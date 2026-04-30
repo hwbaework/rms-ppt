@@ -5,7 +5,7 @@ import SectionSlide from '../components/slides/SectionSlide'
 import ThankYouSlide from '../components/slides/ThankYouSlide'
 
 // === 새 발표 추가 가이드 ===
-// 1. 이 파일을 복사 (예: 2026-05-15-mytalk.tsx)
+// 1. 이 파일을 복사 (예: rmsppt260515.tsx — YYMMDD 형식)
 // 2. meta의 slug, title, date 변경
 // 3. slides 배열에 슬라이드 컴포넌트 또는 자유 JSX 추가
 //    - <CoverSlide />        : 표지
@@ -19,10 +19,11 @@ const TOC = ['rms-ppt 란?', '작성 흐름', '데모', '마무리']
 
 const deck: Deck = {
   meta: {
-    slug: '2026-04-29-demo',
+    slug: 'rmsppt260429',
     title: 'rms-ppt 데모 — RMS GROUP 템플릿',
     date: '2026-04-29',
-    description: 'RMS GROUP PPT 템플릿(표지·목차·섹션·마무리)을 그대로 옮긴 데모입니다.',
+    description:
+      'RMS GROUP PPT 템플릿(표지·목차·섹션·마무리)을 그대로 옮긴 데모입니다.',
     tags: ['Demo', 'Template'],
   },
   slides: [
@@ -46,7 +47,7 @@ const deck: Deck = {
       pageNumber={3}
     />,
 
-    /* 4. 본문 (자유 JSX) — 챕터 라벨 + 강조 박스 + 다이어그램 */
+    /* 4. 본문 — 챕터 라벨 + 강조 박스 + 다이어그램 */
     <div className="relative w-full min-h-full px-12 md:px-20 py-16">
       <p className="text-sm text-gray-500 mb-2">I. rms-ppt 란?</p>
       <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-2">
@@ -112,8 +113,8 @@ const deck: Deck = {
         {[
           {
             no: '1',
-            title: 'src/decks/YYYY-MM-DD-제목.tsx 새 파일',
-            desc: '기존 데모 파일을 복사해서 이름 · 내용 변경',
+            title: 'src/decks/rmspptYYMMDD.tsx 새 파일',
+            desc: '기존 파일을 복사해서 이름 · 내용 변경',
           },
           {
             no: '2',
