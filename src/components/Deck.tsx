@@ -76,45 +76,24 @@ function DeckPlayer({ deck }: { deck: Deck }) {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 bg-white text-gray-900 overflow-hidden flex flex-col"
+      className="fixed inset-0 z-50 bg-white text-gray-900 overflow-hidden flex flex-col"
     >
-      {/* Top: progress bar + meta + fullscreen */}
-      <header className="relative">
-        {/* Progress bar */}
-        <div className="absolute top-0 inset-x-0 h-1 bg-gray-100">
-          <div
-            className="h-full bg-brand transition-all duration-300"
-            style={{ width: `${((idx + 1) / total) * 100}%` }}
-          />
-        </div>
-
-        <div className="px-6 md:px-10 pt-6 pb-3 flex items-center justify-between text-sm text-gray-500 gap-4">
-          <p className="font-medium text-gray-700 truncate flex-1">
-            <span className="hidden md:inline">
-              {deck.meta.title}
-              <span className="text-gray-300 mx-2">·</span>
-            </span>
-            <span className="font-mono text-xs text-gray-400">
-              {deck.meta.date}
-            </span>
-          </p>
-          <button
-            onClick={toggleFullscreen}
-            aria-label="풀스크린"
-            className="size-8 rounded-lg hover:bg-gray-100 flex items-center justify-center transition shrink-0"
-          >
-            <span className="material-symbols-outlined text-base">
-              {isFs ? 'fullscreen_exit' : 'fullscreen'}
-            </span>
-          </button>
-        </div>
-      </header>
+      {/* 풀스크린 버튼 — 우상단 고정 */}
+      <button
+        onClick={toggleFullscreen}
+        aria-label="풀스크린"
+        className="absolute top-4 right-4 z-20 size-9 rounded-lg bg-white/80 backdrop-blur border border-gray-200 hover:bg-white hover:border-gray-300 flex items-center justify-center transition shadow-sm"
+      >
+        <span className="material-symbols-outlined text-base">
+          {isFs ? 'fullscreen_exit' : 'fullscreen'}
+        </span>
+      </button>
 
       {/* Slide content */}
-      <main className="flex-1 flex items-center justify-center px-8 md:px-16 lg:px-24 py-4 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto flex flex-col">
         <div
           key={idx}
-          className="w-full max-w-5xl animate-[slideIn_300ms_ease-out]"
+          className="flex-1 flex animate-[slideIn_300ms_ease-out]"
         >
           {deck.slides[idx]}
         </div>
