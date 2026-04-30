@@ -1,10 +1,8 @@
 import type { Deck } from '../data/types'
-import {
-  CoverSlide,
-  SectionSlide,
-  ThankYouSlide,
-  TocSlide,
-} from '../components/slides'
+import CoverSlide from '../components/slides/CoverSlide'
+import TocSlide from '../components/slides/TocSlide'
+import SectionSlide from '../components/slides/SectionSlide'
+import ThankYouSlide from '../components/slides/ThankYouSlide'
 
 // === 새 발표 추가 가이드 ===
 // 1. 이 파일을 복사 (예: 2026-05-15-mytalk.tsx)
