@@ -1560,45 +1560,158 @@ const deck: Deck = {
       </p>
     </div>,
 
-    /* 13. VI. 시연 */
-    <div className="relative w-full min-h-full px-12 md:px-20 py-16">
+    /* 13. VI. 시연 — 발전사 등록 + 수용가 요청 → SPC 검토 → 계약 완료 */
+    <div className="relative w-full min-h-full px-12 md:px-20 py-12">
       <p className="text-base text-gray-500 mb-2">VI. 시연</p>
       <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-2">
         시연 흐름
       </h2>
       <p className="text-gray-500 mb-6">
-        URL 제공 → 직접 사용 / 오늘은 흐름 위주로 안내
+        ① 발전사 등록 / ② 수용가 전력 요청(3종) → SPC 검토 → 계약 완료
       </p>
 
-      <div className="rounded-2xl border border-gray-100 bg-gray-50/50 p-5 mb-4">
-        <div className="flex items-center justify-center gap-2 flex-wrap">
-          {[
-            { label: '01', title: '로그인', desc: '역할별 진입' },
-            { label: '02', title: '페르소나 홈', desc: '5종 둘러보기' },
-            { label: '03', title: 'PPA · Lease', desc: '거래·정산·계약' },
-            { label: '04', title: '모니터링', desc: '발전·소비·이상' },
-            { label: '05', title: 'DT', desc: '디지털 트윈' },
-          ].map((s, i, arr) => (
-            <div key={s.label} className="flex items-center gap-2">
-              <div className="px-3 py-2 rounded-xl border border-gray-200 bg-white text-center min-w-28">
-                <p className="text-sm tracking-widest text-brand mb-0.5">
-                  {s.label}
-                </p>
-                <p className="font-bold text-gray-900 text-sm">{s.title}</p>
-                <p className="text-sm text-gray-500">{s.desc}</p>
-              </div>
-              {i < arr.length - 1 && (
-                <span className="material-symbols-outlined text-gray-300 text-base">
-                  arrow_forward
-                </span>
-              )}
-            </div>
-          ))}
+      {/* Track 1 — 발전사 등록 */}
+      <div className="rounded-2xl border-2 border-emerald-300 bg-emerald-50/50 p-4 mb-3 shadow-sm">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="size-10 rounded-full bg-emerald-500 text-white font-black flex items-center justify-center shadow-sm">
+            A
+          </div>
+          <p className="font-bold text-gray-900 text-lg">
+            발전사 — 발전소 등록
+          </p>
+          <p className="text-sm text-emerald-700">신재생 자원·설비 등록 기능</p>
+        </div>
+        <div className="flex items-center gap-2 pl-13 flex-wrap">
+          <div className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white border border-emerald-200">
+            <span
+              className="material-symbols-outlined text-emerald-700"
+              style={{ fontSize: '1rem' }}
+            >
+              login
+            </span>
+            <span className="text-sm font-semibold text-gray-700">
+              발전사 로그인
+            </span>
+          </div>
+          <span
+            className="material-symbols-outlined text-gray-400"
+            style={{ fontSize: '1.25rem' }}
+          >
+            arrow_forward
+          </span>
+          <div className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white border border-emerald-200">
+            <span
+              className="material-symbols-outlined text-emerald-700"
+              style={{ fontSize: '1rem' }}
+            >
+              add_business
+            </span>
+            <span className="text-sm font-semibold text-gray-700">
+              발전소 등록 (자원·용량)
+            </span>
+          </div>
+          <span
+            className="material-symbols-outlined text-gray-400"
+            style={{ fontSize: '1.25rem' }}
+          >
+            arrow_forward
+          </span>
+          <div className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white border border-emerald-200">
+            <span
+              className="material-symbols-outlined text-emerald-700"
+              style={{ fontSize: '1rem' }}
+            >
+              check_circle
+            </span>
+            <span className="text-sm font-semibold text-gray-700">등록 완료</span>
+          </div>
         </div>
       </div>
 
-      <div className="bg-red-50 border border-red-100 rounded-2xl px-5 py-3 text-base text-gray-700">
-        <strong>DT (디지털 트윈)</strong> — 산단 가상화 → 시뮬레이션·운영 최적화. 시연 마지막 단계에서 확인.
+      {/* Track 2 — 수용가 전력 요청 (3종) → SPC 검토 → 계약 완료 */}
+      <div className="rounded-2xl border-2 border-amber-300 bg-amber-50/50 p-4 shadow-sm">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="size-10 rounded-full bg-amber-500 text-white font-black flex items-center justify-center shadow-sm">
+            B
+          </div>
+          <p className="font-bold text-gray-900 text-lg">
+            수용가 — 전력 요청 → 계약
+          </p>
+          <p className="text-sm text-amber-700">3종 형태 중 선택 후 계약 진행</p>
+        </div>
+
+        {/* 4 step flow */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
+          {/* Step 1: 전력 요청 (3종) */}
+          <div className="rounded-xl bg-white border-2 border-amber-200 px-3 py-2.5">
+            <p className="text-sm font-bold tracking-widest text-amber-700 mb-1">
+              ① 전력 요청
+            </p>
+            <p className="font-bold text-gray-900 text-sm mb-1">
+              수용가 선택 (3종)
+            </p>
+            <div className="flex flex-wrap gap-1">
+              <span className="px-1.5 py-0.5 rounded bg-violet-100 text-sm text-violet-700">
+                Lease PPA
+              </span>
+              <span className="px-1.5 py-0.5 rounded bg-red-100 text-sm text-brand">
+                직접 PPA
+              </span>
+              <span className="px-1.5 py-0.5 rounded bg-slate-100 text-sm text-slate-700">
+                자가 설치
+              </span>
+            </div>
+          </div>
+
+          {/* Step 2: 각 계약별 항목 확인 (SPC) */}
+          <div className="rounded-xl bg-white border-2 border-red-200 px-3 py-2.5">
+            <p className="text-sm font-bold tracking-widest text-brand mb-1">
+              ② 항목 확인
+            </p>
+            <p className="font-bold text-gray-900 text-sm mb-1">
+              전기 공급사업자
+            </p>
+            <p className="text-sm text-gray-600 leading-tight">
+              계약별 항목·조건 확인
+            </p>
+          </div>
+
+          {/* Step 3: 검토 진행 */}
+          <div className="rounded-xl bg-white border-2 border-red-200 px-3 py-2.5">
+            <p className="text-sm font-bold tracking-widest text-brand mb-1">
+              ③ 검토 진행
+            </p>
+            <p className="font-bold text-gray-900 text-sm mb-1">SPC 검토</p>
+            <p className="text-sm text-gray-600 leading-tight">
+              매칭·승인·정산 조건 검토
+            </p>
+          </div>
+
+          {/* Step 4: 계약 완료 */}
+          <div className="rounded-xl bg-white border-2 border-emerald-300 px-3 py-2.5">
+            <p className="text-sm font-bold tracking-widest text-emerald-700 mb-1">
+              ④ 계약 완료
+            </p>
+            <p className="font-bold text-gray-900 text-sm mb-1">계약 체결</p>
+            <p className="text-sm text-gray-600 leading-tight">
+              사용·정산 개시
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* DT 안내 */}
+      <div className="mt-3 bg-blue-50 border-2 border-blue-200 rounded-2xl px-5 py-3 flex items-center gap-3">
+        <span
+          className="material-symbols-outlined text-blue-600"
+          style={{ fontSize: '1.5rem' }}
+        >
+          view_in_ar
+        </span>
+        <p className="text-base text-gray-700">
+          <strong className="text-blue-700">DT (디지털 트윈)</strong> — 가입자
+          공통 제공 / 시연 마지막 단계에서 확인 (산단 가상화 · 시뮬레이션)
+        </p>
       </div>
 
       <p className="absolute bottom-3 right-6 text-sm text-gray-500 font-medium">
