@@ -798,7 +798,8 @@ const deck: Deck = {
                   {
                     ...p,
                     _key: `${p.tag}-parent`,
-                    _isParent: true,
+                    _isParent: true as boolean,
+                    _isChild: false as boolean,
                   },
                   ...CONSULTANT_TYPES.map((sub) => ({
                     ...p,
@@ -807,11 +808,19 @@ const deck: Deck = {
                     desc: sub.desc,
                     benefit: sub.benefit,
                     _key: `${p.tag}-${sub.short}`,
-                    _isChild: true,
+                    _isParent: false as boolean,
+                    _isChild: true as boolean,
                   })),
                 ]
               }
-              return [{ ...p, _key: p.tag }]
+              return [
+                {
+                  ...p,
+                  _key: p.tag,
+                  _isParent: false as boolean,
+                  _isChild: false as boolean,
+                },
+              ]
             }).map((row, i, arr) => {
               const color = PERSONA_COLOR[row.tag]
               return (
