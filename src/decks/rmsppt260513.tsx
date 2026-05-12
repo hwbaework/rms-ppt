@@ -10,7 +10,6 @@ const TOC = [
   '비즈니스 모델',
   'As-Is / To-Be',
   '일정',
-  'Q&A',
   '포지셔닝 · 우리의 입장',
 ]
 
@@ -201,31 +200,7 @@ const TIMELINE = [
   { no: '4', title: '개발', desc: '확정 기획 기반 개발' },
 ]
 
-const REQUESTS = [
-  {
-    dept: '스마트플랫폼사업본부',
-    color: 'red',
-    items: ['사용자 흐름의 일관성', 'UX 컴포넌트', '성능 및 확장성'],
-  },
-  {
-    dept: 'AX 사업본부',
-    color: 'red',
-    items: ['사용자 흐름의 일관성', 'UX 컴포넌트', '성능 및 확장성'],
-  },
-  {
-    dept: '경영전략본부',
-    color: 'gray',
-    items: [
-      '세금계산서 발행 절차 및 국세청 연동',
-      '전기 공급사업자 마진 회계 처리 및 법인세 영향',
-      '정산 사이클의 타당성',
-      '부가세 처리 등 회계',
-      '감사 추적 및 법정 보존',
-    ],
-  },
-]
-
-// VIII. 포지셔닝 — 후발주자 → 표준 메이커
+// VII. 포지셔닝 — 후발주자 → 표준 메이커
 const POSITIONING_QA = [
   {
     q: '왜 이제야 시작하나?',
@@ -1841,59 +1816,9 @@ const deck: Deck = {
       </p>
     </div>,
 
-    /* 13. VII. Q&A */
-    <div className="relative w-full min-h-full px-12 md:px-20 py-16">
-      <p className="text-base text-gray-500 mb-2">VII. Q&amp;A</p>
-      <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-8">
-        부서별 요청 항목
-      </h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {REQUESTS.map((r) => (
-          <div
-            key={r.dept}
-            className={
-              'rounded-2xl px-5 py-4 ' +
-              (r.color === 'red'
-                ? 'border border-red-100 bg-red-50/30'
-                : 'border border-gray-100 bg-white')
-            }
-          >
-            <p
-              className={
-                'inline-block text-sm font-semibold tracking-widest px-2.5 py-1 rounded-full mb-2 border ' +
-                (r.color === 'red'
-                  ? 'text-brand bg-white border-red-100'
-                  : 'text-gray-600 bg-white border-gray-200')
-              }
-            >
-              {r.dept}
-            </p>
-            <ul className="space-y-1.5">
-              {r.items.map((item, i) => (
-                <li
-                  key={i}
-                  className="flex gap-2 text-base text-gray-700"
-                >
-                  <span className="material-symbols-outlined text-brand text-base shrink-0">
-                    check_circle
-                  </span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-
-      <p className="absolute bottom-3 right-6 text-sm text-gray-500 font-medium">
-        13
-      </p>
-    </div>,
-
-    /* 14. VIII. 포지셔닝 — 우리의 입장 */
+    /* 13. VII. 포지셔닝 — 우리의 입장 */
     <div className="relative w-full min-h-full px-12 md:px-20 py-12">
-      <p className="text-base text-gray-500 mb-2">VIII. 포지셔닝</p>
+      <p className="text-base text-gray-500 mb-2">VII. 포지셔닝</p>
       <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-8">
         후발주자 → 표준 메이커
       </h2>
@@ -1978,13 +1903,13 @@ const deck: Deck = {
       </div>
 
       <p className="absolute bottom-3 right-6 text-sm text-gray-500 font-medium">
-        14
+        13
       </p>
     </div>,
 
-    /* 15. VIII. 포지셔닝 — 강점 프레임 + 발표 멘트 */
+    /* 14. VII. 포지셔닝 — 강점 프레임 + 발표 멘트 */
     <div className="relative w-full min-h-full px-12 md:px-20 py-12">
-      <p className="text-base text-gray-500 mb-2">VIII. 포지셔닝</p>
+      <p className="text-base text-gray-500 mb-2">VII. 포지셔닝</p>
       <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-8">
         강점 프레임 · 발표 핵심 멘트
       </h2>
@@ -2037,13 +1962,13 @@ const deck: Deck = {
       </div>
 
       <p className="absolute bottom-3 right-6 text-sm text-gray-500 font-medium">
-        15
+        14
       </p>
     </div>,
 
-    /* 16. VIII. 포지셔닝 — 예상 질문 대응 */
+    /* 15. VII. 포지셔닝 — 예상 질문 대응 */
     <div className="relative w-full min-h-full px-12 md:px-20 py-12">
-      <p className="text-base text-gray-500 mb-2">VIII. 포지셔닝</p>
+      <p className="text-base text-gray-500 mb-2">VII. 포지셔닝</p>
       <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-8">
         예상 질문 대응
       </h2>
@@ -2086,12 +2011,12 @@ const deck: Deck = {
       </div>
 
       <p className="absolute bottom-3 right-6 text-sm text-gray-500 font-medium">
-        16
+        15
       </p>
     </div>,
 
-    /* 17. 마무리 */
-    <ThankYouSlide email="" pageNumber={17} />,
+    /* 16. 마무리 */
+    <ThankYouSlide email="" pageNumber={16} />,
   ],
 }
 
