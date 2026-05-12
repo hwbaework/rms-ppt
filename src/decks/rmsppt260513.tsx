@@ -200,60 +200,6 @@ const TIMELINE = [
   { no: '4', title: '개발', desc: '확정 기획 기반 개발' },
 ]
 
-// VII. 포지셔닝 — 후발주자 → 표준 메이커
-const POSITIONING_QA = [
-  {
-    q: '왜 이제야 시작하나?',
-    a: 'PPA 매칭 시장은 이미 정리됐지만, 5자 거래(발전사·수용가·컨설턴트·공급사업자·관리자) 운영 표준은 비어 있다. 우리는 그 빈자리를 만든다.',
-  },
-  {
-    q: '왜 울산미포부터인가?',
-    a: '한국 최대 산업단지 — 발전사·수용가·시공사 밀도가 가장 높다. 여기서 검증된 운영 표준은 다른 산단에 그대로 복제된다.',
-  },
-  {
-    q: '확장은 어떻게 하나?',
-    a: '운영 매뉴얼 + 거래·정산 데이터 + 법적 양식 표준화 → 여수·온산·평택 등 산단으로 복제. 복제 비용이 거의 들지 않는 구조.',
-  },
-  {
-    q: '수익은 어디서 나오나?',
-    a: '① 거래 마진(공급사업자) · ② 운영 표준화 라이선스 · ③ 축적 데이터 기반 분석 서비스. 단일 거래 매출이 아니라 운영 표준 비즈니스.',
-  },
-]
-
-const STAGE_NOTES = [
-  {
-    label: '오프닝',
-    line: '"PPA 매칭은 이미 만들어졌습니다. 우리가 만들 것은 그 위의 운영 표준입니다."',
-  },
-  {
-    label: '포지셔닝',
-    line: '"우리는 매칭 회사와 경쟁하지 않습니다. 한국 산업단지 에너지 자급자족의 운영 표준을 만드는 사람입니다."',
-  },
-  {
-    label: '결정타',
-    line: '"울산미포는 그 1호 검증 사이트입니다. 여기서 만들어진 운영 표준이 다른 산단으로 복제됩니다."',
-  },
-  {
-    label: '마무리',
-    line: '"오늘 보신 화면은 단일 거래 데모가 아니라, 표준 운영 체계의 1호 구현입니다."',
-  },
-]
-
-const DEFENSIVE_QA = [
-  {
-    q: '결국 매칭 플랫폼과 무엇이 다른가?',
-    a: '매칭은 거래 한 건을 연결하지만, 우리는 5자 거래의 정산·세금계산서·증빙·감사·권한을 한 화면에서 끝낸다. 매칭은 입구일 뿐 — 운영 표준이 본체.',
-  },
-  {
-    q: '울산미포 한 곳으로 사업이 되나?',
-    a: '울산미포는 검증 사이트다. 운영 매뉴얼·데이터·법적 양식을 표준화해 여수·온산·평택 등 산단에 복제한다. 1호 검증 → N호 복제 모델.',
-  },
-  {
-    q: '한전 정책이 바뀌면 어떻게 되나?',
-    a: '직접 PPA · Lease PPA · 자가 설치 3가지를 모두 수용하는 구조라 단일 정책 변동에 종속되지 않는다. 정책 변동을 표준 운영의 한 변수로 흡수한다.',
-  },
-]
-
 const deck: Deck = {
   meta: {
     slug: 'rmsppt260513',
@@ -1816,89 +1762,51 @@ const deck: Deck = {
       </p>
     </div>,
 
-    /* 13. VII. 포지셔닝 — 우리의 입장 */
+    /* 13. VII. 포지셔닝 — 이것이 우리의 표준이 될 것이다 */
     <div className="relative w-full min-h-full px-12 md:px-20 py-12">
       <p className="text-base text-gray-500 mb-2">VII. 포지셔닝</p>
-      <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-8">
-        후발주자 → 표준 메이커
+      <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-10">
+        이것이 우리의 표준이 될 것이다
       </h2>
 
-      {/* 메인 카피: 핵심 한 줄 */}
-      <div className="rounded-2xl border-2 border-red-200 bg-red-50/40 p-8 md:p-10 mb-6">
-        <div className="flex items-start gap-4">
-          <span
-            className="material-symbols-outlined text-brand shrink-0"
-            style={{ fontSize: '3rem' }}
-          >
-            format_quote
-          </span>
-          <div className="flex-1">
-            <p className="text-xl md:text-3xl font-extrabold text-gray-900 leading-snug mb-3">
-              우리는 매칭 회사와 경쟁하지 않습니다.
-            </p>
-            <p className="text-xl md:text-3xl font-extrabold text-brand leading-snug mb-3">
-              우리는 한국 산업단지 에너지 자급자족의 <br />
-              운영 표준을 만드는 사람입니다.
-            </p>
-            <p className="text-base md:text-lg text-gray-700">
-              울산미포는 그 <strong className="text-brand">1호 검증 사이트</strong>입니다.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* 비교 카드 — 매칭 vs 운영 표준 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="rounded-2xl border border-gray-200 bg-white px-5 py-4">
-          <p className="text-sm font-semibold tracking-widest text-gray-500 mb-2">
-            매칭 플랫폼 (해줌 · 오솔라 …)
+      <div className="space-y-5">
+        {/* 1. 가장 큰 진술 — 검정 배너 */}
+        <div className="rounded-2xl bg-gray-900 px-8 py-7">
+          <p className="text-xl md:text-3xl font-extrabold text-white leading-snug">
+            매칭은 입구. <span className="text-red-300">운영 표준은 본체.</span>
           </p>
-          <ul className="space-y-1.5 text-base text-gray-700">
-            <li className="flex gap-2">
-              <span className="material-symbols-outlined text-gray-400 text-base shrink-0">
-                radio_button_unchecked
-              </span>
-              <span>발전사 ↔ 수용가 1:1 매칭</span>
-            </li>
-            <li className="flex gap-2">
-              <span className="material-symbols-outlined text-gray-400 text-base shrink-0">
-                radio_button_unchecked
-              </span>
-              <span>거래 한 건 연결까지</span>
-            </li>
-            <li className="flex gap-2">
-              <span className="material-symbols-outlined text-gray-400 text-base shrink-0">
-                radio_button_unchecked
-              </span>
-              <span>거래 이후 운영·정산은 별도</span>
-            </li>
-          </ul>
+          <p className="text-xl md:text-3xl font-extrabold text-white leading-snug mt-2">
+            우리는 매칭이 아닌{' '}
+            <span className="text-red-300">표준을 만든다.</span>
+          </p>
         </div>
 
-        <div className="rounded-2xl border-2 border-red-200 bg-white px-5 py-4 shadow-sm">
-          <p className="text-sm font-semibold tracking-widest text-brand mb-2">
-            우리 (운영 표준)
+        {/* 2. 시장 상황 — 빨강 배너 */}
+        <div className="rounded-2xl border-2 border-red-200 bg-red-50/50 px-8 py-6">
+          <p className="text-lg md:text-2xl font-bold text-gray-900 leading-snug">
+            한국 산업단지 에너지 자급자족의 표준 —
           </p>
-          <ul className="space-y-1.5 text-base text-gray-700">
-            <li className="flex gap-2">
-              <span className="material-symbols-outlined text-brand text-base shrink-0">
-                check_circle
-              </span>
-              <span>5자 거래 (발전사·수용가·컨설턴트·공급사업자·관리자)</span>
-            </li>
-            <li className="flex gap-2">
-              <span className="material-symbols-outlined text-brand text-base shrink-0">
-                check_circle
-              </span>
-              <span>정산·세금계산서·증빙·감사까지 일괄</span>
-            </li>
-            <li className="flex gap-2">
-              <span className="material-symbols-outlined text-brand text-base shrink-0">
-                check_circle
-              </span>
-              <span>운영 매뉴얼 표준화 → 산단 복제</span>
-            </li>
-          </ul>
+          <p className="text-lg md:text-2xl font-extrabold text-brand leading-snug mt-1">
+            아직 누구도 만들지 않았다.
+          </p>
+        </div>
+
+        {/* 3. 우리의 자리 — 흰 배너 */}
+        <div className="rounded-2xl border border-gray-200 bg-white px-8 py-6">
+          <p className="text-lg md:text-2xl font-bold text-gray-900 leading-snug">
+            울산미포는 <span className="text-brand">1호 검증 사이트.</span>
+          </p>
+          <p className="text-base md:text-lg text-gray-700 leading-snug mt-2">
+            여기서 만든 표준이 다른 산단으로 그대로 복제된다.
+          </p>
+        </div>
+
+        {/* 4. 마무리 한 줄 — 검정 */}
+        <div className="rounded-2xl bg-gray-900 px-8 py-5 text-center">
+          <p className="text-base md:text-xl font-bold text-white leading-snug">
+            후발주자가 만드는 표준 —{' '}
+            <span className="text-red-300">그것이 진짜 표준이 된다.</span>
+          </p>
         </div>
       </div>
 
@@ -1907,116 +1815,8 @@ const deck: Deck = {
       </p>
     </div>,
 
-    /* 14. VII. 포지셔닝 — 강점 프레임 + 발표 멘트 */
-    <div className="relative w-full min-h-full px-12 md:px-20 py-12">
-      <p className="text-base text-gray-500 mb-2">VII. 포지셔닝</p>
-      <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-8">
-        강점 프레임 · 발표 핵심 멘트
-      </h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {/* 좌: 강점 프레임 Q&A */}
-        <div>
-          <p className="text-sm font-semibold tracking-widest text-gray-500 mb-3">
-            강점 프레임 — 예상 질문 4
-          </p>
-          <ul className="space-y-2.5">
-            {POSITIONING_QA.map((qa, i) => (
-              <li
-                key={i}
-                className="rounded-xl border border-gray-200 bg-white px-4 py-3"
-              >
-                <p className="text-base font-bold text-gray-900 mb-1.5 flex items-start gap-2">
-                  <span className="text-brand shrink-0">Q{i + 1}.</span>
-                  <span>{qa.q}</span>
-                </p>
-                <p className="text-sm text-gray-700 leading-relaxed pl-7">
-                  → {qa.a}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* 우: 발표 핵심 멘트 */}
-        <div>
-          <p className="text-sm font-semibold tracking-widest text-brand mb-3">
-            발표 핵심 멘트
-          </p>
-          <ul className="space-y-2.5">
-            {STAGE_NOTES.map((s, i) => (
-              <li
-                key={i}
-                className="rounded-xl border border-red-100 bg-red-50/30 px-4 py-3"
-              >
-                <p className="inline-block text-xs font-bold tracking-widest text-brand bg-white border border-red-100 rounded-full px-2.5 py-0.5 mb-2">
-                  {s.label}
-                </p>
-                <p className="text-sm md:text-base text-gray-800 leading-relaxed">
-                  {s.line}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      <p className="absolute bottom-3 right-6 text-sm text-gray-500 font-medium">
-        14
-      </p>
-    </div>,
-
-    /* 15. VII. 포지셔닝 — 예상 질문 대응 */
-    <div className="relative w-full min-h-full px-12 md:px-20 py-12">
-      <p className="text-base text-gray-500 mb-2">VII. 포지셔닝</p>
-      <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-8">
-        예상 질문 대응
-      </h2>
-
-      <ul className="space-y-4 mb-6">
-        {DEFENSIVE_QA.map((qa, i) => (
-          <li
-            key={i}
-            className="rounded-2xl border border-gray-200 bg-white px-6 py-5"
-          >
-            <div className="flex items-start gap-3 mb-2">
-              <span className="size-8 rounded-full bg-brand text-white text-sm font-bold flex items-center justify-center shrink-0">
-                Q{i + 1}
-              </span>
-              <p className="text-lg md:text-xl font-bold text-gray-900 pt-0.5">
-                {qa.q}
-              </p>
-            </div>
-            <div className="flex items-start gap-3 pl-11">
-              <span
-                className="material-symbols-outlined text-brand shrink-0"
-                style={{ fontSize: '1.5rem' }}
-              >
-                arrow_right
-              </span>
-              <p className="text-base text-gray-700 leading-relaxed">
-                {qa.a}
-              </p>
-            </div>
-          </li>
-        ))}
-      </ul>
-
-      {/* 최종 한 줄 */}
-      <div className="rounded-2xl bg-gray-900 px-6 py-5 text-center">
-        <p className="text-base md:text-lg font-bold text-white leading-snug">
-          매칭은 입구, <span className="text-red-300">운영 표준은 본체.</span>
-          {' '}우리는 매칭이 아닌 표준을 만든다.
-        </p>
-      </div>
-
-      <p className="absolute bottom-3 right-6 text-sm text-gray-500 font-medium">
-        15
-      </p>
-    </div>,
-
-    /* 16. 마무리 */
-    <ThankYouSlide email="" pageNumber={16} />,
+    /* 14. 마무리 */
+    <ThankYouSlide email="" pageNumber={14} />,
   ],
 }
 
