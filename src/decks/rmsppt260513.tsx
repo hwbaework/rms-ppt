@@ -1762,50 +1762,30 @@ const deck: Deck = {
       </p>
     </div>,
 
-    /* 13. VII. 포지셔닝 — 이것이 우리의 표준이 될 것이다 */
-    <div className="relative w-full min-h-full px-12 md:px-20 py-12">
+    /* 13. VII. 포지셔닝 — 우리의 자리 */
+    <div className="relative w-full min-h-full px-12 md:px-20 py-16">
       <p className="text-base text-gray-500 mb-2">VII. 포지셔닝</p>
       <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-10">
-        이것이 우리의 표준이 될 것이다
+        우리의 자리
       </h2>
 
-      <div className="space-y-5">
-        {/* 1. 가장 큰 진술 — 검정 배너 */}
-        <div className="rounded-2xl bg-gray-900 px-8 py-7">
-          <p className="text-xl md:text-3xl font-extrabold text-white leading-snug">
-            매칭은 입구. <span className="text-red-300">운영 표준은 본체.</span>
+      <div className="space-y-4">
+        <div className="rounded-2xl border border-gray-200 bg-white px-7 py-6">
+          <p className="text-xl md:text-2xl font-bold text-gray-900 mb-1.5">
+            매칭이 아닌 <span className="text-brand">운영 표준</span>
           </p>
-          <p className="text-xl md:text-3xl font-extrabold text-white leading-snug mt-2">
-            우리는 매칭이 아닌{' '}
-            <span className="text-red-300">표준을 만든다.</span>
-          </p>
-        </div>
-
-        {/* 2. 시장 상황 — 빨강 배너 */}
-        <div className="rounded-2xl border-2 border-red-200 bg-red-50/50 px-8 py-6">
-          <p className="text-lg md:text-2xl font-bold text-gray-900 leading-snug">
-            한국 산업단지 에너지 자급자족의 표준 —
-          </p>
-          <p className="text-lg md:text-2xl font-extrabold text-brand leading-snug mt-1">
-            아직 누구도 만들지 않았다.
+          <p className="text-base text-gray-600 leading-relaxed">
+            PPA 매칭은 이미 시장에 있다. 우리는 그 위에서 거래·정산·증빙·감사를
+            한 화면으로 묶는다.
           </p>
         </div>
 
-        {/* 3. 우리의 자리 — 흰 배너 */}
-        <div className="rounded-2xl border border-gray-200 bg-white px-8 py-6">
-          <p className="text-lg md:text-2xl font-bold text-gray-900 leading-snug">
-            울산미포는 <span className="text-brand">1호 검증 사이트.</span>
+        <div className="rounded-2xl border border-gray-200 bg-white px-7 py-6">
+          <p className="text-xl md:text-2xl font-bold text-gray-900 mb-1.5">
+            울산미포 = <span className="text-brand">1호 검증 사이트</span>
           </p>
-          <p className="text-base md:text-lg text-gray-700 leading-snug mt-2">
-            여기서 만든 표준이 다른 산단으로 그대로 복제된다.
-          </p>
-        </div>
-
-        {/* 4. 마무리 한 줄 — 검정 */}
-        <div className="rounded-2xl bg-gray-900 px-8 py-5 text-center">
-          <p className="text-base md:text-xl font-bold text-white leading-snug">
-            후발주자가 만드는 표준 —{' '}
-            <span className="text-red-300">그것이 진짜 표준이 된다.</span>
+          <p className="text-base text-gray-600 leading-relaxed">
+            여기서 만든 운영 방식을 다른 산단으로 그대로 옮긴다.
           </p>
         </div>
       </div>
