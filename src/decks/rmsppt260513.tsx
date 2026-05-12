@@ -1312,15 +1312,25 @@ const deck: Deck = {
             >
               arrow_forward
             </span>
-            <div className="size-12 rounded-xl border-2 border-emerald-400 bg-emerald-50 flex items-center justify-center shrink-0">
-              <span
-                className="material-symbols-outlined text-emerald-700"
-                style={{ fontSize: '1.75rem' }}
-              >
-                solar_power
-              </span>
+            <div className="flex items-center -space-x-2">
+              <div className="size-12 rounded-xl border-2 border-emerald-400 bg-emerald-50 flex items-center justify-center">
+                <span
+                  className="material-symbols-outlined text-emerald-700"
+                  style={{ fontSize: '1.75rem' }}
+                >
+                  solar_power
+                </span>
+              </div>
+              <div className="size-12 rounded-xl border-2 border-emerald-400 bg-emerald-50 flex items-center justify-center">
+                <span
+                  className="material-symbols-outlined text-emerald-700"
+                  style={{ fontSize: '1.75rem' }}
+                >
+                  solar_power
+                </span>
+              </div>
             </div>
-            <p className="font-bold text-gray-900">발전사 후보</p>
+            <p className="font-bold text-gray-900">다수 발전사 후보</p>
           </div>
         </div>
 
