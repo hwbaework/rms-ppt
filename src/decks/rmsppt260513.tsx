@@ -1782,7 +1782,7 @@ const deck: Deck = {
 
         <div className="rounded-2xl border border-gray-200 bg-white px-7 py-6">
           <p className="text-xl md:text-2xl font-bold text-gray-900 mb-1.5">
-            울산미포 = <span className="text-brand">1호 검증 사이트</span>
+            울산미포 = <span className="text-brand">1호 검증</span>
           </p>
           <p className="text-base text-gray-600 leading-relaxed">
             여기서 만든 운영 방식을 다른 산단으로 그대로 옮긴다.
