@@ -1770,11 +1770,11 @@ const deck: Deck = {
       </h2>
 
       <div className="space-y-4">
-        <div className="rounded-2xl border border-gray-200 bg-white px-7 py-6">
-          <p className="text-xl md:text-2xl font-bold text-gray-900 mb-1.5">
-            매칭이 아닌 <span className="text-brand">운영 표준</span>
+        <div className="rounded-2xl bg-gray-900 px-7 py-7">
+          <p className="text-xl md:text-2xl font-bold text-white mb-1.5">
+            매칭이 아닌 <span className="text-red-300">운영 표준</span>
           </p>
-          <p className="text-base text-gray-600 leading-relaxed">
+          <p className="text-base text-gray-300 leading-relaxed">
             PPA 매칭은 이미 시장에 있다. 우리는 그 위에서 거래·정산·증빙·감사를
             한 화면으로 묶는다.
           </p>
