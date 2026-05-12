@@ -26,14 +26,17 @@ function ThankYouSlide({
 
         <Logo size="md" className="mb-8" />
 
-        <div className="w-64 md:w-96 h-px bg-gray-300 mb-8" />
-
-        <a
-          href={`mailto:${email}`}
-          className="text-sm md:text-base text-gray-700 hover:text-brand transition"
-        >
-          {email}
-        </a>
+        {email && (
+          <>
+            <div className="w-64 md:w-96 h-px bg-gray-300 mb-8" />
+            <a
+              href={`mailto:${email}`}
+              className="text-sm md:text-base text-gray-700 hover:text-brand transition"
+            >
+              {email}
+            </a>
+          </>
+        )}
       </div>
 
       {/* 우하단 페이지 번호 */}

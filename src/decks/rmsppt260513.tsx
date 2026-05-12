@@ -236,8 +236,8 @@ const deck: Deck = {
     /* 1. 표지 */
     <CoverSlide
       title="울산 에너지 자급자족 플랫폼"
-      author="배효원"
-      team="RMS팀"
+      author=""
+      team=""
       date="2026.05.13"
     />,
 
@@ -1827,7 +1827,7 @@ const deck: Deck = {
     </div>,
 
     /* 14. 마무리 */
-    <ThankYouSlide email="hwbae@rms.co.kr" pageNumber={14} />,
+    <ThankYouSlide email="" pageNumber={14} />,
   ],
 }
 

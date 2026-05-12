@@ -43,10 +43,18 @@ function CoverSlide({
         <div className="w-12 h-1 bg-brand mb-6" />
 
         <p className="text-sm md:text-base text-gray-600">
-          {author}
-          <span className="text-gray-300 mx-2">|</span>
-          {team}
-          <span className="text-gray-300 mx-2">|</span>
+          {author && (
+            <>
+              {author}
+              <span className="text-gray-300 mx-2">|</span>
+            </>
+          )}
+          {team && (
+            <>
+              {team}
+              <span className="text-gray-300 mx-2">|</span>
+            </>
+          )}
           {date}
         </p>
       </div>
