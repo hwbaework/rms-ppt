@@ -20,6 +20,8 @@ function DeckView() {
     )
   }
 
+  if (deck.element) return <>{deck.element}</>
+
   return <DeckPlayer deck={deck} />
 }
 

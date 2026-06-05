@@ -2,9 +2,10 @@ import type { Deck, DeckMeta } from './types'
 import rmsppt260429 from '../decks/rmsppt260429'
 import rmsppt260430 from '../decks/rmsppt260430'
 import rmsppt260513 from '../decks/rmsppt260513'
+import rmsppt260605 from '../decks/rmsppt260605'
 
 // 새 발표 추가하면 import + 이 배열에 추가
-export const decks: Deck[] = [rmsppt260513, rmsppt260430, rmsppt260429]
+export const decks: Deck[] = [rmsppt260605, rmsppt260513, rmsppt260430, rmsppt260429]
 
 export function getDeckBySlug(slug: string): Deck | undefined {
   return decks.find((d) => d.meta.slug === slug)
