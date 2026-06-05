@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>에너지 자급자족 플랫폼 · 프로세스 맵</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style>
+  :root{
+  --bg:#f6f7f9; --panel:#fff; --line:#e7e9ee; --line-strong:#d4d8e0;
+  --ink:#0f1729; --ink-2:#475067; --ink-3:#8a92a6;
+  --primary:#2563eb; --amber:#f59e0b; --green:#10b981; --red:#ef4444; --violet:#8b5cf6; --sky:#0ea5e9; --slate:#64748b;
+  --amber-soft:#fff7ea;
+  --shadow:0 1px 2px rgba(16,23,41,.04), 0 4px 16px rgba(16,23,41,.06);
+  --radius:14px;
+}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);
+  font-family:'Pretendard','Malgun Gothic',-apple-system,'Segoe UI',sans-serif;
+  -webkit-font-smoothing:antialiased;line-height:1.5}
+  .wrap{max-width:1320px;margin:0 auto;padding:0 24px}
+
+  header.topbar{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.85);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .topbar-in{display:flex;align-items:center;gap:14px;height:62px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.02em}
+  .logo .spark{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;
+  background:linear-gradient(135deg,#2563eb,#10b981);color:#fff;font-size:15px}
+  .logo small{display:block;font-size:11px;font-weight:600;color:var(--ink-3)}
+  .topbar .spacer{flex:1}
+  .pill{font-size:12px;color:var(--ink-2);border:1px solid var(--line);background:#fff;padding:5px 11px;border-radius:999px}
+
+  .hero{padding:28px 0 6px}
+  .hero h1{margin:0 0 6px;font-size:25px;font-weight:800;letter-spacing:-.03em}
+  .hero p{margin:0;color:var(--ink-2);font-size:14px;max-width:820px}
+
+  .modebar{display:flex;gap:8px;margin:20px 0 4px;align-items:center}
+  .seg{display:inline-flex;background:#eceef2;border-radius:12px;padding:4px;gap:4px}
+  .seg button{border:0;background:transparent;cursor:pointer;font:inherit;font-weight:700;
+  font-size:13.5px;color:var(--ink-2);padding:8px 16px;border-radius:9px;display:flex;align-items:center;gap:7px;transition:.15s}
+  .seg button.on{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px}
+  .tab{display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none;background:#fff;
+  border:1px solid var(--line);border-radius:12px;padding:9px 13px;transition:.15s}
+  .tab:hover{border-color:var(--line-strong);transform:translateY(-1px)}
+  .tab .ic{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;font-size:15px;flex:none}
+  .tab .tt{font-weight:700;font-size:13px;letter-spacing:-.01em}
+  .tab .ts{font-size:10.5px;color:var(--ink-3)}
+  .tab.active{box-shadow:0 0 0 3px var(--accent-ring);border-color:var(--accent)}
+  .tab.active .tt{color:var(--accent)}
+
+  .hide{display:none !important}
+
+  /* ── OVERALL (user journey) ── */
+  .ov{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:26px 28px 30px;margin:16px 0 50px}
+  .ov h2{margin:0 0 4px;font-size:19px;font-weight:800;letter-spacing:-.02em}
+  .ov .sub{font-size:13px;color:var(--ink-3);margin-bottom:18px}
+
+  .journey{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:#fbfcfe;padding:12px}
+  .jgrid{display:grid;grid-template-columns:128px repeat(6,minmax(158px,1fr));gap:8px;min-width:1080px}
+  .jph{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 11px}
+  .jph .pn{font-size:11px;font-weight:800;color:var(--primary)}
+  .jph .pt{font-weight:800;font-size:13px;margin-top:1px}
+  .jph .phh{font-size:10.5px;color:var(--ink-3);margin-top:2px}
+  .jcorner{display:flex;align-items:flex-end;font-size:11px;font-weight:700;color:var(--ink-3);padding:0 4px 6px}
+  .jlabel{display:flex;flex-direction:column;justify-content:center;gap:3px;border-radius:10px;padding:8px 11px;border:1px solid;font-weight:800}
+  .jlabel .le{font-size:13px} .jlabel .ls{font-size:10px;opacity:.7;font-weight:700}
+  .jcell{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-height:70px;
+  display:flex;flex-direction:column;gap:4px;position:relative}
+  .jcell.empty{background:repeating-linear-gradient(135deg,#fafbfd,#fafbfd 6px,#f3f5f8 6px,#f3f5f8 12px);border:1px dashed var(--line)}
+  .jcell .ca{font-weight:700;font-size:12px;line-height:1.35;color:var(--ink)}
+  .jcell .cr{font-size:9.5px;color:var(--ink-3);font-family:ui-monospace,monospace;border:1px solid var(--line);border-radius:5px;padding:0 5px;align-self:flex-start}
+  .jcell .cc{font-size:9.5px;font-weight:800;color:#b4730a;background:var(--amber-soft);border:1px solid #f3d79a;border-radius:999px;padding:1px 7px;align-self:flex-start}
+  .jcell .cho{font-size:9.5px;font-weight:800;align-self:flex-start;margin-top:auto;display:flex;align-items:center;gap:3px}
+  .jcell.main{box-shadow:inset 0 0 0 2px var(--lane)}
+  .jcell.planned{background:repeating-linear-gradient(135deg,#fbfaff,#fbfaff 7px,#f1eefe 7px,#f1eefe 14px);border:1px dashed var(--violet);box-shadow:none}
+  .jcell.planned .ca{color:var(--violet);font-style:italic}
+  .jcell .cf{font-size:9px;font-weight:800;color:#fff;background:var(--violet);border-radius:999px;padding:1px 7px;align-self:flex-start}
+
+  .jlegend{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-top:12px;font-size:11.5px;color:var(--ink-2)}
+  .jlegend .li{display:flex;align-items:center;gap:6px}
+  .jlegend .b{width:22px;height:14px;border-radius:5px;border:1px solid var(--line);display:inline-block}
+
+  .ovgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+  .mono{font-family:ui-monospace,monospace}
+  @media(max-width:820px){.ovgrid{grid-template-columns:1fr}}
+
+  .mini{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#fff}
+  .mini h4{margin:0 0 10px;font-size:13px;font-weight:800;display:flex;align-items:center;gap:7px}
+  .mini h4 .d{width:7px;height:7px;border-radius:99px}
+  .rev{display:flex;flex-direction:column;gap:8px}
+  .revrow{display:flex;gap:10px;align-items:baseline;font-size:12.5px}
+  .revrow b{flex:none;width:62px;font-weight:700}
+  .revrow .f{color:var(--ink-2)}
+  .tagm{font-size:10px;font-weight:700;padding:1px 7px;border-radius:999px;flex:none}
+
+  /* ── PERSONA BOARD ── */
+  .grid{display:grid;grid-template-columns:1fr 312px;gap:22px;padding:10px 0 60px;align-items:start}
+  @media(max-width:980px){.grid{grid-template-columns:1fr}}
+  .board{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px 26px 30px}
+  .board-head{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  .board-head .ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-size:19px}
+  .board-head h2{margin:0;font-size:18px;font-weight:800;letter-spacing:-.02em}
+  .board-head .sub{font-size:12.5px;color:var(--ink-3);margin-top:2px}
+  .actor{margin:14px 0 22px;font-size:12.5px;color:var(--ink-2);background:var(--accent-soft);
+  border:1px solid var(--accent-line);border-radius:10px;padding:10px 13px}
+  .actor b{color:var(--accent)}
+
+  .uflow{margin:0 0 18px;border:1px dashed var(--accent-line);border-radius:12px;padding:12px 14px;background:#fff}
+  .uflow .ut{font-size:11px;font-weight:800;color:var(--accent);letter-spacing:.03em;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+  .usteps{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
+  .ustep{flex:1 1 0;min-width:110px;border:1px solid var(--line);border-radius:10px;padding:9px 10px;background:#fcfdff;position:relative}
+  .ustep .un{font-size:10px;font-weight:800;color:var(--accent)}
+  .ustep .uh{font-size:12px;font-weight:700;margin-top:2px}
+  .ustep .ud{font-size:11px;color:var(--ink-2);margin-top:2px;line-height:1.4}
+  .ustep .ur{font-size:10px;color:var(--ink-3);margin-top:5px;border:1px solid var(--line);border-radius:6px;padding:1px 5px;display:inline-block}
+
+  .flow{display:flex;flex-direction:column}
+  .node{position:relative;display:flex;justify-content:center}
+  .conn{height:24px;width:2px;background:var(--line-strong);margin:0 auto}
+  .conn.short{height:15px}
+  .step{width:100%;max-width:580px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px;box-shadow:var(--shadow)}
+  .step .st-t{font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px}
+  .step .st-d{font-size:12.5px;color:var(--ink-2);margin-top:3px}
+  .step .tag{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+  .step.planned{background:repeating-linear-gradient(135deg,#fbfaff,#fbfaff 7px,#f1eefe 7px,#f1eefe 14px);border:1px dashed var(--violet)}
+  .step.planned .st-t{color:var(--violet)}
+  .step .pbadge{font-size:10px;font-weight:800;color:#fff;background:var(--violet);border-radius:999px;padding:1px 7px;margin-left:6px}
+  .decision{width:100%;max-width:580px;background:var(--amber-soft);border:1px solid #f3d79a;border-radius:12px;padding:12px 16px}
+  .decision .dq{font-weight:800;font-size:13.5px;color:#b4730a;display:flex;align-items:center;gap:8px}
+  .decision .dq .dia{width:18px;height:18px;background:var(--amber);transform:rotate(45deg);border-radius:4px;flex:none}
+  .branches{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+  .branch{flex:1 1 0;min-width:130px;background:#fff;border:1px solid #f0dcb4;border-radius:10px;padding:9px 12px}
+  .branch .bl{font-weight:700;font-size:12.5px;display:flex;align-items:center;gap:6px}
+  .branch .bd{font-size:11.5px;color:var(--ink-2);margin-top:4px;line-height:1.45}
+  .branch .arrow{font-size:11px;color:var(--amber);font-weight:700}
+  .branch.ok{border-color:#bfe9d4}.branch.ok .bl{color:#0b7a52}
+  .branch.no{border-color:#f3c9c9}.branch.no .bl{color:#b42424}
+  .endcap{width:100%;max-width:580px;background:linear-gradient(180deg,#fff,#fafcff);border:1px dashed var(--primary);border-radius:12px;padding:12px 16px;text-align:center}
+  .endcap .ec-t{font-weight:800;font-size:13.5px;color:var(--primary)}
+  .endcap .ec-d{font-size:11.5px;color:var(--ink-2);margin-top:3px}
+  .pageref{display:inline-block;font-size:10.5px;color:var(--ink-3);border:1px solid var(--line);border-radius:6px;padding:1px 6px;margin-left:6px}
+
+  .side{display:flex;flex-direction:column;gap:16px;position:sticky;top:80px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 18px}
+  .card h3{margin:0 0 12px;font-size:13px;font-weight:800;display:flex;align-items:center;gap:7px}
+  .card h3 .dot{width:7px;height:7px;border-radius:99px;background:var(--amber)}
+  .cond{border-left:3px solid var(--line-strong);padding:2px 0 2px 12px;margin-bottom:13px}
+  .cond .ct{font-weight:700;font-size:12.5px}.cond .cv{font-size:11.5px;color:var(--ink-2);margin-top:3px}
+  .cond.c-a{border-color:#2563eb}.cond.c-b{border-color:#10b981}.cond.c-c{border-color:#f59e0b}.cond.c-d{border-color:#8b5cf6}
+  .src{font-size:11px;color:var(--ink-3);line-height:1.6}.src b{color:var(--ink-2)}
+
+  /* ── DIAGNOSIS ── */
+  .diag{margin:16px 0 50px;display:flex;flex-direction:column;gap:18px}
+  .dcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 24px}
+  .dcard h2{margin:0 0 3px;font-size:17px;font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+  .dcard .ds{font-size:12.5px;color:var(--ink-3);margin-bottom:16px}
+  .pc{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:820px){.pc{grid-template-columns:1fr}}
+  .pcol{border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .pcol.pro{background:#eafaf3;border-color:#bfe9d4} .pcol.con{background:#fef0f0;border-color:#f3c9c9}
+  .pcol h4{margin:0 0 11px;font-size:13.5px;font-weight:800;display:flex;align-items:center;gap:6px}
+  .pcol.pro h4{color:#0b7a52} .pcol.con h4{color:#b42424}
+  .pcol ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+  .pcol li{font-size:12.5px;color:var(--ink-2);line-height:1.45;padding-left:18px;position:relative}
+  .pcol li b{color:var(--ink)}
+  .pcol.pro li::before{content:'✓';position:absolute;left:0;color:#0b7a52;font-weight:800}
+  .pcol.con li::before{content:'!';position:absolute;left:2px;color:#b42424;font-weight:800}
+
+  .dup{width:100%;border-collapse:separate;border-spacing:0 7px;font-size:12px}
+  .dup th{text-align:left;font-size:10.5px;color:var(--ink-3);font-weight:700;padding:0 10px}
+  .dup td{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:9px 10px;vertical-align:middle}
+  .dup td:first-child{border-left:1px solid var(--line);border-radius:9px 0 0 9px;font-weight:700}
+  .dup td:last-child{border-right:1px solid var(--line);border-radius:0 9px 9px 0}
+  .dupn{display:inline-block;min-width:26px;text-align:center;font-weight:800;border-radius:7px;padding:2px 7px}
+  .dupn.hi{background:#fdecec;color:#b42424} .dupn.mid{background:#fff7ea;color:#b4730a}
+  .loc{display:inline-block;font-family:ui-monospace,monospace;font-size:10px;color:var(--ink-2);background:#f3f5f8;border:1px solid var(--line);border-radius:5px;padding:1px 6px;margin:2px 3px 0 0}
+  .loc.mirror{background:#fdecec;border-color:#f3c9c9;color:#b42424}
+
+  .pdup{display:flex;flex-direction:column;gap:10px}
+  .prow{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .prow .ic{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:16px;flex:none}
+  .prow .nm{font-weight:800;font-size:13.5px}
+  .prow .dd{font-size:12px;color:var(--ink-2);margin-top:4px;line-height:1.5}
+  .prow .badge{font-size:10.5px;font-weight:800;border-radius:999px;padding:2px 9px;flex:none;align-self:flex-start}
+  .b-hi{background:#fdecec;color:#b42424} .b-mid{background:#fff7ea;color:#b4730a} .b-lo{background:#eafaf3;color:#0b7a52}
+
+  .unify{display:grid;grid-template-columns:1fr 40px 1fr;gap:10px;align-items:stretch}
+  @media(max-width:820px){.unify{grid-template-columns:1fr}}
+  .ucol{border-radius:12px;padding:15px 16px}
+  .ucol.before{background:#fef0f0;border:1px solid #f3c9c9} .ucol.after{background:#eff4ff;border:1px solid #cfe0ff}
+  .ucol h4{margin:0 0 10px;font-size:13px;font-weight:800}
+  .ucol.before h4{color:#b42424} .ucol.after h4{color:var(--primary)}
+  .ucol ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:7px}
+  .ucol li{font-size:12px;color:var(--ink-2);line-height:1.45}
+  .uarrow{display:grid;place-items:center;font-size:22px;color:var(--primary);font-weight:800}
+
+  footer{padding:26px 0 40px;text-align:center;color:var(--ink-3);font-size:11.5px}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <div class="logo"><span class="spark">⚡</span>
+      <span>에너지 자급자족 플랫폼<small>울산미포 스마트그린산단 · ESG 에너지 플랫폼</small></span></div>
+    <div class="spacer"></div>
+    <span class="pill">프로세스 맵</span>
+    <span class="pill">3차년도 사업계획서 기준</span>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <h1>에너지 자급자족 플랫폼 — <span style="color:var(--primary)">프로세스 맵</span></h1>
+    <p>발전 자원 구축부터 RE100 이행까지, 6개 주체가 엮이는 생태계입니다. 흐름은 <b>자원 유형·수익 모델·거래 방식</b>에 따라 갈라집니다.</p>
+  </section>
+
+  <div class="modebar">
+    <div class="seg">
+      <button id="m-all" class="on" onclick="setMode('all')">🔗 전체 프로세스</button>
+      <button id="m-per" onclick="setMode('per')">👤 페르소나별</button>
+      <button id="m-diag" onclick="setMode('diag')">🔍 중복 진단</button>
+    </div>
+  </div>
+
+  <!-- ════════ OVERALL (USER JOURNEY) ════════ -->
+  <section id="view-all">
+    <div class="ov">
+      <h2>전체 프로세스 — 엔드투엔드 유저 저니</h2>
+      <div class="sub">세로축 = 주체(레인), 가로축 = 6단계 여정. 각 칸은 그 주체가 그 단계에서 하는 행동·화면·분기입니다. <b>굵은 테두리</b>=주 경로(happy path), <span style="color:var(--violet);font-weight:700">↘ 핸드오프</span>=다음 주체로 넘김.</div>
+
+      <div class="journey"><div class="jgrid" id="jgrid"></div></div>
+
+      <div class="jlegend">
+        <span class="li"><span class="b" style="box-shadow:inset 0 0 0 2px var(--green)"></span>주 경로 (굵은 테두리 = 해당 레인 색)</span>
+        <span class="li"><span class="b empty" style="background:repeating-linear-gradient(135deg,#fafbfd,#fafbfd 4px,#f3f5f8 4px,#f3f5f8 8px)"></span>해당 단계 미참여</span>
+        <span class="li"><span class="cc" style="position:static">분기</span>발생 지점</span>
+        <span class="li"><span style="color:var(--violet);font-weight:800">↘</span>주체 간 핸드오프</span>
+        <span class="li"><span class="b" style="background:repeating-linear-gradient(135deg,#fbfaff,#fbfaff 4px,#f1eefe 4px,#f1eefe 8px);border:1px dashed var(--violet)"></span>추후 공통 기능 (현재 미적용)</span>
+      </div>
+
+      <div class="ovgrid">
+        <div class="mini">
+          <h4><span class="d" style="background:var(--green)"></span>자원별 수익 모델</h4>
+          <div class="rev">
+            <div class="revrow"><span class="tagm" style="background:#eafaf3;color:#0b7a52">연료전지</span>
+              <b>SMP+REC</b><span class="f">SMP + 2.2 REC 가중치 (≈239원/kWh) · CHPS</span></div>
+            <div class="revrow"><span class="tagm" style="background:#eff4ff;color:#2563eb">태양광</span>
+              <b>PPA/자가</b><span class="f">직접 PPA(140원/kWh) 또는 자가소비형</span></div>
+            <div class="revrow"><span class="tagm" style="background:#e9f7fe;color:#0277b6">ORC</span>
+              <b>전력공급</b><span class="f">전력공급 SPC(≈100원/kWh · 7,920h/년)</span></div>
+          </div>
+        </div>
+        <div class="mini">
+          <h4><span class="d" style="background:var(--violet)"></span>ESG 에너지 플랫폼 4모듈 = 화면 도메인</h4>
+          <div class="rev">
+            <div class="revrow"><span class="tagm" style="background:#f3effe;color:#7c3aed">RE100</span><span class="f">컨설팅·인증·교육 → <b>/consulting · /consumer/re100</b></span></div>
+            <div class="revrow"><span class="tagm" style="background:#fff7ea;color:#b4730a">E-데이터</span><span class="f">데이터마켓·카본거래·온실가스 → <b>/e-data · /carbon</b></span></div>
+            <div class="revrow"><span class="tagm" style="background:#e9f7fe;color:#0277b6">분산E중개</span><span class="f">시뮬레이션·인증·VPP → <b>/vpp</b></span></div>
+            <div class="revrow"><span class="tagm" style="background:#f1f3f7;color:#475067">통합관제</span><span class="f">모니터링·안전 DSOP → <b>/monitoring · /dt</b></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ PERSONA ════════ -->
+  <section id="view-per" class="hide">
+    <nav class="tabs" id="tabs"></nav>
+    <div class="grid">
+      <main class="board" id="board"></main>
+      <aside class="side">
+        <div class="card">
+          <h3><span class="dot"></span>주요 분기 포인트</h3>
+          <div class="cond c-a"><div class="ct">발전 자원 유형</div><div class="cv">연료전지(39.6MW) / 태양광(5.1MW) / ORC</div></div>
+          <div class="cond c-b"><div class="ct">수익 모델</div><div class="cv">SMP+2.2REC·CHPS / 직접PPA·자가소비 / 전력공급SPC</div></div>
+          <div class="cond c-d"><div class="ct">거래 방식 (태양광 3종)</div><div class="cv">Lease PPA / 직접 PPA(Onsite·Offsite) / 자가 설치</div></div>
+        </div>
+        <div class="card">
+          <h3><span class="dot" style="background:var(--green)"></span>출처 · 3차년도 사업계획서</h3>
+          <div class="src">· 추진체계 및 역할분담 (p77–78)<br>· 수익금 발생 계획 (p58–59)<br>· 수요기업 확보 방안 (p62)<br>· 사업 후 유지운영·SPC (p39–40)</div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ════════ DIAGNOSIS ════════ -->
+  <section id="view-diag" class="hide">
+    <div class="diag">
+
+      <div class="dcard">
+        <h2>① 현재 구조 — 장단점</h2>
+        <div class="ds">페르소나마다 대시보드가 따로 있는 현재 멀티 대시보드 구조의 평가 (실제 페이지 분석 기준)</div>
+        <div class="pc">
+          <div class="pcol pro">
+            <h4>👍 장점</h4>
+            <ul>
+              <li><b>페르소나 맥락 최적화</b> — 각 역할이 자기 업무에 필요한 위젯만 봄</li>
+              <li><b>권한 경계 명확</b> — SPC 마진 등 민감정보를 관리자 전용 페이지에 격리</li>
+              <li><b>장애 격리·독립 배포</b> — 한 페이지 변경이 다른 곳에 영향 적음</li>
+              <li><b>역할별 딥링크</b> — URL로 특정 화면 직접 진입 가능</li>
+            </ul>
+          </div>
+          <div class="pcol con">
+            <h4>👎 단점 (중복이 핵심)</h4>
+            <ul>
+              <li><b>위젯 중복 구현</b> — 발전량·수익·RE100·발전소 상태가 여러 대시보드에 각각 구현 → 유지보수 N배</li>
+              <li><b>100% 복사본 존재</b> — <span class="loc mirror">/platform/lease/dashboard</span> 는 <span class="loc">/lease/dashboard</span> 리다이렉트(완전 중복)</li>
+              <li><b>데이터 정의 불일치 위험</b> — 같은 "이번달 발전량"이 페이지마다 다르게 계산될 수 있음</li>
+              <li><b>탐색 혼란</b> — 발전사업자는 발전량을 3곳에서 봄 (어디가 정답?)</li>
+              <li><b>라우트 트리 복제</b> — /lease/* ↔ /platform/lease/*, /generator/ppa/* ↔ /platform/ppa/*</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="dcard">
+        <h2>② 중복 위젯 — 어디에 몇 번 노출되나</h2>
+        <div class="ds">같은(또는 거의 같은) 위젯이 서로 다른 대시보드에 반복 노출되는 지점</div>
+        <table class="dup">
+          <thead><tr><th>위젯</th><th>중복</th><th>노출 위치 (페이지)</th><th>영향 페르소나</th></tr></thead>
+          <tbody>
+          <tr><td>발전량 KPI·추이 차트</td><td><span class="dupn hi">5</span></td><td><span class="loc">/dashboard</span><span class="loc">/generator/ppa/dashboard</span><span class="loc">/lease/dashboard</span><span class="loc">/consumer</span><span class="loc">/spc</span></td><td>발전사·수용가·SPC</td></tr>
+          <tr><td>발전소 상태 보드(테이블)</td><td><span class="dupn mid">3</span></td><td><span class="loc">/dashboard</span><span class="loc">/consumer</span><span class="loc">/lease/dashboard</span></td><td>발전사·수용가</td></tr>
+          <tr><td>CFE 매칭률</td><td><span class="dupn mid">3</span></td><td><span class="loc">/dashboard</span><span class="loc">/platform/ppa/dashboard</span><span class="loc">/platform/ppa/status</span></td><td>발전사·SPC·관리자</td></tr>
+          <tr><td>수익·금액 KPI</td><td><span class="dupn mid">3</span></td><td><span class="loc">/dashboard</span><span class="loc">/generator/ppa/dashboard</span><span class="loc">/consultant</span></td><td>발전사·컨설턴트</td></tr>
+          <tr><td>거래량·거래 추이</td><td><span class="dupn mid">3</span></td><td><span class="loc">/spc</span><span class="loc">/platform/ppa/dashboard</span><span class="loc">/platform/ppa/status</span></td><td>SPC·관리자</td></tr>
+          <tr><td>절감액 KPI</td><td><span class="dupn mid">2</span></td><td><span class="loc">/consumer</span><span class="loc">/lease/dashboard</span></td><td>수용가</td></tr>
+          <tr><td>RE100 달성률</td><td><span class="dupn mid">2</span></td><td><span class="loc">/consumer</span><span class="loc">/lease/dashboard</span></td><td>수용가</td></tr>
+          <tr><td>Lease 대시보드 전체</td><td><span class="dupn hi">2</span></td><td><span class="loc">/lease/dashboard</span><span class="loc mirror">/platform/lease/dashboard (100% 복사)</span></td><td>수용가·SPC·관리자</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="dcard">
+        <h2>③ 페르소나별 중복 노출</h2>
+        <div class="ds">각 역할이 로그인 후 보게 되는 대시보드 개수와, 그 사이에서 겹치는 위젯</div>
+        <div class="pdup">
+          <div class="prow"><div class="ic" style="background:#eafaf3;color:#10b981">🏭</div><div style="flex:1"><div class="nm">발전사업자 <span style="color:#8a92a6;font-size:11px;font-weight:600">· 대시보드 3개</span></div><div class="dd"><span class="loc">/dashboard</span><span class="loc">/generator/ppa/dashboard</span><span class="loc">/lease/dashboard</span> → <b>발전량 KPI · 발전추이 차트 · 발전소 상태 보드</b>가 3중 중복</div></div><span class="badge b-hi">중복 高</span></div>
+          <div class="prow"><div class="ic" style="background:#fff7ea;color:#f59e0b">🏢</div><div style="flex:1"><div class="nm">수용가 <span style="color:#8a92a6;font-size:11px;font-weight:600">· 대시보드 2개</span></div><div class="dd"><span class="loc">/consumer</span><span class="loc">/lease/dashboard</span> → <b>절감액 · RE100 · 발전추이 · 발전소 상태 보드</b>가 2중 중복</div></div><span class="badge b-mid">중복 中</span></div>
+          <div class="prow"><div class="ic" style="background:#e9f7fe;color:#0ea5e9">⚡</div><div style="flex:1"><div class="nm">전기공급사업자 (SPC) <span style="color:#8a92a6;font-size:11px;font-weight:600">· 화면 4개</span></div><div class="dd"><span class="loc">/spc</span><span class="loc">/platform/ppa/dashboard</span><span class="loc">/platform/ppa/status</span><span class="loc">/platform/lease/dashboard</span> → <b>거래량 · 발전량 · CFE 매칭률</b> 중복</div></div><span class="badge b-hi">중복 高</span></div>
+          <div class="prow"><div class="ic" style="background:#f1f3f7;color:#64748b">🛡️</div><div style="flex:1"><div class="nm">관리자 <span style="color:#8a92a6;font-size:11px;font-weight:600">· 화면 3개+</span></div><div class="dd"><span class="loc">/platform</span><span class="loc">/platform/ppa/dashboard</span><span class="loc mirror">/platform/lease/dashboard</span> → <b>Lease 대시보드 100% 복제</b> + 거래·발전 위젯 중복</div></div><span class="badge b-hi">중복 高</span></div>
+          <div class="prow"><div class="ic" style="background:#f3effe;color:#8b5cf6">👤</div><div style="flex:1"><div class="nm">컨설턴트 <span style="color:#8a92a6;font-size:11px;font-weight:600">· 대시보드 2개</span></div><div class="dd"><span class="loc">/consultant</span><span class="loc">/consulting</span> → <b>프로젝트 · 고객 현황</b> 부분 중복</div></div><span class="badge b-lo">중복 低</span></div>
+          <div class="prow"><div class="ic" style="background:#eef0fe;color:#6366f1">🏗️</div><div style="flex:1"><div class="nm">용역사 <span style="color:#8a92a6;font-size:11px;font-weight:600">· 전용 대시보드 없음</span></div><div class="dd">현재 전용 대시보드 없이 컨설팅 하위로 운영 → 중복은 없으나 <b>신규 정의 필요</b></div></div><span class="badge b-lo">신규</span></div>
+        </div>
+      </div>
+
+      <div class="dcard">
+        <h2>④ 제안 — 대시보드 1개로 통합 (사용자 UX 기준)</h2>
+        <div class="ds">단일 <b>/dashboard</b> 진입 → 로그인 역할(persona)에 따라 위젯이 자동 구성되는 구조</div>
+        <div class="unify">
+          <div class="ucol before">
+            <h4>AS-IS · 멀티 대시보드</h4>
+            <ul>
+              <li>페르소나마다 대시보드 2~4개</li>
+              <li>발전량·수익·RE100 위젯을 페이지마다 각각 구현</li>
+              <li>/platform/* 미러 라우트로 화면 복제</li>
+              <li>데이터 계산 로직이 페이지마다 흩어짐</li>
+              <li><b>사용자</b>: "내 발전량"을 보려고 3개 화면을 도는 혼란</li>
+            </ul>
+          </div>
+          <div class="uarrow">→</div>
+          <div class="ucol after">
+            <h4>TO-BE · 단일 대시보드</h4>
+            <ul>
+              <li>진입점 <b>/dashboard</b> 1개 — persona로 위젯 조합만 분기</li>
+              <li>공통 위젯 1회 구현: <b>KpiCard · 발전추이Chart · 발전소상태Table · RE100Card · CFE매칭Card</b></li>
+              <li>페르소나별 "위젯 레이아웃 config"만 선언 → 한 곳에서 관리</li>
+              <li>민감 위젯(SPC 마진)은 <b>role-gate</b>로 표시 제어</li>
+              <li><b>사용자</b>: 한 화면에서 내 업무 흐름이 끝남 (단일 진실 공급원)</li>
+            </ul>
+          </div>
+        </div>
+        <div style="margin-top:14px;font-size:12.5px;color:var(--ink-2);background:#eff4ff;border:1px solid #cfe0ff;border-radius:10px;padding:11px 14px">
+          <b style="color:var(--primary)">UX 효과</b> — 인지 부하 감소 · 일관성 · 단일 진실 공급원 · 점진적 노출. <b>개발 효과</b> — 위젯 1개 = 1곳 구현, 데이터 정의 단일화, 신규 페르소나(용역사)는 config 한 줄 추가.
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<footer>울산미포 스마트그린산단 에너지 자급자족 플랫폼 — 프로세스 맵 (시안) · 단독 HTML 목업</footer>
+
+<script>
+  const C = {
+  generator:{a:'#10b981',soft:'#eafaf3',line:'#bfe9d4',ring:'rgba(16,185,129,.18)'},
+  consumer :{a:'#f59e0b',soft:'#fff7ea',line:'#f3d79a',ring:'rgba(245,158,11,.18)'},
+  consultant:{a:'#8b5cf6',soft:'#f3effe',line:'#ddd0fb',ring:'rgba(139,92,246,.18)'},
+  spc      :{a:'#0ea5e9',soft:'#e9f7fe',line:'#bfe6f7',ring:'rgba(14,165,233,.18)'},
+  admin    :{a:'#64748b',soft:'#f1f3f7',line:'#d7dce5',ring:'rgba(100,116,139,.18)'},
+  agency   :{a:'#6366f1',soft:'#eef0fe',line:'#cdd2fb',ring:'rgba(99,102,241,.18)'},
+};
+
+  const JPHASES=[
+  {n:'01', t:'온보딩·구축', h:'1·2차년도 · 설비 설치'},
+  {n:'02', t:'발전 개시', h:'3차년도~ · 자원별 가동'},
+  {n:'03', t:'매칭·계약', h:'수요 ↔ 공급 연결'},
+  {n:'04', t:'거래·공급', h:'전력 흐름'},
+  {n:'05', t:'정산·세금', h:'대금 흐름'},
+  {n:'06', t:'이행·증빙', h:'RE100 · ESG'},
+  ];
+
+  const JLANES=[
+  {key:'admin', icon:'🛡️', name:'관리자', sub:'거버넌스 (전 과정 감독)', cells:[
+  {a:'기업 초대 · 승인 · 역할 부여', r:'/platform/approvals', main:1},
+  {a:'발전소 · SPC 등록 승인', r:'/platform/companies'},
+  {a:'계약 · 매칭 승인', r:'/platform/trading'},
+  {a:'전체 거래 모니터링', r:'/platform/trading', main:1},
+  {a:'정산 감사', r:'/platform/audit-logs'},
+  {a:'감사 로그 · 통제', r:'/platform/audit-logs', main:1},
+    ]},
+  {key:'consumer', sub:'고객', cells:[
+  {a:'가입 · RE100 무료진단 신청', r:'/consulting/diagnosis', ho:'컨설턴트', main:1},
+    null,
+  {a:'제안 검토 → 발전원·계약유형 선택', r:'/ppa/contracts', c:'발전원·계약', main:1},
+  {a:'전력 사용', r:'/consumer/usage', main:1},
+  {a:'전기요금 납부 (부족 시 부족내역)', r:'/ppa/billing/*', main:1},
+  {a:'RE100/ESG 증빙 수령', r:'/consumer/re100', main:1},
+    ]},
+  {key:'consultant', name:'컨설턴트 (독립)', sub:'진단·기획·인증', cells:[
+  {a:'RE100 진단 수행 · 시공 용역사 위탁', r:'/consulting/diagnosis', ho:'용역사', main:1},
+    null,
+  {a:'발전사 ↔ 수용가 매칭 · 제안 발송', planned:1, ho:'발전사'},
+    null,
+  {a:'컨설팅 수익 정산', r:'/consultant/earnings'},
+  {a:'RE100 인증 지원', r:'/consulting/*'},
+    ]},
+  {key:'agency', icon:'🏗️', name:'용역사 (용역)', sub:'시공·설치·유지보수', cells:[
+  {a:'발전설비 시공 · 설치 (위탁 수행)', r:'/consulting/agency', main:1},
+  {a:'설치 완료 · 시운전', r:'/consulting/agency', main:1},
+    null,
+    null,
+  {a:'시공비 정산', r:'/consulting/settlement'},
+  {a:'유지보수 · A/S', r:'/consulting/agency'},
+    ]},
+  {key:'spc', name:'전기공급사업자 (SPC)', sub:'기설립 · 중개·정산', cells:[
+  {a:'발전소 등록 · 계통 연계 관리', r:'/platform/companies'},
+  {a:'발전 자원 운영 · O&M', r:'/platform/lease/*', main:1},
+  {a:'PPA 매칭·중개', r:'/platform/ppa/status', main:1},
+  {a:'전력 중개 · 발전량 예측 vs 실측', r:'/platform/ppa/forecast', c:'정상/부족/초과', main:1},
+  {a:'통합 정산 · 세금계산서 발행', r:'/platform/ppa/billing/*', main:1},
+  {a:'거래 증빙 지원', r:'/ppa/documents/*'},
+    ]},
+  {key:'generator', sub:'발전·공급', cells:[
+  {a:'발전소 구축 · 자원 등록', r:'/generator/ppa/resources/register', c:'자원유형', main:1},
+  {a:'준공 → 발전 개시', r:'/monitoring/plant', main:1},
+  {a:'계약 체결', r:'/generator/ppa/contracts', main:1},
+  {a:'전력 생산 · 공급', r:'/generator/trading', main:1},
+  {a:'판매대금 정산', r:'/generator/ppa/revenue/invoices', c:'수익모델', main:1},
+  {a:'REC 발급 · 보고서', r:'/ppa/documents/evidence', main:1},
+    ]},
+  ];
+
+  const PERSONAS = [
+  {
+    key:'generator', icon:'🏭', name:'발전사업자', en:'generator',
+    actor:'롯데SK에너루트(연료전지) · 에스에너지/한일실리콘(태양광) · 울산미포ORC발전1호',
+    userflow:[
+  {n:'STEP 1', h:'발전소 등록', d:'자원(발전소)·용량·자원유형 등록', r:'/generator/ppa/resources/register'},
+  {n:'STEP 2', h:'발전 모니터링', d:'실시간 발전량·예측 vs 실측 확인', r:'/monitoring/plant'},
+  {n:'STEP 3', h:'수익 분석', d:'자원유형별 단가·수익 추이 확인', r:'/generator/ppa/revenue/analytics'},
+  {n:'STEP 4', h:'정산 확인', d:'월별 정산 내역·세금계산서 발행', r:'/generator/ppa/revenue/invoices'},
+  {n:'STEP 5', h:'이행·증빙', d:'REC 발급·보고서 제출', r:'/ppa/documents/evidence'},
+    ],
+    flow:[
+  {type:'step', tag:'시작', t:'발전소(자원) 등록', d:'자원관리에서 발전소·용량 등록'},
+  {type:'decision', q:'자원 유형은?', branches:[
+  {l:'연료전지', d:'SMP + 2.2 REC 가중치(≈239원/kWh) · CHPS'},
+  {l:'태양광', d:'직접 PPA(140원/kWh) 또는 자가소비형'},
+  {l:'ORC', d:'전력공급 SPC(≈100원/kWh · 7,920h/년)'},
+    ]},
+  {type:'step', t:'전력 생산 → 정산', d:'생산전력 판매 매출 정산 → SPC 운영비 활용'},
+  {type:'output', t:'세금계산서 → 이행증빙', d:'REC 발급 · 보고서 산출', ref:'/generator/ppa/*'},
+    ],
+  },
+  {
+    key:'consumer', icon:'🏢', name:'수용가', en:'consumer',
+    actor:'산단 입주 수요기업 — 한국단조 · 무진네트워크 · 성림첨단산업 등',
+    userflow:[
+  {n:'STEP 1', h:'RE100 진단 신청', d:'무료 진단으로 자급 가능성 확인', r:'/consulting/diagnosis'},
+  {n:'STEP 2', h:'사용량 분석', d:'전력 사용량·패턴 확인', r:'/consumer/usage'},
+  {n:'STEP 3', h:'에너지 계약', d:'발전원(태양광·연료전지·ORC) + 계약유형 선택', r:'/consumer/contracts'},
+  {n:'STEP 4', h:'요금 확인', d:'요금·정산 내역, 부족분 확인', r:'/consumer/billing'},
+  {n:'STEP 5', h:'RE100/ESG', d:'재생에너지 사용 증빙 수령', r:'/consumer/re100'},
+    ],
+    flow:[
+  {type:'step', tag:'시작', t:'RE100 무료 진단', d:'컨설팅 진단으로 자급 가능성 확인'},
+  {type:'decision', q:'자가발전이 가능한가?', branches:[
+  {l:'가능', d:'자가소비형 태양광 설치', cls:'ok'},
+  {l:'불가', d:'마켓플레이스 → 컨설턴트 제안 받기'},
+    ]},
+  {type:'decision', q:'어떤 발전원과 계약? (자원유형)', branches:[
+  {l:'태양광', d:'계약 3종 → Lease PPA · 직접 PPA · 자가 설치'},
+  {l:'연료전지', d:'24시간 안정 발전 · SMP+REC'},
+  {l:'ORC', d:'폐열 기반 발전 · 전력공급'},
+    ]},
+  {type:'decision', q:'태양광 계약 유형은? (3종)', branches:[
+  {l:'Lease PPA', d:'설비 임대형 · 발전량 비례 청구 (발전사=수용가)'},
+  {l:'직접 PPA', d:'발전사 직접계약 · Onsite/Offsite · 5~20년'},
+  {l:'자가 설치', d:'자가 소유·자가소비 · 모니터링만'},
+    ]},
+  {type:'step', t:'전력 사용 → 요금/정산', d:'사용량 분석 · 요금 내역'},
+  {type:'decision', q:'사용량이 계약량 대비?', branches:[
+  {l:'부족', d:'사용량 부족 내역 처리', cls:'no'},
+  {l:'충족', d:'정상 정산', cls:'ok'},
+    ]},
+  {type:'output', t:'RE100 / ESG 증빙 발급', d:'재생에너지 사용 인증', ref:'/consumer/*'},
+    ],
+  },
+  {
+    key:'consultant', icon:'👤', name:'컨설턴트', en:'consultant',
+    actor:'서울에너지인프라개발센터 · 제일에코플랫폼 (에너지 컨설팅 · RE100 진단/인증)',
+    userflow:[
+  {n:'STEP 1', h:'신규 의뢰 수신', d:'수용가의 컨설팅/진단 의뢰 접수', r:'/consulting/consulting-requests'},
+  {n:'STEP 2', h:'RE100 진단 수행', d:'진단 결과 회신 · 사업 기획', r:'/consulting/diagnosis'},
+  {n:'STEP 3', h:'고객·프로젝트 관리', d:'진행 상황 추적', r:'/consultant/clients'},
+  {n:'STEP 4', h:'시공 용역 위탁', d:'용역사에 시공 위탁·관리', r:'/consulting/agency'},
+  {n:'STEP 5', h:'수익·정산', d:'성사 건 수익 정산', r:'/consultant/earnings'},
+    ],
+    flow:[
+  {type:'step', tag:'INBOUND', t:'신규 의뢰 수신', d:'수용가의 컨설팅/진단 의뢰 접수'},
+  {type:'decision', q:'소속 유형은? (user.agencyId)', branches:[
+  {l:'용역사 소속', d:'수익/제안/추천 메뉴 숨김 → 용역 작업만', cls:'no'},
+  {l:'독립', d:'전체 메뉴 노출', cls:'ok'},
+    ]},
+  {type:'step', t:'RE100 진단 · 컨설팅 수행', d:'진단 결과 회신 · 사업 기획'},
+  {type:'step', planned:1, t:'발전사↔수용가 매칭 · 제안 발송', d:'현재 컨설턴트 역할 아님 — 추후 공통 기능으로 편입 예정'},
+  {type:'step', t:'시공 용역사 위탁 · 프로젝트 관리', d:'용역사에 시공 위탁 · 진행 관리'},
+  {type:'output', t:'RE100 인증 지원 → 수익 정산', d:'성사 건 정산·수익 관리', ref:'/consulting/*'},
+    ],
+  },
+  {
+    key:'agency', icon:'🏗️', name:'용역사', en:'agency',
+    actor:'시공 위탁받는 용역사 — 발전설비 시공·설치·유지보수 (독립 컨설턴트의 위탁 수행)',
+    userflow:[
+  {n:'STEP 1', h:'용역 수신', d:'독립 컨설턴트의 시공 위탁 접수', r:'/consulting/agency'},
+  {n:'STEP 2', h:'견적·일정', d:'시공 견적·설치 일정 산출', r:'/consulting/agency'},
+  {n:'STEP 3', h:'시공·설치', d:'발전설비 설치·시운전', r:'/consulting/agency'},
+  {n:'STEP 4', h:'진행 보고', d:'시공 진행률 보고', r:'/consulting/agency'},
+  {n:'STEP 5', h:'시공비 정산', d:'사업비 집행 정산', r:'/consulting/settlement'},
+    ],
+    flow:[
+  {type:'step', tag:'INBOUND', t:'시공 용역 수신', d:'독립 컨설턴트의 시공 위탁 접수'},
+  {type:'step', t:'견적 · 일정 산출', d:'시공 견적·설치 일정 작성'},
+  {type:'decision', q:'작업 유형은?', branches:[
+  {l:'신규 시공', d:'발전설비 신규 설치 (태양광/연료전지/ORC)'},
+  {l:'유지보수', d:'기설치 설비 A/S·유지보수'},
+    ]},
+  {type:'step', t:'설치 · 시운전', d:'발전설비 설치 → 시운전'},
+  {type:'decision', q:'준공 검수 결과는?', branches:[
+  {l:'합격', d:'준공 → 운영 전환(SPC)', cls:'ok'},
+  {l:'보완', d:'재시공·보완 조치', cls:'no'},
+    ]},
+  {type:'output', t:'시공비 정산', d:'사업비 집행으로 정산', ref:'/consulting/settlement'},
+    ],
+  },
+  {
+    key:'spc', icon:'⚡', name:'전기공급사업자', en:'spc',
+    actor:'울산미포ORC발전1호 + 자원별 SPC (기설립) — SPC 총괄운영·PPA 직접거래',
+    userflow:[
+  {n:'STEP 1', h:'거래 현황', d:'발전사·수요기업 거래 이력 (4탭)', r:'/platform/ppa/status'},
+  {n:'STEP 2', h:'매칭·배분', d:'시간단위 매칭 · 우선순위·알고리즘 감사', r:'/platform/ppa/status'},
+  {n:'STEP 3', h:'발전량 예측', d:'예측 vs 실측 오차율', r:'/platform/ppa/forecast'},
+  {n:'STEP 4', h:'정산 처리', d:'잠정→확정 · 분쟁·재정산', r:'/platform/ppa/billing/settlement'},
+  {n:'STEP 5', h:'세금계산서·마진', d:'세금계산서 발행 + SPC 마진 추적', r:'/platform/ppa/billing/tax-invoice'},
+    ],
+    flow:[
+  {type:'step', tag:'운영', t:'거래 현황 모니터링', d:'발전사 거래·수요기업 거래·매칭이력·SPC마진 (4탭)'},
+  {type:'step', t:'시간단위 매칭 · 배분', d:'우선순위·알고리즘 적용 · 매칭 로그 감사'},
+  {type:'decision', q:'매칭 결과는?', branches:[
+  {l:'정상', d:'약정대로 공급', cls:'ok'},
+  {l:'부족', d:'미달분 처리 · 분쟁', cls:'no'},
+  {l:'초과', d:'초과분 처리'},
+    ]},
+  {type:'decision', q:'정산 상태는?', branches:[
+  {l:'잠정', d:'검토 대기'},
+  {l:'확정', d:'세금계산서 발행', cls:'ok'},
+  {l:'분쟁/재정산', d:'수정세금계산서', cls:'no'},
+    ]},
+  {type:'output', t:'세금계산서 발행 · SPC 마진 추적', d:'청구액−지급액=마진 (관리자 전용)', ref:'/platform/ppa/status'},
+    ],
+  },
+  {
+    key:'admin', icon:'🛡️', name:'관리자', en:'admin',
+    actor:'RMS(주관) · 에스앤아이코퍼레이션 · 이아디공간 (플랫폼 총괄·통합관제)',
+    userflow:[
+  {n:'STEP 1', h:'기업 승인', d:'가입 신청 기업 심사·승인', r:'/platform/approvals'},
+  {n:'STEP 2', h:'사용자·역할', d:'사용자 등록·권한 부여', r:'/platform/users'},
+  {n:'STEP 3', h:'기업 초대', d:'신규 산단 기업 초대', r:'/platform/invitations'},
+  {n:'STEP 4', h:'거래 모니터링', d:'전체 거래·운영 감시', r:'/platform/trading'},
+  {n:'STEP 5', h:'감사 로그', d:'전 활동 감사·통제', r:'/platform/audit-logs'},
+    ],
+    flow:[
+  {type:'step', tag:'시작', t:'기업 초대', d:'산단 기업 온보딩 초대 발송'},
+  {type:'decision', q:'가입 승인하는가?', branches:[
+  {l:'승인', d:'역할 부여 단계로', cls:'ok'},
+  {l:'거절', d:'반려 처리', cls:'no'},
+    ]},
+  {type:'step', t:'역할 부여 (6종 페르소나)', d:'generator/consumer/consultant/agency/spc/admin'},
+  {type:'step', t:'권한 매핑', d:'역할·권한 설정'},
+  {type:'output', t:'플랫폼 이용 → 감사 로그 통제', d:'전 활동 감사·통제', ref:'/platform/*'},
+    ],
+  },
+  ];
+
+  const tabsEl=document.getElementById('tabs'), boardEl=document.getElementById('board');
+
+  function renderJourney(){
+  const g=document.getElementById('jgrid');
+  let h='<div class="jcorner">주체 ＼ 단계</div>';
+  JPHASES.forEach(p=>{ h+=`<div class="jph"><div class="pn">PHASE ${p.n}</div><div class="pt">${p.t}</div><div class="phh">${p.h}</div></div>`; });
+  JLANES.forEach(lane=>{
+  const c=C[lane.key], pn=PERSONAS.find(x=>x.key===lane.key);
+  const icon=lane.icon||(pn&&pn.icon)||'', name=lane.name||(pn&&pn.name)||lane.key;
+  h+=`<div class="jlabel" style="background:${c.soft};border-color:${c.line};color:${c.a}">
+      <span class="le">${icon} ${name}</span><span class="ls">${lane.sub}</span></div>`;
+  lane.cells.forEach(cell=>{
+  if(!cell){ h+='<div class="jcell empty"></div>'; return; }
+  h+=`<div class="jcell ${cell.main?'main':''} ${cell.planned?'planned':''}" style="--lane:${c.a}">
+        <div class="ca">${cell.a}</div>
+        ${cell.planned?`<span class="cf">★ 추후 · 공통 기능</span>`:''}
+        ${cell.c?`<span class="cc">◇ ${cell.c}</span>`:''}
+        ${cell.r&&cell.r!=='—'?`<span class="cr">${cell.r}</span>`:''}
+        ${cell.ho?`<span class="cho" style="color:var(--violet)">↘ ${cell.ho}로 핸드오프</span>`:''}
+      </div>`;
+});
+});
+  g.innerHTML=h;
+}
+  renderJourney();
+
+  function setMode(m){
+  document.getElementById('m-all').classList.toggle('on', m==='all');
+  document.getElementById('m-per').classList.toggle('on', m==='per');
+  document.getElementById('m-diag').classList.toggle('on', m==='diag');
+  document.getElementById('view-all').classList.toggle('hide', m!=='all');
+  document.getElementById('view-per').classList.toggle('hide', m!=='per');
+  document.getElementById('view-diag').classList.toggle('hide', m!=='diag');
+}
+
+  function applyAccent(p){
+  const c=C[p.key], r=document.documentElement.style;
+  r.setProperty('--accent',c.a); r.setProperty('--accent-soft',c.soft);
+  r.setProperty('--accent-line',c.line); r.setProperty('--accent-ring',c.ring);
+}
+  function renderTabs(active){
+  tabsEl.innerHTML='';
+  PERSONAS.forEach(p=>{
+  const c=C[p.key], el=document.createElement('div');
+  el.className='tab'+(p.key===active?' active':'');
+  if(p.key===active){el.style.setProperty('--accent',c.a);el.style.setProperty('--accent-ring',c.ring);}
+  el.innerHTML=`<span class="ic" style="background:${c.soft};color:${c.a}">${p.icon}</span>
+      <span><span class="tt">${p.name}</span><br><span class="ts">${p.en}</span></span>`;
+  el.onclick=()=>select(p.key);
+  tabsEl.appendChild(el);
+});
+}
+  function flowHTML(p){
+  let h='<div class="flow">';
+  p.flow.forEach((n,i)=>{
+  if(i>0) h+=`<div class="node"><div class="conn${n.type==='decision'||p.flow[i-1].type==='decision'?'':' short'}"></div></div>`;
+  h+='<div class="node">';
+  if(n.type==='step'){
+  h+=`<div class="step ${n.planned?'planned':''}"><div class="st-t">${n.tag?`<span class="tag">${n.tag}</span>`:''}${n.t}${n.planned?'<span class="pbadge">★ 추후·공통</span>':''}</div><div class="st-d">${n.d}</div></div>`;
+}else if(n.type==='decision'){
+  h+=`<div class="decision"><div class="dq"><span class="dia"></span>${n.q}</div>
+        <div class="branches">${n.branches.map(b=>`<div class="branch ${b.cls||''}"><div class="bl"><span class="arrow">▸</span>${b.l}</div><div class="bd">${b.d}</div></div>`).join('')}</div></div>`;
+}else{
+  h+=`<div class="endcap"><div class="ec-t">${n.t}</div><div class="ec-d">${n.d}${n.ref?`<span class="pageref">${n.ref}</span>`:''}</div></div>`;
+}
+  h+='</div>';
+});
+  return h+'</div>';
+}
+  function userflowHTML(p){
+  if(!p.userflow) return '';
+  return `<div class="uflow"><div class="ut">▤ 유저 플로우 (실제 화면 단계)</div>
+    <div class="usteps">${p.userflow.map(s=>`<div class="ustep"><div class="un">${s.n}</div><div class="uh">${s.h}</div><div class="ud">${s.d}</div><div class="ur">${s.r}</div></div>`).join('')}</div></div>`;
+}
+  function select(key){
+  const p=PERSONAS.find(x=>x.key===key); applyAccent(p); renderTabs(key);
+  const c=C[key];
+  boardEl.innerHTML=`
+    <div class="board-head"><div class="ic" style="background:${c.soft};color:${c.a}">${p.icon}</div>
+      <div><h2>${p.name} <span style="color:${c.a};font-size:13px;font-weight:700">${p.en}</span></h2>
+      <div class="sub">유저 플로우 + 프로세스 흐름</div></div></div>
+    <div class="actor"><b>담당 주체</b> · ${p.actor}</div>
+    ${userflowHTML(p)}
+    ${flowHTML(p)}`;
+}
+  renderTabs('generator'); select('generator');
+  if(location.hash==='#per') setMode('per');
+  if(location.hash==='#diag') setMode('diag');
+</script>
+</body>
+</html>
