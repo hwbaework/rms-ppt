@@ -514,6 +514,15 @@ const CGNB_META: Record<CGnbKey, { label: string; soft: string; line: string; in
   re100:      { label: '⑤ RE100·이행',    soft: '#eafaf3', line: '#bfe9d4', ink: '#0b7a52' },
 }
 
+/* 공통 GNB 이름 — 모든 페르소나 동일 (번호 없음, 범례·라벨용) */
+const GNB_COMMON_LABEL: Record<CGnbKey, string> = {
+  dashboard: '대시보드',
+  consulting: '컨설팅',
+  trading: '전력거래',
+  billing: '정산·요금',
+  re100: 'RE100·이행',
+}
+
 type CJStep = { no: string; title: string; gnb: CGnbKey; path: string; route: string }
 
 const CJ_STEPS: CJStep[] = [
@@ -639,149 +648,173 @@ const PLAN_CONSUMER: PersonaPlan = {
   matrix: { phases: CONSUMER_PHASES, journey: CONSUMER_JOURNEY, gnb: CONSUMER_GNB, check: CONSUMER_CHECK },
 }
 
-/* 발전사업자 */
+/* 발전사업자 — 수용가와 대칭, 5 GNB (모니터링 별도·정산 독립) */
 const PLAN_GENERATOR: PersonaPlan = {
   priorities: [
-    { rank: 1, label: '이번 달 발전 수익',    desc: '자원유형별 단가차익 (SMP+REC / PPA / 전력공급)' },
-    { rank: 2, label: '발전량 vs 예측 오차',   desc: '예측 정확도 · 패널티 영향' },
-    { rank: 3, label: '정산 확정 일정',        desc: '잠정→확정→수금 진행 상태' },
-    { rank: 4, label: '계약 진행',             desc: '매칭·체결·갱신·해지' },
-    { rank: 5, label: '설비 가동률·O&M',      desc: '발전소·인버터 상태·알람' },
+    { rank: 1, label: '지금 잘 돌고 있나',     desc: '설비 가동률·발전소 상태·발전량' },
+    { rank: 2, label: '그래서 얼마 버나',      desc: '수익·정산·미수금' },
+    { rank: 3, label: '약정을 지키나',         desc: '발전량 편차(초과/미달)·REC 발급' },
+    { rank: 4, label: '계약은 안정적인가',     desc: '잔여 계약 기간·갱신·해지 위약금' },
+    { rank: 5, label: '시장가는 어떤가',       desc: 'SMP·REC 시세' },
   ],
   nav: [
-    { idx: '①', name: '대시보드', route: '/generator', lnb: null, note: 'LNB 없음 · 단독 홈' },
-    { idx: '②', name: '자원관리', sub: '발전 주체의 1차 화면', lnb: [
-      { name: '발전소 등록', route: '/generator/ppa/resources/register' },
-      { name: '자원 상세',   route: '/generator/ppa/resources' },
-      { name: '가동 현황',   route: '/generator/ppa/resources/status' },
-      { name: '설비 정보',   route: '/generator/ppa/resources/equipment' },
+    { idx: '①', name: '대시보드', route: '/dashboard', lnb: null, note: 'LNB 없음 · 단독 홈 · 허브' },
+    { idx: '②', name: '전력거래', sub: '"팔기" (자원 등록 포함)', lnb: [
+      { name: '자원 관리',          route: '/generator/ppa/resources/register' },
+      { name: '공급 신청',          route: '/generator/trading' },
+      { name: '내 계약',            route: '/generator/ppa/contracts' },
+      { name: '전력거래시장(ETM)',  route: '/generator/etm' },
     ]},
-    { idx: '③', name: '거래·계약', lnb: [
-      { name: '공급 제안 응답', route: '/generator/ppa/proposals' },
-      { name: '계약 관리',      route: '/generator/ppa/contracts' },
-      { name: '매칭 현황',      route: '/generator/ppa/matching' },
-      { name: '갱신·해지',      route: '/generator/ppa/contracts/renewals' },
+    { idx: '③', name: '발전 모니터링', sub: '"운영 감시"', lnb: [
+      { name: '발전 현황',          route: '/generator/ppa/dashboard' },
+      { name: '발전소 모니터링',    route: '/monitoring/plant' },
+      { name: '이상감지',          route: '/monitoring/anomalies' },
     ]},
-    { idx: '④', name: '정산·수익', sub: '내가 받는 돈', lnb: [
-      { name: '정산 내역',     route: '/generator/ppa/revenue/invoices' },
-      { name: '수익 분석',     route: '/generator/ppa/revenue/analytics' },
-      { name: '세금계산서',    route: '/generator/ppa/revenue/tax-invoice' },
-      { name: '편차',          route: '/generator/ppa/revenue/deviation' },
+    { idx: '④', name: '수익·정산', sub: '"내가 받는 돈"', lnb: [
+      { name: '수익 분석',          route: '/generator/ppa/revenue/analytics' },
+      { name: '정산 내역',          route: '/generator/ppa/revenue/invoices' },
+      { name: '세금계산서',         route: '/generator/ppa/revenue/tax-invoice' },
+      { name: '발전량 편차',        route: '/generator/ppa/revenue/deviation' },
     ]},
-    { idx: '⑤', name: '모니터링·증빙', sub: '발전·REC', lnb: [
-      { name: '실시간 발전량', route: '/monitoring/plant' },
-      { name: '예측 vs 실측',  route: '/monitoring/forecast' },
-      { name: 'REC 발급',      route: '/ppa/documents/rec' },
-      { name: '보고서',        route: '/ppa/documents/report' },
+    { idx: '⑤', name: '이행·증빙', sub: '"REC·증빙"', lnb: [
+      { name: 'REC·이행증빙',       route: '/ppa/documents/evidence' },
+      { name: '보고서',             route: '/monitoring/reports' },
+      { name: '문서 보관함',        route: '/generator/ppa/documents' },
     ]},
   ],
   navCommon: ['탄소거래', 'e-Data', 'VPP', 'DT'],
   designIntent: [
-    '자원관리를 ② GNB로 (발전 주체의 우선 화면)',
-    '정산·수익을 독립 GNB로 (거래 ≠ 정산, 수용가와 같은 패턴)',
-    '모니터링과 REC를 묶음 (RE100 시대 발전사 핵심 산출물)',
+    '자원 등록을 전력거래로 합침 (공급의 전제조건·한 번 하는 셋업)',
+    '모니터링은 성격이 달라(상시 운영 감시) 별도 GNB',
+    '수익·정산을 독립 GNB로 (거래 ≠ 정산) — 수용가 "정산·요금"의 발전사판(받는 돈)',
   ],
   dashboard: {
-    route: '/generator', sub: 'LNB 없음 · 단독 홈',
+    route: '/dashboard', sub: 'LNB 없음 · 단독 홈 · 허브 (5개 GNB 진입 위젯 하나씩)',
     zones: [
-      { z: 'Zone 1', title: '이달 발전·수익', items: ['이달 발전량·수익 KPI', '자원유형별 분해 (연료전지/태양광/ORC)', '전년 대비 추이'] },
-      { z: 'Zone 2', title: '예측 vs 실측',   items: ['오차율 게이지·일별 추이', '패널티 누계 (있을 때)'] },
-      { z: 'Zone 3', title: '정산 일정',      items: ['다음 정산일·잠정 금액', '미수금 알림'] },
-      { z: 'Zone 4', title: '설비 가동률',    items: ['발전소별 가동률·알람', 'O&M 일정'] },
+      { z: 'Zone 1', title: '지금 잘 돌고 있나 (운영)', items: [
+        '설비 가동률·현재 출력(현재출력÷용량 %) → ③ 발전소 모니터링',
+        '설비 상태 보드(정상·주의·점검·정지) → ③ 이상감지',
+        '발전량·발전시간(전일) + 오늘 시간대별 → ③ 발전 현황',
+      ]},
+      { z: 'Zone 2', title: '그래서 얼마 버나 (수익)', items: [
+        '금액(전일)·이번달 예상 수익 → ④ 수익 분석',
+        '미수금·정산 알림 → ④ 정산 내역 (신규)',
+      ]},
+      { z: 'Zone 3', title: '약정을 지키나 (이행)', items: [
+        '미달 발전 수요기업(CFE<70%) → ④ 발전량 편차',
+        'REC 발급 예정 → ⑤ REC·이행증빙 (신규)',
+      ]},
+      { z: 'Zone 4', title: '계약·셋업', items: [
+        '수요기업 비교·계약 갱신 알림 → ② 내 계약 (갱신 알림 신규)',
+        '자원 등록 유도 배너 → ② 자원 관리',
+      ]},
     ],
-    removed: ['수용가 관심 위젯 (RE100 게이지·한전 비교)'],
+    removed: ['대시보드 3중 중복(/dashboard·/generator/ppa/dashboard·/lease/dashboard) → 홈 1개 + 발전 현황으로 일원화 · 신규 위젯 3개: 미수금·계약 갱신·REC 발급 예정'],
   },
   gnbs: [
-    { no: 'D', name: '② 자원관리', screens: [
-      { name: '발전소 등록', route: '/generator/ppa/resources/register',
-        sections: [{ label: '내용', items: ['자원·용량·위치·자원유형 등록 (위저드)'] }],
-        rel: '→ 관리자 승인 · ↔ SPC 계통 연계' },
-      { name: '자원 상세',   route: '/generator/ppa/resources',
-        sections: [{ label: '내용', items: ['발전소 목록·상세·변경 이력'] }] },
-      { name: '가동 현황',   route: '/generator/ppa/resources/status',
-        sections: [{ label: '내용', items: ['일별 가동률·일시 정지 이력·O&M 일정'] }] },
-      { name: '설비 정보',   route: '/generator/ppa/resources/equipment',
-        sections: [{ label: '내용', items: ['인버터·PCS·변압기·모니터링 장비'] }] },
-    ]},
-    { no: 'E', name: '③ 거래·계약', screens: [
-      { name: '공급 제안 응답', route: '/generator/ppa/proposals',
-        sections: [{ label: '내용', items: ['수신된 공급 제안 목록·단가·기간', '수락·거절·재제안'] }],
-        rel: '← SPC 매칭 · → 수용가 계약 체결로' },
-      { name: '계약 관리', route: '/generator/ppa/contracts', hero: true, sub: '핵심 화면',
+    { no: 'D', name: '② 전력거래', sub: '"팔기" — 내 계약이 hero, 자원 등록 포함', screens: [
+      { name: '자원 관리', route: '/generator/ppa/resources/register',
         sections: [
-          { label: '진행 5단계', items: ['신청접수 → SPC검토 → 거래소신고서 → 승인대기 → 효력발생'] },
-          { label: 'KPI',        items: ['총 계약·누적 수익·자원 믹스·평균 단가'] },
-          { label: '액션',       items: ['갱신·변경·해지'] },
+          { label: '등록',   items: ['신규 자원(발전소)·용량·자원유형(연료전지/태양광/ORC) 등록'] },
+          { label: '현황',   items: ['현재 출력·오늘 발전량·상태·예상 REC 발급개수'] },
         ],
-        rel: '↔ 수용가 동일 계약(상태 동기화) · → SPC·관리자 검토·승인' },
-      { name: '매칭 현황', route: '/generator/ppa/matching',
-        sections: [{ label: '내용', items: ['실시간 매칭 비율·매칭된 수용가 목록'] }],
-        rel: '← SPC 매칭 엔진' },
-      { name: '갱신·해지', route: '/generator/ppa/contracts/renewals',
-        sections: [{ label: '내용', items: ['만료 예정·갱신 협상·해지 신청'] }] },
-    ]},
-    { no: 'F', name: '④ 정산·수익', sub: '내가 받는 돈 — 정산 내역이 hero', screens: [
-      { name: '정산 내역', route: '/generator/ppa/revenue/invoices', hero: true, sub: '핵심 화면',
+        rel: '공급의 전제조건 · 거래 흐름의 입구' },
+      { name: '공급 신청', route: '/generator/trading',
         sections: [
-          { label: 'KPI',        items: ['이달 수익·누적(YTD)·다음 수금일·미수금'] },
-          { label: '정산 산출',  items: ['발전량 × 단가 → 공급가액 / 자원유형별 단가차익'] },
-          { label: '수금 통합',  items: ['확정 → SPC 지급 확인 → 수금'] },
-          { label: '상태',       items: ['SPC 확정 전 "잠정" 배지'] },
+          { label: '4단계', items: ['신청 접수 → SPC 매칭 → 수요기업 승인 대기 → 매칭 완료'] },
+          { label: '액션',  items: ['신청 취소'] },
         ],
-        rel: '← SPC 정산 확정 · 수금 = 수용가 청구액 − SPC 마진' },
-      { name: '수익 분석', route: '/generator/ppa/revenue/analytics',
-        sections: [{ label: '내용', items: ['자원유형별 수익 추이·단가 변동·시뮬레이션'] }] },
-      { name: '세금계산서', route: '/generator/ppa/revenue/tax-invoice',
-        sections: [{ label: '내용', items: ['발행 현황·누적 합계·미발행'] }],
-        rel: '→ SPC 수취' },
-      { name: '편차', route: '/generator/ppa/revenue/deviation',
-        sections: [{ label: '내용', items: ['예측 오차로 인한 패널티·보정 정산'] }],
-        rel: '↔ 수용가 사용량 편차 (동일 이벤트 양면)' },
-    ]},
-    { no: 'G', name: '⑤ 모니터링·증빙', sub: '발전·REC', screens: [
-      { name: '실시간 발전량', route: '/monitoring/plant',
+        rel: '→ SPC 매칭 · ↔ 수용가 거래 신청과 매칭' },
+      { name: '내 계약', route: '/generator/ppa/contracts', hero: true, sub: '핵심 화면',
         sections: [
-          { label: 'KPI',   items: ['실시간 출력·이상 알람·가동률'] },
-          { label: '차트',  items: ['시간대별·일별·월별 발전량'] },
+          { label: 'KPI',   items: ['총 계약 용량 · 잔여 계약 기간 · 중도 해지 위약금'] },
+          { label: '내용',  items: ['등록 발전 자원'] },
+          { label: '액션',  items: ['계약 변경·해지 신청'] },
+        ],
+        rel: '↔ 수용가 내 계약과 동일 데이터(상태 동기화) · → SPC·관리자 검토·승인' },
+      { name: '전력거래시장(ETM)', route: '/generator/etm', sub: '배치 위치는 검토 포인트',
+        sections: [
+          { label: 'KPI',   items: ['최신 SMP · 활성 계약 · REC 보유 · 총 거래 계약'] },
+          { label: '차트',  items: ['시장 가격 추이(SMP/REC)'] },
+          { label: '내용',  items: ['내 거래 계약 목록'] },
+        ],
+        rel: '→ 시세 참고' },
+    ]},
+    { no: 'E', name: '③ 발전 모니터링', sub: '"운영 감시" — 발전 현황이 hero', screens: [
+      { name: '발전 현황', route: '/generator/ppa/dashboard', hero: true, sub: '발전사의 일상 핵심 화면',
+        sections: [
+          { label: 'KPI',   items: ['현재 시각 발전량 · 오늘 누적 · 이번달 누적 · 이번달 예상 수익'] },
+          { label: '차트',  items: ['발전량 추이 · 연도별 발전량 이력'] },
         ]},
-      { name: '예측 vs 실측', route: '/monitoring/forecast',
-        sections: [{ label: '내용', items: ['예측 모델·실측 비교·오차율·기상 연동'] }],
-        rel: '→ SPC 정산 정확도 · ↔ 수용가 사용량 편차' },
-      { name: 'REC 발급', route: '/ppa/documents/rec',
-        sections: [{ label: '내용', items: ['REC 발급 신청·가중치 적용·거래·소각 이력'] }],
-        rel: '↔ 수용가 이행증빙 (동일 라우트, 권한 분리 필요)' },
-      { name: '보고서', route: '/ppa/documents/report',
-        sections: [{ label: '내용', items: ['월별·연간 발전 보고서·한전 신고용'] }] },
+      { name: '발전소 모니터링', route: '/monitoring/plant',
+        sections: [{ label: '내용', items: ['맵 기반 발전소 상세 상태(실시간)'] }],
+        warn: '현재 발전사는 진입로 없음 — 신규 노출 필요' },
+      { name: '이상감지', route: '/monitoring/anomalies',
+        sections: [{ label: '내용', items: ['이상 상황 관리 · 알림'] }] },
+    ]},
+    { no: 'F', name: '④ 수익·정산', sub: '"내가 받는 돈" — 정산 내역이 hero', screens: [
+      { name: '수익 분석', route: '/generator/ppa/revenue/analytics',
+        sections: [{ label: '내용', items: ['정산 일정 · 보고서·자동 발송 · 연도별 수익 추이'] }] },
+      { name: '정산 내역', route: '/generator/ppa/revenue/invoices', hero: true, sub: '핵심 화면 · 1,068줄',
+        sections: [
+          { label: '수익 항목', items: ['전력량 대금(매출) · 부가정산금 · 망이용요금'] },
+          { label: '차감 항목', items: ['거래수수료(전력거래소) · 거래수수료(전력공급거래) · 관리 수수료'] },
+          { label: '세금·기금', items: ['부가세(+10%) · 전력산업기반기금 · 요금 조정'] },
+          { label: '합계',      items: ['합계(VAT 포함) · 미수금(발행·미입금)'] },
+        ],
+        rel: '→ 수용가 지불액 − SPC 마진 = 발전사 수령액' },
+      { name: '세금계산서', route: '/generator/ppa/revenue/tax-invoice',
+        sections: [{ label: '항목', items: ['발급번호·발급일·유형·공급받는자·사업자번호·발전소', '공급량·단가·공급가액·부가세(10%)·입금일·상태·입금계좌'] }],
+        rel: '발전사는 발행·수금측 (수용가는 수취측)' },
+      { name: '발전량 편차', route: '/generator/ppa/revenue/deviation', sub: '화면 타이틀 "예상 발전량"',
+        sections: [
+          { label: 'KPI',   items: ['초과 발생 · 평균 SMP 시장가 · 예상 REC 발급개수'] },
+          { label: '내용',  items: ['초과 발생 로그 · 매도 내역 PDF'] },
+        ],
+        rel: '발전사는 초과 중심 (수용가는 부족 중심) · 동일 이벤트의 발전측 면' },
+    ]},
+    { no: 'G', name: '⑤ 이행·증빙', sub: '"REC·증빙"', screens: [
+      { name: 'REC·이행증빙', route: '/ppa/documents/evidence',
+        sections: [{ label: '내용', items: ['REC 발급 · 이행 증빙'] }],
+        warn: '수용가와 동일 라우트 공유 → 권한·뷰 분리 필요' },
+      { name: '보고서', route: '/monitoring/reports', sub: '배치 위치는 검토 포인트',
+        sections: [{ label: '내용', items: ['운영·발전 보고서'] }] },
+      { name: '문서 보관함', route: '/generator/ppa/documents',
+        sections: [
+          { label: '항목',   items: ['파일명·발급일·크기·출처·상태'] },
+          { label: '폴더',   items: ['전체·발전소별·종류별·연도월별'] },
+          { label: '액션',   items: ['미리보기·다운로드·이메일·공유 링크'] },
+        ]},
     ]},
   ],
   diff: [
-    '대시보드 LNB 제거 → 단독 홈 (발전·수익 중심)',
-    '자원관리 → 독립 GNB로 승격 (발전 주체 1차 화면)',
-    '정산·수익 → 독립 GNB로 분리 (수용가와 같은 패턴)',
-    '모니터링·REC를 묶어서 ⑤ GNB로',
-    '/generator/ppa/* 와 /monitoring/* 혼재 → 라우트 일관성 정리',
+    '모니터링 진입로 신설 — 저니 STEP(/monitoring/plant)가 발전사 메뉴에 없음 → ③ 발전 모니터링',
+    "정산 화면 LNB 노출 — 정산·세금계산서·편차 있는데 '수익 분석'만 노출 → ④에 4개 모두",
+    '대시보드 3중 중복 정리 — /dashboard·/generator/ppa/dashboard·/lease/dashboard → 홈 1개 + 발전 현황',
+    '거래 ≠ 정산 분리 — 자원/거래/정산을 ②③④ 3개 GNB로, 저니 STEP1~5 = GNB ②~⑤ 정렬',
+    '자원 등록을 전력거래로 합침 (공급의 전제조건)',
   ],
-  open: ['자원관리 vs 모니터링 경계', 'REC 발급 권한·UI 통합 여부'],
+  open: ['모니터링 GNB 유지 vs 대시보드 흡수', 'ETM 위치(②거래 vs 별도 시장)', '보고서 위치(⑤증빙 vs ③모니터링)'],
   jSteps: [
-    { no: 'STEP 1', title: '발전소·자원 등록',          gnb: 'consulting', path: '자원관리 > 발전소 등록', route: '/generator/ppa/resources/register' },
-    { no: 'STEP 2', title: '공급 제안 응답',            gnb: 'trading',    path: '거래·계약 > 공급 제안',  route: '/generator/ppa/proposals' },
-    { no: 'STEP 3', title: '계약 체결 (진행 5단계)',    gnb: 'trading',    path: '거래·계약 > 계약 관리',  route: '/generator/ppa/contracts' },
-    { no: 'STEP 4', title: '전력 생산·공급',            gnb: 're100',      path: '모니터링 > 실시간 발전량', route: '/monitoring/plant' },
-    { no: 'STEP 5', title: '잠정 정산 확인',            gnb: 'billing',    path: '정산·수익 > 정산 내역',  route: '/generator/ppa/revenue/invoices' },
-    { no: 'STEP 6', title: '확정 정산·수금',            gnb: 'billing',    path: '정산·수익 > 정산 내역',  route: '/generator/ppa/revenue/invoices' },
-    { no: 'STEP 7', title: 'REC 발급·보고서',           gnb: 're100',      path: '모니터링·증빙 > REC',    route: '/ppa/documents/rec' },
+    { no: 'STEP 1', title: '자원 등록',                gnb: 'trading',    path: '전력거래 > 자원 관리',        route: '/generator/ppa/resources/register' },
+    { no: 'STEP 2', title: '공급 신청·SPC 매칭',       gnb: 'trading',    path: '전력거래 > 공급 신청',        route: '/generator/trading' },
+    { no: 'STEP 3', title: '계약 체결',                gnb: 'trading',    path: '전력거래 > 내 계약',          route: '/generator/ppa/contracts' },
+    { no: 'STEP 4', title: '발전·운영 감시',           gnb: 'consulting', path: '발전 모니터링 > 발전 현황',   route: '/generator/ppa/dashboard' },
+    { no: 'STEP 5', title: '수익·정산 확인',           gnb: 'billing',    path: '수익·정산 > 정산 내역',       route: '/generator/ppa/revenue/invoices' },
+    { no: 'STEP 6', title: '발전량 편차(초과)·정산',   gnb: 'billing',    path: '수익·정산 > 발전량 편차',     route: '/generator/ppa/revenue/deviation' },
+    { no: 'STEP 7', title: 'REC·증빙 발급',            gnb: 're100',      path: '이행·증빙 > REC·이행증빙',    route: '/ppa/documents/evidence' },
   ],
   jDecisions: [
     { q: '자원 유형은?', hint: 'STEP 1', branches: [
-      { label: '연료전지', desc: 'SMP + 2.2 REC 가중치 · CHPS' },
-      { label: '태양광',   desc: '직접 PPA 또는 자가소비형' },
-      { label: 'ORC',      desc: '전력공급 SPC · 7,920h/년' },
-    ], note: '자원유형이 수익 모델을 결정 — STEP 5 정산 단가에 직결', meta: '관련 GNB: ② 자원관리 → ④ 정산·수익' },
+      { label: '연료전지', desc: 'SMP + 2.2 REC 가중치(≈239원/kWh) · CHPS' },
+      { label: '태양광',   desc: '직접 PPA(140원/kWh) 또는 자가소비형' },
+      { label: 'ORC',      desc: '전력공급 SPC(≈100원/kWh · 7,920h/년)' },
+    ], note: '자원유형이 수익 모델을 결정 — 정산 단가에 직결', meta: '관련 GNB: ② 전력거래 → ④ 수익·정산' },
     { q: '매칭 결과는?', hint: 'STEP 3 → 4', branches: [
       { label: '정상', desc: '약정대로 공급', tone: 'ok' },
-      { label: '부족', desc: '미달분 보정·분쟁 처리', tone: 'no' },
-      { label: '초과', desc: '초과분 처리', tone: 'warn' },
-    ], note: 'SPC가 시간단위 매칭 — 부족/초과는 정산 단계에서 보정' },
+      { label: '미달', desc: '미달분 보정·분쟁 처리', tone: 'no' },
+      { label: '초과', desc: '초과분 SMP 매도 (발전량 편차)', tone: 'warn' },
+    ], note: 'SPC가 시간단위 매칭 — 초과/미달은 발전량 편차에서 정산' },
     { q: '정산 상태?', hint: 'STEP 5 → 6', branches: [
       { label: '잠정',         desc: '검토 대기' },
       { label: '확정',         desc: '세금계산서 발행·수금', tone: 'ok' },
@@ -789,16 +822,16 @@ const PLAN_GENERATOR: PersonaPlan = {
     ], meta: '데이터 원천: 발전량(계량기/RTU) × 단가 → SPC 확정' },
   ],
   jConcerns: [
-    { no: '①', label: '이번 달 수익',  desc: '자원유형별 단가차익',          mapping: '→ 대시보드 Z1 + 정산 내역',         tone: 'dashboard' },
-    { no: '②', label: '예측 정확도',  desc: '오차율·패널티',                mapping: '→ 대시보드 Z2 + 예측 vs 실측',     hint: '오차 줄이면 마진 ↑', tone: 're100' },
-    { no: '③', label: '정산 일정',    desc: '다음 수금일·미수금',           mapping: '→ 대시보드 Z3 + 정산 내역',         tone: 'billing' },
-    { no: '④', label: '계약·갱신',   desc: '진행 5단계·만료 예정',         mapping: '→ 계약 관리',                       tone: 'trading' },
-    { no: '⑤', label: '설비 이상',   desc: '가동률 저하·알람',             mapping: '→ 모니터링 + 대시보드 Z4',          tone: 'red' },
+    { no: '①', label: '지금 잘 돌고 있나', desc: '가동률·발전소 상태·발전량', mapping: '→ 대시보드 Z1 + 발전 모니터링', tone: 'consulting' },
+    { no: '②', label: '그래서 얼마 버나',  desc: '수익·정산·미수금',          mapping: '→ 대시보드 Z2 + 정산 내역',     tone: 'billing' },
+    { no: '③', label: '약정을 지키나',     desc: '발전량 편차·REC 발급',      mapping: '→ 발전량 편차 + REC·이행증빙',  tone: 're100' },
+    { no: '④', label: '계약은 안정적인가', desc: '잔여 기간·갱신·위약금',     mapping: '→ 내 계약',                     tone: 'trading' },
+    { no: '⑤', label: '시장가는 어떤가',   desc: 'SMP·REC 시세',             mapping: '→ 전력거래시장(ETM)',           tone: 'red' },
   ],
   jCheckpoints: [
-    '자원관리(②)와 모니터링(⑤) 경계 — 등록은 ②, 실시간은 ⑤',
-    'REC 화면을 수용가 이행증빙과 같은 라우트 쓸지 분리할지',
-    '/monitoring/* 와 /generator/ppa/* 통합 여부',
+    '모니터링 GNB 유지 vs 대시보드 흡수',
+    'ETM 위치 (② 전력거래 vs 별도 시장 GNB)',
+    '보고서 위치 (⑤ 이행·증빙 vs ③ 발전 모니터링)',
   ],
 }
 
@@ -813,24 +846,15 @@ const PLAN_CONSULTANT: PersonaPlan = {
   ],
   nav: [
     { idx: '①', name: '대시보드', route: '/consultant', lnb: null, note: 'LNB 없음 · 단독 홈' },
-    { idx: '②', name: '案件관리', sub: '진단·고객·진행', lnb: [
-      { name: '진단 의뢰',    route: '/consulting/diagnosis-requests' },
-      { name: '진행 案件',    route: '/consultant/projects' },
-      { name: '고객 관리',    route: '/consultant/clients' },
-      { name: '상담 이력',    route: '/consultant/history' },
+    { idx: '②', name: '컨설팅', sub: '진단·매칭·제안·시공을 한 GNB로 통합', lnb: [
+      { name: '진단 의뢰',       route: '/consulting/diagnosis-requests' },
+      { name: '진행 案件',       route: '/consultant/projects' },
+      { name: '마켓·매칭',       route: '/consulting/marketplace' },
+      { name: '제안 작성·발송',  route: '/consulting/proposals/create' },
+      { name: '시공 위탁·검수',  route: '/consulting/agency' },
+      { name: '고객 관리',       route: '/consultant/clients' },
     ]},
-    { idx: '③', name: '매칭·제안', lnb: [
-      { name: '마켓플레이스',     route: '/consulting/marketplace' },
-      { name: '제안 작성·발송',   route: '/consulting/proposals/create' },
-      { name: '제안 현황',        route: '/consulting/proposals' },
-      { name: '단가 시뮬레이션',  route: '/consulting/simulator' },
-    ]},
-    { idx: '④', name: '시공·용역', sub: '용역사 위탁', lnb: [
-      { name: '용역사 위탁',  route: '/consulting/agency' },
-      { name: '시공 진행',    route: '/consulting/agency/progress' },
-      { name: '검수',         route: '/consulting/agency/inspection' },
-    ]},
-    { idx: '⑤', name: '정산·수익', sub: '컨설팅 사업비', lnb: [
+    { idx: '③', name: '정산·요금', sub: '컨설팅 사업비', lnb: [
       { name: '컨설팅 수익',  route: '/consultant/earnings' },
       { name: '세금계산서',   route: '/consultant/tax-invoice' },
       { name: '사업비 정산',  route: '/consulting/settlement' },
@@ -838,9 +862,9 @@ const PLAN_CONSULTANT: PersonaPlan = {
   ],
   navCommon: ['탄소거래', 'e-Data', 'VPP', 'DT'],
   designIntent: [
-    '案件관리를 ② GNB로 (진단·고객·진행을 한 곳)',
-    '매칭·제안을 독립 GNB로 (영업 핵심 화면)',
-    '시공 용역은 별도 GNB로 (독립 컨설턴트만 노출, 용역사 소속은 숨김)',
+    '매칭·제안·시공·검수를 모두 컨설팅 GNB 하위로 통합 (별도 GNB 폐지)',
+    '案件관리·고객도 컨설팅에 흡수 (영업 흐름 한 곳)',
+    '정산·요금만 분리 — 이름 통일 (수용가·발전사와 동일)',
   ],
   dashboard: {
     route: '/consultant', sub: 'LNB 없음 · 단독 홈',
@@ -852,7 +876,7 @@ const PLAN_CONSULTANT: PersonaPlan = {
     ],
   },
   gnbs: [
-    { no: 'D', name: '② 案件관리', screens: [
+    { no: 'D', name: '② 컨설팅', sub: '진단·매칭·제안·시공 통합 — 진행 案件이 hero', screens: [
       { name: '진단 의뢰', route: '/consulting/diagnosis-requests',
         sections: [{ label: '내용', items: ['수용가 진단 의뢰 수신·접수', '진단 응답 등록'] }],
         rel: '← 수용가 RE100 무료진단 신청' },
@@ -863,36 +887,21 @@ const PLAN_CONSULTANT: PersonaPlan = {
           { label: '액션',     items: ['案件 등록·상태 변경·종결'] },
         ],
         rel: '↔ 수용가·발전사·용역사 동시 추적' },
-      { name: '고객 관리', route: '/consultant/clients',
-        sections: [{ label: '내용', items: ['수용가 고객 정보·연락처', '초대 링크 발급'] }] },
-      { name: '상담 이력', route: '/consultant/history',
-        sections: [{ label: '내용', items: ['미팅·문서·메시지 이력'] }] },
-    ]},
-    { no: 'E', name: '③ 매칭·제안', sub: '영업 핵심', screens: [
-      { name: '마켓플레이스', route: '/consulting/marketplace',
-        sections: [{ label: '내용', items: ['발전사 자원 탐색·필터 (자원유형·용량·지역)', '수용가 노출용 프로필 관리'] }],
+      { name: '마켓·매칭', route: '/consulting/marketplace',
+        sections: [{ label: '내용', items: ['발전사 자원 탐색·필터 (자원유형·용량·지역)', '발전사 ↔ 수용가 매칭'] }],
         rel: '↔ 발전사·수용가 매칭' },
       { name: '제안 작성·발송', route: '/consulting/proposals/create',
         sections: [
-          { label: '내용', items: ['발전원·계약유형 선택·단가 산출', '제안서 생성 → 수용가 발송'] },
+          { label: '내용', items: ['발전원·계약유형 선택·단가 산출·시뮬레이션', '제안서 생성 → 수용가 발송·수락/거절 추적'] },
         ],
         rel: '→ 수용가 받은 제안 화면' },
-      { name: '제안 현황', route: '/consulting/proposals',
-        sections: [{ label: '내용', items: ['제안 목록·수락/거절 상태·후속 액션'] }] },
-      { name: '단가 시뮬레이션', route: '/consulting/simulator',
-        sections: [{ label: '내용', items: ['자원유형·계약기간별 수익 시뮬레이션'] }] },
+      { name: '시공 위탁·검수', route: '/consulting/agency', sub: '독립 컨설턴트만',
+        sections: [{ label: '내용', items: ['용역사 선정·위탁·계약', '시공 진척 추적·완료 검수(합격/보완)'] }],
+        rel: '→ 용역사 시공 案件 · ← 진행 보고' },
+      { name: '고객 관리', route: '/consultant/clients',
+        sections: [{ label: '내용', items: ['고객 정보·초대 링크·상담 이력'] }] },
     ]},
-    { no: 'F', name: '④ 시공·용역', sub: '용역사 위탁 (독립 컨설턴트만)', screens: [
-      { name: '용역사 위탁', route: '/consulting/agency',
-        sections: [{ label: '내용', items: ['용역사 선정·위탁 등록·계약'] }],
-        rel: '→ 용역사 시공 案件' },
-      { name: '시공 진행', route: '/consulting/agency/progress',
-        sections: [{ label: '내용', items: ['시공 진척률·일정·자재 발주 상태'] }],
-        rel: '← 용역사 진행 보고' },
-      { name: '검수', route: '/consulting/agency/inspection',
-        sections: [{ label: '내용', items: ['시공 완료 검수·합격/보완 처리'] }] },
-    ]},
-    { no: 'G', name: '⑤ 정산·수익', sub: '컨설팅 사업비', screens: [
+    { no: 'E', name: '③ 정산·요금', sub: '컨설팅 사업비', screens: [
       { name: '컨설팅 수익', route: '/consultant/earnings', hero: true,
         sections: [
           { label: 'KPI',     items: ['이달 수익·누적·다음 수금일'] },
@@ -908,19 +917,19 @@ const PLAN_CONSULTANT: PersonaPlan = {
   ],
   diff: [
     '대시보드 LNB 제거 → 단독 홈',
-    '案件관리·매칭·시공·정산 4개 GNB로 명확히 분리',
-    '용역사 소속 컨설턴트는 ③ 매칭·제안 / ④ 시공·용역 숨김 (역할 분기)',
-    '/consulting/* 와 /consultant/* 혼재 → 라우트 일관성 정리',
+    '案件관리·매칭·제안·시공 4개 GNB → 컨설팅 하나로 통합',
+    '정산·수익 → 정산·요금 이름 통일',
+    '용역사 소속 컨설턴트는 컨설팅 내 마켓·매칭/제안/시공 LNB 숨김 (역할 분기)',
   ],
   open: ['용역사 소속 vs 독립 메뉴 분기 방식', '案件 데이터 모델 (수용가/발전사/용역사 N:M 연결)'],
   jSteps: [
-    { no: 'STEP 1', title: '진단 의뢰 수신',         gnb: 'consulting', path: '案件관리 > 진단 의뢰',    route: '/consulting/diagnosis-requests' },
-    { no: 'STEP 2', title: 'RE100 진단 수행·응답',   gnb: 'consulting', path: '案件관리 > 진행 案件',     route: '/consultant/projects' },
-    { no: 'STEP 3', title: '매칭·제안 작성·발송',    gnb: 'trading',    path: '매칭·제안 > 제안 작성',   route: '/consulting/proposals/create' },
-    { no: 'STEP 4', title: '계약 주관',              gnb: 'consulting', path: '案件관리 > 진행 案件',    route: '/consultant/projects' },
-    { no: 'STEP 5', title: '용역사 위탁·관리',       gnb: 'billing',    path: '시공·용역 > 용역사 위탁', route: '/consulting/agency' },
-    { no: 'STEP 6', title: '진행 보고·검수',         gnb: 'billing',    path: '시공·용역 > 검수',        route: '/consulting/agency/inspection' },
-    { no: 'STEP 7', title: '컨설팅 수익 정산',       gnb: 're100',      path: '정산·수익 > 컨설팅 수익', route: '/consultant/earnings' },
+    { no: 'STEP 1', title: '진단 의뢰 수신',         gnb: 'consulting', path: '컨설팅 > 진단 의뢰',       route: '/consulting/diagnosis-requests' },
+    { no: 'STEP 2', title: 'RE100 진단 수행·응답',   gnb: 'consulting', path: '컨설팅 > 진행 案件',       route: '/consultant/projects' },
+    { no: 'STEP 3', title: '매칭·제안 작성·발송',    gnb: 'consulting', path: '컨설팅 > 제안 작성',       route: '/consulting/proposals/create' },
+    { no: 'STEP 4', title: '계약 주관',              gnb: 'consulting', path: '컨설팅 > 진행 案件',       route: '/consultant/projects' },
+    { no: 'STEP 5', title: '용역사 위탁·관리',       gnb: 'consulting', path: '컨설팅 > 시공 위탁',       route: '/consulting/agency' },
+    { no: 'STEP 6', title: '진행 보고·검수',         gnb: 'consulting', path: '컨설팅 > 시공 위탁·검수',  route: '/consulting/agency' },
+    { no: 'STEP 7', title: '컨설팅 수익 정산',       gnb: 'billing',    path: '정산·요금 > 컨설팅 수익',  route: '/consultant/earnings' },
   ],
   jDecisions: [
     { q: '소속 유형?', hint: 'login.agencyId', branches: [
@@ -961,32 +970,22 @@ const PLAN_AGENCY: PersonaPlan = {
   ],
   nav: [
     { idx: '①', name: '대시보드', route: '/agency', lnb: null, note: 'LNB 없음 · 단독 홈' },
-    { idx: '②', name: '위탁 案件', sub: '컨설턴트 위탁 수신', lnb: [
-      { name: '신규 위탁',    route: '/consulting/agency/new' },
-      { name: '진행 案件',    route: '/consulting/agency' },
-      { name: '案件 이력',    route: '/consulting/agency/history' },
+    { idx: '②', name: '컨설팅', sub: '시공 영역 — 위탁·시공·유지보수 통합', lnb: [
+      { name: '위탁 案件',     route: '/consulting/agency/new' },
+      { name: '시공 진행',     route: '/agency/work' },
+      { name: '시운전·검수',   route: '/agency/inspection' },
+      { name: '유지보수·A/S',  route: '/agency/as' },
     ]},
-    { idx: '③', name: '시공·설치', lnb: [
-      { name: '견적·일정',   route: '/agency/quote' },
-      { name: '자재 발주',   route: '/agency/materials' },
-      { name: '시공 진행',   route: '/agency/work' },
-      { name: '시운전·검수', route: '/agency/inspection' },
-    ]},
-    { idx: '④', name: '유지보수', lnb: [
-      { name: 'A/S 요청',    route: '/agency/as' },
-      { name: '정기 점검',   route: '/agency/maintenance' },
-      { name: '이력',        route: '/agency/maintenance/history' },
-    ]},
-    { idx: '⑤', name: '정산·증빙', lnb: [
+    { idx: '③', name: '정산·요금', sub: '시공비', lnb: [
       { name: '시공비 정산', route: '/consulting/settlement' },
       { name: '세금계산서',  route: '/agency/tax-invoice' },
     ]},
   ],
   navCommon: ['탄소거래', 'e-Data', 'VPP', 'DT'],
   designIntent: [
-    '신규 페르소나로 등록 (기존 페르소나 없음)',
-    '컨설턴트의 시공 위탁을 ② GNB로 받음',
-    '유지보수를 독립 GNB로 (장기 운영)',
+    '신규 페르소나로 등록 (기존 전용 화면 없음)',
+    '위탁·시공·유지보수를 컨설팅 GNB로 통합 (시공 = 컨설팅 영역)',
+    '정산·요금만 분리 — 이름 통일 (다른 페르소나와 동일)',
   ],
   dashboard: {
     route: '/agency', sub: 'LNB 없음 · 단독 홈',
@@ -998,41 +997,25 @@ const PLAN_AGENCY: PersonaPlan = {
     ],
   },
   gnbs: [
-    { no: 'D', name: '② 위탁 案件', screens: [
-      { name: '신규 위탁', route: '/consulting/agency/new',
-        sections: [{ label: '내용', items: ['컨설턴트의 위탁 수신·수락/거절'] }],
-        rel: '← 컨설턴트 용역사 위탁' },
-      { name: '진행 案件', route: '/consulting/agency', hero: true,
-        sections: [{ label: '내용', items: ['진행 중 案件 목록·상태·일정', '단계별 진척률'] }],
-        rel: '↔ 컨설턴트 진행 案件' },
-      { name: '案件 이력', route: '/consulting/agency/history',
-        sections: [{ label: '내용', items: ['완료 案件 검색·통계'] }] },
-    ]},
-    { no: 'E', name: '③ 시공·설치', sub: '4단계 진행', screens: [
-      { name: '견적·일정', route: '/agency/quote',
-        sections: [{ label: '내용', items: ['견적서 작성·일정 산출·자재 명세'] }] },
-      { name: '자재 발주', route: '/agency/materials',
-        sections: [{ label: '내용', items: ['자재 목록·발주·입고 추적'] }] },
+    { no: 'D', name: '② 컨설팅', sub: '시공 영역 — 시공 진행이 hero', screens: [
+      { name: '위탁 案件', route: '/consulting/agency/new',
+        sections: [{ label: '내용', items: ['컨설턴트의 위탁 수신·수락/거절', '진행 案件 목록·이력'] }],
+        rel: '← 컨설턴트 시공 위탁 · ↔ 진행 案件' },
       { name: '시공 진행', route: '/agency/work', hero: true,
         sections: [
           { label: '진척률', items: ['단계별 % · 일정 vs 실제'] },
+          { label: '준비',   items: ['견적·일정·자재 발주·입고'] },
           { label: '보고',   items: ['일일 작업 보고·사진 첨부'] },
         ],
         rel: '→ 컨설턴트 진척 보고' },
       { name: '시운전·검수', route: '/agency/inspection',
         sections: [{ label: '내용', items: ['시운전 결과·검수 신청·합격/보완'] }],
         rel: '→ 컨설턴트 검수' },
-    ]},
-    { no: 'F', name: '④ 유지보수', screens: [
-      { name: 'A/S 요청', route: '/agency/as',
-        sections: [{ label: '내용', items: ['긴급 수리 요청·대응 일정·완료 보고'] }],
+      { name: '유지보수·A/S', route: '/agency/as',
+        sections: [{ label: '내용', items: ['긴급 수리·정기 점검·이력 관리'] }],
         rel: '← 수용가·발전사 A/S 신청' },
-      { name: '정기 점검', route: '/agency/maintenance',
-        sections: [{ label: '내용', items: ['정기 점검 일정·체크리스트'] }] },
-      { name: '이력', route: '/agency/maintenance/history',
-        sections: [{ label: '내용', items: ['유지보수 이력 검색·통계'] }] },
     ]},
-    { no: 'G', name: '⑤ 정산·증빙', screens: [
+    { no: 'E', name: '③ 정산·요금', sub: '시공비 — 시공비 정산이 hero', screens: [
       { name: '시공비 정산', route: '/consulting/settlement', hero: true,
         sections: [
           { label: 'KPI',     items: ['이달 수금·누적·미수금'] },
@@ -1045,19 +1028,18 @@ const PLAN_AGENCY: PersonaPlan = {
   ],
   diff: [
     '신규 페르소나로 등록 (이전엔 컨설팅 하위 운영)',
-    '독립 대시보드·5 GNB 신설',
-    '시공·유지보수를 독립 GNB로 분리',
-    '/consulting/agency/* 라우트 정리',
+    '위탁·시공·유지보수 → 컨설팅 하나로 통합 (이름 통일)',
+    '정산·증빙 → 정산·요금 이름 통일',
+    '/consulting/agency/* 와 /agency/* 라우트 정리',
   ],
   open: ['컨설턴트 → 용역사 위탁 인터페이스 정의', '발전소 준공 후 모니터링 권한'],
   jSteps: [
-    { no: 'STEP 1', title: '시공 위탁 수신',     gnb: 'consulting', path: '위탁 案件 > 신규 위탁',  route: '/consulting/agency/new' },
-    { no: 'STEP 2', title: '견적·일정 산출',     gnb: 'trading',    path: '시공·설치 > 견적·일정', route: '/agency/quote' },
-    { no: 'STEP 3', title: '자재 발주',          gnb: 'trading',    path: '시공·설치 > 자재 발주', route: '/agency/materials' },
-    { no: 'STEP 4', title: '설치·시공',          gnb: 'trading',    path: '시공·설치 > 시공 진행', route: '/agency/work' },
-    { no: 'STEP 5', title: '시운전·검수',        gnb: 'trading',    path: '시공·설치 > 검수',      route: '/agency/inspection' },
-    { no: 'STEP 6', title: '시공비 정산',        gnb: 're100',      path: '정산·증빙 > 시공비',    route: '/consulting/settlement' },
-    { no: 'STEP 7', title: '유지보수·A/S',       gnb: 'billing',    path: '유지보수 > A/S 요청',   route: '/agency/as' },
+    { no: 'STEP 1', title: '시공 위탁 수신',     gnb: 'consulting', path: '컨설팅 > 위탁 案件',     route: '/consulting/agency/new' },
+    { no: 'STEP 2', title: '견적·일정·자재',     gnb: 'consulting', path: '컨설팅 > 시공 진행',     route: '/agency/work' },
+    { no: 'STEP 3', title: '설치·시공',          gnb: 'consulting', path: '컨설팅 > 시공 진행',     route: '/agency/work' },
+    { no: 'STEP 4', title: '시운전·검수',        gnb: 'consulting', path: '컨설팅 > 시운전·검수',   route: '/agency/inspection' },
+    { no: 'STEP 5', title: '시공비 정산',        gnb: 'billing',    path: '정산·요금 > 시공비 정산', route: '/consulting/settlement' },
+    { no: 'STEP 6', title: '유지보수·A/S',       gnb: 'consulting', path: '컨설팅 > 유지보수·A/S',  route: '/agency/as' },
   ],
   jDecisions: [
     { q: '작업 유형?', branches: [
@@ -1087,123 +1069,117 @@ const PLAN_AGENCY: PersonaPlan = {
   ],
 }
 
-/* 전기공급사업자 (SPC) */
+/* 전기공급사업자 (SPC) — 5 GNB (발전량 예측 별도·정산 허브) */
 const PLAN_SPC: PersonaPlan = {
   priorities: [
-    { rank: 1, label: '총 거래량·매칭률',   desc: '운영 핵심 지표' },
+    { rank: 1, label: '총 거래량·매칭률',   desc: '중개 운영 핵심 — 양쪽(발전사·수용가)을 본다' },
     { rank: 2, label: 'SPC 마진',           desc: '단가차익 (청구액 − 지급액)' },
     { rank: 3, label: '정산 정확도',         desc: '잠정→확정 전환률·분쟁률' },
-    { rank: 4, label: '예측·오차율',         desc: 'SPC 예측 vs 발전사 실측' },
+    { rank: 4, label: '수급 예측·오차율',    desc: 'SPC 예측 vs 발전사 실측 (페널티 직결)' },
     { rank: 5, label: '미정산·분쟁',         desc: '재정산·수정세금계산서' },
   ],
   nav: [
-    { idx: '①', name: '대시보드', route: '/spc', lnb: null, note: 'LNB 없음 · 단독 홈' },
-    { idx: '②', name: '거래·매칭', sub: '운영 핵심', lnb: [
-      { name: '매칭 엔진',     route: '/platform/ppa/status' },
-      { name: '거래 이력',     route: '/platform/ppa/trading' },
-      { name: 'CFE 매칭률',    route: '/platform/ppa/cfe' },
+    { idx: '①', name: '대시보드', route: '/spc', lnb: null, note: 'LNB 없음 · 단독 홈 · 허브' },
+    { idx: '②', name: '전력거래', sub: '"중개" — 양쪽을 본다 (+ 매칭)', lnb: [
+      { name: '거래 현황',        route: '/platform/trading' },
+      { name: '거래 모니터링',    route: '/platform/ppa/status' },
+      { name: 'PPA 운영 현황',    route: '/platform/ppa/dashboard' },
     ]},
-    { idx: '③', name: '정산·세금', sub: '정산소', lnb: [
-      { name: '정산 운영',     route: '/platform/ppa/billing/settlement' },
-      { name: '세금계산서',    route: '/platform/ppa/billing/tax-invoice' },
-      { name: '마진 추적',     route: '/platform/ppa/margin' },
+    { idx: '③', name: '발전량 예측', route: '/platform/ppa/forecast', lnb: null,
+      note: 'SPC 고유 (수급 예측) · 단일 화면 · 탭(예측·예측 vs 실적·오차/페널티·모델 성능)' },
+    { idx: '④', name: '정산', sub: '"중개·정산 허브" — SPC의 핵심', lnb: [
+      { name: '정산',             route: '/platform/ppa/billing/settlement' },
+      { name: '세금계산서',       route: '/platform/ppa/billing/tax-invoice' },
+      { name: '발전량 초과/미달', route: '/platform/ppa/billing/usage-deviation' },
+      { name: 'SPC 마진',         route: '/platform/ppa/status/margin' },
     ]},
-    { idx: '④', name: '예측·편차', lnb: [
-      { name: '발전량 예측',   route: '/platform/ppa/forecast' },
-      { name: '실측 비교',     route: '/platform/ppa/forecast/actual' },
-      { name: '편차 정산',     route: '/platform/ppa/deviation' },
-    ]},
-    { idx: '⑤', name: '계약·증빙', lnb: [
-      { name: '계약 승인',     route: '/platform/ppa/contracts' },
-      { name: '거래 증빙',     route: '/ppa/documents' },
+    { idx: '⑤', name: '이행·증빙', sub: '증빙·문서', lnb: [
+      { name: '문서 생성',        route: '/platform/ppa/documents/generation' },
+      { name: '문서 보관함',      route: '/platform/ppa/documents' },
     ]},
   ],
   navCommon: ['탄소거래', 'e-Data', 'VPP', 'DT'],
   designIntent: [
-    '거래·매칭을 ② GNB로 (운영 1차 화면)',
-    '정산·세금을 독립 GNB로 (마진 추적 포함)',
-    '예측·편차를 독립 GNB로 (오차 관리 중요)',
+    '거래·매칭 → 전력거래로 이름 통일 (SPC는 양쪽 + 매칭이 특징)',
+    '발전량 예측을 별도 GNB로 (SPC 고유 — 수급 예측, 정산 정확도의 전제)',
+    '정산을 SPC의 핵심 허브로 (정산·세금계산서·초과/미달·마진 통합)',
   ],
   dashboard: {
-    route: '/spc', sub: 'LNB 없음 · 단독 홈',
+    route: '/spc', sub: 'LNB 없음 · 단독 홈 · 허브',
     zones: [
-      { z: 'Zone 1', title: '총 거래량',    items: ['실시간 거래량 KPI·자원별 분해', '24/7 CFE 매칭률'] },
-      { z: 'Zone 2', title: 'SPC 마진',     items: ['이달 마진·누적·자원유형별 분해'] },
-      { z: 'Zone 3', title: '정산 현황',    items: ['잠정·확정·분쟁 案件 수', '다음 정산일'] },
-      { z: 'Zone 4', title: '예측 오차',    items: ['오차율 게이지·일별 추이'] },
+      { z: 'Zone 1', title: '거래량·매칭', items: ['실시간 거래량·24/7 CFE 매칭률 → ② 거래 모니터링', '신규 신청 처리 → ② 거래 현황'] },
+      { z: 'Zone 2', title: 'SPC 마진',    items: ['이달 마진·누적·자원유형별 분해 → ④ SPC 마진'] },
+      { z: 'Zone 3', title: '정산 현황',   items: ['잠정·확정·분쟁 案件 수·다음 정산일 → ④ 정산'] },
+      { z: 'Zone 4', title: '수급 예측',   items: ['오차율 게이지·페널티 → ③ 발전량 예측'] },
     ],
   },
   gnbs: [
-    { no: 'D', name: '② 거래·매칭', sub: '운영 1차', screens: [
-      { name: '매칭 엔진', route: '/platform/ppa/status', hero: true,
+    { no: 'D', name: '② 전력거래', sub: '"중개" — 거래 모니터링이 hero', screens: [
+      { name: '거래 현황', route: '/platform/trading',
+        sections: [{ label: '내용', items: ['신규 신청 처리·접수 큐'] }],
+        rel: '← 수용가·발전사 거래 신청' },
+      { name: '거래 모니터링', route: '/platform/ppa/status', hero: true, sub: '핵심 화면',
         sections: [
-          { label: 'KPI',      items: ['실시간 매칭률·CFE %·자원별 거래량'] },
-          { label: '4탭',      items: ['발전사 거래·수요기업 거래·매칭이력·SPC마진'] },
-          { label: '액션',     items: ['시간단위 매칭·우선순위·알고리즘 감사'] },
+          { label: '4탭',   items: ['발전사 거래 · 수요기업 거래 · 매칭 이력 · SPC 마진'] },
+          { label: '액션',  items: ['시간단위 매칭·우선순위·알고리즘 감사'] },
         ],
         rel: '↔ 발전사·수용가 양면 매칭' },
-      { name: '거래 이력', route: '/platform/ppa/trading',
-        sections: [{ label: '내용', items: ['거래 목록·필터·상세'] }] },
-      { name: 'CFE 매칭률', route: '/platform/ppa/cfe',
-        sections: [{ label: '내용', items: ['24/7 CFE 매칭률 산출·수용가별 분해'] }],
-        rel: '→ 수용가 RE100 현황' },
+      { name: 'PPA 운영 현황', route: '/platform/ppa/dashboard',
+        sections: [{ label: '내용', items: ['PPA 전체 운영 지표·자원별 거래량·CFE'] }] },
     ]},
-    { no: 'E', name: '③ 정산·세금', sub: '정산소 — 마진이 hero', screens: [
-      { name: '정산 운영', route: '/platform/ppa/billing/settlement', hero: true,
+    { no: 'E', name: '③ 발전량 예측', sub: 'SPC 고유 — 수급 예측 (단일 화면·탭)', screens: [
+      { name: '발전량 예측', route: '/platform/ppa/forecast', hero: true,
         sections: [
-          { label: '4상태',     items: ['잠정 → 확정 → 세금계산서 → 수금/지급'] },
-          { label: '산출',      items: ['발전량 × SMP 단가·24/7 매칭률 적용'] },
-          { label: '액션',      items: ['확정·재정산·분쟁 처리'] },
+          { label: '탭',    items: ['예측 · 예측 vs 실적 · 오차/페널티 · 모델 성능'] },
+          { label: '역할',  items: ['수급 예측으로 정산 단가·편차 산출의 전제 제공'] },
+        ],
+        rel: '↔ 발전사 실측 · 수용가 사용량 (예측 vs 실측 → 정산)' },
+    ]},
+    { no: 'F', name: '④ 정산', sub: '"중개·정산 허브" — SPC의 핵심, 정산이 hero', screens: [
+      { name: '정산', route: '/platform/ppa/billing/settlement', hero: true, sub: '핵심 화면',
+        sections: [
+          { label: '탭',    items: ['정산 · 수금·지급 · 이력·감사'] },
+          { label: '4상태', items: ['잠정 → 확정 → 세금계산서 → 수금/지급'] },
+          { label: '산출',  items: ['발전량 × SMP 단가·24/7 매칭률 적용'] },
         ],
         rel: '→ 수용가·발전사·관리자 동기화 (단일 데이터, 다중 뷰)' },
       { name: '세금계산서', route: '/platform/ppa/billing/tax-invoice',
-        sections: [
-          { label: '발행',   items: ['확정 후 자동 발행·일괄 처리'] },
-          { label: '수정',   items: ['분쟁 시 수정세금계산서'] },
-        ],
+        sections: [{ label: '내용', items: ['확정 후 자동 발행·일괄 처리·수정세금계산서'] }],
         rel: '→ 수용가·발전사 수취' },
-      { name: '마진 추적', route: '/platform/ppa/margin', hero: true, sub: '관리자 권한 일부',
+      { name: '발전량 초과/미달', route: '/platform/ppa/billing/usage-deviation',
+        sections: [{ label: '내용', items: ['초과/미달 편차 보정 정산·패널티'] }],
+        rel: '↔ 발전사 초과 · 수용가 부족 (동일 이벤트)' },
+      { name: 'SPC 마진', route: '/platform/ppa/status/margin', hero: true, sub: '관리자 권한 일부',
         sections: [
           { label: '산식',   items: ['수용가 청구액 − 발전사 지급액 = 마진'] },
           { label: '분해',   items: ['자원유형별·계약별·기간별'] },
         ],
         rel: '↔ 관리자 정산 감사' },
     ]},
-    { no: 'F', name: '④ 예측·편차', screens: [
-      { name: '발전량 예측', route: '/platform/ppa/forecast',
-        sections: [{ label: '내용', items: ['예측 모델 운영·일일 예측 등록'] }] },
-      { name: '실측 비교', route: '/platform/ppa/forecast/actual',
-        sections: [{ label: '내용', items: ['예측 vs 실측·오차율 분포·패널티 산출'] }],
-        rel: '↔ 발전사 예측 vs 실측' },
-      { name: '편차 정산', route: '/platform/ppa/deviation',
-        sections: [{ label: '내용', items: ['편차 보정 정산·재정산 트리거'] }],
-        rel: '↔ 발전사 편차·수용가 사용량 편차 (동일 이벤트)' },
-    ]},
-    { no: 'G', name: '⑤ 계약·증빙', screens: [
-      { name: '계약 승인', route: '/platform/ppa/contracts',
-        sections: [{ label: '내용', items: ['계약 중개·승인·거래소 신고서 처리'] }],
-        rel: '↔ 발전사·수용가 계약 상태 동기화' },
-      { name: '거래 증빙', route: '/ppa/documents',
-        sections: [{ label: '내용', items: ['거래 증빙 발급 지원·일괄 처리'] }],
+    { no: 'G', name: '⑤ 이행·증빙', sub: '증빙·문서', screens: [
+      { name: '문서 생성', route: '/platform/ppa/documents/generation',
+        sections: [{ label: '내용', items: ['거래·정산 증빙 문서 생성·일괄 발급'] }],
         rel: '→ 수용가 이행증빙·발전사 REC' },
+      { name: '문서 보관함', route: '/platform/ppa/documents',
+        sections: [{ label: '내용', items: ['발급 문서 보관·검색·다운로드·공유'] }] },
     ]},
   ],
   diff: [
-    '대시보드 LNB 제거 → 단독 홈 (거래량·마진 중심)',
-    '거래·매칭을 ② GNB로 (운영 1차)',
-    '정산·세금에 마진 추적 통합 (별도 화면 X)',
-    '예측·편차를 독립 GNB로 (오차 관리 중요)',
-    '/platform/ppa/* 라우트 5 GNB 기준 정리',
+    '대시보드 LNB 제거 → 단독 홈·허브 (거래량·마진 중심)',
+    '거래·매칭 → 전력거래로 이름 통일 (양쪽 + 매칭이 SPC 특징)',
+    '발전량 예측을 별도 GNB로 승격 (SPC 고유 — 수급 예측)',
+    '정산을 핵심 허브로 — 정산·세금계산서·초과/미달·마진 통합',
+    '증빙 → 이행·증빙으로 이름 통일',
   ],
-  open: ['마진 추적 권한 분리 (관리자 일부 노출)', '예측 모델 외부 연동 인터페이스'],
+  open: ['발전량 예측 GNB 독립 유지 vs 정산에 흡수', 'SPC 마진 위치(② 거래 status 하위 vs ④ 정산)', '마진 노출 권한 (관리자 일부)'],
   jSteps: [
-    { no: 'STEP 1', title: '발전사·수용가 등록 승인',  gnb: 're100',      path: '계약·증빙 > 계약 승인',     route: '/platform/ppa/contracts' },
-    { no: 'STEP 2', title: '거래 신청 수신·매칭',      gnb: 'consulting', path: '거래·매칭 > 매칭 엔진',    route: '/platform/ppa/status' },
-    { no: 'STEP 3', title: '계약 중개·승인',           gnb: 're100',      path: '계약·증빙 > 계약 승인',    route: '/platform/ppa/contracts' },
-    { no: 'STEP 4', title: '발전량 예측·실측',         gnb: 'billing',    path: '예측·편차 > 실측 비교',    route: '/platform/ppa/forecast/actual' },
-    { no: 'STEP 5', title: '잠정 정산',                gnb: 'trading',    path: '정산·세금 > 정산 운영',    route: '/platform/ppa/billing/settlement' },
-    { no: 'STEP 6', title: '확정·세금계산서 발행',     gnb: 'trading',    path: '정산·세금 > 세금계산서',   route: '/platform/ppa/billing/tax-invoice' },
-    { no: 'STEP 7', title: '수금·지급·마진 정산',      gnb: 'trading',    path: '정산·세금 > 마진 추적',    route: '/platform/ppa/margin' },
+    { no: 'STEP 1', title: '거래 신청 수신',          gnb: 'trading',    path: '전력거래 > 거래 현황',      route: '/platform/trading' },
+    { no: 'STEP 2', title: '매칭·계약 중개',           gnb: 'trading',    path: '전력거래 > 거래 모니터링',  route: '/platform/ppa/status' },
+    { no: 'STEP 3', title: '발전량 예측·실적',         gnb: 'consulting', path: '발전량 예측 > 예측',        route: '/platform/ppa/forecast' },
+    { no: 'STEP 4', title: '잠정 정산',                gnb: 'billing',    path: '정산 > 정산',              route: '/platform/ppa/billing/settlement' },
+    { no: 'STEP 5', title: '확정·세금계산서 발행',     gnb: 'billing',    path: '정산 > 세금계산서',        route: '/platform/ppa/billing/tax-invoice' },
+    { no: 'STEP 6', title: '수금·지급·마진 정산',      gnb: 'billing',    path: '정산 > SPC 마진',          route: '/platform/ppa/status/margin' },
+    { no: 'STEP 7', title: '증빙 문서 생성',           gnb: 're100',      path: '이행·증빙 > 문서 생성',     route: '/platform/ppa/documents/generation' },
   ],
   jDecisions: [
     { q: '매칭 결과는?', hint: 'STEP 2', branches: [
@@ -1211,27 +1187,27 @@ const PLAN_SPC: PersonaPlan = {
       { label: '부족', desc: '미달분 처리·분쟁 가능', tone: 'no' },
       { label: '초과', desc: '초과분 처리', tone: 'warn' },
     ], note: '시간단위 매칭 — 매칭 결과가 정산 단가·편차에 직결' },
-    { q: '정산 상태?', hint: 'STEP 5 → 7', branches: [
+    { q: '정산 상태?', hint: 'STEP 4 → 7', branches: [
       { label: '잠정',          desc: '검토 대기' },
       { label: '확정',          desc: '세금계산서 발행·수금/지급', tone: 'ok' },
       { label: '분쟁/재정산',   desc: '수정세금계산서', tone: 'no' },
     ], meta: '데이터 원천: 발전량(계량기) × SMP × 24/7 매칭률' },
-    { q: '오차율?', hint: 'STEP 4', branches: [
+    { q: '예측 오차율?', hint: 'STEP 3', branches: [
       { label: '허용 범위 내', desc: '정상 정산', tone: 'ok' },
-      { label: '초과',         desc: '편차 정산·패널티', tone: 'no' },
+      { label: '초과',         desc: '발전량 초과/미달 편차 정산·패널티', tone: 'no' },
     ]},
   ],
   jConcerns: [
-    { no: '①', label: '거래량',         desc: '실시간 거래량·CFE 매칭률',    mapping: '→ 대시보드 Z1 + 매칭 엔진',     tone: 'dashboard' },
-    { no: '②', label: 'SPC 마진',       desc: '단가차익·자원별 분해',         mapping: '→ 대시보드 Z2 + 마진 추적',    tone: 'trading' },
-    { no: '③', label: '정산 정확도',    desc: '잠정→확정 전환률',             mapping: '→ 정산 운영',                  tone: 'trading' },
-    { no: '④', label: '오차율',         desc: '예측 vs 실측',                  mapping: '→ 예측·편차',                  tone: 'billing' },
-    { no: '⑤', label: '분쟁',           desc: '재정산·수정세금계산서',         mapping: '→ 정산 운영 (분쟁 탭)',        tone: 'red' },
+    { no: '①', label: '거래량·매칭률', desc: '실시간 거래량·CFE',          mapping: '→ 대시보드 Z1 + 거래 모니터링', tone: 'trading' },
+    { no: '②', label: 'SPC 마진',      desc: '단가차익·자원별 분해',        mapping: '→ 대시보드 Z2 + SPC 마진',      tone: 'billing' },
+    { no: '③', label: '정산 정확도',   desc: '잠정→확정 전환률',            mapping: '→ 정산 (이력·감사 탭)',          tone: 'dashboard' },
+    { no: '④', label: '수급 예측',     desc: '예측 vs 실측·페널티',          mapping: '→ 발전량 예측',                  tone: 'consulting' },
+    { no: '⑤', label: '분쟁·미정산',   desc: '재정산·수정세금계산서',        mapping: '→ 정산 + 발전량 초과/미달',      tone: 'red' },
   ],
   jCheckpoints: [
-    '마진 추적 권한 — 관리자 일부 노출 vs 완전 분리',
-    '예측 모델 외부(기상청 등) 연동 인터페이스',
-    '/platform/ppa/* 와 /ppa/* 라우트 통합 여부',
+    '발전량 예측 GNB 독립 유지 vs 정산에 흡수',
+    'SPC 마진 화면 위치 (② 거래 status 하위 vs ④ 정산)',
+    '문서 생성 vs 보관함 분리 유지 여부',
   ],
 }
 
@@ -1246,23 +1222,23 @@ const PLAN_ADMIN: PersonaPlan = {
   ],
   nav: [
     { idx: '①', name: '대시보드', route: '/platform', lnb: null, note: 'LNB 없음 · 단독 홈' },
-    { idx: '②', name: '사용자·기업', sub: '가입·역할', lnb: [
+    { idx: '②', name: '전력거래', sub: '전체 거래 모니터링 (감독 관점)', lnb: [
+      { name: '전체 거래',     route: '/platform/trading' },
+      { name: '계약 승인',     route: '/platform/contracts' },
+      { name: '이상 탐지',     route: '/platform/anomaly' },
+    ]},
+    { idx: '③', name: '정산·요금', sub: '정산 감사 (검증 관점)', lnb: [
+      { name: '정산 감사',     route: '/platform/audit/settlement' },
+      { name: '세무 검토',     route: '/platform/audit/tax' },
+      { name: '분쟁',          route: '/platform/audit/dispute' },
+    ]},
+    { idx: '④', name: '사용자·기업 ★', sub: '운영자 고유 (공통 GNB 외)', lnb: [
       { name: '가입 승인',     route: '/platform/approvals' },
       { name: '사용자',        route: '/platform/users' },
       { name: '역할·권한',     route: '/platform/roles' },
       { name: '기업 초대',     route: '/platform/invitations' },
     ]},
-    { idx: '③', name: '거래·계약', sub: '전체 모니터링', lnb: [
-      { name: '전체 거래',     route: '/platform/trading' },
-      { name: '계약 승인',     route: '/platform/contracts' },
-      { name: '이상 탐지',     route: '/platform/anomaly' },
-    ]},
-    { idx: '④', name: '정산 감사', lnb: [
-      { name: '정산 감사',     route: '/platform/audit/settlement' },
-      { name: '세무 검토',     route: '/platform/audit/tax' },
-      { name: '분쟁',          route: '/platform/audit/dispute' },
-    ]},
-    { idx: '⑤', name: '시스템·감사', lnb: [
+    { idx: '⑤', name: '시스템·감사 ★', sub: '운영자 고유 (공통 GNB 외)', lnb: [
       { name: '감사 로그',     route: '/platform/audit-logs' },
       { name: '코드·기준정보', route: '/platform/code' },
       { name: '공지·알림',     route: '/platform/notice' },
@@ -1270,9 +1246,9 @@ const PLAN_ADMIN: PersonaPlan = {
   ],
   navCommon: ['탄소거래', 'e-Data', 'VPP', 'DT'],
   designIntent: [
-    '사용자·기업을 ② GNB로 (운영 1차 화면)',
-    '정산 감사를 독립 GNB로 (SPC 정산 정확성 검증)',
-    '시스템·감사를 묶음 (운영자 통제 화면)',
+    '거래·계약 → 전력거래로 이름 통일 (같은 데이터, 감독 관점)',
+    '정산 감사 → 정산·요금으로 이름 통일 (검증 관점)',
+    '사용자·기업 / 시스템·감사는 운영자 고유 → 공통 5개에 없어 별도 GNB (★ 확인 필요)',
   ],
   dashboard: {
     route: '/platform', sub: 'LNB 없음 · 단독 홈',
@@ -1284,21 +1260,7 @@ const PLAN_ADMIN: PersonaPlan = {
     ],
   },
   gnbs: [
-    { no: 'D', name: '② 사용자·기업', sub: '운영 1차', screens: [
-      { name: '가입 승인', route: '/platform/approvals', hero: true,
-        sections: [
-          { label: 'KPI',      items: ['승인 대기 건수·평균 처리 시간'] },
-          { label: '액션',     items: ['승인·반려·반려 사유 등록'] },
-        ],
-        rel: '← 신규 페르소나(수용가·발전사 등) 가입 요청' },
-      { name: '사용자', route: '/platform/users',
-        sections: [{ label: '내용', items: ['사용자 목록·검색·필터·상태'] }] },
-      { name: '역할·권한', route: '/platform/roles',
-        sections: [{ label: '내용', items: ['6종 페르소나 역할 부여·권한 매핑·접근 정책'] }] },
-      { name: '기업 초대', route: '/platform/invitations',
-        sections: [{ label: '내용', items: ['신규 산단 기업 초대·응답 추적'] }] },
-    ]},
-    { no: 'E', name: '③ 거래·계약', sub: '전체 모니터링', screens: [
+    { no: 'D', name: '② 전력거래', sub: '전체 거래 모니터링 — 전체 거래가 hero', screens: [
       { name: '전체 거래', route: '/platform/trading', hero: true,
         sections: [
           { label: 'KPI',      items: ['실시간 거래량·자원별 분해'] },
@@ -1312,7 +1274,7 @@ const PLAN_ADMIN: PersonaPlan = {
       { name: '이상 탐지', route: '/platform/anomaly',
         sections: [{ label: '내용', items: ['이상 거래 패턴·자동 알림·조사'] }] },
     ]},
-    { no: 'F', name: '④ 정산 감사', sub: 'SPC 정산 검증', screens: [
+    { no: 'E', name: '③ 정산·요금', sub: 'SPC 정산 검증 — 정산 감사가 hero', screens: [
       { name: '정산 감사', route: '/platform/audit/settlement', hero: true,
         sections: [
           { label: 'KPI',     items: ['감사 대기·이상 案件·SPC 마진 검증'] },
@@ -1324,7 +1286,21 @@ const PLAN_ADMIN: PersonaPlan = {
       { name: '분쟁', route: '/platform/audit/dispute',
         sections: [{ label: '내용', items: ['분쟁 案件 추적·중재·재정산 트리거'] }] },
     ]},
-    { no: 'G', name: '⑤ 시스템·감사', screens: [
+    { no: 'F', name: '④ 사용자·기업 ★', sub: '운영자 고유 (공통 GNB 외) — 가입 승인이 hero', screens: [
+      { name: '가입 승인', route: '/platform/approvals', hero: true,
+        sections: [
+          { label: 'KPI',      items: ['승인 대기 건수·평균 처리 시간'] },
+          { label: '액션',     items: ['승인·반려·반려 사유 등록'] },
+        ],
+        rel: '← 신규 페르소나(수용가·발전사 등) 가입 요청' },
+      { name: '사용자', route: '/platform/users',
+        sections: [{ label: '내용', items: ['사용자 목록·검색·필터·상태'] }] },
+      { name: '역할·권한', route: '/platform/roles',
+        sections: [{ label: '내용', items: ['6종 페르소나 역할 부여·권한 매핑·접근 정책'] }] },
+      { name: '기업 초대', route: '/platform/invitations',
+        sections: [{ label: '내용', items: ['신규 산단 기업 초대·응답 추적'] }] },
+    ]},
+    { no: 'G', name: '⑤ 시스템·감사 ★', sub: '운영자 고유 (공통 GNB 외)', screens: [
       { name: '감사 로그', route: '/platform/audit-logs', hero: true,
         sections: [
           { label: '내용', items: ['전 활동 로그·접근·변경 이력', '검색·필터·내보내기'] },
@@ -1338,18 +1314,17 @@ const PLAN_ADMIN: PersonaPlan = {
   ],
   diff: [
     '대시보드 LNB 제거 → 단독 홈 (거래·승인 중심)',
-    '사용자·기업을 ② GNB로 통합 (가입·역할·권한·초대)',
-    '정산 감사를 독립 GNB로 (SPC 정산 검증 핵심)',
-    '시스템·감사 묶음 (운영자 통제)',
-    '/platform/* 라우트 5 GNB 기준 정리',
+    '거래·계약 → 전력거래로 이름 통일 (감독 관점)',
+    '정산 감사 → 정산·요금으로 이름 통일 (검증 관점)',
+    '사용자·기업 / 시스템·감사는 운영자 고유 → 별도 GNB 유지 (★ 확인 필요)',
   ],
-  open: ['SPC 마진 노출 수준 (감사용 vs 운영용)', '6종 페르소나 외 추가 역할 정의'],
+  open: ['운영자 고유 GNB(사용자·기업·시스템·감사) 이름·위치 확정', 'SPC 마진 노출 수준 (감사용 vs 운영용)'],
   jSteps: [
     { no: 'STEP 1', title: '기업 초대',              gnb: 'consulting', path: '사용자·기업 > 기업 초대', route: '/platform/invitations' },
     { no: 'STEP 2', title: '가입 승인·역할 부여',    gnb: 'consulting', path: '사용자·기업 > 가입 승인', route: '/platform/approvals' },
-    { no: 'STEP 3', title: '거래·계약 모니터링',     gnb: 'trading',    path: '거래·계약 > 전체 거래',   route: '/platform/trading' },
-    { no: 'STEP 4', title: '이상 탐지·점검',         gnb: 'trading',    path: '거래·계약 > 이상 탐지',   route: '/platform/anomaly' },
-    { no: 'STEP 5', title: '정산 감사',              gnb: 'billing',    path: '정산 감사 > 정산 감사',   route: '/platform/audit/settlement' },
+    { no: 'STEP 3', title: '거래·계약 모니터링',     gnb: 'trading',    path: '전력거래 > 전체 거래',    route: '/platform/trading' },
+    { no: 'STEP 4', title: '이상 탐지·점검',         gnb: 'trading',    path: '전력거래 > 이상 탐지',    route: '/platform/anomaly' },
+    { no: 'STEP 5', title: '정산 감사',              gnb: 'billing',    path: '정산·요금 > 정산 감사',   route: '/platform/audit/settlement' },
     { no: 'STEP 6', title: '감사 로그 추적',         gnb: 're100',      path: '시스템·감사 > 감사 로그', route: '/platform/audit-logs' },
     { no: 'STEP 7', title: '시스템 운영·공지',       gnb: 're100',      path: '시스템·감사 > 공지·알림', route: '/platform/notice' },
   ],
@@ -1606,20 +1581,29 @@ function Flow({ p }: { p: Persona }) {
   )
 }
 
-/* 페르소나 유저 플로우 — 신규 GNB 기준 (7 STEP + 분기 + 관심사→화면) */
-function PersonaJourney({ plan, name, navLabels }: { plan: PersonaPlan; name: string; navLabels: Record<CGnbKey, string> }) {
+/* 페르소나 유저 플로우 — 신규 GNB 기준 (N STEP + 분기 + 관심사→화면) */
+function PersonaJourney({ plan, name }: { plan: PersonaPlan; name: string }) {
+  // 슬롯 → 실제 GNB 이름: jSteps.path 첫 토큰("전력거래 > ..." → "전력거래")에서 역산.
+  // 페르소나마다 같은 색 슬롯이 다른 GNB(예: 관리자의 consulting 슬롯 = "사용자·기업")일 수 있어 라벨을 동적으로.
+  const slotLabel = (k: CGnbKey): string => {
+    const step = plan.jSteps.find((s) => s.gnb === k)
+    if (step) return step.path.split(' > ')[0].trim()
+    return GNB_COMMON_LABEL[k]
+  }
+  // 범례엔 실제 사용하는 슬롯만 (+대시보드는 항상)
+  const usedSlots = Array.from(new Set<CGnbKey>(['dashboard', ...plan.jSteps.map((s) => s.gnb)]))
   return (
     <div className="cj">
       <div className="cj-head">
         <div>
           <h3>{name} 유저 플로우 — 신규 GNB 기준 화면 단계·분기</h3>
-          <p>{plan.jSteps[0]?.title.split(' ')[0]} → {plan.jSteps[plan.jSteps.length - 1]?.title} 까지. 카드 색 = 소속 GNB. 화살표 = 주 경로. 아래 다이아몬드 = 분기점.</p>
+          <p>STEP {plan.jSteps.length}단계 흐름. 카드 색 = 소속 GNB. 화살표 = 주 경로. 아래 다이아몬드 = 분기점.</p>
         </div>
         <div className="cj-legend">
-          {(['consulting','trading','billing','re100','dashboard'] as CGnbKey[]).map((k) => (
+          {usedSlots.map((k) => (
             <span key={k} className="cj-lg-item">
               <span className="cj-lg-sw" style={{ background: CGNB_META[k].soft, borderColor: CGNB_META[k].line }} />
-              <span style={{ color: CGNB_META[k].ink, fontWeight: 700 }}>{navLabels[k]}</span>
+              <span style={{ color: CGNB_META[k].ink, fontWeight: 700 }}>{slotLabel(k)}</span>
             </span>
           ))}
         </div>
@@ -2089,17 +2073,7 @@ function PersonaView({
               <div className="csm-userjourney-h">
                 <h4>참고 · 신규 GNB 기준 유저 플로우 — 위 화면 구성안과 연결되는 사용자 흐름</h4>
               </div>
-              <PersonaJourney
-                plan={PLANS[active]!}
-                name={PERSONA_NAME_KO[active]}
-                navLabels={Object.fromEntries(
-                  (['dashboard','consulting','trading','billing','re100'] as CGnbKey[]).map((k, i) => {
-                    const idxName = ['①','②','③','④','⑤'][i]
-                    const navItem = PLANS[active]!.nav.find((n) => n.idx === idxName)
-                    return [k, navItem ? `${idxName} ${navItem.name}` : CGNB_META[k].label]
-                  }),
-                ) as Record<CGnbKey, string>}
-              />
+              <PersonaJourney plan={PLANS[active]!} name={PERSONA_NAME_KO[active]} />
             </>
           ) : (
             <>

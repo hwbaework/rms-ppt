@@ -26,3 +26,4 @@ dist-ssr
 # Claude Code worktrees / local settings (do not commit)
 .claude/worktrees/
 .claude/settings.local.json
+CLAUDE.md
