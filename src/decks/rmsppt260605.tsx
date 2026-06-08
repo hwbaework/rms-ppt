@@ -275,6 +275,1133 @@ const PERSONAS: Persona[] = [
   },
 ]
 
+/* ── 수용가(Consumer) 전용: 엔드투엔드 유저 저니 × 신규 GNB 매핑·점검 ──
+   image-spec: 6단계 phase × {저니행동 / 신규GNB / 대시보드(전폭) / 점검결과 / 정산데이터흐름} */
+const CONSUMER_PHASES = [
+  { n: '01', t: '온보딩·구축', h: '1·2차년도 · 설비 설치' },
+  { n: '02', t: '발전 개시', h: '3차년도~ · 자원별 가동' },
+  { n: '03', t: '매칭·계약', h: '수요 ↔ 공급 연결' },
+  { n: '04', t: '거래·공급', h: '전력 흐름' },
+  { n: '05', t: '정산·세금', h: '대금 흐름' },
+  { n: '06', t: '이행·증빙', h: 'RE100 · ESG' },
+]
+
+type CJourneyCell =
+  | { action: string; routes?: string[]; handoff?: string; decision?: string }
+  | { empty: { title: string; note?: string } }
+
+const CONSUMER_JOURNEY: CJourneyCell[] = [
+  { action: '가입 · RE100 무료진단 신청', routes: ['/consulting/diagnosis'], handoff: '컨설턴트로 핸드오프' },
+  { empty: { title: '설비 구축 단계 · 미참여', note: '(제안 수신 시작 가능)' } },
+  { action: '제안 검토 → 발전원·계약유형 선택', routes: ['/proposals→/trading→/contracts'], decision: '발전원·계약(태양광 3종)' },
+  { action: '전력 사용 · 사용량 확인', routes: ['/ppa/status', '/consumer/usage'] },
+  { action: '요금 확인 · 납부 (부족 시 편차)', routes: ['/ppa/billing/*'] },
+  { action: 'RE100/ESG 증빙 수령', routes: ['/consumer/re100', '/documents'] },
+]
+
+type CGnbCell =
+  | { label: string; items: string[]; handoff?: string }
+  | { empty: string }
+
+const CONSUMER_GNB: CGnbCell[] = [
+  { label: 'GNB ② 컨설팅', items: ['무료 진단', '(마켓플레이스)', '받은 제안 → P3로 연결'] },
+  { empty: '전용 화면 없음' },
+  { label: 'GNB ③ 전력거래', items: ['거래 신청', '내 계약 (新 에너지계약 통합)'], handoff: '← 발전사·SPC·관리자 연계' },
+  { label: 'GNB ③ 전력거래', items: ['전력 현황 (실시간)', '사용량 분석 (과거)'], handoff: '← SPC 매칭 / 발전사 공급' },
+  { label: 'GNB ④ 정산·요금', items: ['정산 내역 (납부 통합)', '세금계산서', '사용량 편차'] },
+  { label: 'GNB ⑤ RE100·이행', items: ['RE100 현황', '이행증빙', '운영 보고서'] },
+]
+
+const CONSUMER_CHECK = [
+  { no: '❶', title: '2곳 중복 → 단일화', desc: '계약·요금·증빙이 대시보드 + 전력거래 양쪽에 존재. 요약판 제거, 풀기능 한 곳으로.' },
+  { no: '❷', title: '정산 독립 GNB 분리', desc: 'P05 정산이 전력거래에 묻힘. 거래 ≠ 정산(업계 표준) → GNB로 승격.' },
+  { no: '❸', title: '납부 액션 신설', desc: 'P05에 조회·수취만 있고 납부 액션 부재 → 정산 내역에 통합.' },
+  { no: '❹', title: 'RE100 GNB 승격', desc: '2순위 관심사인데 LNB에 묻힘 → GNB로 상위 노출. (증빙 발급 한 클릭)' },
+  { no: '❺', title: '사용량 이동', desc: '사용량 분석을 대시보드 → 전력거래로 이동. 현황·분석 한 곳에.' },
+]
+
+/* 수용가 — 관심사 우선순위 */
+const CONSUMER_PRIORITIES = [
+  { rank: 1, label: '얼마나 줄었나', desc: '한전 대비 이번 달/누적 절감액 (경영진 보고 숫자)' },
+  { rank: 2, label: 'RE100 얼마나 달성했나', desc: '달성률·증빙 (수출기업은 CBAM·ESG 대응으로 시급)' },
+  { rank: 3, label: '한전이었다면 얼마나 손해였나', desc: '"한전 청구 vs 실제 PPA" 직접 비교' },
+  { rank: 4, label: '이번 달 요금 · 다음 결제일', desc: '발전량 변동으로 예측 불안' },
+  { rank: 5, label: '부족분 발생 여부', desc: '부족분은 비싼 한전 요금으로 보충됨' },
+]
+
+/* 수용가 — GNB → LNB 트리 */
+type CGnbTree =
+  | { idx: string; name: string; route: string; sub?: string; lnb: null; note: string }
+  | { idx: string; name: string; route?: string; sub?: string; lnb: { name: string; route: string }[] }
+
+const CONSUMER_NAV: CGnbTree[] = [
+  { idx: '①', name: '대시보드', route: '/consumer', lnb: null, note: 'LNB 없음 · 단독 홈' },
+  { idx: '②', name: '컨설팅', lnb: [
+    { name: '무료 진단', route: '/consulting/diagnosis' },
+    { name: '마켓플레이스', route: '/consulting/marketplace' },
+    { name: '받은 제안', route: '/consulting/proposals' },
+    { name: '컨설팅 현황', route: '/consulting' },
+  ]},
+  { idx: '③', name: '전력거래', sub: '거래하기 (계약 + 사용)', lnb: [
+    { name: '거래 신청', route: '/ppa/trading' },
+    { name: '내 계약', route: '/ppa/contracts' },
+    { name: '전력 현황', route: '/ppa/status' },
+    { name: '사용량 분석', route: '/consumer/usage' },
+  ]},
+  { idx: '④', name: '정산·요금', sub: '내가 내는 돈', lnb: [
+    { name: '정산 내역', route: '/ppa/billing/settlement' },
+    { name: '세금계산서', route: '/ppa/billing/tax-invoice' },
+    { name: '사용량 편차', route: '/ppa/billing/usage-deviation' },
+  ]},
+  { idx: '⑤', name: 'RE100·이행', sub: '증빙', lnb: [
+    { name: 'RE100 현황', route: '/consumer/re100' },
+    { name: '이행증빙', route: '/ppa/documents/evidence' },
+    { name: '운영 보고서', route: '/ppa/documents/report' },
+  ]},
+]
+const CONSUMER_NAV_COMMON = ['탄소거래', 'e-Data', 'VPP', 'DT']
+
+/* 핵심 설계 ①②③ — 전체 메뉴 구조 아래 함께 표시 */
+const CONSUMER_DESIGN_INTENT = [
+  '정산·요금을 전력거래에서 분리해 독립 GNB로 (거래 ≠ 정산, 업계 표준)',
+  '사용량 분석을 대시보드 → 전력거래로 이동 (현황·분석 한 곳)',
+  'RE100·이행을 독립 GNB로 승격 (2순위 관심사 상위 노출)',
+]
+
+/* 수용가 — GNB ① 대시보드 4 Zone */
+const DASHBOARD_ZONES = [
+  { z: 'Zone 1', title: '얼마나 아꼈나', items: [
+    '이번달/누적 절감액 · 절감률 KPI',
+    '"한전 vs 실제 PPA" 월별 비교 차트 (차이 음영)',
+    '→ "한전이었으면 +XXX만원 더 냈음"',
+  ]},
+  { z: 'Zone 2', title: 'RE100 달성', items: [
+    '달성률 게이지 · RE 비율 · CO₂ 저감',
+    '"증빙 발급" 바로가기',
+  ]},
+  { z: 'Zone 3', title: '이번 달 돈 관리', items: [
+    '예상 요금 · 다음 결제일 · 미정산',
+    '부족분 경고 (발생 시만)',
+  ]},
+  { z: 'Zone 4', title: '사용량 요약', items: [
+    '총 사용량 · 수요 피크',
+    '미니 차트',
+  ]},
+]
+const DASHBOARD_REMOVED = ['발전량 추이 차트', '발전소 상태 보드 (발전사 관심사)']
+
+/* 수용가 — 각 GNB의 LNB 화면 상세 */
+type ScreenSection = { label: string; items: string[] }
+type Screen = {
+  name: string
+  route: string
+  sub?: string         // (대시보드에서 이동) 같은 메타
+  hero?: boolean       // 정산 내역 같은 핵심 화면
+  sections: ScreenSection[]
+  rel?: string         // ← SPC 정산 확정 …
+  warn?: string        // ⚠ 보강 필요 …
+}
+
+const GNB_CONSULTING: Screen[] = [
+  { name: '무료 진단', route: '/consulting/diagnosis',
+    sections: [{ label: '내용', items: ['5단계 위저드(분야 → 기업현황 → 재생E목표 → 연락처 → 확인)'] }],
+    rel: '→ 컨설턴트 신규 의뢰' },
+  { name: '마켓플레이스', route: '/consulting/marketplace',
+    sections: [{ label: '내용', items: ['컨설턴트 탐색·선택'] }],
+    rel: '← 컨설턴트 프로필' },
+  { name: '받은 제안', route: '/consulting/proposals',
+    sections: [{ label: '내용', items: ['제안 목록 · 상세(발전원·계약유형)'] }],
+    rel: '← 컨설턴트 제안 발송' },
+  { name: '컨설팅 현황', route: '/consulting', sub: '舊 "컨설팅 홈"',
+    sections: [{ label: '내용', items: ['진행 중 컨설팅 추적 · 일정'] }],
+    rel: '← 컨설턴트 프로젝트 관리' },
+]
+
+const GNB_TRADING: Screen[] = [
+  { name: '거래 신청', route: '/ppa/trading',
+    sections: [{ label: '내용', items: [
+      'Lease PPA 문의 / 직접 PPA 유형 선택(Onsite·Offsite)',
+      '거래 이력 / 신청 취소',
+    ]}],
+    rel: '→ SPC 매칭·중개 · ↔ 발전사 공급신청 · → 관리자 승인' },
+  { name: '내 계약', route: '/ppa/contracts', sub: '舊 "에너지 계약" 통합', hero: true,
+    sections: [
+      { label: '진행 5단계 추적', items: ['신청접수 → SPC검토 → 거래소신고서 → 승인대기 → 효력발생'] },
+      { label: 'KPI', items: ['총 계약 · 이달 비용 · CFE 매칭 · RE100 · 자원 믹스'] },
+      { label: '액션', items: ['갱신 · 변경 · 해지'] },
+    ],
+    rel: '↔ 발전사 동일 계약(상태 동기화) · → SPC·관리자 검토·승인' },
+  { name: '전력 현황', route: '/ppa/status',
+    sections: [{ label: '내용', items: [
+      '실시간 자원별 매칭',
+      'RE100 누적 이행률 · 예상 정산금',
+      '할 일 · 최근 활동',
+    ]}],
+    rel: '← SPC 매칭 결과 · ← 발전사 공급량' },
+  { name: '사용량 분석', route: '/consumer/usage', sub: '대시보드에서 이동',
+    sections: [{ label: '내용', items: [
+      '총 사용량 · 한전 사용량 · 평균 일사용량 · 수요 피크',
+      '시간대별 · 일별 · 월별 차트',
+    ]}],
+    rel: '→ SPC 발전량 예측 입력 · → 컨설턴트 진단 기초자료' },
+]
+
+const GNB_BILLING: Screen[] = [
+  { name: '정산 내역', route: '/ppa/billing/settlement', hero: true, sub: '핵심 화면',
+    sections: [
+      { label: 'KPI', items: ['이달 총 비용 · 이달 순절감 · 다음 결제일 · 누적(YTD) · 미정산'] },
+      { label: '정산 산출', items: ['발전량(계량기/RTU) × SMP 단가 → 공급가액 / 24/7 매칭률'] },
+      { label: '납부 통합', items: ['청구 확인 → 납부 액션 (별도 화면 신설 안 함)'] },
+      { label: '한전 비교 상세', items: ['대시보드 Zone1의 상세판'] },
+      { label: '상태', items: ['SPC 확정 전 "잠정" 배지'] },
+    ],
+    rel: '← SPC 정산 확정 · 납부=SPC 수금 · 발전사 판매대금과 차액=SPC 마진' },
+  { name: '세금계산서', route: '/ppa/billing/tax-invoice',
+    sections: [
+      { label: '수취 현황', items: ['총 발급건수 · 총 수취 합계 · 미발급 · 결제 대기'] },
+      { label: '상세', items: ['발급번호 · 공급자 · 사업자번호 · 공급량 · 단가 · 공급가액 · 부가세 · 결제일 · 가상계좌'] },
+      { label: '역할', items: ['증빙·수취 확인 전용 (납부 액션은 정산 내역에만)'] },
+    ],
+    rel: '← SPC 발행 (확정 → 발행 → 수취 순서 강제)' },
+  { name: '사용량 편차', route: '/ppa/billing/usage-deviation', sub: '舊 "사용량 부족 내역" → 라벨 통일',
+    sections: [
+      { label: 'KPI', items: ['총 부족량 · 내부 보완률 · 정산 순영향'] },
+      { label: '내용', items: ['일별 추이 · 시간대별 분포 · 원인 분해 · 처리 분해 · 이벤트 로그 · 편차 정산 처리'] },
+    ],
+    rel: '← SPC 예측 vs 실측 · ↔ 발전사 편차(동일 이벤트 양면)' },
+]
+
+const GNB_RE100: Screen[] = [
+  { name: 'RE100 현황', route: '/consumer/re100', sub: '대시보드에서 이동',
+    sections: [
+      { label: 'KPI', items: ['현재 RE 비율 · 재생E 사용 · CO₂ 저감'] },
+      { label: '차트', items: ['월별 RE 비율 · 연도별 목표 vs 실적 · 에너지원 구성 · 로드맵'] },
+    ],
+    rel: '← 컨설턴트 RE100 인증 지원' },
+  { name: '이행증빙', route: '/ppa/documents/evidence',
+    sections: [
+      { label: '누적', items: ['발전 · 리스료 · 절감 · 증빙 제출'] },
+      { label: '액션', items: ['증빙 문서 + 미리보기 · 다운로드 · 이메일 · 공유'] },
+    ],
+    rel: '← SPC 거래 증빙 · ← 발전사 REC 발급(동일 라우트, 권한 분리 필요)' },
+  { name: '운영 보고서', route: '/ppa/documents/report', sub: '현재 74줄 · 보강 대상',
+    sections: [
+      { label: '내용', items: ['누적 발전량 · 리스료 · 한전 대비 절감 · 연간 추정', '월별 비용 vs 절감 · 발급 이력'] },
+    ],
+    warn: '발행 주체(SPC/관리자) 미정의 → 보강 필요' },
+]
+
+/* AS-IS → TO-BE 변경 요약 */
+const CONSUMER_DIFF = [
+  '대시보드 LNB 제거 → 단독 홈 (절감·RE100 중심)',
+  '에너지 계약·요금 내역 요약판 제거 → 내 계약·정산 내역으로 통합',
+  '사용량 분석 → 전력거래로 이동',
+  '정산·요금 → 독립 GNB 신설',
+  'RE100·이행 → 독립 GNB 신설',
+  '컨설팅 홈 → 컨설팅 현황 명칭 변경',
+  '/ppa/billing ↔ /lease/billing 미러 폐기',
+]
+const CONSUMER_OPEN = ['공통 GNB 4개 노출 여부', '운영 보고서 발행 주체', '이행증빙 권한 분리']
+
+/* ── 수용가 유저 플로우 — 신규 GNB 기준 화면 단계·분기 ── */
+type CGnbKey = 'dashboard' | 'consulting' | 'trading' | 'billing' | 're100'
+
+const CGNB_META: Record<CGnbKey, { label: string; soft: string; line: string; ink: string }> = {
+  dashboard:  { label: '① 대시보드(상시)', soft: '#f1f3f7', line: '#d7dce5', ink: '#64748b' },
+  consulting: { label: '② 컨설팅',        soft: '#f3effe', line: '#ddd0fb', ink: '#8b5cf6' },
+  trading:    { label: '③ 전력거래',      soft: '#fff7ea', line: '#f3d79a', ink: '#b4730a' },
+  billing:    { label: '④ 정산·요금',     soft: '#e9f7fe', line: '#bfe6f7', ink: '#0277b6' },
+  re100:      { label: '⑤ RE100·이행',    soft: '#eafaf3', line: '#bfe9d4', ink: '#0b7a52' },
+}
+
+type CJStep = { no: string; title: string; gnb: CGnbKey; path: string; route: string }
+
+const CJ_STEPS: CJStep[] = [
+  { no: 'STEP 1', title: 'RE100 무료진단 신청',                 gnb: 'consulting', path: '컨설팅 > 무료 진단',   route: '/consulting/diagnosis' },
+  { no: 'STEP 2', title: '제안 검토·수락',                       gnb: 'consulting', path: '컨설팅 > 받은 제안',   route: '/consulting/proposals' },
+  { no: 'STEP 3', title: '거래 신청 (발전원·계약유형)',          gnb: 'trading',    path: '전력거래 > 거래 신청', route: '/ppa/trading' },
+  { no: 'STEP 4', title: '계약 체결·관리 (진행 5단계)',          gnb: 'trading',    path: '전력거래 > 내 계약',   route: '/ppa/contracts' },
+  { no: 'STEP 5', title: '전력 사용·현황 실시간 + 사용량',       gnb: 'trading',    path: '전력현황·사용량분석',  route: '/ppa/status · /usage' },
+  { no: 'STEP 6', title: '정산 확인·납부 + 세금계산서·편차',     gnb: 'billing',    path: '정산·요금 > 정산 내역', route: '/ppa/billing/settlement' },
+  { no: 'STEP 7', title: 'RE100·증빙 수령',                      gnb: 're100',      path: 'RE100·이행',           route: '/consumer/re100 · /evidence' },
+]
+
+type CJBranch = { label: string; desc: string; tone?: 'ok' | 'warn' | 'no' }
+type CJDecision = {
+  q: string
+  hint?: string
+  branches: CJBranch[]
+  note?: string
+  meta?: string
+  isDashboard?: boolean
+}
+
+const CJ_DECISIONS: CJDecision[] = [
+  {
+    q: '자가발전이 가능한가?',
+    branches: [
+      { label: '가능', desc: '자가소비형 태양광 설치', tone: 'ok' },
+      { label: '불가', desc: '마켓플레이스 → 제안 받기', tone: 'warn' },
+    ],
+    note: 'STEP 2–3 진입 분기. 자가설치는 모니터링만, 그 외는 거래 신청으로.',
+    meta: '관련 GNB: ② 컨설팅 → ③ 전력거래',
+  },
+  {
+    q: '발전원·계약유형은?',
+    hint: 'STEP 3',
+    branches: [
+      { label: '태양광',   desc: 'PPA·자가 3종' },
+      { label: '연료전지', desc: '24h·SMP+REC' },
+      { label: 'ORC',      desc: '폐열 발전' },
+    ],
+    note: '태양광 계약 3종: Lease PPA(임대·발전량 비례) / 직접 PPA(Onsite·Offsite 5~20년) / 자가 설치(자가소비·모니터링만) → STEP 4 계약 체결로',
+  },
+  {
+    q: '사용량이 계약량 대비?',
+    hint: 'STEP 5 → 6',
+    branches: [
+      { label: '부족', desc: '한전 단가 보충 → 사용량 편차', tone: 'no' },
+      { label: '충족', desc: '정상 정산', tone: 'ok' },
+    ],
+    note: '정산 단계(⑥)로 직결. 부족분은 GNB ⑥ > 사용량 편차에서 원인·정산영향 확인.',
+    meta: '데이터 원천: SPC 예측 vs 실측 / 발전사 편차 (동일 이벤트)',
+  },
+  {
+    q: '대시보드 (상시)',
+    isDashboard: true,
+    branches: [],
+    note: '모든 단계 위에서 "얼마나 아꼈나"를 매일 요약. 각 위젯 → 해당 단계로 딥링크.',
+  },
+]
+
+type CJConcern = { no: string; label: string; desc: string; mapping: string; hint?: string; tone: CGnbKey | 'red' }
+const CJ_CONCERNS: CJConcern[] = [
+  { no: '①', label: '얼마나 줄었나',  desc: '한전 대비 절감액·절감률',     mapping: '→ 대시보드 Zone1 + 정산 내역', hint: '(한전 vs 실제 PPA 비교)', tone: 'dashboard' },
+  { no: '②', label: 'RE100 달성',     desc: '달성률·증빙 (수출=CBAM 시급)', mapping: '→ 대시보드 Zone2 + GNB⑤',     hint: '"증빙 발급" 한 클릭',     tone: 're100' },
+  { no: '③', label: '한전이면 손해?', desc: '한전 청구 vs 실제 PPA',        mapping: '→ 정산 내역 상세 비교',       hint: '"한전이었으면 +XXX만원"', tone: 'trading' },
+  { no: '④', label: '이번 달 요금',   desc: '예상 요금·다음 결제일',        mapping: '→ 대시보드 Zone3',            hint: '+ 정산 내역',             tone: 'billing' },
+  { no: '⑤', label: '부족분?',        desc: '부족분 = 한전 보충 비용',       mapping: '→ 사용량 편차 (조건부)',      hint: '대시보드 경고',           tone: 'red' },
+]
+
+const CJ_CHECKPOINTS = [
+  "STEP 2 '받은 제안'을 컨설팅에 둘지, 전력거래 입구로 당길지",
+  'STEP 5 전력현황/사용량분석을 한 항목으로 합칠지',
+  '자가설치 케이스는 거래 없이 모니터링만 → 별도 분기 표기 필요',
+]
+
+const CJ_CONCERN_TONES: Record<CJConcern['tone'], { bg: string; bd: string; ink: string }> = {
+  dashboard:  { bg: '#f1f3f7', bd: '#d7dce5', ink: '#64748b' },
+  consulting: { bg: '#f3effe', bd: '#ddd0fb', ink: '#8b5cf6' },
+  trading:    { bg: '#fff7ea', bd: '#f3d79a', ink: '#b4730a' },
+  billing:    { bg: '#e9f7fe', bd: '#bfe6f7', ink: '#0277b6' },
+  re100:      { bg: '#eafaf3', bd: '#bfe9d4', ink: '#0b7a52' },
+  red:        { bg: '#fef0f0', bd: '#f3c9c9', ink: '#b42424' },
+}
+
+/* ── 페르소나별 통합 PLAN ── (6 personas: 화면구성안 + 유저저니)
+   CGnbKey 의미는 색상 슬롯(① dashboard ② violet ③ orange ④ sky ⑤ green)으로만 쓰임.
+   라벨은 plan.nav[].name 으로 표시. 즉 generator의 'consulting' 슬롯은 "자원관리"를 의미. */
+type PersonaPlan = {
+  priorities: { rank: number; label: string; desc: string }[]
+  nav: CGnbTree[]
+  navCommon: string[]
+  designIntent: string[]
+  dashboard: { route: string; sub: string; zones: { z: string; title: string; items: string[] }[]; removed?: string[] }
+  gnbs: { no: string; name: string; sub?: string; screens: Screen[] }[]
+  diff: string[]
+  open: string[]
+  jSteps: CJStep[]
+  jDecisions: CJDecision[]
+  jConcerns: CJConcern[]
+  jCheckpoints: string[]
+  matrix?: { phases: typeof CONSUMER_PHASES; journey: typeof CONSUMER_JOURNEY; gnb: typeof CONSUMER_GNB; check: typeof CONSUMER_CHECK }
+}
+
+/* 수용가 — 기존 데이터 재포장 */
+const PLAN_CONSUMER: PersonaPlan = {
+  priorities: CONSUMER_PRIORITIES,
+  nav: CONSUMER_NAV,
+  navCommon: CONSUMER_NAV_COMMON,
+  designIntent: CONSUMER_DESIGN_INTENT,
+  dashboard: { route: '/consumer', sub: 'LNB 없음 · 단독 홈', zones: DASHBOARD_ZONES, removed: DASHBOARD_REMOVED },
+  gnbs: [
+    { no: 'D', name: '② 컨설팅', screens: GNB_CONSULTING },
+    { no: 'E', name: '③ 전력거래', sub: '"거래하기" (계약 + 사용) — 내 계약이 통합 핵심', screens: GNB_TRADING },
+    { no: 'F', name: '④ 정산·요금', sub: '"내가 내는 돈" — 정산 내역이 hero, 납부 통합', screens: GNB_BILLING },
+    { no: 'G', name: '⑤ RE100·이행', sub: '"증빙" — 2순위 관심사 상위 노출', screens: GNB_RE100 },
+  ],
+  diff: CONSUMER_DIFF,
+  open: CONSUMER_OPEN,
+  jSteps: CJ_STEPS,
+  jDecisions: CJ_DECISIONS,
+  jConcerns: CJ_CONCERNS,
+  jCheckpoints: CJ_CHECKPOINTS,
+  matrix: { phases: CONSUMER_PHASES, journey: CONSUMER_JOURNEY, gnb: CONSUMER_GNB, check: CONSUMER_CHECK },
+}
+
+/* 발전사업자 */
+const PLAN_GENERATOR: PersonaPlan = {
+  priorities: [
+    { rank: 1, label: '이번 달 발전 수익',    desc: '자원유형별 단가차익 (SMP+REC / PPA / 전력공급)' },
+    { rank: 2, label: '발전량 vs 예측 오차',   desc: '예측 정확도 · 패널티 영향' },
+    { rank: 3, label: '정산 확정 일정',        desc: '잠정→확정→수금 진행 상태' },
+    { rank: 4, label: '계약 진행',             desc: '매칭·체결·갱신·해지' },
+    { rank: 5, label: '설비 가동률·O&M',      desc: '발전소·인버터 상태·알람' },
+  ],
+  nav: [
+    { idx: '①', name: '대시보드', route: '/generator', lnb: null, note: 'LNB 없음 · 단독 홈' },
+    { idx: '②', name: '자원관리', sub: '발전 주체의 1차 화면', lnb: [
+      { name: '발전소 등록', route: '/generator/ppa/resources/register' },
+      { name: '자원 상세',   route: '/generator/ppa/resources' },
+      { name: '가동 현황',   route: '/generator/ppa/resources/status' },
+      { name: '설비 정보',   route: '/generator/ppa/resources/equipment' },
+    ]},
+    { idx: '③', name: '거래·계약', lnb: [
+      { name: '공급 제안 응답', route: '/generator/ppa/proposals' },
+      { name: '계약 관리',      route: '/generator/ppa/contracts' },
+      { name: '매칭 현황',      route: '/generator/ppa/matching' },
+      { name: '갱신·해지',      route: '/generator/ppa/contracts/renewals' },
+    ]},
+    { idx: '④', name: '정산·수익', sub: '내가 받는 돈', lnb: [
+      { name: '정산 내역',     route: '/generator/ppa/revenue/invoices' },
+      { name: '수익 분석',     route: '/generator/ppa/revenue/analytics' },
+      { name: '세금계산서',    route: '/generator/ppa/revenue/tax-invoice' },
+      { name: '편차',          route: '/generator/ppa/revenue/deviation' },
+    ]},
+    { idx: '⑤', name: '모니터링·증빙', sub: '발전·REC', lnb: [
+      { name: '실시간 발전량', route: '/monitoring/plant' },
+      { name: '예측 vs 실측',  route: '/monitoring/forecast' },
+      { name: 'REC 발급',      route: '/ppa/documents/rec' },
+      { name: '보고서',        route: '/ppa/documents/report' },
+    ]},
+  ],
+  navCommon: ['탄소거래', 'e-Data', 'VPP', 'DT'],
+  designIntent: [
+    '자원관리를 ② GNB로 (발전 주체의 우선 화면)',
+    '정산·수익을 독립 GNB로 (거래 ≠ 정산, 수용가와 같은 패턴)',
+    '모니터링과 REC를 묶음 (RE100 시대 발전사 핵심 산출물)',
+  ],
+  dashboard: {
+    route: '/generator', sub: 'LNB 없음 · 단독 홈',
+    zones: [
+      { z: 'Zone 1', title: '이달 발전·수익', items: ['이달 발전량·수익 KPI', '자원유형별 분해 (연료전지/태양광/ORC)', '전년 대비 추이'] },
+      { z: 'Zone 2', title: '예측 vs 실측',   items: ['오차율 게이지·일별 추이', '패널티 누계 (있을 때)'] },
+      { z: 'Zone 3', title: '정산 일정',      items: ['다음 정산일·잠정 금액', '미수금 알림'] },
+      { z: 'Zone 4', title: '설비 가동률',    items: ['발전소별 가동률·알람', 'O&M 일정'] },
+    ],
+    removed: ['수용가 관심 위젯 (RE100 게이지·한전 비교)'],
+  },
+  gnbs: [
+    { no: 'D', name: '② 자원관리', screens: [
+      { name: '발전소 등록', route: '/generator/ppa/resources/register',
+        sections: [{ label: '내용', items: ['자원·용량·위치·자원유형 등록 (위저드)'] }],
+        rel: '→ 관리자 승인 · ↔ SPC 계통 연계' },
+      { name: '자원 상세',   route: '/generator/ppa/resources',
+        sections: [{ label: '내용', items: ['발전소 목록·상세·변경 이력'] }] },
+      { name: '가동 현황',   route: '/generator/ppa/resources/status',
+        sections: [{ label: '내용', items: ['일별 가동률·일시 정지 이력·O&M 일정'] }] },
+      { name: '설비 정보',   route: '/generator/ppa/resources/equipment',
+        sections: [{ label: '내용', items: ['인버터·PCS·변압기·모니터링 장비'] }] },
+    ]},
+    { no: 'E', name: '③ 거래·계약', screens: [
+      { name: '공급 제안 응답', route: '/generator/ppa/proposals',
+        sections: [{ label: '내용', items: ['수신된 공급 제안 목록·단가·기간', '수락·거절·재제안'] }],
+        rel: '← SPC 매칭 · → 수용가 계약 체결로' },
+      { name: '계약 관리', route: '/generator/ppa/contracts', hero: true, sub: '핵심 화면',
+        sections: [
+          { label: '진행 5단계', items: ['신청접수 → SPC검토 → 거래소신고서 → 승인대기 → 효력발생'] },
+          { label: 'KPI',        items: ['총 계약·누적 수익·자원 믹스·평균 단가'] },
+          { label: '액션',       items: ['갱신·변경·해지'] },
+        ],
+        rel: '↔ 수용가 동일 계약(상태 동기화) · → SPC·관리자 검토·승인' },
+      { name: '매칭 현황', route: '/generator/ppa/matching',
+        sections: [{ label: '내용', items: ['실시간 매칭 비율·매칭된 수용가 목록'] }],
+        rel: '← SPC 매칭 엔진' },
+      { name: '갱신·해지', route: '/generator/ppa/contracts/renewals',
+        sections: [{ label: '내용', items: ['만료 예정·갱신 협상·해지 신청'] }] },
+    ]},
+    { no: 'F', name: '④ 정산·수익', sub: '내가 받는 돈 — 정산 내역이 hero', screens: [
+      { name: '정산 내역', route: '/generator/ppa/revenue/invoices', hero: true, sub: '핵심 화면',
+        sections: [
+          { label: 'KPI',        items: ['이달 수익·누적(YTD)·다음 수금일·미수금'] },
+          { label: '정산 산출',  items: ['발전량 × 단가 → 공급가액 / 자원유형별 단가차익'] },
+          { label: '수금 통합',  items: ['확정 → SPC 지급 확인 → 수금'] },
+          { label: '상태',       items: ['SPC 확정 전 "잠정" 배지'] },
+        ],
+        rel: '← SPC 정산 확정 · 수금 = 수용가 청구액 − SPC 마진' },
+      { name: '수익 분석', route: '/generator/ppa/revenue/analytics',
+        sections: [{ label: '내용', items: ['자원유형별 수익 추이·단가 변동·시뮬레이션'] }] },
+      { name: '세금계산서', route: '/generator/ppa/revenue/tax-invoice',
+        sections: [{ label: '내용', items: ['발행 현황·누적 합계·미발행'] }],
+        rel: '→ SPC 수취' },
+      { name: '편차', route: '/generator/ppa/revenue/deviation',
+        sections: [{ label: '내용', items: ['예측 오차로 인한 패널티·보정 정산'] }],
+        rel: '↔ 수용가 사용량 편차 (동일 이벤트 양면)' },
+    ]},
+    { no: 'G', name: '⑤ 모니터링·증빙', sub: '발전·REC', screens: [
+      { name: '실시간 발전량', route: '/monitoring/plant',
+        sections: [
+          { label: 'KPI',   items: ['실시간 출력·이상 알람·가동률'] },
+          { label: '차트',  items: ['시간대별·일별·월별 발전량'] },
+        ]},
+      { name: '예측 vs 실측', route: '/monitoring/forecast',
+        sections: [{ label: '내용', items: ['예측 모델·실측 비교·오차율·기상 연동'] }],
+        rel: '→ SPC 정산 정확도 · ↔ 수용가 사용량 편차' },
+      { name: 'REC 발급', route: '/ppa/documents/rec',
+        sections: [{ label: '내용', items: ['REC 발급 신청·가중치 적용·거래·소각 이력'] }],
+        rel: '↔ 수용가 이행증빙 (동일 라우트, 권한 분리 필요)' },
+      { name: '보고서', route: '/ppa/documents/report',
+        sections: [{ label: '내용', items: ['월별·연간 발전 보고서·한전 신고용'] }] },
+    ]},
+  ],
+  diff: [
+    '대시보드 LNB 제거 → 단독 홈 (발전·수익 중심)',
+    '자원관리 → 독립 GNB로 승격 (발전 주체 1차 화면)',
+    '정산·수익 → 독립 GNB로 분리 (수용가와 같은 패턴)',
+    '모니터링·REC를 묶어서 ⑤ GNB로',
+    '/generator/ppa/* 와 /monitoring/* 혼재 → 라우트 일관성 정리',
+  ],
+  open: ['자원관리 vs 모니터링 경계', 'REC 발급 권한·UI 통합 여부'],
+  jSteps: [
+    { no: 'STEP 1', title: '발전소·자원 등록',          gnb: 'consulting', path: '자원관리 > 발전소 등록', route: '/generator/ppa/resources/register' },
+    { no: 'STEP 2', title: '공급 제안 응답',            gnb: 'trading',    path: '거래·계약 > 공급 제안',  route: '/generator/ppa/proposals' },
+    { no: 'STEP 3', title: '계약 체결 (진행 5단계)',    gnb: 'trading',    path: '거래·계약 > 계약 관리',  route: '/generator/ppa/contracts' },
+    { no: 'STEP 4', title: '전력 생산·공급',            gnb: 're100',      path: '모니터링 > 실시간 발전량', route: '/monitoring/plant' },
+    { no: 'STEP 5', title: '잠정 정산 확인',            gnb: 'billing',    path: '정산·수익 > 정산 내역',  route: '/generator/ppa/revenue/invoices' },
+    { no: 'STEP 6', title: '확정 정산·수금',            gnb: 'billing',    path: '정산·수익 > 정산 내역',  route: '/generator/ppa/revenue/invoices' },
+    { no: 'STEP 7', title: 'REC 발급·보고서',           gnb: 're100',      path: '모니터링·증빙 > REC',    route: '/ppa/documents/rec' },
+  ],
+  jDecisions: [
+    { q: '자원 유형은?', hint: 'STEP 1', branches: [
+      { label: '연료전지', desc: 'SMP + 2.2 REC 가중치 · CHPS' },
+      { label: '태양광',   desc: '직접 PPA 또는 자가소비형' },
+      { label: 'ORC',      desc: '전력공급 SPC · 7,920h/년' },
+    ], note: '자원유형이 수익 모델을 결정 — STEP 5 정산 단가에 직결', meta: '관련 GNB: ② 자원관리 → ④ 정산·수익' },
+    { q: '매칭 결과는?', hint: 'STEP 3 → 4', branches: [
+      { label: '정상', desc: '약정대로 공급', tone: 'ok' },
+      { label: '부족', desc: '미달분 보정·분쟁 처리', tone: 'no' },
+      { label: '초과', desc: '초과분 처리', tone: 'warn' },
+    ], note: 'SPC가 시간단위 매칭 — 부족/초과는 정산 단계에서 보정' },
+    { q: '정산 상태?', hint: 'STEP 5 → 6', branches: [
+      { label: '잠정',         desc: '검토 대기' },
+      { label: '확정',         desc: '세금계산서 발행·수금', tone: 'ok' },
+      { label: '분쟁/재정산',  desc: '수정세금계산서', tone: 'no' },
+    ], meta: '데이터 원천: 발전량(계량기/RTU) × 단가 → SPC 확정' },
+  ],
+  jConcerns: [
+    { no: '①', label: '이번 달 수익',  desc: '자원유형별 단가차익',          mapping: '→ 대시보드 Z1 + 정산 내역',         tone: 'dashboard' },
+    { no: '②', label: '예측 정확도',  desc: '오차율·패널티',                mapping: '→ 대시보드 Z2 + 예측 vs 실측',     hint: '오차 줄이면 마진 ↑', tone: 're100' },
+    { no: '③', label: '정산 일정',    desc: '다음 수금일·미수금',           mapping: '→ 대시보드 Z3 + 정산 내역',         tone: 'billing' },
+    { no: '④', label: '계약·갱신',   desc: '진행 5단계·만료 예정',         mapping: '→ 계약 관리',                       tone: 'trading' },
+    { no: '⑤', label: '설비 이상',   desc: '가동률 저하·알람',             mapping: '→ 모니터링 + 대시보드 Z4',          tone: 'red' },
+  ],
+  jCheckpoints: [
+    '자원관리(②)와 모니터링(⑤) 경계 — 등록은 ②, 실시간은 ⑤',
+    'REC 화면을 수용가 이행증빙과 같은 라우트 쓸지 분리할지',
+    '/monitoring/* 와 /generator/ppa/* 통합 여부',
+  ],
+}
+
+/* 컨설턴트 (독립) */
+const PLAN_CONSULTANT: PersonaPlan = {
+  priorities: [
+    { rank: 1, label: '진행 案件·예상 수익', desc: '컨설팅 수수료·성사 단계' },
+    { rank: 2, label: '신규 진단 의뢰',       desc: '수용가의 RE100 무료진단 인입' },
+    { rank: 3, label: '매칭·제안 성공률',     desc: '발전사 ↔ 수용가 매칭 전환율' },
+    { rank: 4, label: '용역사 위탁 진행',     desc: '시공 진척률·검수' },
+    { rank: 5, label: '정산·수금',            desc: '컨설팅 사업비 정산 일정' },
+  ],
+  nav: [
+    { idx: '①', name: '대시보드', route: '/consultant', lnb: null, note: 'LNB 없음 · 단독 홈' },
+    { idx: '②', name: '案件관리', sub: '진단·고객·진행', lnb: [
+      { name: '진단 의뢰',    route: '/consulting/diagnosis-requests' },
+      { name: '진행 案件',    route: '/consultant/projects' },
+      { name: '고객 관리',    route: '/consultant/clients' },
+      { name: '상담 이력',    route: '/consultant/history' },
+    ]},
+    { idx: '③', name: '매칭·제안', lnb: [
+      { name: '마켓플레이스',     route: '/consulting/marketplace' },
+      { name: '제안 작성·발송',   route: '/consulting/proposals/create' },
+      { name: '제안 현황',        route: '/consulting/proposals' },
+      { name: '단가 시뮬레이션',  route: '/consulting/simulator' },
+    ]},
+    { idx: '④', name: '시공·용역', sub: '용역사 위탁', lnb: [
+      { name: '용역사 위탁',  route: '/consulting/agency' },
+      { name: '시공 진행',    route: '/consulting/agency/progress' },
+      { name: '검수',         route: '/consulting/agency/inspection' },
+    ]},
+    { idx: '⑤', name: '정산·수익', sub: '컨설팅 사업비', lnb: [
+      { name: '컨설팅 수익',  route: '/consultant/earnings' },
+      { name: '세금계산서',   route: '/consultant/tax-invoice' },
+      { name: '사업비 정산',  route: '/consulting/settlement' },
+    ]},
+  ],
+  navCommon: ['탄소거래', 'e-Data', 'VPP', 'DT'],
+  designIntent: [
+    '案件관리를 ② GNB로 (진단·고객·진행을 한 곳)',
+    '매칭·제안을 독립 GNB로 (영업 핵심 화면)',
+    '시공 용역은 별도 GNB로 (독립 컨설턴트만 노출, 용역사 소속은 숨김)',
+  ],
+  dashboard: {
+    route: '/consultant', sub: 'LNB 없음 · 단독 홈',
+    zones: [
+      { z: 'Zone 1', title: '案件 수익',        items: ['진행 案件 수·예상 수익 KPI', '단계별 분포 (진단→제안→계약→정산)'] },
+      { z: 'Zone 2', title: '신규 리드',        items: ['신규 진단 의뢰 알림', '미응답 案件'] },
+      { z: 'Zone 3', title: '매칭 전환',        items: ['제안 송부·수락률·진행 案件 비율'] },
+      { z: 'Zone 4', title: '용역 진척',        items: ['위탁 案件 진척률·검수 대기'] },
+    ],
+  },
+  gnbs: [
+    { no: 'D', name: '② 案件관리', screens: [
+      { name: '진단 의뢰', route: '/consulting/diagnosis-requests',
+        sections: [{ label: '내용', items: ['수용가 진단 의뢰 수신·접수', '진단 응답 등록'] }],
+        rel: '← 수용가 RE100 무료진단 신청' },
+      { name: '진행 案件', route: '/consultant/projects', hero: true, sub: '핵심 화면',
+        sections: [
+          { label: 'KPI',      items: ['진행 案件 수·단계별 분포'] },
+          { label: '추적',     items: ['진단 → 제안 → 계약 → 시공 → 정산'] },
+          { label: '액션',     items: ['案件 등록·상태 변경·종결'] },
+        ],
+        rel: '↔ 수용가·발전사·용역사 동시 추적' },
+      { name: '고객 관리', route: '/consultant/clients',
+        sections: [{ label: '내용', items: ['수용가 고객 정보·연락처', '초대 링크 발급'] }] },
+      { name: '상담 이력', route: '/consultant/history',
+        sections: [{ label: '내용', items: ['미팅·문서·메시지 이력'] }] },
+    ]},
+    { no: 'E', name: '③ 매칭·제안', sub: '영업 핵심', screens: [
+      { name: '마켓플레이스', route: '/consulting/marketplace',
+        sections: [{ label: '내용', items: ['발전사 자원 탐색·필터 (자원유형·용량·지역)', '수용가 노출용 프로필 관리'] }],
+        rel: '↔ 발전사·수용가 매칭' },
+      { name: '제안 작성·발송', route: '/consulting/proposals/create',
+        sections: [
+          { label: '내용', items: ['발전원·계약유형 선택·단가 산출', '제안서 생성 → 수용가 발송'] },
+        ],
+        rel: '→ 수용가 받은 제안 화면' },
+      { name: '제안 현황', route: '/consulting/proposals',
+        sections: [{ label: '내용', items: ['제안 목록·수락/거절 상태·후속 액션'] }] },
+      { name: '단가 시뮬레이션', route: '/consulting/simulator',
+        sections: [{ label: '내용', items: ['자원유형·계약기간별 수익 시뮬레이션'] }] },
+    ]},
+    { no: 'F', name: '④ 시공·용역', sub: '용역사 위탁 (독립 컨설턴트만)', screens: [
+      { name: '용역사 위탁', route: '/consulting/agency',
+        sections: [{ label: '내용', items: ['용역사 선정·위탁 등록·계약'] }],
+        rel: '→ 용역사 시공 案件' },
+      { name: '시공 진행', route: '/consulting/agency/progress',
+        sections: [{ label: '내용', items: ['시공 진척률·일정·자재 발주 상태'] }],
+        rel: '← 용역사 진행 보고' },
+      { name: '검수', route: '/consulting/agency/inspection',
+        sections: [{ label: '내용', items: ['시공 완료 검수·합격/보완 처리'] }] },
+    ]},
+    { no: 'G', name: '⑤ 정산·수익', sub: '컨설팅 사업비', screens: [
+      { name: '컨설팅 수익', route: '/consultant/earnings', hero: true,
+        sections: [
+          { label: 'KPI',     items: ['이달 수익·누적·다음 수금일'] },
+          { label: '산출',    items: ['案件별 성사 수수료·단가차익 % 등'] },
+        ],
+        rel: '← SPC 사업비 지급' },
+      { name: '세금계산서', route: '/consultant/tax-invoice',
+        sections: [{ label: '내용', items: ['발행·수취 현황'] }] },
+      { name: '사업비 정산', route: '/consulting/settlement',
+        sections: [{ label: '내용', items: ['용역사 시공비 정산 (위탁→지급)'] }],
+        rel: '→ 용역사 시공비 수금' },
+    ]},
+  ],
+  diff: [
+    '대시보드 LNB 제거 → 단독 홈',
+    '案件관리·매칭·시공·정산 4개 GNB로 명확히 분리',
+    '용역사 소속 컨설턴트는 ③ 매칭·제안 / ④ 시공·용역 숨김 (역할 분기)',
+    '/consulting/* 와 /consultant/* 혼재 → 라우트 일관성 정리',
+  ],
+  open: ['용역사 소속 vs 독립 메뉴 분기 방식', '案件 데이터 모델 (수용가/발전사/용역사 N:M 연결)'],
+  jSteps: [
+    { no: 'STEP 1', title: '진단 의뢰 수신',         gnb: 'consulting', path: '案件관리 > 진단 의뢰',    route: '/consulting/diagnosis-requests' },
+    { no: 'STEP 2', title: 'RE100 진단 수행·응답',   gnb: 'consulting', path: '案件관리 > 진행 案件',     route: '/consultant/projects' },
+    { no: 'STEP 3', title: '매칭·제안 작성·발송',    gnb: 'trading',    path: '매칭·제안 > 제안 작성',   route: '/consulting/proposals/create' },
+    { no: 'STEP 4', title: '계약 주관',              gnb: 'consulting', path: '案件관리 > 진행 案件',    route: '/consultant/projects' },
+    { no: 'STEP 5', title: '용역사 위탁·관리',       gnb: 'billing',    path: '시공·용역 > 용역사 위탁', route: '/consulting/agency' },
+    { no: 'STEP 6', title: '진행 보고·검수',         gnb: 'billing',    path: '시공·용역 > 검수',        route: '/consulting/agency/inspection' },
+    { no: 'STEP 7', title: '컨설팅 수익 정산',       gnb: 're100',      path: '정산·수익 > 컨설팅 수익', route: '/consultant/earnings' },
+  ],
+  jDecisions: [
+    { q: '소속 유형?', hint: 'login.agencyId', branches: [
+      { label: '독립',         desc: '전체 메뉴 노출 (③ 매칭·④ 시공)', tone: 'ok' },
+      { label: '용역사 소속',  desc: '③·④ 숨김 → 용역 작업만', tone: 'warn' },
+    ], note: '같은 GNB 골격, 권한 게이트로 메뉴 노출 분기', meta: '데이터: user.agencyId 유무로 판정' },
+    { q: '진단 결과?', hint: 'STEP 2', branches: [
+      { label: '자가발전 가능', desc: '자가소비형 태양광 추천', tone: 'ok' },
+      { label: '불가',          desc: '마켓플레이스 → 발전사 매칭' },
+    ], note: '진단 결과가 STEP 3 제안 흐름을 결정' },
+    { q: '시공 검수?', hint: 'STEP 6', branches: [
+      { label: '합격', desc: '준공 → 운영 전환(SPC)', tone: 'ok' },
+      { label: '보완', desc: '재시공·보완 조치', tone: 'no' },
+    ]},
+  ],
+  jConcerns: [
+    { no: '①', label: '案件 수익',     desc: '예상 수수료·진행 단계',  mapping: '→ 대시보드 Z1 + 컨설팅 수익', tone: 'dashboard' },
+    { no: '②', label: '신규 리드',     desc: '진단 의뢰 알림',         mapping: '→ 대시보드 Z2 + 진단 의뢰',   tone: 'consulting' },
+    { no: '③', label: '제안 전환',     desc: '제안 → 계약 성공률',     mapping: '→ 제안 현황',                  tone: 'trading' },
+    { no: '④', label: '용역 진척',     desc: '시공 진척률·검수',       mapping: '→ 시공 진행·검수',             tone: 'billing' },
+    { no: '⑤', label: '수금 일정',     desc: '다음 수금일·미수금',     mapping: '→ 컨설팅 수익',                tone: 're100' },
+  ],
+  jCheckpoints: [
+    '案件 데이터 모델 (수용가·발전사·용역사 N:M)',
+    '용역사 소속 컨설턴트 메뉴 분기 정책',
+    '/consulting/* 와 /consultant/* 라우트 통합',
+  ],
+}
+
+/* 용역사 */
+const PLAN_AGENCY: PersonaPlan = {
+  priorities: [
+    { rank: 1, label: '신규 위탁 案件',     desc: '독립 컨설턴트의 시공 위탁' },
+    { rank: 2, label: '시공 진척률',         desc: '일정·자재·인력 현황' },
+    { rank: 3, label: '시공비 정산',         desc: '단계별 지급·미수금' },
+    { rank: 4, label: 'A/S·유지보수',       desc: '정기 점검·긴급 수리' },
+    { rank: 5, label: '검수 통과율',         desc: '준공 합격·보완' },
+  ],
+  nav: [
+    { idx: '①', name: '대시보드', route: '/agency', lnb: null, note: 'LNB 없음 · 단독 홈' },
+    { idx: '②', name: '위탁 案件', sub: '컨설턴트 위탁 수신', lnb: [
+      { name: '신규 위탁',    route: '/consulting/agency/new' },
+      { name: '진행 案件',    route: '/consulting/agency' },
+      { name: '案件 이력',    route: '/consulting/agency/history' },
+    ]},
+    { idx: '③', name: '시공·설치', lnb: [
+      { name: '견적·일정',   route: '/agency/quote' },
+      { name: '자재 발주',   route: '/agency/materials' },
+      { name: '시공 진행',   route: '/agency/work' },
+      { name: '시운전·검수', route: '/agency/inspection' },
+    ]},
+    { idx: '④', name: '유지보수', lnb: [
+      { name: 'A/S 요청',    route: '/agency/as' },
+      { name: '정기 점검',   route: '/agency/maintenance' },
+      { name: '이력',        route: '/agency/maintenance/history' },
+    ]},
+    { idx: '⑤', name: '정산·증빙', lnb: [
+      { name: '시공비 정산', route: '/consulting/settlement' },
+      { name: '세금계산서',  route: '/agency/tax-invoice' },
+    ]},
+  ],
+  navCommon: ['탄소거래', 'e-Data', 'VPP', 'DT'],
+  designIntent: [
+    '신규 페르소나로 등록 (기존 페르소나 없음)',
+    '컨설턴트의 시공 위탁을 ② GNB로 받음',
+    '유지보수를 독립 GNB로 (장기 운영)',
+  ],
+  dashboard: {
+    route: '/agency', sub: 'LNB 없음 · 단독 홈',
+    zones: [
+      { z: 'Zone 1', title: '신규 위탁',     items: ['신규 위탁 案件 알림', '미응답 案件'] },
+      { z: 'Zone 2', title: '시공 진척',     items: ['진행 案件 수·평균 진척률', '지연 案件 경고'] },
+      { z: 'Zone 3', title: '시공비 정산',   items: ['이달 수금·미수금·다음 정산일'] },
+      { z: 'Zone 4', title: 'A/S 대응',      items: ['미처리 A/S 요청·평균 대응 시간'] },
+    ],
+  },
+  gnbs: [
+    { no: 'D', name: '② 위탁 案件', screens: [
+      { name: '신규 위탁', route: '/consulting/agency/new',
+        sections: [{ label: '내용', items: ['컨설턴트의 위탁 수신·수락/거절'] }],
+        rel: '← 컨설턴트 용역사 위탁' },
+      { name: '진행 案件', route: '/consulting/agency', hero: true,
+        sections: [{ label: '내용', items: ['진행 중 案件 목록·상태·일정', '단계별 진척률'] }],
+        rel: '↔ 컨설턴트 진행 案件' },
+      { name: '案件 이력', route: '/consulting/agency/history',
+        sections: [{ label: '내용', items: ['완료 案件 검색·통계'] }] },
+    ]},
+    { no: 'E', name: '③ 시공·설치', sub: '4단계 진행', screens: [
+      { name: '견적·일정', route: '/agency/quote',
+        sections: [{ label: '내용', items: ['견적서 작성·일정 산출·자재 명세'] }] },
+      { name: '자재 발주', route: '/agency/materials',
+        sections: [{ label: '내용', items: ['자재 목록·발주·입고 추적'] }] },
+      { name: '시공 진행', route: '/agency/work', hero: true,
+        sections: [
+          { label: '진척률', items: ['단계별 % · 일정 vs 실제'] },
+          { label: '보고',   items: ['일일 작업 보고·사진 첨부'] },
+        ],
+        rel: '→ 컨설턴트 진척 보고' },
+      { name: '시운전·검수', route: '/agency/inspection',
+        sections: [{ label: '내용', items: ['시운전 결과·검수 신청·합격/보완'] }],
+        rel: '→ 컨설턴트 검수' },
+    ]},
+    { no: 'F', name: '④ 유지보수', screens: [
+      { name: 'A/S 요청', route: '/agency/as',
+        sections: [{ label: '내용', items: ['긴급 수리 요청·대응 일정·완료 보고'] }],
+        rel: '← 수용가·발전사 A/S 신청' },
+      { name: '정기 점검', route: '/agency/maintenance',
+        sections: [{ label: '내용', items: ['정기 점검 일정·체크리스트'] }] },
+      { name: '이력', route: '/agency/maintenance/history',
+        sections: [{ label: '내용', items: ['유지보수 이력 검색·통계'] }] },
+    ]},
+    { no: 'G', name: '⑤ 정산·증빙', screens: [
+      { name: '시공비 정산', route: '/consulting/settlement', hero: true,
+        sections: [
+          { label: 'KPI',     items: ['이달 수금·누적·미수금'] },
+          { label: '단계',    items: ['계약금 → 중도금 → 잔금'] },
+        ],
+        rel: '← 컨설턴트 사업비 지급' },
+      { name: '세금계산서', route: '/agency/tax-invoice',
+        sections: [{ label: '내용', items: ['발행·수취 현황'] }] },
+    ]},
+  ],
+  diff: [
+    '신규 페르소나로 등록 (이전엔 컨설팅 하위 운영)',
+    '독립 대시보드·5 GNB 신설',
+    '시공·유지보수를 독립 GNB로 분리',
+    '/consulting/agency/* 라우트 정리',
+  ],
+  open: ['컨설턴트 → 용역사 위탁 인터페이스 정의', '발전소 준공 후 모니터링 권한'],
+  jSteps: [
+    { no: 'STEP 1', title: '시공 위탁 수신',     gnb: 'consulting', path: '위탁 案件 > 신규 위탁',  route: '/consulting/agency/new' },
+    { no: 'STEP 2', title: '견적·일정 산출',     gnb: 'trading',    path: '시공·설치 > 견적·일정', route: '/agency/quote' },
+    { no: 'STEP 3', title: '자재 발주',          gnb: 'trading',    path: '시공·설치 > 자재 발주', route: '/agency/materials' },
+    { no: 'STEP 4', title: '설치·시공',          gnb: 'trading',    path: '시공·설치 > 시공 진행', route: '/agency/work' },
+    { no: 'STEP 5', title: '시운전·검수',        gnb: 'trading',    path: '시공·설치 > 검수',      route: '/agency/inspection' },
+    { no: 'STEP 6', title: '시공비 정산',        gnb: 're100',      path: '정산·증빙 > 시공비',    route: '/consulting/settlement' },
+    { no: 'STEP 7', title: '유지보수·A/S',       gnb: 'billing',    path: '유지보수 > A/S 요청',   route: '/agency/as' },
+  ],
+  jDecisions: [
+    { q: '작업 유형?', branches: [
+      { label: '신규 시공',   desc: '발전설비 신규 설치 (태양광/연료전지/ORC)' },
+      { label: '유지보수',    desc: '기설치 설비 A/S·정기 점검' },
+    ], note: '작업 유형이 단계 흐름을 결정' },
+    { q: '준공 검수?', hint: 'STEP 5', branches: [
+      { label: '합격', desc: '준공 → 운영 전환·정산 청구', tone: 'ok' },
+      { label: '보완', desc: '재시공·보완 조치', tone: 'no' },
+    ], meta: '검수자: 독립 컨설턴트' },
+    { q: 'A/S 유형?', branches: [
+      { label: '정기 점검', desc: '계획된 일정' },
+      { label: '긴급 수리', desc: '장애·고장 대응', tone: 'no' },
+    ]},
+  ],
+  jConcerns: [
+    { no: '①', label: '신규 위탁',     desc: '인입 案件 알림',         mapping: '→ 대시보드 Z1 + 신규 위탁', tone: 'dashboard' },
+    { no: '②', label: '시공 진척',     desc: '단계·지연 案件',         mapping: '→ 대시보드 Z2 + 시공 진행', tone: 'consulting' },
+    { no: '③', label: '자재·일정',     desc: '발주·입고·인력',         mapping: '→ 자재 발주',                tone: 'trading' },
+    { no: '④', label: '시공비',        desc: '단계별 수금',            mapping: '→ 시공비 정산',              tone: 're100' },
+    { no: '⑤', label: 'A/S',          desc: '미처리·평균 대응 시간',  mapping: '→ A/S 요청',                 tone: 'red' },
+  ],
+  jCheckpoints: [
+    '컨설턴트 → 용역사 위탁 데이터 모델',
+    '시공 진행 보고 표준화 (사진·일지)',
+    '준공 후 모니터링 권한 — 발전사로 이관 시점',
+  ],
+}
+
+/* 전기공급사업자 (SPC) */
+const PLAN_SPC: PersonaPlan = {
+  priorities: [
+    { rank: 1, label: '총 거래량·매칭률',   desc: '운영 핵심 지표' },
+    { rank: 2, label: 'SPC 마진',           desc: '단가차익 (청구액 − 지급액)' },
+    { rank: 3, label: '정산 정확도',         desc: '잠정→확정 전환률·분쟁률' },
+    { rank: 4, label: '예측·오차율',         desc: 'SPC 예측 vs 발전사 실측' },
+    { rank: 5, label: '미정산·분쟁',         desc: '재정산·수정세금계산서' },
+  ],
+  nav: [
+    { idx: '①', name: '대시보드', route: '/spc', lnb: null, note: 'LNB 없음 · 단독 홈' },
+    { idx: '②', name: '거래·매칭', sub: '운영 핵심', lnb: [
+      { name: '매칭 엔진',     route: '/platform/ppa/status' },
+      { name: '거래 이력',     route: '/platform/ppa/trading' },
+      { name: 'CFE 매칭률',    route: '/platform/ppa/cfe' },
+    ]},
+    { idx: '③', name: '정산·세금', sub: '정산소', lnb: [
+      { name: '정산 운영',     route: '/platform/ppa/billing/settlement' },
+      { name: '세금계산서',    route: '/platform/ppa/billing/tax-invoice' },
+      { name: '마진 추적',     route: '/platform/ppa/margin' },
+    ]},
+    { idx: '④', name: '예측·편차', lnb: [
+      { name: '발전량 예측',   route: '/platform/ppa/forecast' },
+      { name: '실측 비교',     route: '/platform/ppa/forecast/actual' },
+      { name: '편차 정산',     route: '/platform/ppa/deviation' },
+    ]},
+    { idx: '⑤', name: '계약·증빙', lnb: [
+      { name: '계약 승인',     route: '/platform/ppa/contracts' },
+      { name: '거래 증빙',     route: '/ppa/documents' },
+    ]},
+  ],
+  navCommon: ['탄소거래', 'e-Data', 'VPP', 'DT'],
+  designIntent: [
+    '거래·매칭을 ② GNB로 (운영 1차 화면)',
+    '정산·세금을 독립 GNB로 (마진 추적 포함)',
+    '예측·편차를 독립 GNB로 (오차 관리 중요)',
+  ],
+  dashboard: {
+    route: '/spc', sub: 'LNB 없음 · 단독 홈',
+    zones: [
+      { z: 'Zone 1', title: '총 거래량',    items: ['실시간 거래량 KPI·자원별 분해', '24/7 CFE 매칭률'] },
+      { z: 'Zone 2', title: 'SPC 마진',     items: ['이달 마진·누적·자원유형별 분해'] },
+      { z: 'Zone 3', title: '정산 현황',    items: ['잠정·확정·분쟁 案件 수', '다음 정산일'] },
+      { z: 'Zone 4', title: '예측 오차',    items: ['오차율 게이지·일별 추이'] },
+    ],
+  },
+  gnbs: [
+    { no: 'D', name: '② 거래·매칭', sub: '운영 1차', screens: [
+      { name: '매칭 엔진', route: '/platform/ppa/status', hero: true,
+        sections: [
+          { label: 'KPI',      items: ['실시간 매칭률·CFE %·자원별 거래량'] },
+          { label: '4탭',      items: ['발전사 거래·수요기업 거래·매칭이력·SPC마진'] },
+          { label: '액션',     items: ['시간단위 매칭·우선순위·알고리즘 감사'] },
+        ],
+        rel: '↔ 발전사·수용가 양면 매칭' },
+      { name: '거래 이력', route: '/platform/ppa/trading',
+        sections: [{ label: '내용', items: ['거래 목록·필터·상세'] }] },
+      { name: 'CFE 매칭률', route: '/platform/ppa/cfe',
+        sections: [{ label: '내용', items: ['24/7 CFE 매칭률 산출·수용가별 분해'] }],
+        rel: '→ 수용가 RE100 현황' },
+    ]},
+    { no: 'E', name: '③ 정산·세금', sub: '정산소 — 마진이 hero', screens: [
+      { name: '정산 운영', route: '/platform/ppa/billing/settlement', hero: true,
+        sections: [
+          { label: '4상태',     items: ['잠정 → 확정 → 세금계산서 → 수금/지급'] },
+          { label: '산출',      items: ['발전량 × SMP 단가·24/7 매칭률 적용'] },
+          { label: '액션',      items: ['확정·재정산·분쟁 처리'] },
+        ],
+        rel: '→ 수용가·발전사·관리자 동기화 (단일 데이터, 다중 뷰)' },
+      { name: '세금계산서', route: '/platform/ppa/billing/tax-invoice',
+        sections: [
+          { label: '발행',   items: ['확정 후 자동 발행·일괄 처리'] },
+          { label: '수정',   items: ['분쟁 시 수정세금계산서'] },
+        ],
+        rel: '→ 수용가·발전사 수취' },
+      { name: '마진 추적', route: '/platform/ppa/margin', hero: true, sub: '관리자 권한 일부',
+        sections: [
+          { label: '산식',   items: ['수용가 청구액 − 발전사 지급액 = 마진'] },
+          { label: '분해',   items: ['자원유형별·계약별·기간별'] },
+        ],
+        rel: '↔ 관리자 정산 감사' },
+    ]},
+    { no: 'F', name: '④ 예측·편차', screens: [
+      { name: '발전량 예측', route: '/platform/ppa/forecast',
+        sections: [{ label: '내용', items: ['예측 모델 운영·일일 예측 등록'] }] },
+      { name: '실측 비교', route: '/platform/ppa/forecast/actual',
+        sections: [{ label: '내용', items: ['예측 vs 실측·오차율 분포·패널티 산출'] }],
+        rel: '↔ 발전사 예측 vs 실측' },
+      { name: '편차 정산', route: '/platform/ppa/deviation',
+        sections: [{ label: '내용', items: ['편차 보정 정산·재정산 트리거'] }],
+        rel: '↔ 발전사 편차·수용가 사용량 편차 (동일 이벤트)' },
+    ]},
+    { no: 'G', name: '⑤ 계약·증빙', screens: [
+      { name: '계약 승인', route: '/platform/ppa/contracts',
+        sections: [{ label: '내용', items: ['계약 중개·승인·거래소 신고서 처리'] }],
+        rel: '↔ 발전사·수용가 계약 상태 동기화' },
+      { name: '거래 증빙', route: '/ppa/documents',
+        sections: [{ label: '내용', items: ['거래 증빙 발급 지원·일괄 처리'] }],
+        rel: '→ 수용가 이행증빙·발전사 REC' },
+    ]},
+  ],
+  diff: [
+    '대시보드 LNB 제거 → 단독 홈 (거래량·마진 중심)',
+    '거래·매칭을 ② GNB로 (운영 1차)',
+    '정산·세금에 마진 추적 통합 (별도 화면 X)',
+    '예측·편차를 독립 GNB로 (오차 관리 중요)',
+    '/platform/ppa/* 라우트 5 GNB 기준 정리',
+  ],
+  open: ['마진 추적 권한 분리 (관리자 일부 노출)', '예측 모델 외부 연동 인터페이스'],
+  jSteps: [
+    { no: 'STEP 1', title: '발전사·수용가 등록 승인',  gnb: 're100',      path: '계약·증빙 > 계약 승인',     route: '/platform/ppa/contracts' },
+    { no: 'STEP 2', title: '거래 신청 수신·매칭',      gnb: 'consulting', path: '거래·매칭 > 매칭 엔진',    route: '/platform/ppa/status' },
+    { no: 'STEP 3', title: '계약 중개·승인',           gnb: 're100',      path: '계약·증빙 > 계약 승인',    route: '/platform/ppa/contracts' },
+    { no: 'STEP 4', title: '발전량 예측·실측',         gnb: 'billing',    path: '예측·편차 > 실측 비교',    route: '/platform/ppa/forecast/actual' },
+    { no: 'STEP 5', title: '잠정 정산',                gnb: 'trading',    path: '정산·세금 > 정산 운영',    route: '/platform/ppa/billing/settlement' },
+    { no: 'STEP 6', title: '확정·세금계산서 발행',     gnb: 'trading',    path: '정산·세금 > 세금계산서',   route: '/platform/ppa/billing/tax-invoice' },
+    { no: 'STEP 7', title: '수금·지급·마진 정산',      gnb: 'trading',    path: '정산·세금 > 마진 추적',    route: '/platform/ppa/margin' },
+  ],
+  jDecisions: [
+    { q: '매칭 결과는?', hint: 'STEP 2', branches: [
+      { label: '정상', desc: '약정대로 공급', tone: 'ok' },
+      { label: '부족', desc: '미달분 처리·분쟁 가능', tone: 'no' },
+      { label: '초과', desc: '초과분 처리', tone: 'warn' },
+    ], note: '시간단위 매칭 — 매칭 결과가 정산 단가·편차에 직결' },
+    { q: '정산 상태?', hint: 'STEP 5 → 7', branches: [
+      { label: '잠정',          desc: '검토 대기' },
+      { label: '확정',          desc: '세금계산서 발행·수금/지급', tone: 'ok' },
+      { label: '분쟁/재정산',   desc: '수정세금계산서', tone: 'no' },
+    ], meta: '데이터 원천: 발전량(계량기) × SMP × 24/7 매칭률' },
+    { q: '오차율?', hint: 'STEP 4', branches: [
+      { label: '허용 범위 내', desc: '정상 정산', tone: 'ok' },
+      { label: '초과',         desc: '편차 정산·패널티', tone: 'no' },
+    ]},
+  ],
+  jConcerns: [
+    { no: '①', label: '거래량',         desc: '실시간 거래량·CFE 매칭률',    mapping: '→ 대시보드 Z1 + 매칭 엔진',     tone: 'dashboard' },
+    { no: '②', label: 'SPC 마진',       desc: '단가차익·자원별 분해',         mapping: '→ 대시보드 Z2 + 마진 추적',    tone: 'trading' },
+    { no: '③', label: '정산 정확도',    desc: '잠정→확정 전환률',             mapping: '→ 정산 운영',                  tone: 'trading' },
+    { no: '④', label: '오차율',         desc: '예측 vs 실측',                  mapping: '→ 예측·편차',                  tone: 'billing' },
+    { no: '⑤', label: '분쟁',           desc: '재정산·수정세금계산서',         mapping: '→ 정산 운영 (분쟁 탭)',        tone: 'red' },
+  ],
+  jCheckpoints: [
+    '마진 추적 권한 — 관리자 일부 노출 vs 완전 분리',
+    '예측 모델 외부(기상청 등) 연동 인터페이스',
+    '/platform/ppa/* 와 /ppa/* 라우트 통합 여부',
+  ],
+}
+
+/* 관리자 */
+const PLAN_ADMIN: PersonaPlan = {
+  priorities: [
+    { rank: 1, label: '전체 거래·이상 탐지',  desc: '실시간 거래 모니터링' },
+    { rank: 2, label: '가입 승인 대기',        desc: '기업·사용자·역할' },
+    { rank: 3, label: '정산 감사',             desc: 'SPC 정산 정확성·세무 검토' },
+    { rank: 4, label: '시스템 가용성',         desc: '서비스 상태·알람' },
+    { rank: 5, label: '감사 로그·접근 통제',  desc: '권한·로그 추적' },
+  ],
+  nav: [
+    { idx: '①', name: '대시보드', route: '/platform', lnb: null, note: 'LNB 없음 · 단독 홈' },
+    { idx: '②', name: '사용자·기업', sub: '가입·역할', lnb: [
+      { name: '가입 승인',     route: '/platform/approvals' },
+      { name: '사용자',        route: '/platform/users' },
+      { name: '역할·권한',     route: '/platform/roles' },
+      { name: '기업 초대',     route: '/platform/invitations' },
+    ]},
+    { idx: '③', name: '거래·계약', sub: '전체 모니터링', lnb: [
+      { name: '전체 거래',     route: '/platform/trading' },
+      { name: '계약 승인',     route: '/platform/contracts' },
+      { name: '이상 탐지',     route: '/platform/anomaly' },
+    ]},
+    { idx: '④', name: '정산 감사', lnb: [
+      { name: '정산 감사',     route: '/platform/audit/settlement' },
+      { name: '세무 검토',     route: '/platform/audit/tax' },
+      { name: '분쟁',          route: '/platform/audit/dispute' },
+    ]},
+    { idx: '⑤', name: '시스템·감사', lnb: [
+      { name: '감사 로그',     route: '/platform/audit-logs' },
+      { name: '코드·기준정보', route: '/platform/code' },
+      { name: '공지·알림',     route: '/platform/notice' },
+    ]},
+  ],
+  navCommon: ['탄소거래', 'e-Data', 'VPP', 'DT'],
+  designIntent: [
+    '사용자·기업을 ② GNB로 (운영 1차 화면)',
+    '정산 감사를 독립 GNB로 (SPC 정산 정확성 검증)',
+    '시스템·감사를 묶음 (운영자 통제 화면)',
+  ],
+  dashboard: {
+    route: '/platform', sub: 'LNB 없음 · 단독 홈',
+    zones: [
+      { z: 'Zone 1', title: '전체 거래',      items: ['실시간 거래량·이상 거래 경고'] },
+      { z: 'Zone 2', title: '가입·승인',      items: ['승인 대기 기업·사용자 수', '신규 초대 응답률'] },
+      { z: 'Zone 3', title: '정산 감사',      items: ['감사 대기 案件·이상 정산 수'] },
+      { z: 'Zone 4', title: '시스템 상태',    items: ['서비스 가용성·오류 알람·로그인 시도'] },
+    ],
+  },
+  gnbs: [
+    { no: 'D', name: '② 사용자·기업', sub: '운영 1차', screens: [
+      { name: '가입 승인', route: '/platform/approvals', hero: true,
+        sections: [
+          { label: 'KPI',      items: ['승인 대기 건수·평균 처리 시간'] },
+          { label: '액션',     items: ['승인·반려·반려 사유 등록'] },
+        ],
+        rel: '← 신규 페르소나(수용가·발전사 등) 가입 요청' },
+      { name: '사용자', route: '/platform/users',
+        sections: [{ label: '내용', items: ['사용자 목록·검색·필터·상태'] }] },
+      { name: '역할·권한', route: '/platform/roles',
+        sections: [{ label: '내용', items: ['6종 페르소나 역할 부여·권한 매핑·접근 정책'] }] },
+      { name: '기업 초대', route: '/platform/invitations',
+        sections: [{ label: '내용', items: ['신규 산단 기업 초대·응답 추적'] }] },
+    ]},
+    { no: 'E', name: '③ 거래·계약', sub: '전체 모니터링', screens: [
+      { name: '전체 거래', route: '/platform/trading', hero: true,
+        sections: [
+          { label: 'KPI',      items: ['실시간 거래량·자원별 분해'] },
+          { label: '필터',     items: ['수용가·발전사·SPC·기간'] },
+          { label: '액션',     items: ['상세 추적·이상 표시'] },
+        ],
+        rel: '← SPC 매칭 엔진' },
+      { name: '계약 승인', route: '/platform/contracts',
+        sections: [{ label: '내용', items: ['SPC 매칭 결과 검토·승인·반려'] }],
+        rel: '↔ SPC 계약 승인' },
+      { name: '이상 탐지', route: '/platform/anomaly',
+        sections: [{ label: '내용', items: ['이상 거래 패턴·자동 알림·조사'] }] },
+    ]},
+    { no: 'F', name: '④ 정산 감사', sub: 'SPC 정산 검증', screens: [
+      { name: '정산 감사', route: '/platform/audit/settlement', hero: true,
+        sections: [
+          { label: 'KPI',     items: ['감사 대기·이상 案件·SPC 마진 검증'] },
+          { label: '액션',    items: ['감사 실행·재정산 요청·승인'] },
+        ],
+        rel: '← SPC 정산 운영·마진 추적' },
+      { name: '세무 검토', route: '/platform/audit/tax',
+        sections: [{ label: '내용', items: ['세금계산서 검증·세무 신고'] }] },
+      { name: '분쟁', route: '/platform/audit/dispute',
+        sections: [{ label: '내용', items: ['분쟁 案件 추적·중재·재정산 트리거'] }] },
+    ]},
+    { no: 'G', name: '⑤ 시스템·감사', screens: [
+      { name: '감사 로그', route: '/platform/audit-logs', hero: true,
+        sections: [
+          { label: '내용', items: ['전 활동 로그·접근·변경 이력', '검색·필터·내보내기'] },
+        ],
+        rel: '↔ 전 페르소나 활동 추적' },
+      { name: '코드·기준정보', route: '/platform/code',
+        sections: [{ label: '내용', items: ['공통 코드·기준정보 관리·버전 추적'] }] },
+      { name: '공지·알림', route: '/platform/notice',
+        sections: [{ label: '내용', items: ['공지 발행·알림 발송·이력'] }] },
+    ]},
+  ],
+  diff: [
+    '대시보드 LNB 제거 → 단독 홈 (거래·승인 중심)',
+    '사용자·기업을 ② GNB로 통합 (가입·역할·권한·초대)',
+    '정산 감사를 독립 GNB로 (SPC 정산 검증 핵심)',
+    '시스템·감사 묶음 (운영자 통제)',
+    '/platform/* 라우트 5 GNB 기준 정리',
+  ],
+  open: ['SPC 마진 노출 수준 (감사용 vs 운영용)', '6종 페르소나 외 추가 역할 정의'],
+  jSteps: [
+    { no: 'STEP 1', title: '기업 초대',              gnb: 'consulting', path: '사용자·기업 > 기업 초대', route: '/platform/invitations' },
+    { no: 'STEP 2', title: '가입 승인·역할 부여',    gnb: 'consulting', path: '사용자·기업 > 가입 승인', route: '/platform/approvals' },
+    { no: 'STEP 3', title: '거래·계약 모니터링',     gnb: 'trading',    path: '거래·계약 > 전체 거래',   route: '/platform/trading' },
+    { no: 'STEP 4', title: '이상 탐지·점검',         gnb: 'trading',    path: '거래·계약 > 이상 탐지',   route: '/platform/anomaly' },
+    { no: 'STEP 5', title: '정산 감사',              gnb: 'billing',    path: '정산 감사 > 정산 감사',   route: '/platform/audit/settlement' },
+    { no: 'STEP 6', title: '감사 로그 추적',         gnb: 're100',      path: '시스템·감사 > 감사 로그', route: '/platform/audit-logs' },
+    { no: 'STEP 7', title: '시스템 운영·공지',       gnb: 're100',      path: '시스템·감사 > 공지·알림', route: '/platform/notice' },
+  ],
+  jDecisions: [
+    { q: '가입 승인?', hint: 'STEP 2', branches: [
+      { label: '승인', desc: '역할 부여 단계로', tone: 'ok' },
+      { label: '거절', desc: '반려 사유 등록', tone: 'no' },
+    ]},
+    { q: '이상 탐지?', hint: 'STEP 4', branches: [
+      { label: '통과',  desc: '정상 거래', tone: 'ok' },
+      { label: '의심',  desc: '추가 조사 필요', tone: 'warn' },
+      { label: '차단',  desc: '거래 중단·계정 잠금', tone: 'no' },
+    ], meta: '자동 알림 + 수동 검토' },
+    { q: '정산 감사?', hint: 'STEP 5', branches: [
+      { label: '통과',          desc: '확정·종결', tone: 'ok' },
+      { label: '분쟁 발생',     desc: 'SPC 재정산 트리거', tone: 'no' },
+    ]},
+  ],
+  jConcerns: [
+    { no: '①', label: '전체 거래',     desc: '실시간 모니터링·이상 거래',   mapping: '→ 대시보드 Z1 + 전체 거래',      tone: 'dashboard' },
+    { no: '②', label: '가입 승인',     desc: '승인 대기·평균 처리 시간',     mapping: '→ 대시보드 Z2 + 가입 승인',      tone: 'consulting' },
+    { no: '③', label: '이상 거래',     desc: '자동 탐지·수동 검토',          mapping: '→ 이상 탐지',                    tone: 'trading' },
+    { no: '④', label: '정산 정확성',   desc: 'SPC 마진 검증·재정산',         mapping: '→ 정산 감사',                    tone: 'billing' },
+    { no: '⑤', label: '시스템 상태',   desc: '가용성·오류·로그인 시도',      mapping: '→ 대시보드 Z4 + 감사 로그',      tone: 'red' },
+  ],
+  jCheckpoints: [
+    'SPC 마진 노출 수준 (감사 전용 vs 운영용)',
+    '이상 탐지 룰 정의·자동화 범위',
+    '6종 페르소나 확장성 (신규 역할 추가 절차)',
+  ],
+}
+
+/* 페르소나 키 → PLAN 매핑 */
+const PLANS: Partial<Record<ColorKey, PersonaPlan>> = {
+  consumer:   PLAN_CONSUMER,
+  generator:  PLAN_GENERATOR,
+  consultant: PLAN_CONSULTANT,
+  agency:     PLAN_AGENCY,
+  spc:        PLAN_SPC,
+  admin:      PLAN_ADMIN,
+}
+
+/* 페르소나 키 → 한글명 (헤더 타이틀용) */
+const PERSONA_NAME_KO: Record<ColorKey, string> = {
+  consumer:   '수용가',
+  generator:  '발전사업자',
+  consultant: '컨설턴트',
+  agency:     '용역사',
+  spc:        '전기공급사업자',
+  admin:      '관리자',
+}
+
 /* 커스텀 CSS 변수를 포함한 style 헬퍼 */
 const vars = (o: Record<string, string>) => o as CSSProperties
 
@@ -479,6 +1606,428 @@ function Flow({ p }: { p: Persona }) {
   )
 }
 
+/* 페르소나 유저 플로우 — 신규 GNB 기준 (7 STEP + 분기 + 관심사→화면) */
+function PersonaJourney({ plan, name, navLabels }: { plan: PersonaPlan; name: string; navLabels: Record<CGnbKey, string> }) {
+  return (
+    <div className="cj">
+      <div className="cj-head">
+        <div>
+          <h3>{name} 유저 플로우 — 신규 GNB 기준 화면 단계·분기</h3>
+          <p>{plan.jSteps[0]?.title.split(' ')[0]} → {plan.jSteps[plan.jSteps.length - 1]?.title} 까지. 카드 색 = 소속 GNB. 화살표 = 주 경로. 아래 다이아몬드 = 분기점.</p>
+        </div>
+        <div className="cj-legend">
+          {(['consulting','trading','billing','re100','dashboard'] as CGnbKey[]).map((k) => (
+            <span key={k} className="cj-lg-item">
+              <span className="cj-lg-sw" style={{ background: CGNB_META[k].soft, borderColor: CGNB_META[k].line }} />
+              <span style={{ color: CGNB_META[k].ink, fontWeight: 700 }}>{navLabels[k]}</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* N STEPs */}
+      <div className="cj-sec-h">☰ 유저 플로우 — 실제 화면 단계 ({plan.jSteps.length})</div>
+      <div className="cj-steps">
+        {plan.jSteps.map((s, i) => {
+          const m = CGNB_META[s.gnb]
+          return (
+            <Fragment key={s.no}>
+              <div className="cj-step" style={{ background: m.soft, borderColor: m.line }}>
+                <div className="cj-step-no" style={{ color: m.ink }}>{s.no}</div>
+                <div className="cj-step-title">{s.title}</div>
+                <div className="cj-step-meta">
+                  <span className="cj-step-path">ⓘ {s.path}</span>
+                  <code className="cj-step-route">{s.route}</code>
+                </div>
+              </div>
+              {i < plan.jSteps.length - 1 && <div className="cj-step-arrow">→</div>}
+            </Fragment>
+          )
+        })}
+      </div>
+
+      {/* 분기점 */}
+      <div className="cj-sec-h">☰ 프로세스 흐름 — 주요 분기점</div>
+      <div className="cj-decisions">
+        {plan.jDecisions.map((d, i) => (
+          <div key={i} className={`cj-deci${d.isDashboard ? ' cj-deci--dash' : ''}`}>
+            <div className="cj-deci-q">
+              <span className="cj-deci-dia">◇</span>
+              <span>{d.q}</span>
+              {d.hint && <span className="cj-deci-hint">({d.hint})</span>}
+            </div>
+            {d.branches.length > 0 && (
+              <div className="cj-deci-branches">
+                {d.branches.map((b) => (
+                  <div key={b.label} className={`cj-branch${b.tone ? ` cj-branch--${b.tone}` : ''}`}>
+                    <div className="cj-branch-l">{b.label}</div>
+                    <div className="cj-branch-d">{b.desc}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {d.note && <div className="cj-deci-note">→ {d.note}</div>}
+            {d.meta && <div className="cj-deci-meta">{d.meta}</div>}
+          </div>
+        ))}
+      </div>
+
+      {/* 관심사 → 화면 */}
+      <div className="cj-sec-h">☰ {name}이(가) 각 단계에서 궁금한 것 (관심사 → 화면)</div>
+      <div className="cj-concerns">
+        {plan.jConcerns.map((c) => {
+          const t = CJ_CONCERN_TONES[c.tone]
+          return (
+            <div key={c.no} className="cj-concern" style={{ background: t.bg, borderColor: t.bd }}>
+              <div className="cj-concern-h" style={{ color: t.ink }}>
+                <span className="cj-concern-no">{c.no}</span>
+                <span className="cj-concern-label">{c.label}</span>
+              </div>
+              <div className="cj-concern-desc">{c.desc}</div>
+              <div className="cj-concern-map" style={{ color: t.ink }}>{c.mapping}</div>
+              {c.hint && <div className="cj-concern-hint">{c.hint}</div>}
+            </div>
+          )
+        })}
+      </div>
+
+      {/* 검토 포인트 */}
+      <div className="cj-checkpoints">
+        <b>검토 포인트</b>
+        <ol>{plan.jCheckpoints.map((c, i) => <li key={i}>({i + 1}) {c}</li>)}</ol>
+      </div>
+    </div>
+  )
+}
+
+/* 단일 화면 카드 — Screen 한 건 */
+function ScreenCard({ scr }: { scr: Screen }) {
+  return (
+    <div className={`csm-scr${scr.hero ? ' csm-scr--hero' : ''}`}>
+      <div className="csm-scr-h">
+        <div className="csm-scr-title">
+          <span className="csm-scr-name">{scr.name}</span>
+          {scr.sub && <span className="csm-scr-sub">— {scr.sub}</span>}
+        </div>
+        <code className="csm-scr-route">{scr.route}</code>
+      </div>
+      {scr.sections.map((s) => (
+        <div key={s.label} className="csm-scr-sec">
+          <div className="csm-scr-label">{s.label}</div>
+          <ul>{s.items.map((it) => <li key={it}>{it}</li>)}</ul>
+        </div>
+      ))}
+      {scr.warn && <div className="csm-scr-warn">⚠ {scr.warn}</div>}
+      {scr.rel && <div className="csm-scr-rel">{scr.rel}</div>}
+    </div>
+  )
+}
+
+/* GNB 섹션 박스 */
+function GnbSection({ no, name, sub, screens }: { no: string; name: string; sub?: string; screens: Screen[] }) {
+  return (
+    <div className="csm-sec">
+      <div className="csm-sec-h">
+        <span className="csm-sec-no">{no}</span>
+        <h4>GNB {name}</h4>
+        {sub && <p>{sub}</p>}
+      </div>
+      <div className="csm-scr-grid">
+        {screens.map((s) => <ScreenCard key={s.name} scr={s} />)}
+      </div>
+    </div>
+  )
+}
+
+/* 페르소나 화면 구성안 — 관심사 → 메뉴 트리 → GNB ①~⑤ → 정산 데이터 흐름 → 변경 요약 → (옵션) 매핑·점검 매트릭스 */
+function ScreenMap({ plan, name }: { plan: PersonaPlan; name: string }) {
+  return (
+    <div className="csm">
+      <div className="csm-head">
+        <div>
+          <h3>{name} 화면 구성안 — GNB ①~⑤ + 대시보드</h3>
+          <p>관심사 우선순위 → 메뉴 구조 → 각 화면(LNB) 상세 → 정산 데이터 흐름 → 변경 요약{plan.matrix ? ' → 매핑·점검 매트릭스' : ''} 순으로 정리</p>
+        </div>
+      </div>
+
+      {/* ── A. 관심사 우선순위 ── */}
+      <div className="csm-sec">
+        <div className="csm-sec-h">
+          <span className="csm-sec-no">A</span>
+          <h4>{name}은(는) 무엇이 제일 궁금한가</h4>
+          <p>관심사 우선순위 = 화면 우선순위</p>
+        </div>
+        <div className="csm-prios">
+          {plan.priorities.map((p) => (
+            <div key={p.rank} className="csm-prio">
+              <div className="csm-prio-rank">#{p.rank}</div>
+              <div>
+                <div className="csm-prio-label">{p.label}</div>
+                <div className="csm-prio-desc">{p.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── B. 전체 메뉴 구조 ── */}
+      <div className="csm-sec">
+        <div className="csm-sec-h">
+          <span className="csm-sec-no">B</span>
+          <h4>전체 메뉴 구조 (GNB → LNB)</h4>
+          <p>5개 GNB + 공통 GNB 4개(별도)</p>
+        </div>
+        <div className="csm-tree">
+          {plan.nav.map((g) => (
+            <div key={g.idx} className="csm-tree-gnb">
+              <div className="csm-tree-h">
+                <span className="csm-tree-idx">{g.idx}</span>
+                <span className="csm-tree-name">{g.name}</span>
+                {g.sub && <span className="csm-tree-sub">{g.sub}</span>}
+              </div>
+              {'route' in g && g.route && <code className="csm-tree-route">{g.route}</code>}
+              {g.lnb === null ? (
+                <div className="csm-tree-note">{g.note}</div>
+              ) : (
+                <ul className="csm-tree-lnb">
+                  {g.lnb.map((l) => (
+                    <li key={l.name}>
+                      <span>{l.name}</span>
+                      <code>{l.route}</code>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="csm-common-gnb">
+          공통 GNB:
+          {plan.navCommon.map((n) => <span key={n} className="csm-common-pill">{n}</span>)}
+        </div>
+        <div className="csm-intent">
+          <div className="csm-intent-h">핵심 설계 — 왜 이렇게 재구성했는가</div>
+          <ol>
+            {plan.designIntent.map((d, i) => (
+              <li key={i}><span className="csm-intent-no">{['①','②','③','④','⑤'][i] || `${i + 1}.`}</span>{d}</li>
+            ))}
+          </ol>
+        </div>
+      </div>
+
+      {/* ── C. GNB ① 대시보드 ── */}
+      <div className="csm-sec">
+        <div className="csm-sec-h">
+          <span className="csm-sec-no">C</span>
+          <h4>GNB ① 대시보드 <code className="csm-inline-code">{plan.dashboard.route} · {plan.dashboard.sub}</code></h4>
+          <p>관심사 순서대로 위→아래 배치. 모든 위젯은 상세 화면으로 딥링크</p>
+        </div>
+        <div className="csm-zones">
+          {plan.dashboard.zones.map((z) => (
+            <div key={z.z} className="csm-zone">
+              <div className="csm-zone-h">
+                <span className="csm-zone-tag">{z.z}</span>
+                <span className="csm-zone-title">{z.title}</span>
+              </div>
+              <ul>{z.items.map((it) => <li key={it}>{it}</li>)}</ul>
+            </div>
+          ))}
+        </div>
+        {plan.dashboard.removed && (
+          <div className="csm-removed">
+            <b>제거된 위젯</b> · {plan.dashboard.removed.join(' · ')}
+          </div>
+        )}
+      </div>
+
+      {/* ── D–G. GNB ②~⑤ ── */}
+      {plan.gnbs.map((g) => (
+        <GnbSection key={g.no} no={g.no} name={g.name} sub={g.sub} screens={g.screens} />
+      ))}
+
+      {/* ── H. 정산 데이터 흐름 ── */}
+      <div className="csm-sec">
+        <div className="csm-sec-h">
+          <span className="csm-sec-no">H</span>
+          <h4>정산 데이터 흐름 — 단일 데이터, 다중 뷰</h4>
+          <p>미러 라우트로 복제하지 않고 같은 데이터를 권한·관점만 다르게 표시</p>
+        </div>
+        <div className="csm-flow">
+          <div className="csm-flow-step">
+            <div className="csm-flow-t">발전사 발전량</div>
+            <div className="csm-flow-d">계량기 / RTU</div>
+          </div>
+          <span className="csm-flow-arrow">→</span>
+          <div className="csm-flow-step csm-flow-spc">
+            <div className="csm-flow-t">SPC 정산: ① 잠정 → ② 확정 → ③ 세금계산서 → ④ 수금/지급</div>
+            <div className="csm-flow-d">분쟁 시 재정산 · 수정세금계산서로 분기</div>
+          </div>
+          <span className="csm-flow-arrow">→</span>
+          <div className="csm-flow-step csm-flow-consumer">
+            <div className="csm-flow-t">수용가: 정산 내역</div>
+            <div className="csm-flow-d">잠정/확정 표시 → 납부 = SPC 수금</div>
+          </div>
+          <div className="csm-flow-side">
+            <div className="csm-flow-step csm-flow-mini">
+              <div className="csm-flow-t">발전사: 판매대금</div>
+              <div className="csm-flow-d">수용가 지불 − SPC 마진</div>
+            </div>
+            <div className="csm-flow-step csm-flow-mini">
+              <div className="csm-flow-t">관리자: SPC 마진</div>
+              <div className="csm-flow-d">청구액 − 지급액 (전용)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── I. AS-IS → TO-BE 변경 요약 ── */}
+      <div className="csm-sec">
+        <div className="csm-sec-h">
+          <span className="csm-sec-no">I</span>
+          <h4>AS-IS 대비 무엇이 바뀌나</h4>
+        </div>
+        <ul className="csm-diff">
+          {plan.diff.map((d) => <li key={d}>{d}</li>)}
+        </ul>
+        <div className="csm-open">
+          <b>남은 논점</b>
+          {plan.open.map((o) => <span key={o} className="csm-open-pill">{o}</span>)}
+        </div>
+      </div>
+
+      {/* ── J. 부록: 6단계 매트릭스 — plan.matrix 있을 때만 (현재 consumer 전용) ── */}
+      {plan.matrix && <MatrixAppendix matrix={plan.matrix} />}
+    </div>
+  )
+}
+
+/* J. 부록 매트릭스 — consumer 전용 (legacy 한장 요약 보존) */
+function MatrixAppendix({ matrix }: { matrix: NonNullable<PersonaPlan['matrix']> }) {
+  return (
+    <>
+      <div className="csm-sec">
+        <div className="csm-sec-h">
+          <span className="csm-sec-no">J</span>
+          <h4>부록 · 6단계 매트릭스 — 매핑·점검 한장 요약</h4>
+          <p>가로 = 6단계 여정 · 위 = 저니 행동 · 아래 = 신규 GNB · 빨간 박스 = 점검 결과</p>
+        </div>
+        <div className="csm-mlegend">
+          <span><span className="csm-lg lg-j" /> 저니 행동</span>
+          <span><span className="csm-lg lg-g" /> 신규 GNB</span>
+          <span><span className="csm-lg lg-c" /> 점검·변경</span>
+        </div>
+      </div>
+
+      <div className="csm-grid">
+        {/* PHASE HEADER ROW */}
+        {matrix.phases.map((p) => (
+          <div key={`ph-${p.n}`} className="csm-ph">
+            <div className="pn">PHASE {p.n}</div>
+            <div className="pt">{p.t}</div>
+            <div className="phh">{p.h}</div>
+          </div>
+        ))}
+
+        {/* ROW 1: 저니 행동 */}
+        <div className="csm-row-label">☰ 저니 행동 (현 매트릭스)</div>
+        {matrix.journey.map((cell, i) => {
+          if ('empty' in cell) {
+            return (
+              <div key={`j-${i}`} className="csm-cell csm-cell--empty">
+                <div className="csm-ce-t">{cell.empty.title}</div>
+                {cell.empty.note && <div className="csm-ce-n">{cell.empty.note}</div>}
+              </div>
+            )
+          }
+          return (
+            <div key={`j-${i}`} className="csm-cell csm-cell--j">
+              <div className="csm-ca">{cell.action}</div>
+              {cell.routes?.map((r) => (
+                <span key={r} className="csm-route">{r}</span>
+              ))}
+              {cell.decision && <span className="csm-deci">◇ {cell.decision}</span>}
+              {cell.handoff && <span className="csm-ho">↘ {cell.handoff}</span>}
+            </div>
+          )
+        })}
+
+        {/* ROW 2: 신규 GNB */}
+        <div className="csm-row-label">☰ 신규 GNB / LNB 가 받는 곳</div>
+        {matrix.gnb.map((cell, i) => {
+          if ('empty' in cell) {
+            return (
+              <div key={`g-${i}`} className="csm-cell csm-cell--empty">
+                <div className="csm-ce-t">{cell.empty}</div>
+              </div>
+            )
+          }
+          return (
+            <div key={`g-${i}`} className="csm-cell csm-cell--g">
+              <div className="csm-glabel">{cell.label}</div>
+              <ul className="csm-glist">
+                {cell.items.map((it) => (
+                  <li key={it}>{it}</li>
+                ))}
+              </ul>
+              {cell.handoff && <span className="csm-glink">{cell.handoff}</span>}
+            </div>
+          )
+        })}
+
+        {/* ROW 3: 대시보드 (전 폭) */}
+        <div className="csm-row-label">☰ GNB ① 대시보드 (/consumer · LNB 없음)</div>
+        <div className="csm-dash">
+          <b>전 단계를 가로지르는 단독 홈</b> — Zone1 절감액·한전비교 · Zone2 RE100 · Zone3 이번달 돈관리 · Zone4 사용량 요약 · 각 위젯이 위 GNB로 딥링크
+        </div>
+
+        {/* ROW 4: 점검 결과 (빨강) */}
+        <div className="csm-row-label">☰ 점검 결과 — 현 매트릭스 대비 무엇을 바꾸나</div>
+        {matrix.check.map((c, i) => (
+          <div key={`c-${i}`} className="csm-cell csm-cell--c">
+            <div className="csm-ct">{c.no} {c.title}</div>
+            <div className="csm-cd">{c.desc}</div>
+          </div>
+        ))}
+        {/* 6번째 칸 비움(점검 결과는 5개) */}
+        <div className="csm-cell csm-cell--blank" />
+
+        {/* ROW 5: 정산 데이터 흐름 (전 폭) */}
+        <div className="csm-row-label">☰ 정산 데이터 흐름 (단일 데이터·다중 뷰) — P05 의 뒷단</div>
+        <div className="csm-flow">
+          <div className="csm-flow-step">
+            <div className="csm-flow-t">발전사 발전량</div>
+            <div className="csm-flow-d">계량기 / RTU</div>
+          </div>
+          <span className="csm-flow-arrow">→</span>
+          <div className="csm-flow-step csm-flow-spc">
+            <div className="csm-flow-t">SPC 정산: ① 잠정 → ② 확정 → ③ 세금계산서 → ④ 수금/지급</div>
+            <div className="csm-flow-d">분쟁 시 재정산 · 수정세금계산서로 분기</div>
+          </div>
+          <span className="csm-flow-arrow">→</span>
+          <div className="csm-flow-step csm-flow-consumer">
+            <div className="csm-flow-t">수용가: 정산 내역</div>
+            <div className="csm-flow-d">잠정/확정 표시 → 납부 = SPC 수금</div>
+          </div>
+          <div className="csm-flow-side">
+            <div className="csm-flow-step csm-flow-mini">
+              <div className="csm-flow-t">발전사: 판매대금</div>
+              <div className="csm-flow-d">수용가 지불 − SPC 마진</div>
+            </div>
+            <div className="csm-flow-step csm-flow-mini">
+              <div className="csm-flow-t">관리자: SPC 마진</div>
+              <div className="csm-flow-d">청구액 − 지급액 (전용)</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="csm-foot">
+          ※ 미러 라우트(/ppa/billing ↔ /lease/billing)로 복제하지 않고, 같은 정산 데이터를 페르소나별 권한·관점만 다르게 표시. 4상태가 전 화면에서 동기화.
+        </div>
+      </div>
+    </>
+  )
+}
+
 function PersonaView({
   active,
   setActive,
@@ -533,8 +2082,31 @@ function PersonaView({
             </div>
           </div>
           <div className="actor"><b>담당 주체</b> · {p.actor}</div>
-          <UserFlow p={p} />
-          <Flow p={p} />
+          {PLANS[active] ? (
+            <>
+              {/* PLAN 있는 페르소나: 화면 구성안(메인) → 신규 GNB 기준 유저 플로우(아래) */}
+              <ScreenMap plan={PLANS[active]!} name={PERSONA_NAME_KO[active]} />
+              <div className="csm-userjourney-h">
+                <h4>참고 · 신규 GNB 기준 유저 플로우 — 위 화면 구성안과 연결되는 사용자 흐름</h4>
+              </div>
+              <PersonaJourney
+                plan={PLANS[active]!}
+                name={PERSONA_NAME_KO[active]}
+                navLabels={Object.fromEntries(
+                  (['dashboard','consulting','trading','billing','re100'] as CGnbKey[]).map((k, i) => {
+                    const idxName = ['①','②','③','④','⑤'][i]
+                    const navItem = PLANS[active]!.nav.find((n) => n.idx === idxName)
+                    return [k, navItem ? `${idxName} ${navItem.name}` : CGNB_META[k].label]
+                  }),
+                ) as Record<CGnbKey, string>}
+              />
+            </>
+          ) : (
+            <>
+              <UserFlow p={p} />
+              <Flow p={p} />
+            </>
+          )}
         </main>
 
         <aside className="side">
@@ -838,6 +2410,202 @@ const CSS = `
 .ppm .uarrow{display:grid;place-items:center;font-size:22px;color:var(--primary);font-weight:800}
 
 .ppm footer{padding:26px 0 40px;text-align:center;color:var(--ink-3);font-size:11.5px}
+
+/* ── 수용가 화면 구성안 매트릭스 (consumer 전용) ── */
+.ppm .csm{margin-top:22px;padding:20px 22px 22px;background:#fffbf5;border:1px solid #f4d8a8;border-radius:14px}
+.ppm .csm-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+.ppm .csm-head h3{margin:0 0 4px;font-size:15px;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
+.ppm .csm-head p{margin:0;font-size:12px;color:var(--ink-2)}
+.ppm .csm-legend{display:flex;align-items:center;gap:10px;font-size:11.5px;color:var(--ink-2);flex-wrap:wrap}
+.ppm .csm-lg{display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:3px;vertical-align:middle}
+.ppm .csm-lg.lg-j{background:#fef4d6;border:1px solid #f3d79a}
+.ppm .csm-lg.lg-g{background:#fde0b8;border:1px solid #f0b974}
+.ppm .csm-lg.lg-c{background:#ef4444}
+
+.ppm .csm-grid{display:grid;grid-template-columns:repeat(6,minmax(150px,1fr));gap:8px;overflow-x:auto}
+.ppm .csm-row-label{grid-column:1 / -1;margin-top:10px;font-size:11px;font-weight:800;color:var(--ink-2);letter-spacing:.04em}
+
+.ppm .csm-ph{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 11px}
+.ppm .csm-ph .pn{font-size:11px;font-weight:800;color:var(--primary)}
+.ppm .csm-ph .pt{font-weight:800;font-size:13px;margin-top:1px}
+.ppm .csm-ph .phh{font-size:10.5px;color:var(--ink-3);margin-top:2px}
+
+.ppm .csm-cell{border-radius:10px;padding:9px 10px;min-height:84px;display:flex;flex-direction:column;gap:4px;font-size:11.5px}
+.ppm .csm-cell--j{background:#fef4d6;border:1px solid #f3d79a}
+.ppm .csm-cell--g{background:#fde0b8;border:1px solid #f0b974}
+.ppm .csm-cell--empty{background:repeating-linear-gradient(135deg,#fafbfd,#fafbfd 6px,#f3f5f8 6px,#f3f5f8 12px);border:1px dashed var(--line);color:var(--ink-3);align-items:center;justify-content:center;text-align:center}
+.ppm .csm-cell--empty .csm-ce-t{font-weight:700;font-size:12px}
+.ppm .csm-cell--empty .csm-ce-n{font-size:10.5px;margin-top:2px;color:var(--ink-3)}
+.ppm .csm-cell--blank{background:transparent;border:0;min-height:0}
+
+.ppm .csm-ca{font-weight:800;font-size:12px;color:var(--ink);line-height:1.35}
+.ppm .csm-route{display:inline-block;font-size:9.5px;color:var(--ink-2);font-family:ui-monospace,monospace;border:1px solid #e7c989;background:#fffaef;border-radius:5px;padding:1px 5px;align-self:flex-start;margin-top:1px}
+.ppm .csm-deci{display:inline-block;font-size:10px;font-weight:800;color:#b4730a;background:#fff7ea;border:1px solid #f3d79a;border-radius:999px;padding:1px 7px;align-self:flex-start;margin-top:2px}
+.ppm .csm-ho{font-size:10.5px;font-weight:800;color:#8b5cf6;align-self:flex-start;margin-top:auto}
+
+.ppm .csm-glabel{font-weight:800;font-size:12px;color:#7a4a0c}
+.ppm .csm-glist{margin:2px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:2px}
+.ppm .csm-glist li{font-size:11px;color:var(--ink);font-weight:600}
+.ppm .csm-glist li::before{content:'·';color:#b4730a;margin-right:4px;font-weight:800}
+.ppm .csm-glink{font-size:10px;font-weight:700;color:#7a4a0c;margin-top:auto}
+
+.ppm .csm-dash{grid-column:1 / -1;border:1.5px dashed #f0b974;background:#fff7ea;border-radius:10px;padding:10px 14px;font-size:12px;color:var(--ink);line-height:1.5}
+.ppm .csm-dash b{color:#b4730a}
+
+.ppm .csm-cell--c{background:#ef4444;color:#fff;border:0}
+.ppm .csm-cell--c .csm-ct{font-weight:800;font-size:12.5px}
+.ppm .csm-cell--c .csm-cd{font-size:11px;color:#fff;opacity:.92;line-height:1.45;margin-top:2px}
+
+.ppm .csm-flow{grid-column:1 / -1;display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;padding:4px 0}
+.ppm .csm-flow-step{flex:1 1 0;min-width:150px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 12px;display:flex;flex-direction:column;gap:2px}
+.ppm .csm-flow-spc{background:#eff4ff;border-color:#cfe0ff}
+.ppm .csm-flow-consumer{background:#fff7ea;border-color:#f3d79a}
+.ppm .csm-flow-side{flex:1 1 220px;display:flex;flex-direction:column;gap:6px}
+.ppm .csm-flow-mini{padding:6px 10px;min-width:0}
+.ppm .csm-flow-t{font-weight:800;font-size:11.5px;color:var(--ink)}
+.ppm .csm-flow-d{font-size:10.5px;color:var(--ink-2)}
+.ppm .csm-flow-arrow{display:flex;align-items:center;font-weight:800;color:var(--ink-3)}
+
+.ppm .csm-foot{grid-column:1 / -1;margin-top:8px;font-size:11px;color:var(--ink-3);line-height:1.5}
+
+/* ── csm 본문: 섹션·블록 공통 ── */
+.ppm .csm-sec{margin-top:20px;padding:14px 16px 16px;background:#fff;border:1px solid var(--line);border-radius:12px}
+.ppm .csm-sec-h{display:flex;align-items:baseline;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.ppm .csm-sec-no{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:7px;background:#fff7ea;color:#b4730a;font-weight:800;font-size:12px;flex:none}
+.ppm .csm-sec-h h4{margin:0;font-size:14.5px;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
+.ppm .csm-sec-h p{margin:0 0 0 4px;font-size:11.5px;color:var(--ink-3)}
+.ppm .csm-inline-code{display:inline-block;font-family:ui-monospace,monospace;font-size:11px;color:var(--ink-2);background:#f3f5f8;border:1px solid var(--line);border-radius:5px;padding:1px 6px;margin-left:6px;font-weight:600}
+
+/* A. priorities */
+.ppm .csm-prios{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.ppm .csm-prio{display:flex;align-items:flex-start;gap:9px;background:#fffbf3;border:1px solid #f3d79a;border-radius:10px;padding:9px 11px}
+.ppm .csm-prio-rank{font-size:14px;font-weight:900;color:#b4730a;background:#fff;border:1px solid #f3d79a;border-radius:7px;padding:1px 7px;flex:none}
+.ppm .csm-prio-label{font-size:12.5px;font-weight:800;color:var(--ink)}
+.ppm .csm-prio-desc{font-size:11px;color:var(--ink-2);margin-top:2px;line-height:1.4}
+
+/* B. tree */
+.ppm .csm-tree{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.ppm .csm-tree-gnb{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.ppm .csm-tree-h{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ppm .csm-tree-idx{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;background:#fff7ea;color:#b4730a;font-weight:800;font-size:11.5px;flex:none}
+.ppm .csm-tree-name{font-weight:800;font-size:13px;color:var(--ink)}
+.ppm .csm-tree-sub{font-size:10.5px;color:var(--ink-3)}
+.ppm .csm-tree-route{font-family:ui-monospace,monospace;font-size:10.5px;color:var(--ink-2);background:#f3f5f8;border:1px solid var(--line);border-radius:5px;padding:1px 6px;width:fit-content}
+.ppm .csm-tree-note{font-size:11px;color:var(--ink-3);font-style:italic}
+.ppm .csm-tree-lnb{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px}
+.ppm .csm-tree-lnb li{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:11.5px;color:var(--ink);padding:3px 0;border-bottom:1px dashed #eef0f3}
+.ppm .csm-tree-lnb li:last-child{border-bottom:0}
+.ppm .csm-tree-lnb code{font-size:9.5px;color:var(--ink-3);font-family:ui-monospace,monospace}
+
+.ppm .csm-common-gnb{margin-top:10px;font-size:11.5px;color:var(--ink-2)}
+.ppm .csm-common-pill{display:inline-block;font-size:10.5px;color:var(--ink-2);background:#f3f5f8;border:1px solid var(--line);border-radius:999px;padding:1px 8px;margin-left:5px;font-weight:700}
+.ppm .csm-intent{margin-top:12px;background:#eff4ff;border:1px solid #cfe0ff;border-radius:10px;padding:11px 14px}
+.ppm .csm-intent-h{font-size:11.5px;font-weight:800;color:var(--primary);letter-spacing:.02em;margin-bottom:6px}
+.ppm .csm-intent ol{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}
+.ppm .csm-intent li{font-size:12px;color:var(--ink-2);line-height:1.5;display:flex;gap:8px;align-items:flex-start}
+.ppm .csm-intent-no{flex:none;font-weight:900;color:var(--primary);min-width:18px}
+
+/* C. dashboard zones */
+.ppm .csm-zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.ppm .csm-zone{background:linear-gradient(180deg,#fffbf3,#fff);border:1px solid #f3d79a;border-radius:10px;padding:10px 12px}
+.ppm .csm-zone-h{display:flex;align-items:baseline;gap:7px;margin-bottom:6px}
+.ppm .csm-zone-tag{font-size:10px;font-weight:800;color:#fff;background:#b4730a;border-radius:5px;padding:1px 6px}
+.ppm .csm-zone-title{font-size:13px;font-weight:800;color:var(--ink)}
+.ppm .csm-zone ul{margin:0;padding-left:14px;display:flex;flex-direction:column;gap:3px}
+.ppm .csm-zone li{font-size:11px;color:var(--ink-2);line-height:1.45}
+.ppm .csm-removed{margin-top:10px;font-size:11px;color:var(--ink-3);background:#f8fafc;border:1px dashed var(--line);border-radius:8px;padding:7px 10px}
+.ppm .csm-removed b{color:var(--ink-2);margin-right:6px}
+
+/* D-G. GNB sections — screen cards */
+.ppm .csm-scr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.ppm .csm-scr{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.ppm .csm-scr--hero{background:#fffbf3;border-color:#f3d79a;box-shadow:0 0 0 2px rgba(180,115,10,.08)}
+.ppm .csm-scr-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;border-bottom:1px solid #eef0f3;padding-bottom:6px}
+.ppm .csm-scr--hero .csm-scr-h{border-bottom-color:#f3d79a}
+.ppm .csm-scr-title{display:flex;flex-direction:column}
+.ppm .csm-scr-name{font-weight:800;font-size:13.5px;color:var(--ink)}
+.ppm .csm-scr--hero .csm-scr-name{color:#b4730a}
+.ppm .csm-scr-sub{font-size:10.5px;color:var(--ink-3);margin-top:2px;font-weight:600}
+.ppm .csm-scr-route{font-family:ui-monospace,monospace;font-size:10px;color:var(--ink-2);background:#f3f5f8;border:1px solid var(--line);border-radius:5px;padding:1px 5px;flex:none}
+.ppm .csm-scr-sec{display:flex;flex-direction:column;gap:2px}
+.ppm .csm-scr-label{font-size:10px;font-weight:800;color:#b4730a;letter-spacing:.04em;text-transform:uppercase}
+.ppm .csm-scr-sec ul{margin:0;padding-left:14px;display:flex;flex-direction:column;gap:2px}
+.ppm .csm-scr-sec li{font-size:11.5px;color:var(--ink-2);line-height:1.45}
+.ppm .csm-scr-rel{margin-top:auto;font-size:10.5px;color:var(--violet);font-weight:700;border-top:1px dashed #eef0f3;padding-top:6px}
+.ppm .csm-scr-warn{font-size:11px;color:#b42424;background:#fef0f0;border:1px solid #f3c9c9;border-radius:6px;padding:5px 8px}
+
+/* I. diff & open */
+.ppm .csm-diff{margin:0;padding-left:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:5px 18px}
+.ppm .csm-diff li{font-size:12px;color:var(--ink-2);line-height:1.5}
+.ppm .csm-open{margin-top:10px;font-size:11.5px;color:var(--ink-2);background:#f8fafc;border:1px dashed var(--line);border-radius:8px;padding:7px 10px}
+.ppm .csm-open b{color:var(--ink);margin-right:6px}
+.ppm .csm-open-pill{display:inline-block;font-size:10.5px;color:var(--ink-2);background:#fff;border:1px solid var(--line);border-radius:999px;padding:1px 8px;margin-left:5px;font-weight:700}
+
+/* J. legend (matrix 부록 위) */
+.ppm .csm-mlegend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-2);margin-top:-4px}
+.ppm .csm-mlegend>span{display:inline-flex;align-items:center;gap:5px}
+
+/* 수용가 — 유저저니 구분선 (ConsumerScreenMap 아래) */
+.ppm .csm-userjourney-h{margin:24px 0 10px;padding-top:18px;border-top:2px dashed var(--line)}
+.ppm .csm-userjourney-h h4{margin:0;font-size:13px;font-weight:800;color:var(--ink-2);letter-spacing:-.01em}
+
+/* ── 수용가 유저 플로우 (신규 GNB 기준) ── */
+.ppm .cj{margin-top:10px;padding:14px 16px 16px;background:#fff;border:1px solid var(--line);border-radius:12px}
+.ppm .cj-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:12px;flex-wrap:wrap}
+.ppm .cj-head h3{margin:0 0 3px;font-size:14.5px;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
+.ppm .cj-head p{margin:0;font-size:11.5px;color:var(--ink-3)}
+.ppm .cj-legend{display:flex;gap:10px;flex-wrap:wrap;font-size:11px}
+.ppm .cj-lg-item{display:inline-flex;align-items:center;gap:5px}
+.ppm .cj-lg-sw{display:inline-block;width:14px;height:14px;border-radius:4px;border:1px solid}
+
+.ppm .cj-sec-h{margin:14px 0 8px;font-size:11px;font-weight:800;color:var(--ink-2);letter-spacing:.04em}
+
+/* 7 STEPs */
+.ppm .cj-steps{display:flex;align-items:stretch;gap:6px;overflow-x:auto;padding-bottom:4px}
+.ppm .cj-step{flex:1 1 0;min-width:158px;border:2px solid;border-radius:10px;padding:9px 11px;display:flex;flex-direction:column;gap:4px}
+.ppm .cj-step-no{font-size:10.5px;font-weight:900;letter-spacing:.05em}
+.ppm .cj-step-title{font-size:12.5px;font-weight:800;color:var(--ink);line-height:1.35;min-height:34px}
+.ppm .cj-step-meta{display:flex;flex-direction:column;gap:2px;margin-top:auto}
+.ppm .cj-step-path{font-size:10px;color:var(--ink-2);font-weight:700}
+.ppm .cj-step-route{font-family:ui-monospace,monospace;font-size:9.5px;color:var(--ink-3);background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.06);border-radius:4px;padding:1px 5px;width:fit-content}
+.ppm .cj-step-arrow{display:flex;align-items:center;font-weight:800;font-size:18px;color:var(--ink-3);flex:none;padding:0 2px}
+
+/* 분기점 */
+.ppm .cj-decisions{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+.ppm .cj-deci{background:#fffbf3;border:1px solid #f3d79a;border-radius:10px;padding:10px 12px}
+.ppm .cj-deci--dash{background:repeating-linear-gradient(135deg,#fafbfd,#fafbfd 6px,#f3f5f8 6px,#f3f5f8 12px);border:1px dashed var(--line-strong)}
+.ppm .cj-deci-q{display:flex;align-items:baseline;gap:6px;font-weight:800;font-size:13px;color:#b4730a;margin-bottom:8px;flex-wrap:wrap}
+.ppm .cj-deci--dash .cj-deci-q{color:var(--ink-2)}
+.ppm .cj-deci-dia{font-size:14px}
+.ppm .cj-deci-hint{font-size:10.5px;font-weight:700;color:var(--ink-3)}
+.ppm .cj-deci-branches{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.ppm .cj-branch{flex:1 1 0;min-width:110px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 9px}
+.ppm .cj-branch-l{font-size:11.5px;font-weight:800;color:var(--ink)}
+.ppm .cj-branch-d{font-size:10.5px;color:var(--ink-2);margin-top:2px;line-height:1.4}
+.ppm .cj-branch--ok{border-color:#bfe9d4;background:#eafaf3}
+.ppm .cj-branch--ok .cj-branch-l{color:#0b7a52}
+.ppm .cj-branch--warn{border-color:#f3d79a;background:#fff7ea}
+.ppm .cj-branch--warn .cj-branch-l{color:#b4730a}
+.ppm .cj-branch--no{border-color:#f3c9c9;background:#fef0f0}
+.ppm .cj-branch--no .cj-branch-l{color:#b42424}
+.ppm .cj-deci-note{font-size:11px;color:var(--ink-2);line-height:1.45}
+.ppm .cj-deci-meta{font-size:10.5px;color:var(--ink-3);margin-top:4px;font-style:italic}
+
+/* 관심사 → 화면 */
+.ppm .cj-concerns{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.ppm .cj-concern{border:1px solid;border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:3px}
+.ppm .cj-concern-h{display:flex;align-items:baseline;gap:5px;font-weight:800;font-size:13px}
+.ppm .cj-concern-no{font-weight:900}
+.ppm .cj-concern-label{font-size:13px}
+.ppm .cj-concern-desc{font-size:11px;color:var(--ink);font-weight:600;line-height:1.4;margin-top:3px}
+.ppm .cj-concern-map{font-size:11px;font-weight:800;margin-top:5px;line-height:1.4}
+.ppm .cj-concern-hint{font-size:10.5px;color:var(--ink-3);line-height:1.4;margin-top:1px}
+
+/* 검토 포인트 */
+.ppm .cj-checkpoints{margin-top:14px;background:#f8fafc;border:1px dashed var(--line);border-radius:10px;padding:10px 14px}
+.ppm .cj-checkpoints b{font-size:11.5px;color:var(--ink);margin-right:8px}
+.ppm .cj-checkpoints ol{margin:5px 0 0;padding-left:14px;display:flex;flex-direction:column;gap:3px}
+.ppm .cj-checkpoints li{font-size:11.5px;color:var(--ink-2);line-height:1.45;list-style:none;padding-left:0}
 `
 
 type Mode = 'all' | 'per' | 'diag'
