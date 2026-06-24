@@ -1,7 +1,9 @@
-import type { Deck } from '../data/types'
-import CoverSlide from '../components/slides/CoverSlide'
-import TocSlide from '../components/slides/TocSlide'
-import ThankYouSlide from '../components/slides/ThankYouSlide'
+'use client'
+
+import DeckPlayer from '@/components/Deck'
+import CoverSlide from '@/components/slides/CoverSlide'
+import TocSlide from '@/components/slides/TocSlide'
+import ThankYouSlide from '@/components/slides/ThankYouSlide'
 
 const TOC = [
   '배경',
@@ -71,7 +73,7 @@ const PERSONA_COLOR: Record<string, { badge: string; ring: string; bg: string; t
   Generator: { badge: 'bg-emerald-500', ring: 'ring-emerald-400 border-emerald-300', bg: 'bg-emerald-50', text: 'text-emerald-700' },
   Consumer: { badge: 'bg-amber-500', ring: 'ring-amber-400 border-amber-300', bg: 'bg-amber-50', text: 'text-amber-700' },
   Consultant: { badge: 'bg-violet-500', ring: 'ring-violet-400 border-violet-300', bg: 'bg-violet-50', text: 'text-violet-700' },
-  SPC: { badge: 'bg-brand', ring: 'ring-red-400 border-red-300', bg: 'bg-red-50', text: 'text-brand' },
+  SPC: { badge: 'bg-brand', ring: 'ring-blue-400 border-blue-300', bg: 'bg-blue-50', text: 'text-brand' },
   Admin: { badge: 'bg-slate-500', ring: 'ring-slate-400 border-slate-300', bg: 'bg-slate-50', text: 'text-slate-700' },
 }
 
@@ -200,15 +202,7 @@ const TIMELINE = [
   { no: '4', title: '개발', desc: '확정 기획 기반 개발' },
 ]
 
-const deck: Deck = {
-  meta: {
-    slug: 'rmsppt260513',
-    title: '울산 에너지 자급자족 플랫폼',
-    date: '2026-05-13',
-    description: '페르소나 · PPA 거래 · 앞으로의 방향',
-    tags: ['Ulsan', 'PPA', 'Platform'],
-  },
-  slides: [
+const slides = [
     /* 1. 표지 */
     <CoverSlide
       title="울산 에너지 자급자족 플랫폼"
@@ -484,7 +478,7 @@ const deck: Deck = {
         3. 새 거래 구조 (To-Be)
       </h2>
 
-      <div className="rounded-2xl border border-red-100 bg-red-50/30 p-6 mb-3">
+      <div className="rounded-2xl border border-blue-100 bg-blue-50/30 p-6 mb-3">
         {/* 메인 — 발전사 ↔ 플랫폼 ↔ 수용가 (화살표 아래에 한전·KPX 위치) */}
         <div className="grid grid-cols-[auto_9rem_auto_9rem_auto] gap-y-1 items-center justify-center justify-items-center">
           {/* 발전사 */}
@@ -609,7 +603,7 @@ const deck: Deck = {
       </div>
 
       {/* SPC = 다중 연결 허브 → 페르소나 다양함 */}
-      <div className="rounded-2xl border border-red-100 bg-white px-5 py-4">
+      <div className="rounded-2xl border border-blue-100 bg-white px-5 py-4">
         <div className="flex items-center gap-3 mb-3">
           <span
             className="material-symbols-outlined text-brand"
@@ -634,7 +628,7 @@ const deck: Deck = {
           ].map((e) => (
             <div
               key={e.label}
-              className="rounded-xl bg-red-50/60 border border-red-100 px-2 py-2 text-center"
+              className="rounded-xl bg-blue-50/60 border border-blue-100 px-2 py-2 text-center"
             >
               <span
                 className="material-symbols-outlined text-brand"
@@ -932,7 +926,7 @@ const deck: Deck = {
         </div>
 
         {/* 직접 PPA — brand red 톤 (제일 강조) */}
-        <div className="rounded-2xl border-2 border-red-300 bg-red-50/60 px-5 py-4 flex flex-col shadow-md">
+        <div className="rounded-2xl border-2 border-blue-300 bg-blue-50/60 px-5 py-4 flex flex-col shadow-md">
           <div className="flex items-center justify-between mb-2">
             <p className="inline-block text-sm font-bold tracking-widest text-white bg-brand px-3 py-1 rounded-full shadow-sm">
               {TRADES[1].tag}
@@ -950,7 +944,7 @@ const deck: Deck = {
             {DIRECT_SUB.map((sub) => (
               <div
                 key={sub.tag}
-                className="rounded-xl border-2 border-red-200 bg-white px-3 py-2 shadow-sm"
+                className="rounded-xl border-2 border-blue-200 bg-white px-3 py-2 shadow-sm"
               >
                 <p className="inline-block text-sm font-bold tracking-widest text-white bg-brand px-2 py-0.5 rounded-full mb-1">
                   {sub.tag}
@@ -1171,7 +1165,7 @@ const deck: Deck = {
       </div>
 
       {/* 계약 구조 — 매월 약정 임대료 · 5/10/15/20년 단위 */}
-      <div className="mt-2 rounded-2xl bg-red-50 border-2 border-red-300 px-5 py-3 shadow-sm">
+      <div className="mt-2 rounded-2xl bg-blue-50 border-2 border-blue-300 px-5 py-3 shadow-sm">
         <div className="flex items-start gap-3">
           <span
             className="material-symbols-outlined text-brand shrink-0 mt-0.5"
@@ -1524,7 +1518,7 @@ const deck: Deck = {
       </h2>
 
       {/* 마진 산식 */}
-      <div className="rounded-2xl border-2 border-red-200 bg-red-50/30 p-6 mb-6 shadow-sm">
+      <div className="rounded-2xl border-2 border-blue-200 bg-blue-50/30 p-6 mb-6 shadow-sm">
         <div className="flex items-center justify-center gap-3 flex-wrap text-base font-bold">
           <div className="flex items-center gap-2 px-4 py-3 rounded-xl border-2 border-amber-300 bg-amber-50">
             <span
@@ -1578,7 +1572,7 @@ const deck: Deck = {
             className="rounded-xl border-2 border-gray-200 bg-white px-4 py-3 flex flex-col md:flex-row md:items-center gap-3 shadow-sm"
           >
             <div className="md:w-48 shrink-0 flex items-center gap-2">
-              <p className="inline-block text-sm font-bold tracking-widest text-brand bg-red-50 px-2.5 py-1 rounded-full border border-red-100">
+              <p className="inline-block text-sm font-bold tracking-widest text-brand bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
                 {r.tag}
               </p>
               <p className="font-bold text-gray-900 text-base">{r.label}</p>
@@ -1658,8 +1652,8 @@ const deck: Deck = {
         </div>
 
         {/* To-Be */}
-        <div className="rounded-2xl border-2 border-red-200 bg-red-50/40 p-5 shadow-sm">
-          <p className="inline-block text-sm font-bold tracking-widest text-brand bg-white px-3 py-1 rounded-full mb-4 border-2 border-red-200">
+        <div className="rounded-2xl border-2 border-blue-200 bg-blue-50/40 p-5 shadow-sm">
+          <p className="inline-block text-sm font-bold tracking-widest text-brand bg-white px-3 py-1 rounded-full mb-4 border-2 border-blue-200">
             TO-BE · 역할별 전용 화면
           </p>
 
@@ -1696,7 +1690,7 @@ const deck: Deck = {
                   >
                     arrow_forward
                   </span>
-                  <div className="flex-1 rounded-lg bg-white border-2 border-red-100 px-3 py-1.5 text-sm font-semibold text-gray-700">
+                  <div className="flex-1 rounded-lg bg-white border-2 border-blue-100 px-3 py-1.5 text-sm font-semibold text-gray-700">
                     {row.label} 전용 페이지
                   </div>
                 </div>
@@ -1772,7 +1766,7 @@ const deck: Deck = {
       <div className="space-y-4">
         <div className="rounded-2xl bg-gray-900 px-7 py-7">
           <p className="text-xl md:text-2xl font-bold text-white mb-1.5">
-            매칭이 아닌 <span className="text-red-300">운영 표준</span>
+            매칭이 아닌 <span className="text-blue-300">운영 표준</span>
           </p>
           <p className="text-base text-gray-300 leading-relaxed">
             PPA 매칭은 이미 시장에 있다. 우리는 그 위에서 거래·정산·증빙·감사를
@@ -1797,7 +1791,8 @@ const deck: Deck = {
 
     /* 14. 마무리 */
     <ThankYouSlide email="" pageNumber={14} />,
-  ],
-}
+]
 
-export default deck
+export default function Page() {
+  return <DeckPlayer slides={slides} />
+}

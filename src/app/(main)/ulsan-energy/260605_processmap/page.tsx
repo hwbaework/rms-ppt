@@ -1,7 +1,8 @@
-import type { Deck } from '../data/types'
+'use client'
+
 import { Fragment, useState } from 'react'
 import type { CSSProperties } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 
 // 에너지 자급자족 플랫폼 — 프로세스 맵 (페이지형, PPT 아님)
 // 기존 단독 HTML 목업을 네이티브 React 로 변환. 3모드(전체/페르소나별/중복진단)는 useState 로 전환.
@@ -2600,7 +2601,7 @@ function PersonaProcessMap() {
 
       <header className="topbar">
         <div className="wrap topbar-in">
-          <Link to="/" className="logo">
+          <Link href="/" className="logo">
             <span className="spark">⚡</span>
             <span>
               에너지 자급자족 플랫폼
@@ -2608,7 +2609,7 @@ function PersonaProcessMap() {
             </span>
           </Link>
           <div className="spacer" />
-          <Link to="/" className="pill">← 목록</Link>
+          <Link href="/" className="pill">← 목록</Link>
           <span className="pill">프로세스 맵</span>
           <span className="pill">3차년도 사업계획서 기준</span>
         </div>
@@ -2645,16 +2646,6 @@ function PersonaProcessMap() {
 
 // 2026-06-05 — PPT(슬라이드)가 아니라 정보 제공용 "페이지".
 // PersonaProcessMap 컴포넌트는 위에 같은 파일 안에 정의됨.
-const deck: Deck = {
-  element: <PersonaProcessMap />,
-  meta: {
-    slug: 'rmsppt260605',
-    title: '에너지 자급자족 플랫폼 — 프로세스 맵',
-    date: '2026-06-05',
-    description: '전체 프로세스 · 페르소나별 · 중복 진단 (페이지형)',
-    tags: ['Page', 'Persona', 'Process'],
-  },
-  slides: [],
+export default function Page() {
+  return <PersonaProcessMap />
 }
-
-export default deck

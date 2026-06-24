@@ -1,8 +1,10 @@
-import type { Deck } from '../data/types'
-import CoverSlide from '../components/slides/CoverSlide'
-import TocSlide from '../components/slides/TocSlide'
-import SectionSlide from '../components/slides/SectionSlide'
-import ThankYouSlide from '../components/slides/ThankYouSlide'
+'use client'
+
+import DeckPlayer from '@/components/Deck'
+import CoverSlide from '@/components/slides/CoverSlide'
+import TocSlide from '@/components/slides/TocSlide'
+import SectionSlide from '@/components/slides/SectionSlide'
+import ThankYouSlide from '@/components/slides/ThankYouSlide'
 
 // === 새 발표 추가 가이드 ===
 // 1. 이 파일을 복사 (예: rmsppt260515.tsx — YYMMDD 형식)
@@ -13,26 +15,16 @@ import ThankYouSlide from '../components/slides/ThankYouSlide'
 //    - <SectionSlide />      : 섹션 구분 (빨강 풀배경)
 //    - <ThankYouSlide />     : 마무리
 //    - 또는 <div>...</div>   : 직접 JSX
-// 4. data/deckList.ts 에 import + decks 배열에 추가
+// 4. lib/decks.ts 에 import + decks 배열에 추가
 
-const TOC = ['rms-ppt 란?', '작성 흐름', '데모', '마무리']
+const TOC = ['ppt 란?', '작성 흐름', '데모', '마무리']
 
-const deck: Deck = {
-  meta: {
-    slug: 'rmsppt260429',
-    title: 'rms-ppt 데모 — RMS GROUP 템플릿',
-    date: '2026-04-29',
-    description:
-      'RMS GROUP PPT 템플릿(표지·목차·섹션·마무리)을 그대로 옮긴 데모입니다.',
-    tags: ['Demo', 'Template'],
-  },
-  slides: [
+const slides = [
     /* 1. 표지 */
     <CoverSlide
-      title="rms-ppt 데모"
+      title="ppt 데모"
       subtitle="AI와 함께 만드는 발표 자료 아카이브"
       author="배효원"
-      team="RMS팀"
       date="2026.04.29"
     />,
 
@@ -42,26 +34,26 @@ const deck: Deck = {
     /* 3. 섹션 구분 */
     <SectionSlide
       number="01"
-      title="rms-ppt 란?"
+      title="ppt 란?"
       description="발표 자료를 코드로 작성하고 한 곳에 모아 보는 아카이브"
       pageNumber={3}
     />,
 
     /* 4. 본문 — 챕터 라벨 + 강조 박스 + 다이어그램 */
     <div className="relative w-full min-h-full px-12 md:px-20 py-16">
-      <p className="text-sm text-gray-500 mb-2">I. rms-ppt 란?</p>
+      <p className="text-sm text-gray-500 mb-2">I. ppt 란?</p>
       <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-2">
         1. 작성 → 빌드 → 배포
       </h2>
       <p className="text-gray-500 mb-8">파일 한 개를 추가하고 git push만 하면 끝</p>
 
-      <div className="bg-red-50 border border-red-100 rounded-2xl px-5 py-4 text-base md:text-lg text-gray-700 mb-10">
+      <div className="bg-blue-50 border border-blue-100 rounded-2xl px-5 py-4 text-base md:text-lg text-gray-700 mb-10">
         <strong>JSX 기반 슬라이드</strong> — Vite + React + Tailwind v4 위에,
         <strong> Cloudflare Workers</strong>로 정적 호스팅
       </div>
 
       <div className="rounded-2xl border border-gray-100 bg-gray-50/50 p-6 md:p-8">
-        <p className="inline-block text-xs font-semibold tracking-widest text-brand bg-red-50 px-3 py-1 rounded-full mb-6 border border-red-100">
+        <p className="inline-block text-xs font-semibold tracking-widest text-brand bg-blue-50 px-3 py-1 rounded-full mb-6 border border-blue-100">
           WORKFLOW
         </p>
         <div className="flex items-center justify-center gap-3 flex-wrap">
@@ -69,7 +61,7 @@ const deck: Deck = {
             { label: 'Write', title: 'JSX 슬라이드' },
             { label: 'Build', title: 'Vite + Tailwind' },
             { label: 'Deploy', title: 'Cloudflare' },
-            { label: 'Browse', title: 'rms-ppt' },
+            { label: 'Browse', title: 'ppt' },
           ].map((s, i) => (
             <div key={s.label} className="flex items-center gap-3">
               <div className="px-5 py-4 rounded-xl border border-gray-200 bg-white shadow-sm text-center min-w-32">
@@ -97,7 +89,7 @@ const deck: Deck = {
     <SectionSlide
       number="02"
       title="작성 흐름"
-      description="src/decks 폴더에 파일 추가 → git push → 자동 배포"
+      description="src/content 폴더에 파일 추가 → git push → 자동 배포"
       pageNumber={5}
     />,
 
@@ -113,12 +105,12 @@ const deck: Deck = {
         {[
           {
             no: '1',
-            title: 'src/decks/rmspptYYMMDD.tsx 새 파일',
+            title: 'src/content/rmspptYYMMDD.tsx 새 파일',
             desc: '기존 파일을 복사해서 이름 · 내용 변경',
           },
           {
             no: '2',
-            title: 'src/data/deckList.ts 에 import + 배열 추가',
+            title: 'src/lib/decks.ts 에 import + 배열 추가',
             desc: '목록에 자동 노출됨',
           },
           {
@@ -146,7 +138,8 @@ const deck: Deck = {
 
     /* 7. 마무리 */
     <ThankYouSlide email="hwbae@rms.co.kr" pageNumber={7} />,
-  ],
-}
+]
 
-export default deck
+export default function Page() {
+  return <DeckPlayer slides={slides} />
+}

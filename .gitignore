@@ -12,10 +12,15 @@ dist
 dist-ssr
 *.local
 
+# Next.js 빌드 산출물 (커밋 금지)
+.next/
+out/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
+*.iml
 .DS_Store
 *.suo
 *.ntvs*

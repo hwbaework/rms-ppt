@@ -1,11 +1,14 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import type { Deck } from '../data/types'
+'use client'
 
-function DeckPlayer({ deck }: { deck: Deck }) {
+import { useCallback, useEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
+
+function DeckPlayer({ slides }: { slides: ReactNode[] }) {
   const [idx, setIdx] = useState(0)
   const [isFs, setIsFs] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
-  const total = deck.slides.length
+  const total = slides.length
 
   const next = useCallback(
     () => setIdx((i) => Math.min(total - 1, i + 1)),
@@ -73,6 +76,10 @@ function DeckPlayer({ deck }: { deck: Deck }) {
     return () => document.removeEventListener('fullscreenchange', onFs)
   }, [])
 
+  // 클라이언트에서만 본문 렌더 — 정적 export 프리렌더 시 무거운 슬라이드 SSR을 건너뛴다
+  useEffect(() => setMounted(true), [])
+  if (!mounted) return <div className="fixed inset-0 z-50 bg-white" />
+
   return (
     <div
       ref={containerRef}
@@ -95,7 +102,7 @@ function DeckPlayer({ deck }: { deck: Deck }) {
           key={idx}
           className="flex-1 flex animate-[slideIn_300ms_ease-out]"
         >
-          {deck.slides[idx]}
+          {slides[idx]}
         </div>
       </main>
 
@@ -112,7 +119,7 @@ function DeckPlayer({ deck }: { deck: Deck }) {
 
         {/* Indicators */}
         <div className="flex items-center gap-2 flex-1 justify-center max-w-md overflow-x-auto">
-          {deck.slides.map((_, i) => (
+          {slides.map((_, i) => (
             <button
               key={i}
               onClick={() => goTo(i)}
@@ -138,14 +145,6 @@ function DeckPlayer({ deck }: { deck: Deck }) {
           <span className="material-symbols-outlined">chevron_right</span>
         </button>
       </footer>
-
-      {/* Fade-in animation */}
-      <style>{`
-        @keyframes slideIn {
-          from { opacity: 0; transform: translateY(8px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </div>
   )
 }
