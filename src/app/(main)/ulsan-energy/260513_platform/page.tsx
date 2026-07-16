@@ -205,7 +205,7 @@ const TIMELINE = [
 const slides = [
     /* 1. 표지 */
     <CoverSlide
-      title="울산 에너지 자급자족 플랫폼"
+      title="에너지 자급자족 플랫폼"
       author=""
       team=""
       date="2026.05.13"

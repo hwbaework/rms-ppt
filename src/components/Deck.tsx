@@ -3,11 +3,21 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 
-function DeckPlayer({ slides }: { slides: ReactNode[] }) {
+function DeckPlayer({
+  slides,
+  canvas,
+}: {
+  slides: ReactNode[]
+  // 고정 캔버스 모드(시범 — 260715_carbon) — 슬라이드를 지정 픽셀 크기로 고정 렌더하고
+  // 창 크기에는 통째로 비율 축소(scale)해 맞춘다. PPT처럼 어떤 창에서도 배치가 동일.
+  canvas?: { width: number; height: number }
+}) {
   const [idx, setIdx] = useState(0)
   const [isFs, setIsFs] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [scale, setScale] = useState(1)
   const containerRef = useRef<HTMLDivElement>(null)
+  const areaRef = useRef<HTMLElement>(null)
   const total = slides.length
 
   const next = useCallback(
@@ -76,6 +86,23 @@ function DeckPlayer({ slides }: { slides: ReactNode[] }) {
     return () => document.removeEventListener('fullscreenchange', onFs)
   }, [])
 
+  // 고정 캔버스 모드 — 표시 영역에 맞춰 축소 배율 계산
+  const canvasW = canvas?.width
+  const canvasH = canvas?.height
+  useEffect(() => {
+    if (!canvasW || !canvasH) return
+    const el = areaRef.current
+    if (!el) return
+    const update = () => {
+      const r = el.getBoundingClientRect()
+      setScale(Math.min(r.width / canvasW, r.height / canvasH))
+    }
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [canvasW, canvasH, mounted])
+
   // 클라이언트에서만 본문 렌더 — 정적 export 프리렌더 시 무거운 슬라이드 SSR을 건너뛴다
   useEffect(() => setMounted(true), [])
   if (!mounted) return <div className="fixed inset-0 z-50 bg-white" />
@@ -97,14 +124,32 @@ function DeckPlayer({ slides }: { slides: ReactNode[] }) {
       </button>
 
       {/* Slide content */}
-      <main className="flex-1 overflow-y-auto flex flex-col">
-        <div
-          key={idx}
-          className="flex-1 flex animate-[slideIn_300ms_ease-out]"
-        >
-          {slides[idx]}
-        </div>
-      </main>
+      {canvas ? (
+        /* 고정 캔버스 — canvas 픽셀로 고정 렌더 후 통째로 scale, 남는 영역은 레터박스 */
+        <main ref={areaRef} className="relative flex-1 overflow-hidden bg-slate-100">
+          <div
+            className="absolute left-1/2 top-1/2 bg-white shadow-lg overflow-hidden"
+            style={{
+              width: canvas.width,
+              height: canvas.height,
+              transform: `translate(-50%, -50%) scale(${scale})`,
+            }}
+          >
+            <div key={idx} className="w-full h-full flex animate-[slideIn_300ms_ease-out]">
+              {slides[idx]}
+            </div>
+          </div>
+        </main>
+      ) : (
+        <main className="flex-1 overflow-y-auto flex flex-col">
+          <div
+            key={idx}
+            className="flex-1 flex animate-[slideIn_300ms_ease-out]"
+          >
+            {slides[idx]}
+          </div>
+        </main>
+      )}
 
       {/* Bottom controls */}
       <footer className="border-t border-gray-100 px-6 md:px-10 py-4 flex items-center justify-between gap-4">

@@ -2,6 +2,7 @@ import Logo from '../Logo'
 
 // 표지 슬라이드 — 표준 마스터 M1 (Cover)
 // blue-950 다크 배경 + 흰 제목. 액센트 밑줄/컬러바 금지(§17).
+// ※ 이미지 표지(Main.png)는 260715_carbon 덱에서 시범 적용 중 — 확정되면 여기로 이식.
 //
 // 사용 예시:
 // <CoverSlide

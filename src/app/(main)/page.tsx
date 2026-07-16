@@ -2,9 +2,10 @@
 
 // 아카이브 홈 — 지역(사업)별로 묶고, 칩으로 필터. 프로젝트가 늘어도 칩+섹션으로 정리됨.
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { decks, getDecksByRegion, type DeckMeta } from '@/lib/decks'
+import NewDeckModal from '@/components/NewDeckModal'
 
 // 지역별 액센트 색 (새 지역은 여기 추가, 없으면 violet 기본)
 const REGION_ACCENT: Record<string, string> = {
@@ -16,10 +17,28 @@ const REGION_ACCENT: Record<string, string> = {
 const accent = (region: string) => REGION_ACCENT[region] ?? 'bg-violet-500'
 
 export default function Home() {
-  const groups = getDecksByRegion()
   const [active, setActive] = useState<string>('전체')
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
-  const total = decks.length
+  const [extra, setExtra] = useState<DeckMeta[]>([]) // 서버 붙기 전 임시(메모리)
+  const [modalOpen, setModalOpen] = useState(false)
+
+  // 정적 등록부 + 방금 만든 임시 덱을 합쳐 지역별로 묶는다
+  const groups = useMemo(() => {
+    const merged = [...extra, ...decks]
+    const base = getDecksByRegion()
+    if (extra.length === 0) return base
+    const map = new Map<string, DeckMeta[]>()
+    for (const d of merged) {
+      if (!map.has(d.region)) map.set(d.region, [])
+      map.get(d.region)!.push(d)
+    }
+    return Array.from(map.entries()).map(([region, list]) => ({
+      region,
+      decks: [...list].sort((a, b) => b.date.localeCompare(a.date)),
+    }))
+  }, [extra])
+
+  const total = decks.length + extra.length
 
   const toggle = (r: string) =>
     setCollapsed((prev) => {
@@ -54,9 +73,18 @@ export default function Home() {
         <p className="text-sm font-semibold text-brand mb-3 tracking-widest">
           발표 아카이브
         </p>
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1]">
-          지역·사업별로 모은 <span className="text-brand">발표 자료</span>
-        </h1>
+        <div className="flex items-end justify-between gap-6 flex-wrap">
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.1]">
+            지역·사업별로 모은 <span className="text-brand">발표 자료</span>
+          </h1>
+          <button
+            onClick={() => setModalOpen(true)}
+            className="shrink-0 inline-flex items-center gap-2 rounded-full bg-brand text-white font-semibold px-5 py-2.5 text-sm shadow-sm hover:bg-primary-hover hover:shadow-md active:scale-[0.98] transition"
+          >
+            <span className="material-symbols-outlined text-lg">add</span>
+            새 발표 만들기
+          </button>
+        </div>
 
         {/* 필터 칩 */}
         <div className="mt-9 flex flex-wrap gap-2">
@@ -138,6 +166,13 @@ export default function Home() {
           <p className="font-mono text-xs">ppt</p>
         </div>
       </footer>
+
+      {/* 새 발표 만들기 모달 */}
+      <NewDeckModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onCreated={(deck) => setExtra((prev) => [deck, ...prev])}
+      />
     </div>
   )
 }

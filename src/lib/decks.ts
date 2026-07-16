@@ -16,16 +16,24 @@ export type DeckMeta = {
 export const decks: DeckMeta[] = [
   {
     region: '울산 에너지자급자족',
+    date: '2026-07-15',
+    title: '탄소거래 개념 정리',
+    href: '/ulsan-energy/260715_carbon',
+    description: '왜 사고파는가 · 시장과 상품 · K-ETS 운영 · 측정과 CBAM',
+    tags: ['K-ETS', 'Carbon', 'MRV'],
+  },
+  {
+    region: '울산 에너지자급자족',
     date: '2026-06-24',
-    title: '울산 에너지 자급자족 — PPT 기획',
+    title: 'PPT 기획',
     href: '/ulsan-energy/260624_planning',
     description: '발표 자료 구성안 (초안, 작성 중)',
-    tags: ['Ulsan', '기획'],
+    tags: ['기획'],
   },
   {
     region: '울산 에너지자급자족',
     date: '2026-06-05',
-    title: '에너지 자급자족 플랫폼 — 프로세스 맵',
+    title: '플랫폼 프로세스 맵',
     href: '/ulsan-energy/260605_processmap',
     description: '전체 프로세스 · 페르소나별 · 중복 진단 (페이지형)',
     tags: ['Page', 'Persona', 'Process'],
@@ -33,7 +41,7 @@ export const decks: DeckMeta[] = [
   {
     region: '울산 에너지자급자족',
     date: '2026-05-13',
-    title: '울산 에너지 자급자족 플랫폼',
+    title: '에너지 자급자족 플랫폼',
     href: '/ulsan-energy/260513_platform',
     description: '페르소나 · PPA 거래 · 앞으로의 방향',
     tags: ['PPA', 'Platform'],
@@ -43,16 +51,16 @@ export const decks: DeckMeta[] = [
     date: '2026-04-30',
     title: '빈 템플릿 (새 발표 시작용)',
     href: '/common/260430_blank',
-    description: '새 발표를 시작할 때 복사해서 쓰는 빈 템플릿',
-    tags: ['Draft'],
+    description: '복사해서 시작하는 빈 템플릿 — 이미지 표지 · 간지 없음 · 이미지 제안 슬롯',
+    tags: ['Draft', 'Template'],
   },
   {
     region: '공통',
     date: '2026-04-29',
-    title: 'ppt 데모 — 템플릿',
+    title: '표준 데모 — 슬라이드 패턴',
     href: '/common/260429_demo',
-    description: '표지·목차·섹션·마무리 템플릿 데모',
-    tags: ['Demo', 'Template'],
+    description: '표준 골격·레이아웃·KPI/표/차트 패턴과 새 발표 추가 가이드',
+    tags: ['Demo', 'Guide'],
   },
 ]
 
