@@ -125,9 +125,20 @@ const CSS = `
 .vs-h .material-symbols-outlined{font-size:1.1vw}
 .vs-panel.ours .vs-h{color:var(--accent)}
 
-/* ── 순환 사이클 (메인 플랫폼 중심 — 가입→참여→수익→관리가 고리로 돈다) ── */
-.cyc{position:relative;flex:1;min-height:13.5vw}
+/* ── 순환 사이클 (메인 플랫폼 중심 — 가입→참여→수익→관리가 고리로 돈다) ──
+   정사각(aspect-ratio 1) 영역에 그린다 — 비정사각이면 선·화살촉이 늘어나 왜곡됨 */
+.cyc{position:relative;width:100%;max-width:24vw;aspect-ratio:1;align-self:center;margin:0 auto}
 .cyc svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.cyc-glow{position:absolute;left:50%;top:47%;transform:translate(-50%,-50%);width:15vw;height:15vw;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.10),transparent 65%);pointer-events:none}
+/* 죽은 납품형 — 세로 타임라인 (아래로 흘러가 끊긴다) */
+.dead{display:flex;flex-direction:column;align-self:center}
+.dead-row{display:flex;align-items:center;gap:.9vw}
+.dead-ic{width:2.6vw;height:2.6vw;border-radius:50%;background:#eef1f5;border:1px solid #e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dead-ic .material-symbols-outlined{font-size:1.2vw}
+.dead-row.stop .dead-ic{background:#fef2f2;border-color:#fecaca;color:#dc2626}
+.dead-row b{font-size:.84vw;color:#475569;font-weight:700}
+.dead-row small{display:block;font-size:.66vw;color:#94a3b8;margin-top:.1vw}
+.dead-link{width:2px;height:2.1vw;margin-left:1.3vw;background:repeating-linear-gradient(180deg,#cbd5e1 0 4px,transparent 4px 8px)}
 .cyc-seg{fill:none;stroke:#aac3ee;stroke-width:1.3;stroke-linecap:round}
 /* 빛나는 점 — CSS motion path로 각 호를 따라 이동 (SMIL은 이 환경에서 타임라인이 멈춰 있어 사용 불가) */
 .cyc-dot{fill:#3b82f6;offset-rotate:0deg;animation:travel 3s linear infinite}
@@ -139,7 +150,7 @@ const CSS = `
 .cnode b{font-size:.77vw;color:var(--ink);white-space:nowrap;letter-spacing:-.01em}
 .cnode small{font-size:.62vw;color:var(--muted);white-space:nowrap}
 /* 살아있는 허브 — 유리질감 구체 + 은은한 펄스 */
-.ihub-wrap{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:5.8vw;height:5.8vw;z-index:1}
+.ihub-wrap{position:absolute;left:50%;top:47%;transform:translate(-50%,-50%);width:5.8vw;height:5.8vw;z-index:1}
 .ihub-c{position:absolute;inset:0;border-radius:50%;background:
   radial-gradient(circle at 30% 24%,rgba(255,255,255,.38) 0%,transparent 42%),
   linear-gradient(135deg,#1e40af 0%,#2563eb 55%,#3b82f6 100%);
@@ -508,23 +519,31 @@ const SLIDES: ReactNode[] = [
     <div className="vs">
       <div className="vs-panel">
         <div className="vs-h"><span className="material-symbols-outlined">inventory_2</span>통상적인 지자체 · 공공 플랫폼</div>
-        <div className="mflow">
-          <MNode tone="gray" ic="local_shipping" t="지역에 납품" />
-          <Arr />
-          <MNode tone="gray" ic="flag" t="사업 종료" />
-          <Arr />
-          <MNode tone="gray" ic="block" t="업데이트 중단 · 방치" />
+        <div className="dead">
+          <div className="dead-row">
+            <span className="dead-ic"><span className="material-symbols-outlined">local_shipping</span></span>
+            <span><b>지역에 납품</b><small>시스템 구축 · 인도</small></span>
+          </div>
+          <span className="dead-link" />
+          <div className="dead-row">
+            <span className="dead-ic"><span className="material-symbols-outlined">flag</span></span>
+            <span><b>사업 종료</b><small>계약 기간 만료</small></span>
+          </div>
+          <span className="dead-link" />
+          <div className="dead-row stop">
+            <span className="dead-ic"><span className="material-symbols-outlined">block</span></span>
+            <span><b>업데이트 중단 · 방치</b><small>여기서 끝난다</small></span>
+          </div>
         </div>
       </div>
       <div className="vs-panel ours">
         <div className="vs-h"><span className="material-symbols-outlined">all_inclusive</span>RMS — 하나의 메인 플랫폼</div>
         <div className="cyc">
-          {/* 순환 화살표 — 노드 사이를 호 5개가 잇고, 대시가 화살촉 방향으로 흐른다.
-              viewBox 126×100 = 컨테이너 실측 비율(≈1.26)로, 화살촉 왜곡 없이 % 좌표와 일치 */}
-          <svg viewBox="0 0 126 100" preserveAspectRatio="none" aria-hidden>
+          <div className="cyc-glow" />
+          {/* 순환 화살표 — 정사각 viewBox라 원호·화살촉이 왜곡 없이 균일하다 */}
+          <svg viewBox="0 0 100 100" aria-hidden>
             <defs>
-              {/* 가는 셰브런 화살촉 — 채운 삼각형보다 절제된 인상 */}
-              <marker id="cycArr" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <marker id="cycArr" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto">
                 <path d="M 1.5 1 L 8 5 L 1.5 9" fill="none" stroke="#aac3ee" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
               </marker>
               <filter id="cycGlow" x="-200%" y="-200%" width="500%" height="500%">
@@ -532,24 +551,22 @@ const SLIDES: ReactNode[] = [
                 <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
               </filter>
             </defs>
-            {/* 깊이감용 안쪽 헤어라인 링 */}
-            <ellipse cx="63" cy="44" rx="27" ry="19" fill="none" stroke="#e9f0fa" strokeWidth="1" />
-            <path id="cycs1" className="cyc-seg" markerEnd="url(#cycArr)" d="M 73.8 10.9 A 47.9 34 0 0 1 104.1 26.5" />
-            <path id="cycs2" className="cyc-seg" markerEnd="url(#cycArr)" d="M 110.7 41.0 A 47.9 34 0 0 1 99.2 66.3" />
-            <path id="cycs3" className="cyc-seg" markerEnd="url(#cycArr)" d="M 81.7 75.3 A 47.9 34 0 0 1 44.3 75.3" />
-            <path id="cycs4" className="cyc-seg" markerEnd="url(#cycArr)" d="M 26.9 66.3 A 47.9 34 0 0 1 15.3 41.0" />
-            <path id="cycs5" className="cyc-seg" markerEnd="url(#cycArr)" d="M 21.9 26.5 A 47.9 34 0 0 1 52.2 10.9" />
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 59.4 6.1 A 42 42 0 0 1 86.0 25.4" />
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 91.8 43.3 A 42 42 0 0 1 81.7 74.6" />
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 66.4 85.7 A 42 42 0 0 1 33.6 85.7" />
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 18.3 74.6 A 42 42 0 0 1 8.2 43.3" />
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 14.0 25.4 A 42 42 0 0 1 40.6 6.1" />
             {/* 빛나는 점이 각 곡선을 미끄러지듯 이동 — 시차를 두고 물결처럼 */}
             {[
-              "M 73.8 10.9 A 47.9 34 0 0 1 104.1 26.5",
-              "M 110.7 41.0 A 47.9 34 0 0 1 99.2 66.3",
-              "M 81.7 75.3 A 47.9 34 0 0 1 44.3 75.3",
-              "M 26.9 66.3 A 47.9 34 0 0 1 15.3 41.0",
-              "M 21.9 26.5 A 47.9 34 0 0 1 52.2 10.9",
+              "M 59.4 6.1 A 42 42 0 0 1 86.0 25.4",
+              "M 91.8 43.3 A 42 42 0 0 1 81.7 74.6",
+              "M 66.4 85.7 A 42 42 0 0 1 33.6 85.7",
+              "M 18.3 74.6 A 42 42 0 0 1 8.2 43.3",
+              "M 14.0 25.4 A 42 42 0 0 1 40.6 6.1",
             ].map((d, i) => (
               <circle
                 key={i}
-                r="1.1"
+                r="1"
                 className="cyc-dot"
                 filter="url(#cycGlow)"
                 style={{ offsetPath: `path('${d}')`, animationDelay: `${-i * 0.6}s` }}
@@ -565,11 +582,11 @@ const SLIDES: ReactNode[] = [
             </div>
           </div>
           {[
-            { x: '50%', y: '10%', no: '1', ic: 'location_on', t: '울산 에자자 사업', s: '여기서 시작' },
-            { x: '86%', y: '33%', no: '2', ic: 'person_add', t: '신규 가입', s: '참여 기업이 아니어도' },
-            { x: '72%', y: '72%', no: '3', ic: 'touch_app', t: '참여 · 이용', s: '필요한 기능 사용' },
-            { x: '28%', y: '72%', no: '4', ic: 'payments', t: '수익 창출', s: '플랫폼 위에서 거래' },
-            { x: '14%', y: '33%', no: '5', ic: 'settings_suggest', t: '관리 · 운영', s: '종료 후에도 업데이트' },
+            { x: '50%', y: '5%', no: '1', ic: 'location_on', t: '울산 에자자 사업', s: '여기서 시작' },
+            { x: '90%', y: '34%', no: '2', ic: 'person_add', t: '신규 가입', s: '참여 기업이 아니어도' },
+            { x: '74.7%', y: '81%', no: '3', ic: 'touch_app', t: '참여 · 이용', s: '필요한 기능 사용' },
+            { x: '25.3%', y: '81%', no: '4', ic: 'payments', t: '수익 창출', s: '플랫폼 위에서 거래' },
+            { x: '10%', y: '34%', no: '5', ic: 'settings_suggest', t: '관리 · 운영', s: '종료 후에도 업데이트' },
           ].map((n) => (
             <div className="cnode" key={n.no} style={{ left: n.x, top: n.y }}>
               <span className="cnode-ic">
@@ -583,7 +600,6 @@ const SLIDES: ReactNode[] = [
         </div>
       </div>
     </div>
-    <p className="coda">목표는 — <b>지속가능한 플랫폼</b>입니다</p>
   </ContentSlide>,
 
   /* ── 5page : 사용자 관점에서의 설계 ── */
