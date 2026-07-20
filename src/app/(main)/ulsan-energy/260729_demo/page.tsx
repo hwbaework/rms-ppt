@@ -128,8 +128,8 @@ const CSS = `
 /* ── 순환 사이클 (메인 플랫폼 중심 — 가입→참여→수익→관리가 고리로 돈다) ── */
 .cyc{position:relative;flex:1;min-height:13.5vw}
 .cyc svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.cyc-orbit{fill:none;stroke:#a9c4ef;stroke-width:1.6;stroke-dasharray:5 4;animation:orbit 7s linear infinite}
-@keyframes orbit{to{stroke-dashoffset:-108}}
+.cyc-seg{fill:none;stroke:#a9c4ef;stroke-width:1.6;stroke-dasharray:4 3;animation:orbit 6s linear infinite}
+@keyframes orbit{to{stroke-dashoffset:-105}}
 .cnode{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:.22vw;text-align:center;z-index:1}
 .cnode-ic{position:relative;width:2.4vw;height:2.4vw;border-radius:50%;background:#fff;border:1px solid var(--tint-line);color:var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(37,99,235,.14)}
 .cnode-ic .material-symbols-outlined{font-size:1.15vw}
@@ -519,9 +519,19 @@ const SLIDES: ReactNode[] = [
       <div className="vs-panel ours">
         <div className="vs-h"><span className="material-symbols-outlined">all_inclusive</span>RMS — 하나의 메인 플랫폼</div>
         <div className="cyc">
-          {/* 순환 궤도 — 대시가 시계방향으로 계속 돈다 */}
-          <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
-            <ellipse className="cyc-orbit" cx="50" cy="44" rx="38" ry="34" />
+          {/* 순환 화살표 — 노드 사이를 호 5개가 잇고, 대시가 화살촉 방향으로 흐른다.
+              viewBox 126×100 = 컨테이너 실측 비율(≈1.26)로, 화살촉 왜곡 없이 % 좌표와 일치 */}
+          <svg viewBox="0 0 126 100" preserveAspectRatio="none" aria-hidden>
+            <defs>
+              <marker id="cycArr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b87d7" />
+              </marker>
+            </defs>
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 73.8 10.9 A 47.9 34 0 0 1 104.1 26.5" />
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 110.7 41.0 A 47.9 34 0 0 1 99.2 66.3" />
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 81.7 75.3 A 47.9 34 0 0 1 44.3 75.3" />
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 26.9 66.3 A 47.9 34 0 0 1 15.3 41.0" />
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 21.9 26.5 A 47.9 34 0 0 1 52.2 10.9" />
           </svg>
           <div className="ihub-wrap">
             <span className="ihub-ring" />
