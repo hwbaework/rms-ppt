@@ -127,7 +127,7 @@ const CSS = `
 
 /* ── 순환 사이클 (메인 플랫폼 중심 — 가입→참여→수익→관리가 고리로 돈다) ──
    정사각(aspect-ratio 1) 영역에 그린다 — 비정사각이면 선·화살촉이 늘어나 왜곡됨 */
-.cyc{position:relative;width:100%;max-width:24vw;aspect-ratio:1;align-self:center;margin:0 auto}
+.cyc{position:relative;width:100%;max-width:23.5vw;aspect-ratio:1;align-self:center;margin:1.8vw auto 0}
 .cyc svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .cyc-glow{position:absolute;left:50%;top:47%;transform:translate(-50%,-50%);width:15vw;height:15vw;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.10),transparent 65%);pointer-events:none}
 /* 죽은 납품형 — 세로 타임라인 (아래로 흘러가 끊긴다) */
