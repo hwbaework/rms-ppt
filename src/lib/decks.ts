@@ -19,7 +19,7 @@ export const decks: DeckMeta[] = [
     date: '2026-07-29',
     title: '통합에너지플랫폼 구축 현황',
     href: '/ulsan-energy/260729_demo',
-    description: '사업 경과 · 방향성 · 핵심 기능 5 · 하반기 로드맵 — 발표 시나리오 v0.1 기반',
+    description: '발표 시나리오 v0.1 — 13페이지 1:1 구성 (경과 · 방향성 · 핵심 기능 5 · 로드맵)',
     tags: ['Platform', 'RE100', 'Roadmap'],
   },
   {
