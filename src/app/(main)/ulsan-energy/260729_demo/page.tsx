@@ -120,7 +120,7 @@ const CSS = `
 /* ── 대비 패널 (통상 방식 vs RMS 방식) ── */
 .vs{display:grid;grid-template-columns:1fr 1.15fr;gap:1vw;flex:1;align-items:stretch}
 .vs-panel{border:2px dashed #cbd5e1;border-radius:14px;background:#f8fafc;padding:1.1vw 1.2vw;display:flex;flex-direction:column;gap:1vw;justify-content:center}
-.vs-panel.ours{border:1px solid #93c5fd;background:#fff;box-shadow:0 4px 18px rgba(37,99,235,.08)}
+.vs-panel.ours{border:1px solid #b9d2f8;background:linear-gradient(180deg,#ffffff 0%,#f7faff 100%);box-shadow:0 6px 24px rgba(37,99,235,.09)}
 .vs-h{display:flex;align-items:center;gap:.5vw;font-size:.95vw;font-weight:800;color:#64748b;justify-content:center}
 .vs-h .material-symbols-outlined{font-size:1.1vw}
 .vs-panel.ours .vs-h{color:var(--accent)}
@@ -128,22 +128,27 @@ const CSS = `
 /* ── 순환 사이클 (메인 플랫폼 중심 — 가입→참여→수익→관리가 고리로 돈다) ── */
 .cyc{position:relative;flex:1;min-height:13.5vw}
 .cyc svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.cyc-seg{fill:none;stroke:#a9c4ef;stroke-width:1.6;stroke-dasharray:4 3;animation:orbit 6s linear infinite}
-@keyframes orbit{to{stroke-dashoffset:-105}}
-.cnode{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:.22vw;text-align:center;z-index:1}
-.cnode-ic{position:relative;width:2.4vw;height:2.4vw;border-radius:50%;background:#fff;border:1px solid var(--tint-line);color:var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(37,99,235,.14)}
-.cnode-ic .material-symbols-outlined{font-size:1.15vw}
-.cnode-no{position:absolute;top:-.35vw;right:-.4vw;width:1.05vw;height:1.05vw;border-radius:50%;background:var(--accent);color:#fff;font-size:.6vw;font-weight:800;display:flex;align-items:center;justify-content:center}
-.cnode b{font-size:.76vw;color:var(--ink);white-space:nowrap}
+.cyc-seg{fill:none;stroke:#c9d8f0;stroke-width:1.3;stroke-linecap:round}
+/* 빛나는 점 — CSS motion path로 각 호를 따라 이동 (SMIL은 이 환경에서 타임라인이 멈춰 있어 사용 불가) */
+.cyc-dot{fill:#3b82f6;offset-rotate:0deg;animation:travel 3s linear infinite}
+@keyframes travel{0%{offset-distance:0%;opacity:0}12%{opacity:1}88%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.cnode{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:.24vw;text-align:center;z-index:1}
+.cnode-ic{position:relative;width:2.6vw;height:2.6vw;border-radius:50%;background:linear-gradient(180deg,#ffffff,#f6f9ff);border:1px solid #e3ebf7;color:var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px rgba(11,21,38,.05),0 10px 22px rgba(37,99,235,.10)}
+.cnode-ic .material-symbols-outlined{font-size:1.2vw}
+.cnode-no{position:absolute;top:-.35vw;right:-.42vw;width:1.1vw;height:1.1vw;border-radius:50%;background:linear-gradient(135deg,#1d4ed8,#3b82f6);border:2px solid #fff;color:#fff;font-size:.56vw;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(29,78,216,.35)}
+.cnode b{font-size:.77vw;color:var(--ink);white-space:nowrap;letter-spacing:-.01em}
 .cnode small{font-size:.62vw;color:var(--muted);white-space:nowrap}
-/* 살아있는 허브 — 펄스 링이 계속 퍼진다 */
-.ihub-wrap{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:5.6vw;height:5.6vw;z-index:1}
-.ihub-c{position:absolute;inset:0;border-radius:50%;background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.12vw;box-shadow:0 8px 26px rgba(37,99,235,.3);z-index:1;text-align:center}
+/* 살아있는 허브 — 유리질감 구체 + 은은한 펄스 */
+.ihub-wrap{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:5.8vw;height:5.8vw;z-index:1}
+.ihub-c{position:absolute;inset:0;border-radius:50%;background:
+  radial-gradient(circle at 30% 24%,rgba(255,255,255,.38) 0%,transparent 42%),
+  linear-gradient(135deg,#1e40af 0%,#2563eb 55%,#3b82f6 100%);
+  border:1px solid rgba(255,255,255,.22);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.12vw;box-shadow:0 12px 32px rgba(30,64,175,.35),inset 0 1px 0 rgba(255,255,255,.28);z-index:1;text-align:center}
 .ihub-c .material-symbols-outlined{font-size:1.4vw}
-.ihub-c b{font-size:.74vw;line-height:1.3}
-.ihub-ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(37,99,235,.45);animation:ringout 2.6s ease-out infinite}
-.ihub-ring.r2{animation-delay:1.3s}
-@keyframes ringout{from{transform:scale(1);opacity:.7}to{transform:scale(1.75);opacity:0}}
+.ihub-c b{font-size:.74vw;line-height:1.3;letter-spacing:-.01em}
+.ihub-ring{position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(37,99,235,.32);animation:ringout 3s ease-out infinite}
+.ihub-ring.r2{animation-delay:1.5s}
+@keyframes ringout{from{transform:scale(1);opacity:.65}to{transform:scale(1.9);opacity:0}}
 
 /* ── 페르소나 허브 (중앙 플랫폼 + 5 방사 노드) ── */
 .hub{position:relative;flex:1;min-height:13vw}
@@ -523,15 +528,38 @@ const SLIDES: ReactNode[] = [
               viewBox 126×100 = 컨테이너 실측 비율(≈1.26)로, 화살촉 왜곡 없이 % 좌표와 일치 */}
           <svg viewBox="0 0 126 100" preserveAspectRatio="none" aria-hidden>
             <defs>
-              <marker id="cycArr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b87d7" />
+              {/* 가는 셰브런 화살촉 — 채운 삼각형보다 절제된 인상 */}
+              <marker id="cycArr" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 1.5 1 L 8 5 L 1.5 9" fill="none" stroke="#6b96dd" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
               </marker>
+              <filter id="cycGlow" x="-200%" y="-200%" width="500%" height="500%">
+                <feGaussianBlur stdDeviation="1" result="b" />
+                <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+              </filter>
             </defs>
-            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 73.8 10.9 A 47.9 34 0 0 1 104.1 26.5" />
-            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 110.7 41.0 A 47.9 34 0 0 1 99.2 66.3" />
-            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 81.7 75.3 A 47.9 34 0 0 1 44.3 75.3" />
-            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 26.9 66.3 A 47.9 34 0 0 1 15.3 41.0" />
-            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 21.9 26.5 A 47.9 34 0 0 1 52.2 10.9" />
+            {/* 깊이감용 안쪽 헤어라인 링 */}
+            <ellipse cx="63" cy="44" rx="27" ry="19" fill="none" stroke="#e9f0fa" strokeWidth="1" />
+            <path id="cycs1" className="cyc-seg" markerEnd="url(#cycArr)" d="M 73.8 10.9 A 47.9 34 0 0 1 104.1 26.5" />
+            <path id="cycs2" className="cyc-seg" markerEnd="url(#cycArr)" d="M 110.7 41.0 A 47.9 34 0 0 1 99.2 66.3" />
+            <path id="cycs3" className="cyc-seg" markerEnd="url(#cycArr)" d="M 81.7 75.3 A 47.9 34 0 0 1 44.3 75.3" />
+            <path id="cycs4" className="cyc-seg" markerEnd="url(#cycArr)" d="M 26.9 66.3 A 47.9 34 0 0 1 15.3 41.0" />
+            <path id="cycs5" className="cyc-seg" markerEnd="url(#cycArr)" d="M 21.9 26.5 A 47.9 34 0 0 1 52.2 10.9" />
+            {/* 빛나는 점이 각 곡선을 미끄러지듯 이동 — 시차를 두고 물결처럼 */}
+            {[
+              "M 73.8 10.9 A 47.9 34 0 0 1 104.1 26.5",
+              "M 110.7 41.0 A 47.9 34 0 0 1 99.2 66.3",
+              "M 81.7 75.3 A 47.9 34 0 0 1 44.3 75.3",
+              "M 26.9 66.3 A 47.9 34 0 0 1 15.3 41.0",
+              "M 21.9 26.5 A 47.9 34 0 0 1 52.2 10.9",
+            ].map((d, i) => (
+              <circle
+                key={i}
+                r="1.1"
+                className="cyc-dot"
+                filter="url(#cycGlow)"
+                style={{ offsetPath: `path('${d}')`, animationDelay: `${-i * 0.6}s` }}
+              />
+            ))}
           </svg>
           <div className="ihub-wrap">
             <span className="ihub-ring" />
