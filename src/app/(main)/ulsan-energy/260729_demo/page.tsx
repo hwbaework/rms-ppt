@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 플랫폼 시연 발표 — 2026.07.20  (에디토리얼 스타일)
+// 플랫폼 시연 발표 — 2026.07.29  (에디토리얼 스타일)
 // 원본 자료: "울산 에자자 영상/RMS_플랫폼_발표멘트.docx" (시연 영상 발표 멘트)
 // 발표 구성: ① 대시보드 → ② 컨설팅 → ③ 전력거래
 // 관통 메시지: "우리 플랫폼은 수용가의 RE100 달성을 도와주는 플랫폼이다."
@@ -337,9 +337,7 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     <div className="cover-meta">
       <img src="/images/logo.png" alt="RMS GROUP" />
       <i />
-      <span>배효원 주임 · 스마트사업본부 RMS</span>
-      <i />
-      <span>2026. 07. 20</span>
+      <span>2026. 07. 29</span>
     </div>
   </div>,
 

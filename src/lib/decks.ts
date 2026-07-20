@@ -16,9 +16,9 @@ export type DeckMeta = {
 export const decks: DeckMeta[] = [
   {
     region: '울산 에너지자급자족',
-    date: '2026-07-20',
+    date: '2026-07-29',
     title: '플랫폼 시연 발표',
-    href: '/ulsan-energy/260720_demo',
+    href: '/ulsan-energy/260729_demo',
     description: '대시보드 · 컨설팅 7단계 · 전력거래 — 시연 영상 발표 구성',
     tags: ['Demo', 'RE100', 'PPA'],
   },
