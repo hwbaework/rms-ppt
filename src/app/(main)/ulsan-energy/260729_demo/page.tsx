@@ -163,6 +163,9 @@ const CSS = `
 .wip i{display:block;height:100%;border-radius:999px;background:repeating-linear-gradient(-45deg,#2563eb 0 .45vw,#60a5fa .45vw .9vw);background-size:1.28vw 100%;animation:crawl 1.1s linear infinite}
 @keyframes crawl{to{background-position:1.28vw 0}}
 .wip-empty{height:.4vw;border-radius:999px;border:1.5px dashed #c9d3e2;margin-top:.55vw}
+/* 구축 완료 — 꽉 찬 바 + 은은한 스윕 (지금은 QA·안정화 단계) */
+.wip-done{height:.4vw;border-radius:999px;background:linear-gradient(90deg,#1d4ed8,#3b82f6);position:relative;overflow:hidden;margin-top:.55vw}
+.wip-done:after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.5) 50%,transparent 70%);transform:translateX(-100%);animation:sheen 2.4s ease-in-out infinite}
 .press-st{margin-top:.45vw;display:flex;justify-content:center}
 .tag.live i{animation:livepulse 1.6s ease-in-out infinite}
 @keyframes livepulse{0%,100%{opacity:.4}50%{opacity:1}}
@@ -329,7 +332,7 @@ function Tile({
   k: string
   d?: string
   soon?: boolean
-  bar?: 'wip' | 'todo'
+  bar?: 'wip' | 'todo' | 'done'
   st?: ReactNode
 }) {
   return (
@@ -338,6 +341,7 @@ function Tile({
       <div className="press-k">{k}</div>
       {d && <div className="press-d">{d}</div>}
       {bar === 'wip' && <div className="wip"><i /></div>}
+      {bar === 'done' && <div className="wip-done" />}
       {bar === 'todo' && <div className="wip-empty" />}
       {st && <div className="press-st">{st}</div>}
     </div>
@@ -451,22 +455,22 @@ const SLIDES: ReactNode[] = [
     key="p3"
     no="03"
     sec="3차년도 개발 현황 요약"
-    title={<>상반기 <span className="hl">4</span>개 구축 중 · 하반기 <span className="hl">3</span>개 계획</>}
+    title={<>상반기 <span className="hl">4</span>개는 구축을 마치고 <span className="hl">QA · 안정화</span> 중입니다</>}
     lede={<>지금 보여드리는 것은 <b>현재까지의 구축 결과물</b>입니다.</>}
   >
     <div style={{ paddingTop: '1.3vw' }}>
       <div className="yeartrack">
-        <div className="yt-h1"><span className="material-symbols-outlined">construction</span>상반기 — 4개 구축 중</div>
+        <div className="yt-h1"><span className="material-symbols-outlined">task_alt</span>상반기 — 4개 구축 완료 · QA 중</div>
         <div className="yt-h2">하반기 — 3개 개발 계획 (12p 로드맵)</div>
         <span className="yt-now" style={{ left: '58%' }}>지금 · 7월</span>
       </div>
     </div>
     <div className="split43">
       <div className="press">
-        <Tile ic="support_agent" k="컨설팅" bar="wip" st={<span className="tag blue live"><i />구축 중</span>} />
-        <Tile ic="monitoring" k="모니터링" bar="wip" st={<span className="tag blue live"><i />구축 중</span>} />
-        <Tile ic="swap_horiz" k="전력거래" bar="wip" st={<span className="tag blue live"><i />구축 중</span>} />
-        <Tile ic="view_in_ar" k="DT" d="디지털 트윈" bar="wip" st={<span className="tag blue live"><i />구축 중</span>} />
+        <Tile ic="support_agent" k="컨설팅" bar="done" st={<span className="tag blue live"><i />QA · 안정화 중</span>} />
+        <Tile ic="monitoring" k="모니터링" bar="done" st={<span className="tag blue live"><i />QA · 안정화 중</span>} />
+        <Tile ic="swap_horiz" k="전력거래" bar="done" st={<span className="tag blue live"><i />QA · 안정화 중</span>} />
+        <Tile ic="view_in_ar" k="DT" d="디지털 트윈" bar="done" st={<span className="tag blue live"><i />QA · 안정화 중</span>} />
       </div>
       <div className="press p3">
         <Tile soon ic="co2" k="탄소배출관리" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
