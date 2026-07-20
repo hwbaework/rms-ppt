@@ -55,7 +55,7 @@ const CSS = `
 
 /* ── 본문 공통 ── */
 .cs{background:var(--paper);display:flex;flex-direction:column}
-.cs-body{flex:1;display:flex;flex-direction:column;padding:3% 6.5% 58px}
+.cs-body{flex:1;display:flex;flex-direction:column;padding:3% 6.5% 80px}
 .cs-head{display:flex;align-items:center;gap:.9vw;margin-bottom:1.1vw}
 .cs-no{color:var(--accent);font-size:.85vw;font-weight:800;letter-spacing:.14em}
 .cs-sec{color:var(--muted);font-size:.85vw;font-weight:500}
