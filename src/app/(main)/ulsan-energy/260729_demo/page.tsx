@@ -173,13 +173,21 @@ const CSS = `
 .pnode-ic .material-symbols-outlined{font-size:1.5vw}
 .pnode b{font-size:.82vw;color:var(--ink)}
 
-/* ── 질문 카드 ── */
-.q3{display:grid;grid-template-columns:repeat(3,1fr);gap:1vw}
-.qcard{background:#fff;border:1px solid var(--hair);border-radius:14px;padding:1.5vw 1.2vw;text-align:center}
-.q-ic{width:3.2vw;height:3.2vw;border-radius:50%;margin:0 auto .7vw;background:var(--tint);color:var(--accent);display:flex;align-items:center;justify-content:center}
-.q-ic .material-symbols-outlined{font-size:1.6vw}
-.q-no{color:var(--accent);font-size:.78vw;font-weight:800;letter-spacing:.16em;margin-bottom:.35vw}
-.q-t{font-size:1.18vw;font-weight:800;color:var(--ink);line-height:1.45}
+/* ── 질문 3단 (에디토리얼 — 고스트 숫자 + 헤어라인 + 수렴선) ── */
+.qrow{display:grid;grid-template-columns:repeat(3,1fr);flex:1;align-content:center}
+.qcol{position:relative;padding:2.2vw 1.8vw 2vw;display:flex;flex-direction:column;gap:.9vw;justify-content:center}
+.qcol+.qcol{border-left:1px solid var(--hair)}
+.q-ghost{position:absolute;top:0;right:1.2vw;font-size:6vw;font-weight:900;color:#e8eefb;line-height:1;letter-spacing:-.04em;user-select:none}
+.q-chip{width:2.6vw;height:2.6vw;border-radius:50%;background:var(--tint);color:var(--accent);display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.q-chip .material-symbols-outlined{font-size:1.3vw}
+.q-text{position:relative;z-index:1;font-size:1.3vw;font-weight:800;color:var(--ink);line-height:1.55;letter-spacing:-.015em}
+.q-text .hl{color:var(--accent)}
+.qcol:after{content:"";position:absolute;left:50%;bottom:-1.15vw;width:1.5px;height:1.15vw;background:linear-gradient(180deg,#dbe3f0,#93c5fd)}
+.ans{margin-top:1.15vw;background:linear-gradient(90deg,#0f2a5f,#1d4ed8 55%,#2563eb);border-radius:14px;padding:1vw 1.6vw;display:flex;align-items:center;gap:1.1vw;color:#fff;box-shadow:0 10px 28px rgba(30,64,175,.25)}
+.ans>.material-symbols-outlined{font-size:1.35vw;color:#bcd3fa}
+.ans-t{font-size:1.05vw;font-weight:700;flex:1}
+.ans-fn{display:flex;gap:.45vw;flex-wrap:wrap;justify-content:flex-end}
+.ans-pill{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);border-radius:999px;padding:.2vw .85vw;font-size:.76vw;font-weight:600;color:#dbe7ff;white-space:nowrap}
 
 /* ── 기능 슬라이드 분할 ── */
 .feat{display:grid;grid-template-columns:1fr 1fr;gap:1.1vw;flex:1;align-items:stretch}
@@ -610,24 +618,34 @@ const SLIDES: ReactNode[] = [
     title={<>기업이 궁금한 건 결국 <span className="hl">세 가지</span>입니다</>}
     lede={<>플랫폼 기능은 <b>실제 수요기업의 관심사</b>에서 출발했습니다.</>}
   >
-    <div className="q3">
-      <div className="qcard">
-        <div className="q-ic"><span className="material-symbols-outlined">flag</span></div>
-        <div className="q-no">Q1</div>
-        <div className="q-t">RE100을 이행하려면<br />어떻게 해야 하나?</div>
+    <div className="qrow">
+      <div className="qcol">
+        <span className="q-ghost">01</span>
+        <span className="q-chip"><span className="material-symbols-outlined">flag</span></span>
+        <div className="q-text">RE100을 이행하려면<br /><span className="hl">어떻게</span> 해야 하나?</div>
       </div>
-      <div className="qcard">
-        <div className="q-ic"><span className="material-symbols-outlined">route</span></div>
-        <div className="q-no">Q2</div>
-        <div className="q-t">그 구체적인 방법은<br />무엇인가?</div>
+      <div className="qcol">
+        <span className="q-ghost">02</span>
+        <span className="q-chip"><span className="material-symbols-outlined">route</span></span>
+        <div className="q-text">그 <span className="hl">구체적인 방법</span>은<br />무엇인가?</div>
       </div>
-      <div className="qcard">
-        <div className="q-ic"><span className="material-symbols-outlined">insights</span></div>
-        <div className="q-no">Q3</div>
-        <div className="q-t">태양광을 설치하면<br />실제 효과가 얼마나 되나?</div>
+      <div className="qcol">
+        <span className="q-ghost">03</span>
+        <span className="q-chip"><span className="material-symbols-outlined">insights</span></span>
+        <div className="q-text">태양광을 설치하면<br /><span className="hl">실제 효과</span>가 얼마나 되나?</div>
       </div>
     </div>
-    <p className="coda">핵심 기능 전부가 — <b>이 세 질문에 답하기 위한 서비스</b>입니다</p>
+    <div className="ans">
+      <span className="material-symbols-outlined">hub</span>
+      <span className="ans-t">핵심 기능 전부가, 이 세 질문에 답하기 위한 서비스입니다</span>
+      <span className="ans-fn">
+        <span className="ans-pill">컨설팅</span>
+        <span className="ans-pill">원스톱</span>
+        <span className="ans-pill">모니터링</span>
+        <span className="ans-pill">전력거래</span>
+        <span className="ans-pill">DT</span>
+      </span>
+    </div>
   </ContentSlide>,
 
   /* ── 6page : 플랫폼 구조 — 5개 페르소나 ── */
