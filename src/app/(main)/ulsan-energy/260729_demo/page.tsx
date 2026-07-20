@@ -4,10 +4,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 플랫폼 시연 발표 — 2026.07.29  (에디토리얼 스타일)
-// 원본 자료: "울산 에자자 영상/RMS_플랫폼_발표멘트.docx" (시연 영상 발표 멘트)
-// 발표 구성: ① 대시보드 → ② 컨설팅 → ③ 전력거래
-// 관통 메시지: "우리 플랫폼은 수용가의 RE100 달성을 도와주는 플랫폼이다."
+// 통합에너지플랫폼 구축 현황 발표 — 2026.07.29  (에디토리얼 스타일)
+// 원본 자료: "발표자료 시나리오v0.1.hwpx" (13페이지 발표 시나리오)
+// 원칙: 멘트(시나리오)가 설명을 담당 → 슬라이드는 키워드 + 도식 + 이미지 슬롯만.
+//        문장·리드문 최소화, 시나리오에 없는 내용 추가 금지.
 // 디자인: docs/style-reference.md — 260715_carbon 패턴(페이지 로컬 CSS + 자체 플레이어)
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -41,7 +41,11 @@ const CSS = `
 .grain{position:absolute;inset:0;opacity:.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");background-size:180px 180px;pointer-events:none}
 .cover-eyebrow{color:var(--accent-soft);letter-spacing:.42em;text-transform:uppercase;font-size:.72vw;font-weight:600;margin-bottom:1.7vw;position:relative;z-index:1}
 .cover-title{color:#fff;font-size:3.9vw;font-weight:900;letter-spacing:-.02em;line-height:1.18;margin-bottom:1.2vw;position:relative;z-index:1}
-.cover-sub{color:rgba(191,209,238,.85);font-size:1.12vw;font-weight:300;line-height:1.75;margin-bottom:3.2vw;position:relative;z-index:1}
+.cover-sub{color:rgba(191,209,238,.85);font-size:1.08vw;font-weight:300;line-height:1.75;margin-bottom:2.2vw;position:relative;z-index:1}
+.cover-steps{display:flex;align-items:center;gap:.7vw;margin-bottom:3vw;position:relative;z-index:1}
+.cover-step{display:inline-flex;align-items:center;gap:.45vw;border:1px solid rgba(127,168,232,.35);border-radius:999px;padding:.3vw 1vw;color:rgba(191,209,238,.9);font-size:.78vw;font-weight:600}
+.cover-step .material-symbols-outlined{font-size:.95vw;color:var(--accent-soft)}
+.cover-step-arr{color:rgba(127,168,232,.5);font-size:.9vw}
 .cover-meta{display:flex;align-items:center;gap:1vw;color:rgba(148,168,200,.85);font-size:.82vw;position:relative;z-index:1}
 .cover-meta img{height:1.35vw;filter:brightness(0) invert(1);opacity:.9}
 .cover-meta i{width:3px;height:3px;border-radius:50%;background:rgba(148,168,200,.5)}
@@ -51,7 +55,7 @@ const CSS = `
 .thanks-tagline{color:var(--accent-soft);font-size:1vw;font-weight:300;line-height:1.8}
 .thanks-contact{color:rgba(148,168,200,.6);font-size:.82vw;margin-top:2.8vw;letter-spacing:.08em}
 
-/* ── 목차 (좌 네이비 패널 + 우 에디토리얼 리스트) ── */
+/* ── 목차 ── */
 .toc{display:flex}
 .toc-left{width:35%;background:transparent;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;padding:0 3.6vw}
 .toc-left:before{content:"";position:absolute;left:-10vw;bottom:-14vw;width:30vw;height:30vw;border:1px solid rgba(127,168,232,.15);border-radius:50%}
@@ -74,10 +78,8 @@ const CSS = `
 .cs-no{color:var(--accent);font-size:.78vw;font-weight:800;letter-spacing:.14em}
 .cs-sec{color:var(--muted);font-size:.78vw;font-weight:500}
 .cs-hair{flex:1;height:1px;background:var(--hair)}
-.cs-title{color:var(--ink);font-size:2vw;font-weight:800;letter-spacing:-.025em;line-height:1.28;margin-bottom:.85vw}
-.lede{color:var(--body);font-size:.94vw;line-height:1.8;max-width:78%;margin-bottom:1.15vw}
-.lede b{color:var(--ink);font-weight:700}
-.lede .hl{color:var(--accent);font-weight:700}
+.cs-title{color:var(--ink);font-size:2.1vw;font-weight:800;letter-spacing:-.025em;line-height:1.28;margin-bottom:1.2vw}
+.cs-title .hl{color:var(--accent)}
 .area{flex:1;display:flex;flex-direction:column;gap:1.1vw}
 
 /* ── 스텝 플로우 (점 + 라인) ── */
@@ -86,72 +88,96 @@ const CSS = `
 .step-line{display:flex;align-items:center;gap:.55vw;margin-bottom:.55vw}
 .step-dot{width:.52vw;height:.52vw;border-radius:50%;border:2px solid var(--accent);background:var(--paper);flex-shrink:0}
 .step.final .step-dot{background:var(--accent)}
-.step-no{color:var(--accent);font-size:.66vw;font-weight:800;letter-spacing:.1em}
+.step-no{color:var(--accent);font-size:.68vw;font-weight:800;letter-spacing:.1em}
 .step-line:after{content:"";flex:1;height:1px;background:var(--hair)}
 .step:last-child .step-line:after{display:none}
-.step-name{color:var(--ink);font-size:.93vw;font-weight:700;line-height:1.4;margin-bottom:.28vw}
+.step-name{color:var(--ink);font-size:1vw;font-weight:700;line-height:1.4;margin-bottom:.28vw}
 .step.final .step-name{color:var(--accent)}
 .step-sub{color:var(--muted);font-size:.78vw;line-height:1.68}
 
-/* ── 블록 (라벨 + 그리드) ── */
+/* ── 블록 라벨 ── */
 .block-label{display:flex;align-items:center;gap:.9vw;margin-bottom:.55vw}
 .block-label b{color:var(--ink);font-size:.9vw;font-weight:700;white-space:nowrap}
+.block-label .tag{margin-left:0}
 .block-label:after{content:"";flex:1;height:1px;background:var(--hair)}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:.8vw}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:.8vw}
-.item{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:.72vw 1vw}
-.item-k{color:var(--ink);font-size:.84vw;font-weight:700;display:flex;align-items:center;gap:.5vw;margin-bottom:.32vw}
-.item-k i{width:.4vw;height:.4vw;border-radius:50%;background:var(--accent);flex-shrink:0}
-.item-d{color:var(--body);font-size:.77vw;line-height:1.66}
 
-/* ── 피처 카드 ── */
-.cards-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1vw}
-.fcard{background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:1.05vw 1.25vw;box-shadow:0 1px 2px rgba(11,21,38,.03);display:flex;flex-direction:column}
-.fcard.pick{border-color:#93c5fd;box-shadow:0 4px 18px rgba(37,99,235,.08)}
-.fcard-title{color:var(--ink);font-size:.98vw;font-weight:700;display:flex;align-items:center;gap:.6vw;margin-bottom:.55vw;flex-wrap:wrap}
-.fcard-desc{color:var(--body);font-size:.8vw;line-height:1.78}
-.fcard-desc b{color:var(--ink)}
-.fcard-ic{width:2.1vw;height:2.1vw;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--tint);color:var(--accent);flex-shrink:0}
-.fcard-ic .material-symbols-outlined{font-size:1.1vw}
-.tag{display:inline-flex;align-items:center;gap:.38vw;border:1px solid var(--hair);border-radius:999px;padding:.15vw .7vw;font-size:.66vw;font-weight:600;color:var(--muted);background:#fff}
+/* ── 아이콘 타일 ── */
+.press{display:grid;grid-template-columns:repeat(4,1fr);gap:.8vw}
+.press.p3{grid-template-columns:repeat(3,1fr)}
+.press-card{background:#fff;border:1px solid var(--hair);border-radius:14px;padding:1vw .8vw;text-align:center}
+.press-card.soon{background:var(--chip);border-style:dashed}
+.press-ic{width:2.6vw;height:2.6vw;border-radius:50%;margin:0 auto .45vw;display:flex;align-items:center;justify-content:center;background:var(--tint);color:var(--accent)}
+.press-ic .material-symbols-outlined{font-size:1.35vw}
+.press-card.soon .press-ic{background:#eef1f7;color:#64748b}
+.press-k{color:var(--ink);font-size:1vw;font-weight:800;letter-spacing:-.01em}
+.press-d{color:var(--muted);font-size:.73vw;line-height:1.55;margin-top:.3vw}
+
+/* ── 태그 ── */
+.tag{display:inline-flex;align-items:center;gap:.38vw;border:1px solid var(--hair);border-radius:999px;padding:.15vw .7vw;font-size:.68vw;font-weight:600;color:var(--muted);background:#fff}
 .tag i{width:.38vw;height:.38vw;border-radius:50%;display:inline-block}
-.tag.blue{color:#1d4ed8}.tag.blue i{background:#2563eb}
-.tag.amber{color:#b45309}.tag.amber i{background:#f59e0b}
+.tag.blue{color:#1d4ed8;border-color:#bfdbfe}.tag.blue i{background:#2563eb}
 .tag.gray i{background:#94a3b8}
 
-/* ── 페르소나 스윔레인 ── */
-.lane{background:var(--card);border:1px solid var(--hair);border-radius:14px;overflow:hidden}
-.lane-row{display:flex;align-items:center;border-bottom:1px solid var(--hair);padding:.62vw 1vw;gap:1vw}
-.lane-row:last-child{border-bottom:none}
-.lane-row.hero{background:#fffdf5}
-.lane-who{width:13.5vw;flex-shrink:0}
-.lane-name{color:var(--ink);font-size:.88vw;font-weight:700;display:flex;align-items:center;gap:.5vw;flex-wrap:wrap}
-.lane-name i{width:.5vw;height:.5vw;border-radius:50%;flex-shrink:0}
-.lane-sub{color:var(--muted);font-size:.72vw;margin:.18vw 0 0 1vw}
-.lane-steps{flex:1;display:flex;align-items:center;gap:.5vw;flex-wrap:wrap}
-.lstep{background:var(--chip);border-radius:9px;padding:.42vw .8vw}
-.lstep b{display:block;color:var(--ink);font-size:.78vw;font-weight:600;white-space:nowrap}
-.lstep small{display:block;color:var(--muted);font-size:.66vw;margin-top:.1vw;white-space:nowrap}
+/* ── 아이콘 노드 미니 플로우 ── */
+.mflow{display:flex;align-items:center;justify-content:center;gap:.8vw;flex-wrap:wrap}
+.mnode{display:flex;flex-direction:column;align-items:center;gap:.35vw;text-align:center;min-width:6.5vw}
+.mnode-ic{width:3vw;height:3vw;border-radius:50%;background:var(--tint);color:var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px rgba(37,99,235,.08)}
+.mnode-ic .material-symbols-outlined{font-size:1.45vw}
+.mnode.gray .mnode-ic{background:#eef1f7;color:#64748b;box-shadow:none}
+.mnode.fill .mnode-ic{background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;box-shadow:0 6px 18px rgba(37,99,235,.28)}
+.mnode-t{font-size:.84vw;font-weight:700;color:var(--ink);line-height:1.35}
+.mnode-s{font-size:.68vw;color:var(--muted);line-height:1.5}
+.mflow-arr{color:#c3ccda;font-size:1.3vw;flex-shrink:0}
+.mlink{display:flex;flex-direction:column;align-items:center;gap:.2vw;flex-shrink:0}
+.mlink-lab{background:var(--tint);border:1px solid var(--tint-line);color:var(--accent);border-radius:999px;padding:.12vw .7vw;font-size:.66vw;font-weight:700;white-space:nowrap}
 
-/* ── 아이콘 + 키워드 타일 ── */
-.press{display:grid;grid-template-columns:repeat(4,1fr);gap:.8vw}
-.press-card{background:#fff;border:1px solid var(--hair);border-radius:14px;padding:.9vw .8vw;text-align:center}
-.press-ic{width:2.4vw;height:2.4vw;border-radius:50%;margin:0 auto .4vw;display:flex;align-items:center;justify-content:center;background:var(--tint);color:var(--accent)}
-.press-ic .material-symbols-outlined{font-size:1.25vw}
-.press-k{color:var(--ink);font-size:.98vw;font-weight:800;letter-spacing:-.01em}
-.press-d{color:var(--muted);font-size:.73vw;line-height:1.55;margin-top:.35vw}
+/* ── 대비 패널 (통상 방식 vs RMS 방식) ── */
+.vs{display:grid;grid-template-columns:1fr 1.15fr;gap:1vw;flex:1;align-items:stretch}
+.vs-panel{border:2px dashed #cbd5e1;border-radius:14px;background:#f8fafc;padding:1.1vw 1.2vw;display:flex;flex-direction:column;gap:1vw;justify-content:center}
+.vs-panel.ours{border:1px solid #93c5fd;background:#fff;box-shadow:0 4px 18px rgba(37,99,235,.08)}
+.vs-h{display:flex;align-items:center;gap:.5vw;font-size:.95vw;font-weight:800;color:#64748b;justify-content:center}
+.vs-h .material-symbols-outlined{font-size:1.1vw}
+.vs-panel.ours .vs-h{color:var(--accent)}
 
-/* ── 이미지 플레이스홀더 (실제 화면 캡처 넣을 자리) ── */
-.imgslot{border:2px dashed #c7d2e3;border-radius:14px;background:var(--chip);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.1vw;gap:.35vw}
+/* ── 페르소나 허브 (중앙 플랫폼 + 5 방사 노드) ── */
+.hub{position:relative;flex:1;min-height:14vw}
+.hub svg{position:absolute;inset:0;width:100%;height:100%}
+.hub-c{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:9.5vw;height:9.5vw;border-radius:50%;background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.25vw;box-shadow:0 10px 34px rgba(37,99,235,.28);z-index:1;text-align:center;padding:.6vw}
+.hub-c .material-symbols-outlined{font-size:1.7vw}
+.hub-c b{font-size:.84vw;line-height:1.35}
+.hub-c small{font-size:.62vw;opacity:.75}
+.pnode{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:.3vw;z-index:1;text-align:center}
+.pnode-ic{width:3.2vw;height:3.2vw;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 5px 16px rgba(11,21,38,.16)}
+.pnode-ic .material-symbols-outlined{font-size:1.5vw}
+.pnode b{font-size:.82vw;color:var(--ink)}
+.pnode small{font-size:.64vw;color:var(--muted)}
+
+/* ── 질문 카드 ── */
+.q3{display:grid;grid-template-columns:repeat(3,1fr);gap:1vw}
+.qcard{background:#fff;border:1px solid var(--hair);border-radius:14px;padding:1.5vw 1.2vw;text-align:center}
+.q-ic{width:3.2vw;height:3.2vw;border-radius:50%;margin:0 auto .7vw;background:var(--tint);color:var(--accent);display:flex;align-items:center;justify-content:center}
+.q-ic .material-symbols-outlined{font-size:1.6vw}
+.q-no{color:var(--accent);font-size:.72vw;font-weight:800;letter-spacing:.16em;margin-bottom:.35vw}
+.q-t{font-size:1.08vw;font-weight:800;color:var(--ink);line-height:1.45}
+
+/* ── 기능 슬라이드 분할 ── */
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:1.1vw;flex:1;align-items:stretch}
+.fcol{display:flex;flex-direction:column;gap:1vw;justify-content:center}
+.pbox{border:1.5px solid #93c5fd;border-radius:14px;background:var(--tint);padding:1.5vw 1.2vw 1.2vw;position:relative}
+.pbox-tag{position:absolute;top:-.75vw;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;border-radius:999px;padding:.16vw .9vw;font-size:.7vw;font-weight:700;white-space:nowrap}
+
+/* ── 이미지 플레이스홀더 (실제 화면 캡처 자리 — 가장 중요) ── */
+.imgslot{border:2px dashed #c7d2e3;border-radius:14px;background:var(--chip);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.1vw;gap:.35vw;min-height:9vw}
+.imgslot.tall{min-height:12vw}
 .imgslot .material-symbols-outlined{font-size:2vw;color:#94a3b8}
 .imgslot-t{color:var(--muted);font-size:.78vw;font-weight:700}
 .imgslot-d{color:var(--muted);font-size:.71vw;line-height:1.65}
 
 /* ── 마침 문장 ── */
-.coda{color:var(--body);font-size:.95vw;line-height:1.8;border-top:1px solid var(--hair);padding-top:1vw}
+.coda{color:var(--body);font-size:.92vw;line-height:1.8;border-top:1px solid var(--hair);padding-top:.9vw;text-align:center}
 .coda b{color:var(--accent);font-weight:700}
 
-/* ── 모션 (전부 CSS — 부유 블롭 + 콘텐츠 스태거 등장) ── */
+/* ── 모션 ── */
 @keyframes drift-a{0%{transform:translate(0,0) scale(1);opacity:.8}50%{opacity:1}100%{transform:translate(7vw,4.5vw) scale(1.25);opacity:.85}}
 @keyframes drift-b{0%{transform:translate(0,0) scale(1);opacity:.85}50%{opacity:1}100%{transform:translate(-5.5vw,-4vw) scale(1.22);opacity:.8}}
 @keyframes drift-c{0%{transform:translate(0,0) scale(.95);opacity:.8}100%{transform:translate(-4vw,4.5vw) scale(1.18);opacity:1}}
@@ -163,7 +189,8 @@ const CSS = `
 .slide.active .cover-eyebrow{animation:rise .65s cubic-bezier(.2,.6,.2,1) both}
 .slide.active .cover-title{animation:rise .65s cubic-bezier(.2,.6,.2,1) .12s both}
 .slide.active .cover-sub{animation:rise .65s cubic-bezier(.2,.6,.2,1) .24s both}
-.slide.active .cover-meta{animation:rise .65s cubic-bezier(.2,.6,.2,1) .36s both}
+.slide.active .cover-steps{animation:rise .65s cubic-bezier(.2,.6,.2,1) .34s both}
+.slide.active .cover-meta{animation:rise .65s cubic-bezier(.2,.6,.2,1) .44s both}
 .slide.active .toc-left>*{animation:rise .6s cubic-bezier(.2,.6,.2,1) both}
 .slide.active .toc-left>:nth-child(2){animation-delay:.1s}
 .slide.active .toc-left>:nth-child(3){animation-delay:.2s}
@@ -174,12 +201,11 @@ const CSS = `
 .slide.active .trow:nth-child(5){animation-delay:.28s}
 .slide.active .cs-head{animation:rise .5s cubic-bezier(.2,.6,.2,1) both}
 .slide.active .cs-title{animation:rise .55s cubic-bezier(.2,.6,.2,1) .08s both}
-.slide.active .lede{animation:rise .6s cubic-bezier(.2,.6,.2,1) .16s both}
 .slide.active .area>*{animation:rise .6s cubic-bezier(.2,.6,.2,1) both}
-.slide.active .area>:nth-child(1){animation-delay:.24s}
-.slide.active .area>:nth-child(2){animation-delay:.36s}
-.slide.active .area>:nth-child(3){animation-delay:.48s}
-.slide.active .area>:nth-child(4){animation-delay:.6s}
+.slide.active .area>:nth-child(1){animation-delay:.18s}
+.slide.active .area>:nth-child(2){animation-delay:.3s}
+.slide.active .area>:nth-child(3){animation-delay:.42s}
+.slide.active .area>:nth-child(4){animation-delay:.54s}
 .slide.active .thanks-inner{animation:rise .8s cubic-bezier(.2,.6,.2,1) both}
 /* ※ prefers-reduced-motion 스위치 금지 — OS 설정으로 모든 모션이 죽는 원인(CLAUDE.md §3.4) */
 
@@ -204,13 +230,11 @@ function ContentSlide({
   no,
   sec,
   title,
-  lede,
   children,
 }: {
   no: string
   sec: string
-  title: string
-  lede?: ReactNode
+  title: ReactNode
   children: ReactNode
 }) {
   return (
@@ -222,7 +246,6 @@ function ContentSlide({
           <span className="cs-hair" />
         </div>
         <h2 className="cs-title">{title}</h2>
-        {lede && <p className="lede">{lede}</p>}
         <div className="area">{children}</div>
       </div>
     </div>
@@ -246,66 +269,34 @@ function Flow({ steps }: { steps: { no: string; name: string; sub: string; final
   )
 }
 
-function Block({ label, cols, children }: { label: string; cols: 2 | 3; children: ReactNode }) {
+// 아이콘 노드 미니 플로우 — 노드(아이콘+라벨)를 화살표로 잇는 그림
+function MNode({ ic, t, s, tone }: { ic: string; t: string; s?: string; tone?: 'gray' | 'fill' }) {
   return (
-    <div>
-      <div className="block-label"><b>{label}</b></div>
-      <div className={`grid-${cols}`}>{children}</div>
+    <div className={`mnode${tone ? ` ${tone}` : ''}`}>
+      <div className="mnode-ic"><span className="material-symbols-outlined">{ic}</span></div>
+      <div className="mnode-t">{t}</div>
+      {s && <div className="mnode-s">{s}</div>}
     </div>
   )
 }
 
-function Item({ k, d }: { k: string; d: string }) {
+function Arr() {
+  return <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
+}
+
+function Tile({ ic, k, d, soon }: { ic: string; k: string; d?: string; soon?: boolean }) {
   return (
-    <div className="item">
-      <div className="item-k"><i />{k}</div>
-      <div className="item-d">{d}</div>
+    <div className={`press-card${soon ? ' soon' : ''}`}>
+      <div className="press-ic"><span className="material-symbols-outlined">{ic}</span></div>
+      <div className="press-k">{k}</div>
+      {d && <div className="press-d">{d}</div>}
     </div>
   )
 }
 
-// 페르소나 행 — 색상 매핑은 CLAUDE.md §4.5 (발전사 emerald · 수용가 amber · 컨설턴트 violet · SPC blue · 관리자 slate)
-function PersonaRow({
-  color,
-  name,
-  eng,
-  quote,
-  chips,
-  hero,
-}: {
-  color: string
-  name: string
-  eng: string
-  quote: string
-  chips: { b: string; s?: string }[]
-  hero?: boolean
-}) {
+function ImgSlot({ t, d, tall }: { t: string; d: string; tall?: boolean }) {
   return (
-    <div className={`lane-row${hero ? ' hero' : ''}`}>
-      <div className="lane-who">
-        <div className="lane-name">
-          <i style={{ background: color }} />
-          {name}
-          <span style={{ color: 'var(--muted)', fontSize: '.66vw', fontWeight: 500 }}>{eng}</span>
-          {hero && <span className="tag amber"><i />오늘 시연의 중심</span>}
-        </div>
-        <div className="lane-sub">한마디로 — &ldquo;{quote}&rdquo; 화면</div>
-      </div>
-      <div className="lane-steps">
-        {chips.map((c, i) => (
-          <div className="lstep" key={i}>
-            <b>{c.b}</b>
-            {c.s && <small>{c.s}</small>}
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function ImgSlot({ t, d }: { t: string; d: string }) {
-  return (
-    <div className="imgslot">
+    <div className={`imgslot${tall ? ' tall' : ''}`}>
       <span className="material-symbols-outlined">add_photo_alternate</span>
       <div className="imgslot-t">{t}</div>
       <div className="imgslot-d">{d}</div>
@@ -317,23 +308,35 @@ function ImgSlot({ t, d }: { t: string; d: string }) {
 
 // target = 각 챕터 첫 슬라이드의 인덱스 (목차 행 클릭 시 이동)
 const TOC = [
-  { no: '00', t: '오프닝 — 오늘 보실 세 가지', d: '대시보드 · 컨설팅 · 전력거래, 전부 하나의 목적으로 이어진다', target: 2 },
-  { no: '01', t: '대시보드', d: '누가 로그인했느냐에 따라, 보이는 화면이 다르다 — 다섯 역할', target: 3 },
-  { no: '02', t: '컨설팅', d: '같은 화면을 보며 실시간으로 함께 — 무료 진단에서 7단계까지', target: 4 },
-  { no: '03', t: '전력거래', d: '컨설팅 결과를 실제 거래로 — Lease · Off-site 두 케이스 시연', target: 6 },
-  { no: '04', t: '마무리 — 그리고 앞으로', d: '다섯 역할, 하나의 목적 — 신뢰할 수 있는 플랫폼으로', target: 7 },
+  { no: '01', t: '사업 추진 경과', d: '1~2차년도 기반 구축 → 3차년도 핵심 기능 개발', target: 2 },
+  { no: '02', t: '플랫폼 방향성', d: '납품형이 아닌, 지속가능한 하나의 플랫폼 — 5개 페르소나', target: 4 },
+  { no: '03', t: '핵심 기능 다섯 가지', d: '컨설팅 · 원스톱 · 모니터링 · 전력거래 · DT', target: 7 },
+  { no: '04', t: '하반기 로드맵', d: '탄소배출관리 · e데이터마켓 · VPP — 딥링크 연동', target: 12 },
+  { no: '05', t: '마무리', d: '울산은 하나의 적용 범위 — 확장 가능한 플랫폼', target: 13 },
 ]
 
-// goTo = 플레이어의 슬라이드 이동 함수
+// 페르소나 색상 — CLAUDE.md §4.5 (발전사 emerald · 수용가 amber · 컨설턴트 violet · SPC blue · 관리자 slate)
+const PERSONAS = [
+  { x: '50%', y: '10%', c: '#f59e0b', ic: 'factory', t: '수요기업' },
+  { x: '85%', y: '30%', c: '#10b981', ic: 'solar_power', t: '발전사업자' },
+  { x: '76%', y: '86%', c: '#2563eb', ic: 'apartment', t: 'SPC' },
+  { x: '24%', y: '86%', c: '#8b5cf6', ic: 'support_agent', t: '컨설턴트' },
+  { x: '15%', y: '30%', c: '#64748b', ic: 'admin_panel_settings', t: '플랫폼관리자' },
+]
+
 const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
-  /* 1. 표지 */
+  /* 0. 표지 — [1page 인사 및 발표 개요] */
   <div className="dark-stage" key="cover">
-    <p className="cover-eyebrow">Ulsan Energy Platform Live Demo</p>
-    <h1 className="cover-title">수용가의 RE100 달성을<br />도와주는 플랫폼</h1>
-    <p className="cover-sub">
-      울산 에너지 자급자족 플랫폼 시연 — 대시보드 · 컨설팅 · 전력거래<br />
-      세 기능이 하나의 목적으로 이어지는 과정을 보여드립니다
-    </p>
+    <p className="cover-eyebrow">Ulsan-Mipo Energy Independence</p>
+    <h1 className="cover-title">지속가능한<br />통합 에너지 플랫폼</h1>
+    <p className="cover-sub">울산미포 에너지자급자족 인프라 구축 및 운영사업 — 플랫폼 구축 현황과 방향성</p>
+    <div className="cover-steps">
+      <span className="cover-step"><span className="material-symbols-outlined">co_present</span>발표</span>
+      <span className="cover-step-arr">→</span>
+      <span className="cover-step"><span className="material-symbols-outlined">play_circle</span>시연 영상</span>
+      <span className="cover-step-arr">→</span>
+      <span className="cover-step"><span className="material-symbols-outlined">computer</span>실제 플랫폼 시연</span>
+    </div>
     <div className="cover-meta">
       <img src="/images/logo.png" alt="RMS GROUP" />
       <i />
@@ -341,15 +344,15 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     </div>
   </div>,
 
-  /* 2. 목차 */
+  /* 1. 목차 */
   <div className="toc" key="toc">
     <div className="toc-left">
       <p className="toc-eyebrow">Contents</p>
       <h2 className="toc-title">목차</h2>
       <p className="toc-lead">
-        대시보드도, 컨설팅도, 전력거래도 —<br />
-        결국 전부 하나로 이어집니다.<br />
-        수용가의 RE100 달성.
+        울산에 납품하고 끝나는 시스템이 아니라,<br />
+        계속 자라는 하나의 플랫폼을<br />
+        만들고 있습니다.
       </p>
     </div>
     <div className="toc-right">
@@ -365,296 +368,263 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     </div>
   </div>,
 
-  /* 3. 00 — 오프닝 */
-  <ContentSlide
-    key="s-open"
-    no="00"
-    sec="오프닝"
-    title="세 가지를 보여드립니다 — 전부 하나로 이어집니다"
-    lede={
-      <>오늘 시연은 <b>① 대시보드 → ② 컨설팅 → ③ 전력거래</b> 순서로 진행합니다.
-      이 플랫폼이 존재하는 이유는 하나 — <span className="hl">수용가가 RE100을 달성하도록 끝까지 도와드리는 것</span>입니다.</>
-    }
-  >
+  /* 2. [2page 사업 추진 경과] */
+  <ContentSlide key="s-history" no="01" sec="사업 추진 경과" title={<>지금은 <span className="hl">3차년도</span> — 계획대로 가고 있습니다</>}>
     <Flow
       steps={[
-        { no: '①', name: '대시보드', sub: '역할별로 필요한 현황만 본다' },
-        { no: '②', name: '컨설팅', sub: 'RE100을 "어떻게" 달성할지 방향을 잡는다' },
-        { no: '③', name: '전력거래', sub: '정해진 방향을 실제 거래로 실행한다' },
-        { no: '목적', name: '수용가의 RE100 달성', sub: '세 기능이 전부 이 하나로 이어진다', final: true },
+        { no: '1~2차년도', name: '요구사항 분석 · 설계', sub: '플랫폼 구축 기반 작업' },
+        { no: '1~2차년도', name: '통합관제센터 구축', sub: '' },
+        { no: '3차년도 · 올해', name: '핵심 기능 개발', sub: '계획된 일정에 따라 정상 진행 중', final: true },
       ]}
     />
-
-    <Block label="시연 안내 — 오늘은 녹화 영상으로, 이후엔 직접" cols={3}>
-      <Item k="녹화 영상 시연" d="플랫폼 화면을 녹화한 영상을 보면서 설명을 진행합니다" />
-      <Item k="시연 후 직접 체험" d="시연 이후 회원가입 후, 각 페르소나별로 직접 테스트해 보실 수 있습니다" />
-      <Item k="이용 가이드 제공" d="처음 이용하시는 분도 이용 가이드를 따라 쉽게 사용할 수 있습니다" />
-    </Block>
-
     <ImgSlot
-      t="제안: 플랫폼 메인(랜딩) 화면 캡처"
-      d="시연 사이트 첫 화면 또는 로그인 화면 — 어떤 서비스에 접속하는지 한눈에 보이는 컷"
+      tall
+      t="제안: 통합관제센터 사진"
+      d="1~2차년도에 구축한 통합관제센터 실사 — 상황판이 켜진 정면 컷"
     />
   </ContentSlide>,
 
-  /* 4. 01 — 대시보드 */
-  <ContentSlide
-    key="s-dash"
-    no="01"
-    sec="대시보드"
-    title="누가 로그인했느냐에 따라, 보이는 화면이 다르다"
-    lede={
-      <>역할은 총 <b>다섯</b>. 같은 플랫폼이라도 <span className="hl">역할마다 필요한 것만</span> 화면에 노출됩니다.
-      각 역할의 화면을 따로 돌아보지 않고, <b>수용가의 컨설팅을 진행하면서 자연스럽게</b> 보게 됩니다.</>
-    }
-  >
-    <div className="lane">
-      <PersonaRow
-        color="#f59e0b"
-        name="수용가"
-        eng="Consumer"
-        quote="내 RE100과 내 전기요금"
-        hero
-        chips={[
-          { b: 'RE100 달성률' },
-          { b: '이번 달 절감액 · 예상 요금' },
-          { b: '한전 대비 실제 PPA 비교' },
-        ]}
-      />
-      <PersonaRow
-        color="#8b5cf6"
-        name="컨설턴트"
-        eng="Consultant"
-        quote="내 컨설팅 업무"
-        chips={[
-          { b: '진행 중 프로젝트 · 담당 고객' },
-          { b: '내게 할당된 의뢰' },
-          { b: '이번 주 방문 일정' },
-          { b: '매출 · 평점' },
-        ]}
-      />
-      <PersonaRow
-        color="#10b981"
-        name="발전사업자"
-        eng="Generator"
-        quote="내 발전소"
-        chips={[
-          { b: '현재 출력' },
-          { b: '전일 발전량 · 발전시간' },
-          { b: 'CO₂ 저감' },
-          { b: 'SMP 시장가' },
-        ]}
-      />
-      <PersonaRow
-        color="#2563eb"
-        name="SPC"
-        eng="전기 공급사업자"
-        quote="컨소시엄 · 사업 단위"
-        chips={[
-          { b: '참여 기업 · 등록 발전소' },
-          { b: '누적 거래량' },
-          { b: '프로젝트별 진행률' },
-          { b: '월별 PPA 거래 추이' },
-        ]}
-      />
-      <PersonaRow
-        color="#64748b"
-        name="관리자"
-        eng="Admin"
-        quote="플랫폼 전체 운영"
-        chips={[
-          { b: '전체 사용자 · 등록 기업' },
-          { b: '승인 대기 · PPA 계약' },
-          { b: '역할별 사용자 분포' },
-          { b: '감사 로그' },
-        ]}
-      />
+  /* 3. [3page 3차년도 개발 현황 요약] */
+  <ContentSlide key="s-status" no="01" sec="사업 추진 경과" title={<>상반기 <span className="hl">4</span>개 구축 중 · 하반기 <span className="hl">3</span>개 계획</>}>
+    <div>
+      <div className="block-label"><b>상반기 — 구축 중</b><span className="tag blue"><i />오늘 보여드리는 범위</span></div>
+      <div className="press">
+        <Tile ic="support_agent" k="컨설팅" />
+        <Tile ic="monitoring" k="모니터링" />
+        <Tile ic="swap_horiz" k="전력거래" />
+        <Tile ic="view_in_ar" k="DT" d="디지털 트윈" />
+      </div>
+    </div>
+    <div>
+      <div className="block-label"><b>하반기 — 개발 계획</b><span className="tag gray"><i />로드맵에서 상세</span></div>
+      <div className="press p3">
+        <Tile soon ic="co2" k="탄소배출관리" />
+        <Tile soon ic="storefront" k="e데이터마켓" />
+        <Tile soon ic="hub" k="VPP" />
+      </div>
     </div>
   </ContentSlide>,
 
-  /* 5. 02 — 컨설팅 시작 */
-  <ContentSlide
-    key="s-consult1"
-    no="02"
-    sec="컨설팅"
-    title="시작은 수용가의 무료 진단 — 그리고 같은 화면에서 함께"
-    lede={
-      <>수용가가 기본정보만 기입하면 회사의 현황이 <b>A–F 단계</b>로 진단됩니다.
-      그 결과로 컨설턴트를 찾아 <span className="hl">무료 컨설팅</span>이 시작되고,
-      컨설팅은 RE100을 <b>&ldquo;어떻게&rdquo;</b> 달성할지 방향을 잡는 단계입니다.</>
-    }
-  >
-    <Flow
-      steps={[
-        { no: 'STEP 1', name: '무료 진단 설문', sub: '수용가 로그인 후 기본정보 기입' },
-        { no: 'STEP 2', name: 'A–F 현황 진단', sub: '현재 회사의 단계를 파악' },
-        { no: 'STEP 3', name: '컨설턴트 탐색', sub: '진단 결과를 들고 컨설턴트를 찾는다' },
-        { no: 'STEP 4', name: '의뢰 수락 · 거절', sub: '컨설턴트가 의뢰를 확인하고 결정' },
-        { no: 'STEP 5', name: '무료 컨설팅 시작', sub: '수락된 의뢰만 7단계로 진행', final: true },
-      ]}
-    />
-
-    <div className="cards-3">
-      <div className="fcard pick">
-        <div className="fcard-title">
-          <span className="fcard-ic"><span className="material-symbols-outlined">co_present</span></span>
-          같은 화면을 보며, 실시간으로
-        </div>
-        <div className="fcard-desc">
-          수용가와 컨설턴트가 <b>같은 화면 위에서</b> 대화하며 컨설팅을 진행합니다.
-          따로 메일을 주고받고, 자료를 정리해 보내는 방식이 아닙니다.
+  /* 4. [4page 방향성] */
+  <ContentSlide key="s-vision" no="02" sec="플랫폼 방향성" title={<>납품하고 끝나는 시스템이 <span className="hl">아닙니다</span></>}>
+    <div className="vs">
+      <div className="vs-panel">
+        <div className="vs-h"><span className="material-symbols-outlined">inventory_2</span>통상적인 공공 플랫폼</div>
+        <div className="mflow">
+          <MNode tone="gray" ic="local_shipping" t="지역에 납품" />
+          <Arr />
+          <MNode tone="gray" ic="flag" t="사업 종료" />
+          <Arr />
+          <MNode tone="gray" ic="block" t="업데이트 중단 · 방치" />
         </div>
       </div>
-      <div className="fcard">
-        <div className="fcard-title">
-          <span className="fcard-ic"><span className="material-symbols-outlined">history_edu</span></span>
-          모든 대화가 기록으로
+      <div className="vs-panel ours">
+        <div className="vs-h"><span className="material-symbols-outlined">all_inclusive</span>RMS — 하나의 메인 플랫폼</div>
+        <div className="mflow">
+          <MNode tone="fill" ic="hub" t="메인 플랫폼" s="하나의 기반" />
+          <Arr />
+          <MNode ic="location_on" t="울산 사용자" s="울산 정보만 열람" />
+          <Arr />
+          <MNode ic="update" t="종료 후에도" s="운영 · 업데이트 지속" />
+          <Arr />
+          <MNode ic="person_add" t="신규 가입자" s="누구나 쉽게 접근" />
         </div>
-        <div className="fcard-desc">
-          모든 대화가 기록으로 남고, <b>그 자리에서 바로 소통</b>되는 구조입니다.
-          진행 이력이 그대로 다음 단계의 근거가 됩니다.
+      </div>
+    </div>
+  </ContentSlide>,
+
+  /* 5. [5page 사용자 관점] */
+  <ContentSlide key="s-questions" no="02" sec="플랫폼 방향성" title={<>기업이 궁금한 건 결국 <span className="hl">세 가지</span>입니다</>}>
+    <div className="q3">
+      <div className="qcard">
+        <div className="q-ic"><span className="material-symbols-outlined">flag</span></div>
+        <div className="q-no">Q1</div>
+        <div className="q-t">RE100을 이행하려면<br />어떻게 해야 하나?</div>
+      </div>
+      <div className="qcard">
+        <div className="q-ic"><span className="material-symbols-outlined">route</span></div>
+        <div className="q-no">Q2</div>
+        <div className="q-t">그 구체적인 방법은<br />무엇인가?</div>
+      </div>
+      <div className="qcard">
+        <div className="q-ic"><span className="material-symbols-outlined">insights</span></div>
+        <div className="q-no">Q3</div>
+        <div className="q-t">태양광을 설치하면<br />효과가 얼마나 되나?</div>
+      </div>
+    </div>
+    <p className="coda">핵심 기능 전부가 — <b>이 세 질문에 답하기 위한 서비스</b>입니다</p>
+  </ContentSlide>,
+
+  /* 6. [6page 5개 페르소나] */
+  <ContentSlide key="s-persona" no="02" sec="플랫폼 방향성" title={<>하나의 플랫폼, <span className="hl">다섯 개의 화면</span></>}>
+    <div className="hub">
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
+        {PERSONAS.map((p, i) => (
+          <line key={i} x1="50" y1="50" x2={parseFloat(p.x)} y2={parseFloat(p.y)} stroke="#d5ddeb" strokeWidth=".35" strokeDasharray="1.4 1.1" />
+        ))}
+      </svg>
+      <div className="hub-c">
+        <span className="material-symbols-outlined">hub</span>
+        <b>통합 에너지<br />플랫폼</b>
+        <small>역할별 UI/UX · 기능</small>
+      </div>
+      {PERSONAS.map((p) => (
+        <div className="pnode" key={p.t} style={{ left: p.x, top: p.y }}>
+          <div className="pnode-ic" style={{ background: p.c }}>
+            <span className="material-symbols-outlined">{p.ic}</span>
+          </div>
+          <b>{p.t}</b>
+        </div>
+      ))}
+    </div>
+    <div className="mflow">
+      <span className="tag blue"><i />현장 시연 — 관리자 계정</span>
+      <span className="tag gray"><i />페르소나별 화면 — 시연 영상으로</span>
+    </div>
+  </ContentSlide>,
+
+  /* 7. [7page 핵심 기능 ① 컨설팅] */
+  <ContentSlide key="s-f1" no="03 · ①" sec="핵심 기능 — 컨설팅" title={<>신청하면, <span className="hl">매칭</span>됩니다</>}>
+    <div className="mflow">
+      <MNode tone="gray" ic="psychology_alt" t="기존" s="어디에 문의할지조차 어려움" />
+      <Arr />
+      <MNode ic="edit_note" t="플랫폼 내 신청" s="수요기업" />
+      <Arr />
+      <MNode tone="fill" ic="handshake" t="컨설턴트 매칭" s="플랫폼에 직접 연계" />
+      <Arr />
+      <MNode ic="forum" t="톡으로 진행" s="일정 조율 · 질의" />
+    </div>
+    <ImgSlot
+      tall
+      t="제안: 컨설팅 신청 → 매칭 → 톡 화면 캡처"
+      d="수요기업의 컨설팅 신청 화면과, 매칭된 컨설턴트와의 톡(일정 조율 대화) 화면"
+    />
+  </ContentSlide>,
+
+  /* 8. [8page 핵심 기능 ② 원스톱 통합 처리] */
+  <ContentSlide key="s-f2" no="03 · ②" sec="핵심 기능 — 원스톱 통합 처리" title={<>계약부터 정산까지, <span className="hl">플랫폼 안에서</span></>}>
+    <div className="feat">
+      <div className="fcol">
+        <div className="pbox">
+          <span className="pbox-tag">전부 플랫폼 안에서</span>
+          <div className="mflow">
+            <MNode ic="contract" t="계약" />
+            <Arr />
+            <MNode ic="receipt_long" t="세금계산서 발행" />
+            <Arr />
+            <MNode tone="fill" ic="payments" t="정산" />
+          </div>
+        </div>
+        <div className="mflow">
+          <span className="tag gray"><i />별도 수기 처리 — 없음</span>
         </div>
       </div>
       <ImgSlot
-        t="제안: 컨설팅 실시간 협업 화면 캡처"
-        d="수용가·컨설턴트가 같은 화면을 보며 채팅으로 소통하는 장면 — 자료 요청 대화가 보이는 컷"
+        tall
+        t="제안: 세금계산서 · 정산 화면 캡처"
+        d="플랫폼 안에서 세금계산서가 발행되고 정산 내역이 잡히는 화면"
       />
     </div>
   </ContentSlide>,
 
-  /* 6. 02 — 컨설팅 7단계 */
-  <ContentSlide
-    key="s-consult2"
-    no="02"
-    sec="컨설팅"
-    title="7단계 — 단계마다 누가 무엇을 할지 정해져 있다"
-    lede={
-      <>수락된 컨설팅은 <b>7단계</b>로 진행됩니다. 7단계가 끝나면 이 수용가가
-      <b> Lease</b>로 갈지, <b>On-site</b>로 갈지, <b>Off-site</b>로 갈지가 <span className="hl">명확해진 상태</span>가 됩니다.</>
-    }
-  >
-    <Flow
-      steps={[
-        { no: 'STEP 1', name: '설문 · 자료 수집', sub: '한전 자료 등 판단에 필요한 공식 문서를 요청' },
-        { no: 'STEP 2', name: '사업장 등록', sub: '기업과 실제 운영 사업장이 다를 수 있어 위치를 등록' },
-        { no: 'STEP 3', name: '방문 일정 조율', sub: '등록한 사업장을 대상으로 일정 협의' },
-        { no: 'STEP 4', name: '현장 방문 · 실사', sub: '조율된 일정에 맞춰 실사 — 관련 문서 생성' },
-      ]}
-    />
-    <Flow
-      steps={[
-        { no: 'STEP 5', name: '계약 체결 — 2단계', sub: '① 실사값 기반 계약 → ② 실제로 쓰일 문서를 새로 작성해 양측 합의' },
-        { no: 'STEP 6', name: '보고서 작성', sub: '방향 · 전략 · 최종 보고서 — 컨설턴트 혼자가 아니라 수용가와 함께 확인하며' },
-        { no: 'STEP 7', name: '평가', sub: '수용가가 컨설턴트에게 평점 — 컨설턴트의 지표로 그대로 반영', final: true },
-      ]}
-    />
-
-    <p className="coda">
-      7단계가 끝나면 거래 방식(<b>Lease · On-site · Off-site</b>)이 확정된 상태 —
-      이 결과를 그대로 들고 다음 장, <b>전력거래</b>로 넘어갑니다.
-    </p>
+  /* 9. [9page 핵심 기능 ③ 모니터링 + O&M] */
+  <ContentSlide key="s-f3" no="03 · ③" sec="핵심 기능 — 모니터링 + O&M" title={<>감지에서 조치까지, <span className="hl">하나의 흐름</span></>}>
+    <div className="feat">
+      <ImgSlot
+        tall
+        t="제안: 모니터링 대시보드 + O&M 접수 화면 캡처"
+        d="이상상황 알림이 뜬 모니터링 화면과, 연결된 A/S · O&M 접수 · 처리 현황 화면"
+      />
+      <div className="fcol">
+        <div className="mflow">
+          <MNode ic="warning" t="이상상황 감지" />
+          <Arr />
+          <MNode ic="handyman" t="A/S · O&M 접수" s="플랫폼 내 바로 연계" />
+        </div>
+        <div className="mflow">
+          <MNode ic="task_alt" t="조치" />
+          <Arr />
+          <MNode tone="fill" ic="sync" t="실시간 반영" s="처리 현황 업데이트" />
+        </div>
+        <div className="mflow">
+          <span className="tag gray"><i />발전량만 보는 모니터링은 반쪽</span>
+        </div>
+      </div>
+    </div>
   </ContentSlide>,
 
-  /* 7. 03 — 전력거래 */
-  <ContentSlide
-    key="s-trade"
-    no="03"
-    sec="전력거래"
-    title="컨설팅 결과를, 그대로 실제 거래로"
-    lede={
-      <>어떤 방식으로 갈지는 <b>이미 컨설팅에서 정해졌습니다</b>.
-      오늘은 세 방식 중 <span className="hl">Lease와 Off-site 두 케이스</span>를 직접 보여드립니다.</>
-    }
-  >
-    <div className="cards-3">
-      <div className="fcard pick">
-        <div className="fcard-title">
-          <span className="fcard-ic"><span className="material-symbols-outlined">contract</span></span>
-          Lease <span className="tag blue"><i />시연 케이스 ①</span>
-        </div>
-        <div className="fcard-desc">
-          컨설팅에서 나온 조건을 <b>그대로 가져와</b> Lease 계약 형태로 거래를 구성합니다.
+  /* 10. [10page 핵심 기능 ④ 전력거래] */
+  <ContentSlide key="s-f4" no="03 · ④" sec="핵심 기능 — 전력거래" title={<>RE100 전력을 <span className="hl">조달하는 길</span></>}>
+    <div className="feat">
+      <div className="fcol">
+        <div className="mflow">
+          <MNode ic="solar_power" t="재생에너지 전력" s="발전사업자" />
+          <Arr />
+          <MNode tone="fill" ic="swap_horiz" t="전력거래" s="플랫폼이 서비스로 제공" />
+          <Arr />
+          <MNode ic="factory" t="수요기업" s="RE100 이행" />
         </div>
       </div>
-      <div className="fcard">
-        <div className="fcard-title">
-          <span className="fcard-ic"><span className="material-symbols-outlined">solar_power</span></span>
-          On-site <span className="tag gray"><i />컨설팅 결과에 따라</span>
-        </div>
-        <div className="fcard-desc">
-          사업장 안의 발전 자원을 활용하는 방식 — 오늘 시연에서는 다루지 않습니다.
-        </div>
-      </div>
-      <div className="fcard pick">
-        <div className="fcard-title">
-          <span className="fcard-ic"><span className="material-symbols-outlined">cell_tower</span></span>
-          Off-site <span className="tag blue"><i />시연 케이스 ②</span>
-        </div>
-        <div className="fcard-desc">
-          사업장 <b>외부의 발전 자원</b>을 활용하는 Off-site 형태로 거래를 구성합니다.
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <div className="block-label"><b>두 케이스 모두 같은 흐름 — 등록부터 대시보드 반영까지</b></div>
-      <Flow
-        steps={[
-          { no: '①', name: '거래 등록', sub: '컨설팅 결과의 방식으로 거래를 등록' },
-          { no: '②', name: '조건 확인', sub: '컨설팅에서 나온 조건을 그대로 확인' },
-          { no: '③', name: '체결', sub: '양측 합의로 거래 체결' },
-          { no: '④', name: '대시보드 반영', sub: '체결 결과가 곧바로 대시보드에 반영', final: true },
-        ]}
+      <ImgSlot
+        tall
+        t="제안: 전력거래 화면 캡처"
+        d="수요기업이 재생에너지 전력을 확보하는 거래 화면"
       />
     </div>
+  </ContentSlide>,
 
+  /* 11. [11page 핵심 기능 ⑤ DT] */
+  <ContentSlide key="s-f5" no="03 · ⑤" sec="핵심 기능 — DT (디지털 트윈)" title={<>설치 전에, 효과를 <span className="hl">눈으로</span></>}>
+    <div className="mflow">
+      <MNode ic="apartment" t="설치 전" s="우리 사업장" />
+      <Arr />
+      <MNode tone="fill" ic="view_in_ar" t="DT 시뮬레이션" />
+      <Arr />
+      <MNode ic="insights" t="예상 효과 확인" s="시각적으로" />
+      <span className="tag blue" style={{ marginLeft: '1vw' }}><i />발표 후 실제 접속 시연</span>
+    </div>
     <ImgSlot
-      t="제안: 거래 체결 → 대시보드 반영 화면 캡처 (2컷)"
-      d="Lease 거래 체결 화면과, 체결 직후 수용가 대시보드에 수치가 반영된 화면을 나란히"
+      tall
+      t="제안: DT 화면 캡처 (대형)"
+      d="태양광 설치 전 예상 효과를 3D로 보여주는 디지털 트윈 화면 — 이 덱에서 가장 큰 이미지"
     />
   </ContentSlide>,
 
-  /* 8. 04 — 마무리 · 앞으로 */
-  <ContentSlide
-    key="s-close"
-    no="04"
-    sec="마무리 — 그리고 앞으로"
-    title="다섯 역할, 하나의 목적 — 신뢰할 수 있는 플랫폼으로"
-    lede={
-      <>다섯 역할이 각자 화면에서 필요한 정보를 확인하고, <b>같은 화면에서 실시간으로 소통</b>하며,
-      그 결과가 <span className="hl">곧바로 실제 거래로</span> 이어지는 플랫폼을 구성했습니다.</>
-    }
-  >
-    <div className="press">
-      <div className="press-card">
-        <div className="press-ic"><span className="material-symbols-outlined">monitoring</span></div>
-        <div className="press-k">모니터링 · 관리</div>
-        <div className="press-d">체결 이후의 거래가 어떻게 모니터링되고 관리되는지까지 플랫폼 안에서</div>
-      </div>
-      <div className="press-card">
-        <div className="press-ic"><span className="material-symbols-outlined">storefront</span></div>
-        <div className="press-k">탄소거래 연계</div>
-        <div className="press-d">이후 E-Data 마켓을 통한 탄소거래로 확장</div>
-      </div>
-      <div className="press-card">
-        <div className="press-ic"><span className="material-symbols-outlined">engineering</span></div>
-        <div className="press-k">운영 인력 절감</div>
-        <div className="press-d">사업관리 측면에서 인력 소모를 줄이는 구조</div>
-      </div>
-      <div className="press-card">
-        <div className="press-ic"><span className="material-symbols-outlined">verified</span></div>
-        <div className="press-k">성과 보증</div>
-        <div className="press-d">앞으로는 RMS가 성과를 직접 보증하는 플랫폼으로</div>
-      </div>
+  /* 12. [12page 하반기 개발 로드맵] */
+  <ContentSlide key="s-roadmap" no="04" sec="하반기 로드맵" title={<>딥링크로 연결되는 <span className="hl">세 개의 신규 서비스</span></>}>
+    <div className="press p3">
+      <Tile ic="co2" k="탄소배출관리" />
+      <Tile ic="storefront" k="e데이터마켓" />
+      <Tile ic="hub" k="VPP" />
     </div>
-
-    <p className="coda">
-      이 모든 흐름의 목적은 처음 말씀드린 그 하나 — <b>수용가가 RE100을 달성</b>하도록,
-      사용자에게 편의성을 제공하며, <b>신뢰할 수 있는 플랫폼</b>으로 만들어가겠습니다.
-    </p>
+    <div className="mflow">
+      <MNode tone="fill" ic="hub" t="메인 플랫폼" />
+      <span className="mlink">
+        <span className="mlink-lab">딥링크 연동</span>
+        <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
+      </span>
+      <MNode ic="open_in_new" t="신규 플랫폼" s="범위가 방대해 별도 구축" />
+    </div>
+    <p className="coda">사용자는 <b>하나의 플랫폼처럼</b> 자연스럽게 이동 — 서비스 연속성 유지</p>
   </ContentSlide>,
 
-  /* 9. 마무리 */
+  /* 13. [13page 마무리] */
+  <ContentSlide key="s-close" no="05" sec="마무리" title={<>울산은 <span className="hl">하나의 적용 범위</span>입니다</>}>
+    <div className="mflow">
+      <MNode tone="fill" ic="location_on" t="울산 에자자" s="첫 적용" />
+      <Arr />
+      <MNode ic="map" t="타 지역" s="동일한 플랫폼 기반" />
+      <Arr />
+      <MNode ic="person_add" t="신규 가입자" s="확장" />
+    </div>
+    <div className="mflow">
+      <span className="tag blue"><i />이어서 — 시연 영상</span>
+      <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
+      <span className="tag blue"><i />실제 플랫폼 시연</span>
+    </div>
+  </ContentSlide>,
+
+  /* 14. 마무리 다크 */
   <div className="dark-stage" key="thanks">
     <div className="thanks-inner">
       <img src="/images/logo.png" alt="RMS GROUP" />
@@ -662,7 +632,7 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
       <div className="thanks-tagline">
         Improving the quality of life and<br />creating a sustainable &amp; resilient society
       </div>
-      <div className="thanks-contact">hwbae@rms.co.kr · rmsgroup.co.kr</div>
+      <div className="thanks-contact">rmsgroup.co.kr</div>
     </div>
   </div>,
 ]
