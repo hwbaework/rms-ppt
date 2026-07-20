@@ -125,16 +125,28 @@ const CSS = `
 .vs-h .material-symbols-outlined{font-size:1.1vw}
 .vs-panel.ours .vs-h{color:var(--accent)}
 
-/* ── 허브 트리 (메인 플랫폼 1 → 특성 가지 3) — 순서가 아니라 병렬 특성 ── */
-.tree{display:flex;align-items:center;gap:0;flex:1}
-.tree>.mnode{flex-shrink:0}
-.tree-svg{width:4vw;height:11vw;flex-shrink:0}
-.tree-items{flex:1;display:flex;flex-direction:column;gap:.6vw}
+/* ── 유입 다이어그램 (사용자들이 플랫폼으로 흘러들어온다) ── */
+.inflow{display:grid;grid-template-columns:auto 1fr auto;grid-auto-rows:1fr;align-items:center;column-gap:.7vw;row-gap:.55vw;flex:1}
 .titem{display:flex;align-items:center;gap:.7vw;background:var(--chip);border-radius:11px;padding:.55vw .9vw;text-align:left}
 .titem-ic{width:2vw;height:2vw;border-radius:50%;background:#fff;color:var(--accent);border:1px solid var(--tint-line);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .titem-ic .material-symbols-outlined{font-size:1vw}
 .titem b{display:block;color:var(--ink);font-size:.83vw;font-weight:700}
 .titem small{display:block;color:var(--muted);font-size:.7vw;margin-top:.12vw;line-height:1.5}
+/* 유입 라인 — 점이 사용자 쪽에서 플랫폼 쪽으로 계속 흘러간다 */
+.itrack{position:relative;height:2px;background:linear-gradient(90deg,#e3eaf5,#bfd3f5)}
+.itrack i{position:absolute;top:50%;left:0;width:.5vw;height:.5vw;border-radius:50%;background:var(--accent);transform:translate(-50%,-50%);animation:flowdot 2.4s linear infinite}
+.itrack i:nth-child(2){animation-delay:.8s}
+.itrack i:nth-child(3){animation-delay:1.6s}
+@keyframes flowdot{0%{left:0;opacity:0}12%{opacity:1}88%{opacity:1}100%{left:100%;opacity:0}}
+/* 살아있는 허브 — 펄스 링이 계속 퍼진다 */
+.ihub{position:relative;display:flex;flex-direction:column;align-items:center;gap:.6vw;padding:0 .4vw}
+.ihub-wrap{position:relative;width:6.2vw;height:6.2vw}
+.ihub-c{position:absolute;inset:0;border-radius:50%;background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15vw;box-shadow:0 8px 26px rgba(37,99,235,.3);z-index:1;text-align:center}
+.ihub-c .material-symbols-outlined{font-size:1.5vw}
+.ihub-c b{font-size:.78vw;line-height:1.3}
+.ihub-ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(37,99,235,.45);animation:ringout 2.6s ease-out infinite}
+.ihub-ring.r2{animation-delay:1.3s}
+@keyframes ringout{from{transform:scale(1);opacity:.7}to{transform:scale(1.75);opacity:0}}
 
 /* ── 페르소나 허브 (중앙 플랫폼 + 5 방사 노드) ── */
 .hub{position:relative;flex:1;min-height:13vw}
@@ -509,27 +521,33 @@ const SLIDES: ReactNode[] = [
       </div>
       <div className="vs-panel ours">
         <div className="vs-h"><span className="material-symbols-outlined">all_inclusive</span>RMS — 하나의 메인 플랫폼</div>
-        <div className="tree">
-          <MNode tone="fill" ic="hub" t="메인 플랫폼" s="울산에 국한되지&#10;않는 구조" />
-          <svg className="tree-svg" viewBox="0 0 40 100" preserveAspectRatio="none" fill="none" aria-hidden>
-            <path d="M 2 50 C 20 50 20 14 38 14" stroke="#c9d6ea" strokeWidth="1.5" />
-            <path d="M 2 50 L 38 50" stroke="#c9d6ea" strokeWidth="1.5" />
-            <path d="M 2 50 C 20 50 20 86 38 86" stroke="#c9d6ea" strokeWidth="1.5" />
-          </svg>
-          <div className="tree-items">
-            <div className="titem">
-              <span className="titem-ic"><span className="material-symbols-outlined">location_on</span></span>
-              <span><b>울산 사용자가 접속하면, 울산 정보만 열람</b><small>하나의 플랫폼 위에서 지역별로 보이는 구조</small></span>
-            </div>
-            <div className="titem">
-              <span className="titem-ic"><span className="material-symbols-outlined">update</span></span>
-              <span><b>사업 종료 이후에도 지속 운영 · 업데이트</b><small>납품형처럼 멈추지 않는다</small></span>
-            </div>
-            <div className="titem">
-              <span className="titem-ic"><span className="material-symbols-outlined">person_add</span></span>
-              <span><b>신규 가입자도 쉽게 접근</b><small>에자자 사업 참여 기업이 아니어도</small></span>
-            </div>
+        <div className="inflow">
+          <div className="titem">
+            <span className="titem-ic"><span className="material-symbols-outlined">manage_accounts</span></span>
+            <span><b>울산 관리자 · 울산 사용자</b><small>접속하면 울산 정보만 열람</small></span>
           </div>
+          <div className="itrack"><i /><i /><i /></div>
+          <div className="ihub" style={{ gridColumn: 3, gridRow: '1 / 4' }}>
+            <div className="ihub-wrap">
+              <span className="ihub-ring" />
+              <span className="ihub-ring r2" />
+              <div className="ihub-c">
+                <span className="material-symbols-outlined">hub</span>
+                <b>메인<br />플랫폼</b>
+              </div>
+            </div>
+            <span className="tag blue live"><i />사업 종료 후에도 운영 · 업데이트</span>
+          </div>
+          <div className="titem">
+            <span className="titem-ic"><span className="material-symbols-outlined">factory</span></span>
+            <span><b>에자자 참여 기업</b><small>사업과 함께 이용 중</small></span>
+          </div>
+          <div className="itrack"><i /><i /><i /></div>
+          <div className="titem">
+            <span className="titem-ic"><span className="material-symbols-outlined">person_add</span></span>
+            <span><b>신규 가입자</b><small>참여 기업이 아니어도 쉽게 접근</small></span>
+          </div>
+          <div className="itrack"><i /><i /><i /></div>
         </div>
       </div>
     </div>
