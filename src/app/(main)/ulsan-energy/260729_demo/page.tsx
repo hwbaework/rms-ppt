@@ -177,7 +177,7 @@ const CSS = `
 .qrow{display:grid;grid-template-columns:repeat(3,1fr);flex:1;align-content:center}
 .qcol{position:relative;padding:2.2vw 1.8vw 2vw;display:flex;flex-direction:column;gap:.9vw;justify-content:center}
 .qcol+.qcol{border-left:1px solid var(--hair)}
-.q-ghost{position:absolute;top:0;right:1.2vw;font-size:6vw;font-weight:900;color:#e8eefb;line-height:1;letter-spacing:-.04em;user-select:none}
+.q-ghost{position:absolute;top:0;right:1.2vw;font-size:6vw;font-weight:900;line-height:1;letter-spacing:-.04em;user-select:none;background:linear-gradient(180deg,#b9cff0 0%,#e2ecfb 85%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .q-chip{width:2.6vw;height:2.6vw;border-radius:50%;background:var(--tint);color:var(--accent);display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
 .q-chip .material-symbols-outlined{font-size:1.3vw}
 .q-text{position:relative;z-index:1;font-size:1.3vw;font-weight:800;color:var(--ink);line-height:1.55;letter-spacing:-.015em}
