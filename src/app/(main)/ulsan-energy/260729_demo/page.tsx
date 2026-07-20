@@ -395,9 +395,9 @@ function Tile({
   )
 }
 
-function ImgSlot({ t, d, tall }: { t: string; d: string; tall?: boolean }) {
+function ImgSlot({ t, d, tall, grow }: { t: string; d: string; tall?: boolean; grow?: boolean }) {
   return (
-    <div className={`imgslot${tall ? ' tall' : ''}`}>
+    <div className={`imgslot${tall ? ' tall' : ''}`} style={grow ? { flex: 1 } : undefined}>
       <span className="material-symbols-outlined">add_photo_alternate</span>
       <div className="imgslot-t">{t}</div>
       <div className="imgslot-d">{d}</div>
@@ -700,6 +700,7 @@ const SLIDES: ReactNode[] = [
     </div>
     <ImgSlot
       tall
+      grow
       t="제안: 컨설팅 신청 → 매칭 → 톡 화면 캡처"
       d="수요기업의 컨설팅 신청 화면과, 매칭된 컨설턴트와의 톡(일정 조율 · 질의) 화면"
     />
@@ -813,6 +814,7 @@ const SLIDES: ReactNode[] = [
     </div>
     <ImgSlot
       tall
+      grow
       t="제안: DT 화면 캡처 (대형)"
       d="태양광 설치 전 예상 효과를 3D로 보여주는 디지털 트윈 화면 — 이 덱에서 가장 큰 이미지"
     />
