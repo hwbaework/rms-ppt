@@ -125,6 +125,17 @@ const CSS = `
 .vs-h .material-symbols-outlined{font-size:1.1vw}
 .vs-panel.ours .vs-h{color:var(--accent)}
 
+/* ── 허브 트리 (메인 플랫폼 1 → 특성 가지 3) — 순서가 아니라 병렬 특성 ── */
+.tree{display:flex;align-items:center;gap:0;flex:1}
+.tree>.mnode{flex-shrink:0}
+.tree-svg{width:4vw;height:11vw;flex-shrink:0}
+.tree-items{flex:1;display:flex;flex-direction:column;gap:.6vw}
+.titem{display:flex;align-items:center;gap:.7vw;background:var(--chip);border-radius:11px;padding:.55vw .9vw;text-align:left}
+.titem-ic{width:2vw;height:2vw;border-radius:50%;background:#fff;color:var(--accent);border:1px solid var(--tint-line);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.titem-ic .material-symbols-outlined{font-size:1vw}
+.titem b{display:block;color:var(--ink);font-size:.83vw;font-weight:700}
+.titem small{display:block;color:var(--muted);font-size:.7vw;margin-top:.12vw;line-height:1.5}
+
 /* ── 페르소나 허브 (중앙 플랫폼 + 5 방사 노드) ── */
 .hub{position:relative;flex:1;min-height:13vw}
 .hub svg{position:absolute;inset:0;width:100%;height:100%}
@@ -498,14 +509,27 @@ const SLIDES: ReactNode[] = [
       </div>
       <div className="vs-panel ours">
         <div className="vs-h"><span className="material-symbols-outlined">all_inclusive</span>RMS — 하나의 메인 플랫폼</div>
-        <div className="mflow">
-          <MNode tone="fill" ic="hub" t="메인 플랫폼" s="울산에 국한되지 않는 구조" />
-          <Arr />
-          <MNode ic="location_on" t="울산 사용자 접속" s="울산 정보만 열람" />
-          <Arr />
-          <MNode ic="update" t="사업 종료 이후에도" s="지속 운영 · 업데이트" />
-          <Arr />
-          <MNode ic="person_add" t="신규 가입자" s="에자자 참여 기업이 아니어도 쉽게 접근" />
+        <div className="tree">
+          <MNode tone="fill" ic="hub" t="메인 플랫폼" s="울산에 국한되지&#10;않는 구조" />
+          <svg className="tree-svg" viewBox="0 0 40 100" preserveAspectRatio="none" fill="none" aria-hidden>
+            <path d="M 2 50 C 20 50 20 14 38 14" stroke="#c9d6ea" strokeWidth="1.5" />
+            <path d="M 2 50 L 38 50" stroke="#c9d6ea" strokeWidth="1.5" />
+            <path d="M 2 50 C 20 50 20 86 38 86" stroke="#c9d6ea" strokeWidth="1.5" />
+          </svg>
+          <div className="tree-items">
+            <div className="titem">
+              <span className="titem-ic"><span className="material-symbols-outlined">location_on</span></span>
+              <span><b>울산 사용자가 접속하면, 울산 정보만 열람</b><small>하나의 플랫폼 위에서 지역별로 보이는 구조</small></span>
+            </div>
+            <div className="titem">
+              <span className="titem-ic"><span className="material-symbols-outlined">update</span></span>
+              <span><b>사업 종료 이후에도 지속 운영 · 업데이트</b><small>납품형처럼 멈추지 않는다</small></span>
+            </div>
+            <div className="titem">
+              <span className="titem-ic"><span className="material-symbols-outlined">person_add</span></span>
+              <span><b>신규 가입자도 쉽게 접근</b><small>에자자 사업 참여 기업이 아니어도</small></span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
