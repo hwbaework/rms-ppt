@@ -87,7 +87,10 @@ const CSS = `
 /* ── 아이콘 타일 ── */
 .press{display:grid;grid-template-columns:repeat(4,1fr);gap:.8vw}
 .press.p3{grid-template-columns:repeat(3,1fr)}
-.press-card{background:#fff;border:1px solid var(--hair);border-radius:14px;padding:1vw .8vw;text-align:center}
+.press-card{background:#fff;border:1px solid var(--hair);border-radius:14px;padding:1vw .8vw;text-align:center;display:flex;flex-direction:column}
+/* 상태 바·태그는 카드 하단에 정렬 — 타일마다 줄 수가 달라도 라인이 맞도록 */
+.press-card .wip,.press-card .wip-done,.press-card .wip-empty{margin-top:auto}
+.press-card .press-k+.wip,.press-card .press-k+.wip-done,.press-card .press-k+.wip-empty{padding-top:.55vw}
 .press-card.soon{background:var(--chip);border-style:dashed}
 .press-ic{width:2.6vw;height:2.6vw;border-radius:50%;margin:0 auto .45vw;display:flex;align-items:center;justify-content:center;background:var(--tint);color:var(--accent)}
 .press-ic .material-symbols-outlined{font-size:1.35vw}
@@ -470,7 +473,7 @@ const SLIDES: ReactNode[] = [
         <Tile ic="support_agent" k="컨설팅" bar="done" st={<span className="tag blue live"><i />QA · 안정화 중</span>} />
         <Tile ic="monitoring" k="모니터링" bar="done" st={<span className="tag blue live"><i />QA · 안정화 중</span>} />
         <Tile ic="swap_horiz" k="전력거래" bar="done" st={<span className="tag blue live"><i />QA · 안정화 중</span>} />
-        <Tile ic="view_in_ar" k="DT" d="디지털 트윈" bar="done" st={<span className="tag blue live"><i />QA · 안정화 중</span>} />
+        <Tile ic="view_in_ar" k="DT(디지털트윈)" bar="done" st={<span className="tag blue live"><i />QA · 안정화 중</span>} />
       </div>
       <div className="press p3">
         <Tile soon ic="co2" k="탄소배출관리" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
