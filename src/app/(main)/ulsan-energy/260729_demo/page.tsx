@@ -148,6 +148,25 @@ const CSS = `
 .pbox{border:1.5px solid #93c5fd;border-radius:14px;background:var(--tint);padding:1.5vw 1.2vw 1.2vw;position:relative}
 .pbox-tag{position:absolute;top:-.75vw;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;border-radius:999px;padding:.16vw .9vw;font-size:.7vw;font-weight:700;white-space:nowrap}
 
+/* ── 2026 연간 트랙 (상반기 진행 → 하반기 예정 + 현재 마커) ── */
+.yeartrack{position:relative;height:2.3vw;display:flex}
+.yt-h1{width:53%;background:linear-gradient(90deg,#1d4ed8,#3b82f6);border-radius:999px 0 0 999px;color:#fff;display:flex;align-items:center;justify-content:center;gap:.5vw;font-size:.8vw;font-weight:700;position:relative;overflow:hidden}
+.yt-h1 .material-symbols-outlined{font-size:.95vw}
+.yt-h1:after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);transform:translateX(-100%);animation:sheen 2.6s ease-in-out infinite}
+@keyframes sheen{to{transform:translateX(100%)}}
+.yt-h2{flex:1;border:1.5px dashed #b9c6dd;border-left:none;border-radius:0 999px 999px 0;background:var(--chip);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:.8vw;font-weight:700}
+.yt-now{position:absolute;top:-1.25vw;transform:translateX(-50%);color:var(--accent);font-size:.66vw;font-weight:800;display:flex;flex-direction:column;align-items:center;line-height:1.2;z-index:1}
+.yt-now:after{content:"";width:2px;height:3.3vw;background:var(--accent);border-radius:2px;margin-top:.15vw;box-shadow:0 0 8px rgba(37,99,235,.45)}
+.split43{display:grid;grid-template-columns:53fr 47fr;gap:1vw}
+/* 구축 중 — 움직이는 작업 스트라이프 (진행률 주장 없이 "작업 중" 상태 표시) */
+.wip{height:.4vw;border-radius:999px;overflow:hidden;background:#e6ecf7;margin-top:.55vw}
+.wip i{display:block;height:100%;border-radius:999px;background:repeating-linear-gradient(-45deg,#2563eb 0 .45vw,#60a5fa .45vw .9vw);background-size:1.28vw 100%;animation:crawl 1.1s linear infinite}
+@keyframes crawl{to{background-position:1.28vw 0}}
+.wip-empty{height:.4vw;border-radius:999px;border:1.5px dashed #c9d3e2;margin-top:.55vw}
+.press-st{margin-top:.45vw;display:flex;justify-content:center}
+.tag.live i{animation:livepulse 1.6s ease-in-out infinite}
+@keyframes livepulse{0%,100%{opacity:.4}50%{opacity:1}}
+
 /* ── 단계 레인 (트랙 라벨 + 스텝 칩 체인 — 사업계획서 세부추진일정 재구성) ── */
 .glanes{background:var(--card);border:1px solid var(--hair);border-radius:14px;overflow:hidden}
 .glane{display:flex;align-items:center;gap:1vw;padding:.6vw 1vw;border-bottom:1px solid var(--hair)}
@@ -298,12 +317,29 @@ function Arr() {
   return <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
 }
 
-function Tile({ ic, k, d, soon }: { ic: string; k: string; d?: string; soon?: boolean }) {
+function Tile({
+  ic,
+  k,
+  d,
+  soon,
+  bar,
+  st,
+}: {
+  ic: string
+  k: string
+  d?: string
+  soon?: boolean
+  bar?: 'wip' | 'todo'
+  st?: ReactNode
+}) {
   return (
     <div className={`press-card${soon ? ' soon' : ''}`}>
       <div className="press-ic"><span className="material-symbols-outlined">{ic}</span></div>
       <div className="press-k">{k}</div>
       {d && <div className="press-d">{d}</div>}
+      {bar === 'wip' && <div className="wip"><i /></div>}
+      {bar === 'todo' && <div className="wip-empty" />}
+      {st && <div className="press-st">{st}</div>}
     </div>
   )
 }
@@ -418,21 +454,24 @@ const SLIDES: ReactNode[] = [
     title={<>상반기 <span className="hl">4</span>개 구축 중 · 하반기 <span className="hl">3</span>개 계획</>}
     lede={<>지금 보여드리는 것은 <b>현재까지의 구축 결과물</b>입니다.</>}
   >
-    <div>
-      <div className="block-label"><b>상반기 — 구축 중인 핵심 서비스 영역</b></div>
-      <div className="press">
-        <Tile ic="support_agent" k="컨설팅" />
-        <Tile ic="monitoring" k="모니터링" />
-        <Tile ic="swap_horiz" k="전력거래" />
-        <Tile ic="view_in_ar" k="DT" d="디지털 트윈" />
+    <div style={{ paddingTop: '1.3vw' }}>
+      <div className="yeartrack">
+        <div className="yt-h1"><span className="material-symbols-outlined">construction</span>상반기 — 4개 구축 중</div>
+        <div className="yt-h2">하반기 — 3개 개발 계획 (12p 로드맵)</div>
+        <span className="yt-now" style={{ left: '58%' }}>지금 · 7월</span>
       </div>
     </div>
-    <div>
-      <div className="block-label"><b>하반기 — 개발 계획 (12p 로드맵에서 상세)</b></div>
+    <div className="split43">
+      <div className="press">
+        <Tile ic="support_agent" k="컨설팅" bar="wip" st={<span className="tag blue live"><i />구축 중</span>} />
+        <Tile ic="monitoring" k="모니터링" bar="wip" st={<span className="tag blue live"><i />구축 중</span>} />
+        <Tile ic="swap_horiz" k="전력거래" bar="wip" st={<span className="tag blue live"><i />구축 중</span>} />
+        <Tile ic="view_in_ar" k="DT" d="디지털 트윈" bar="wip" st={<span className="tag blue live"><i />구축 중</span>} />
+      </div>
       <div className="press p3">
-        <Tile soon ic="co2" k="탄소배출관리" />
-        <Tile soon ic="storefront" k="e데이터마켓" />
-        <Tile soon ic="hub" k="VPP" />
+        <Tile soon ic="co2" k="탄소배출관리" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
+        <Tile soon ic="storefront" k="e데이터마켓" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
+        <Tile soon ic="hub" k="VPP" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
       </div>
     </div>
   </ContentSlide>,
