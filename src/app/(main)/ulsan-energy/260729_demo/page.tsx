@@ -125,25 +125,22 @@ const CSS = `
 .vs-h .material-symbols-outlined{font-size:1.1vw}
 .vs-panel.ours .vs-h{color:var(--accent)}
 
-/* ── 유입 다이어그램 (사용자들이 플랫폼으로 흘러들어온다) ── */
-.inflow{display:grid;grid-template-columns:auto 1fr auto;grid-auto-rows:1fr;align-items:center;column-gap:.7vw;row-gap:.55vw;flex:1}
-.titem{display:flex;align-items:center;gap:.7vw;background:var(--chip);border-radius:11px;padding:.55vw .9vw;text-align:left}
-.titem-ic{width:2vw;height:2vw;border-radius:50%;background:#fff;color:var(--accent);border:1px solid var(--tint-line);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.titem-ic .material-symbols-outlined{font-size:1vw}
-.titem b{display:block;color:var(--ink);font-size:.83vw;font-weight:700}
-.titem small{display:block;color:var(--muted);font-size:.7vw;margin-top:.12vw;line-height:1.5}
-/* 유입 라인 — 점이 사용자 쪽에서 플랫폼 쪽으로 계속 흘러간다 */
-.itrack{position:relative;height:2px;background:linear-gradient(90deg,#e3eaf5,#bfd3f5)}
-.itrack i{position:absolute;top:50%;left:0;width:.5vw;height:.5vw;border-radius:50%;background:var(--accent);transform:translate(-50%,-50%);animation:flowdot 2.4s linear infinite}
-.itrack i:nth-child(2){animation-delay:.8s}
-.itrack i:nth-child(3){animation-delay:1.6s}
-@keyframes flowdot{0%{left:0;opacity:0}12%{opacity:1}88%{opacity:1}100%{left:100%;opacity:0}}
+/* ── 순환 사이클 (메인 플랫폼 중심 — 가입→참여→수익→관리가 고리로 돈다) ── */
+.cyc{position:relative;flex:1;min-height:13.5vw}
+.cyc svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.cyc-orbit{fill:none;stroke:#a9c4ef;stroke-width:1.6;stroke-dasharray:5 4;animation:orbit 7s linear infinite}
+@keyframes orbit{to{stroke-dashoffset:-108}}
+.cnode{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:.22vw;text-align:center;z-index:1}
+.cnode-ic{position:relative;width:2.4vw;height:2.4vw;border-radius:50%;background:#fff;border:1px solid var(--tint-line);color:var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(37,99,235,.14)}
+.cnode-ic .material-symbols-outlined{font-size:1.15vw}
+.cnode-no{position:absolute;top:-.35vw;right:-.4vw;width:1.05vw;height:1.05vw;border-radius:50%;background:var(--accent);color:#fff;font-size:.6vw;font-weight:800;display:flex;align-items:center;justify-content:center}
+.cnode b{font-size:.76vw;color:var(--ink);white-space:nowrap}
+.cnode small{font-size:.62vw;color:var(--muted);white-space:nowrap}
 /* 살아있는 허브 — 펄스 링이 계속 퍼진다 */
-.ihub{position:relative;display:flex;flex-direction:column;align-items:center;gap:.6vw;padding:0 .4vw}
-.ihub-wrap{position:relative;width:6.2vw;height:6.2vw}
-.ihub-c{position:absolute;inset:0;border-radius:50%;background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15vw;box-shadow:0 8px 26px rgba(37,99,235,.3);z-index:1;text-align:center}
-.ihub-c .material-symbols-outlined{font-size:1.5vw}
-.ihub-c b{font-size:.78vw;line-height:1.3}
+.ihub-wrap{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:5.6vw;height:5.6vw;z-index:1}
+.ihub-c{position:absolute;inset:0;border-radius:50%;background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.12vw;box-shadow:0 8px 26px rgba(37,99,235,.3);z-index:1;text-align:center}
+.ihub-c .material-symbols-outlined{font-size:1.4vw}
+.ihub-c b{font-size:.74vw;line-height:1.3}
 .ihub-ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(37,99,235,.45);animation:ringout 2.6s ease-out infinite}
 .ihub-ring.r2{animation-delay:1.3s}
 @keyframes ringout{from{transform:scale(1);opacity:.7}to{transform:scale(1.75);opacity:0}}
@@ -521,33 +518,35 @@ const SLIDES: ReactNode[] = [
       </div>
       <div className="vs-panel ours">
         <div className="vs-h"><span className="material-symbols-outlined">all_inclusive</span>RMS — 하나의 메인 플랫폼</div>
-        <div className="inflow">
-          <div className="titem">
-            <span className="titem-ic"><span className="material-symbols-outlined">manage_accounts</span></span>
-            <span><b>울산 관리자 · 울산 사용자</b><small>접속하면 울산 정보만 열람</small></span>
-          </div>
-          <div className="itrack"><i /><i /><i /></div>
-          <div className="ihub" style={{ gridColumn: 3, gridRow: '1 / 4' }}>
-            <div className="ihub-wrap">
-              <span className="ihub-ring" />
-              <span className="ihub-ring r2" />
-              <div className="ihub-c">
-                <span className="material-symbols-outlined">hub</span>
-                <b>메인<br />플랫폼</b>
-              </div>
+        <div className="cyc">
+          {/* 순환 궤도 — 대시가 시계방향으로 계속 돈다 */}
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
+            <ellipse className="cyc-orbit" cx="50" cy="44" rx="38" ry="34" />
+          </svg>
+          <div className="ihub-wrap">
+            <span className="ihub-ring" />
+            <span className="ihub-ring r2" />
+            <div className="ihub-c">
+              <span className="material-symbols-outlined">hub</span>
+              <b>메인<br />플랫폼</b>
             </div>
-            <span className="tag blue live"><i />사업 종료 후에도 운영 · 업데이트</span>
           </div>
-          <div className="titem">
-            <span className="titem-ic"><span className="material-symbols-outlined">factory</span></span>
-            <span><b>에자자 참여 기업</b><small>사업과 함께 이용 중</small></span>
-          </div>
-          <div className="itrack"><i /><i /><i /></div>
-          <div className="titem">
-            <span className="titem-ic"><span className="material-symbols-outlined">person_add</span></span>
-            <span><b>신규 가입자</b><small>참여 기업이 아니어도 쉽게 접근</small></span>
-          </div>
-          <div className="itrack"><i /><i /><i /></div>
+          {[
+            { x: '50%', y: '10%', no: '1', ic: 'location_on', t: '울산 에자자 사업', s: '여기서 시작' },
+            { x: '86%', y: '33%', no: '2', ic: 'person_add', t: '신규 가입', s: '참여 기업이 아니어도' },
+            { x: '72%', y: '72%', no: '3', ic: 'touch_app', t: '참여 · 이용', s: '필요한 기능 사용' },
+            { x: '28%', y: '72%', no: '4', ic: 'payments', t: '수익 창출', s: '플랫폼 위에서 거래' },
+            { x: '14%', y: '33%', no: '5', ic: 'settings_suggest', t: '관리 · 운영', s: '종료 후에도 업데이트' },
+          ].map((n) => (
+            <div className="cnode" key={n.no} style={{ left: n.x, top: n.y }}>
+              <span className="cnode-ic">
+                <span className="material-symbols-outlined">{n.ic}</span>
+                <span className="cnode-no">{n.no}</span>
+              </span>
+              <b>{n.t}</b>
+              <small>{n.s}</small>
+            </div>
+          ))}
         </div>
       </div>
     </div>
