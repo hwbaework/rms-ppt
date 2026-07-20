@@ -404,18 +404,13 @@ const SLIDES: ReactNode[] = [
     <p className="cover-eyebrow">Ulsan-Mipo Energy Independence · RMS</p>
     <h1 className="cover-title">지속가능한<br />통합 에너지 플랫폼</h1>
     <p className="cover-sub">
-      울산미포 에너지자급자족 인프라 구축 및 운영사업 — <b>통합에너지플랫폼 구축 담당 RMS</b><br />
-      플랫폼 구축 현황과 방향성을 말씀드립니다
+      울산미포 에너지자급자족 인프라 구축 및 운영사업<br />
+      통합에너지플랫폼 구축 현황과 방향성
     </p>
-    <div className="cover-steps">
-      <span className="cover-step"><span className="material-symbols-outlined">co_present</span>PPT 발표<small> — 현황 · 방향성</small></span>
-      <span className="cover-step-arr">→</span>
-      <span className="cover-step"><span className="material-symbols-outlined">play_circle</span>시연 영상</span>
-      <span className="cover-step-arr">→</span>
-      <span className="cover-step"><span className="material-symbols-outlined">computer</span>실제 플랫폼 접속<small> — 주요 기능 1~2개 직접</small></span>
-    </div>
     <div className="cover-meta">
       <img src="/images/logo.png" alt="RMS GROUP" />
+      <i />
+      <span>RMS</span>
       <i />
       <span>2026. 07. 29</span>
     </div>
