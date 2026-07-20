@@ -128,7 +128,7 @@ const CSS = `
 /* ── 순환 사이클 (메인 플랫폼 중심 — 가입→참여→수익→관리가 고리로 돈다) ── */
 .cyc{position:relative;flex:1;min-height:13.5vw}
 .cyc svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.cyc-seg{fill:none;stroke:#c9d8f0;stroke-width:1.3;stroke-linecap:round}
+.cyc-seg{fill:none;stroke:#aac3ee;stroke-width:1.3;stroke-linecap:round}
 /* 빛나는 점 — CSS motion path로 각 호를 따라 이동 (SMIL은 이 환경에서 타임라인이 멈춰 있어 사용 불가) */
 .cyc-dot{fill:#3b82f6;offset-rotate:0deg;animation:travel 3s linear infinite}
 @keyframes travel{0%{offset-distance:0%;opacity:0}12%{opacity:1}88%{opacity:1}100%{offset-distance:100%;opacity:0}}
@@ -530,7 +530,7 @@ const SLIDES: ReactNode[] = [
             <defs>
               {/* 가는 셰브런 화살촉 — 채운 삼각형보다 절제된 인상 */}
               <marker id="cycArr" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-                <path d="M 1.5 1 L 8 5 L 1.5 9" fill="none" stroke="#6b96dd" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M 1.5 1 L 8 5 L 1.5 9" fill="none" stroke="#aac3ee" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
               </marker>
               <filter id="cycGlow" x="-200%" y="-200%" width="500%" height="500%">
                 <feGaussianBlur stdDeviation="1" result="b" />
