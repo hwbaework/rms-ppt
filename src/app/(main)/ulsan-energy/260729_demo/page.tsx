@@ -148,6 +148,31 @@ const CSS = `
 .pbox{border:1.5px solid #93c5fd;border-radius:14px;background:var(--tint);padding:1.5vw 1.2vw 1.2vw;position:relative}
 .pbox-tag{position:absolute;top:-.75vw;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;border-radius:999px;padding:.16vw .9vw;font-size:.7vw;font-weight:700;white-space:nowrap}
 
+/* ── 단계 레인 (트랙 라벨 + 스텝 칩 체인 — 사업계획서 세부추진일정 재구성) ── */
+.glanes{background:var(--card);border:1px solid var(--hair);border-radius:14px;overflow:hidden}
+.glane{display:flex;align-items:center;gap:1vw;padding:.6vw 1vw;border-bottom:1px solid var(--hair)}
+.glane:last-child{border-bottom:none}
+.glane-who{width:12.5vw;flex-shrink:0;display:flex;align-items:center;gap:.5vw;color:var(--ink);font-size:.8vw;font-weight:700}
+.glane-who .material-symbols-outlined{font-size:1.05vw;color:var(--accent)}
+.glane-steps{flex:1;display:flex;align-items:center;gap:.45vw;flex-wrap:wrap}
+.gchip{background:var(--chip);border-radius:8px;padding:.32vw .7vw;color:var(--ink);font-size:.74vw;font-weight:600;white-space:nowrap}
+.gchip.on{background:var(--tint);border:1px solid var(--tint-line);color:#1d4ed8}
+.garr{color:#c3ccda;font-size:.85vw;flex-shrink:0}
+
+/* ── 구축률 누적 바 (연차별 목표 세그먼트) ── */
+.pbar{display:flex;height:1.5vw;border-radius:8px;overflow:hidden}
+.pseg{display:flex;align-items:center;justify-content:center;color:#fff;font-size:.68vw;font-weight:700;white-space:nowrap}
+.pseg.y1{background:#93c5fd}
+.pseg.y2{background:#60a5fa}
+.pseg.y3{background:var(--accent)}
+.pseg.y4{background:#e2e8f0;color:#64748b}
+.pbar-cap{position:relative;height:1.2vw;margin-top:.3vw}
+.pbar-mark{position:absolute;transform:translateX(-50%);color:var(--accent);font-size:.7vw;font-weight:800;white-space:nowrap}
+.pbar-mark:before{content:"▲";display:block;text-align:center;font-size:.55vw;line-height:1}
+
+/* ── 근거 캡션 ── */
+.srcline{color:var(--muted);font-size:.68vw;line-height:1.6}
+
 /* ── 이미지 플레이스홀더 (실제 화면 캡처 자리 — 가장 중요) ── */
 .imgslot{border:2px dashed #c7d2e3;border-radius:14px;background:var(--chip);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.1vw;gap:.35vw;min-height:9vw}
 .imgslot.tall{min-height:12vw}
@@ -329,19 +354,60 @@ const SLIDES: ReactNode[] = [
   </div>,
 
   /* ── 2page : 사업 추진 경과 (1~2차년도) ── */
+  /*    연차별 단계·3차년도 할 일·구축률: [울산미포에자자] 3차년도 사업계획서(2026.03) 재구성 */
   <ContentSlide key="p2" no="02" sec="사업 추진 경과 (1~2차년도)" title={<>지금은 <span className="hl">3차년도</span> — 계획대로 진행 중입니다</>}>
     <Flow
       steps={[
-        { no: '1~2차년도', name: '요구사항 분석 · 설계', sub: '플랫폼 구축을 위한 기반 작업' },
-        { no: '1~2차년도', name: '통합관제센터 구축', sub: '' },
-        { no: '3차년도 · 올해', name: '핵심 기능 개발', sub: '계획상 핵심 기능 개발 년도 — 계획된 일정에 따라 정상 진행', final: true },
+        { no: '1차년도 · 2024', name: '요구사항 분석 · 설계', sub: '프로세스 · 아키텍처 설계, 관제 시나리오 분석' },
+        { no: '2차년도 · 2025', name: '기반 구축', sub: '네트워크 · 데이터센터 설계, 통합관제센터(상황실) 구축' },
+        { no: '3차년도 · 올해', name: '핵심 기능 개발', sub: '계획된 일정에 따라 정상 진행 중', final: true },
+        { no: '4차년도 · 2027', name: '고도화 · 이관', sub: '테스트 · 교육 · 시스템 이관, 플랫폼 고도화' },
       ]}
     />
-    <ImgSlot
-      tall
-      t="제안: 통합관제센터 사진"
-      d="1~2차년도에 구축한 통합관제센터 실사 — 상황판이 켜진 정면 컷"
-    />
+
+    <div>
+      <div className="block-label"><b>3차년도 — ESG 에너지 플랫폼, 단계별로 해야 할 일</b></div>
+      <div className="glanes">
+        <div className="glane">
+          <div className="glane-who"><span className="material-symbols-outlined">dns</span>수집인프라 · 데이터센터</div>
+          <div className="glane-steps">
+            <span className="gchip">현장 설치</span><span className="garr">→</span>
+            <span className="gchip">단위 · 통합 테스트</span><span className="garr">→</span>
+            <span className="gchip on">운영 · 안정화</span>
+          </div>
+        </div>
+        <div className="glane">
+          <div className="glane-who"><span className="material-symbols-outlined">hub</span>ESG 에너지 플랫폼</div>
+          <div className="glane-steps">
+            <span className="gchip">프로세스 설계</span><span className="garr">→</span>
+            <span className="gchip">개발 설계</span><span className="garr">→</span>
+            <span className="gchip">플랫폼 구축</span><span className="garr">→</span>
+            <span className="gchip on">테스트 · 안정화</span>
+          </div>
+        </div>
+        <div className="glane">
+          <div className="glane-who"><span className="material-symbols-outlined">monitoring</span>통합관제센터</div>
+          <div className="glane-steps">
+            <span className="gchip">디버깅</span><span className="garr">→</span>
+            <span className="gchip on">안정화</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div className="block-label"><b>ESG 에너지 플랫폼 구축률 — 연차별 목표</b></div>
+      <div className="pbar">
+        <div className="pseg y1" style={{ width: '15%' }}>1차 15%</div>
+        <div className="pseg y2" style={{ width: '35%' }}>2차 35%</div>
+        <div className="pseg y3" style={{ width: '30%' }}>3차 30%</div>
+        <div className="pseg y4" style={{ width: '20%' }}>4차 20%</div>
+      </div>
+      <div className="pbar-cap">
+        <span className="pbar-mark" style={{ left: '80%' }}>3차년도 말 누적 80%</span>
+      </div>
+      <p className="srcline">근거 — [울산미포에자자] 3차년도 사업계획서(2026.03) 성과지표 · 추진일정 총괄계획 재구성</p>
+    </div>
   </ContentSlide>,
 
   /* ── 3page : 3차년도 개발 현황 요약 ── */
