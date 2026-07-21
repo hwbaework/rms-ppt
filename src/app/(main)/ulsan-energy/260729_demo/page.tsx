@@ -294,6 +294,13 @@ const CSS = `
 .close-thanks{color:rgba(148,168,200,.75);font-size:.97vw;position:relative;z-index:1;display:flex;align-items:center;gap:1vw}
 .close-thanks img{height:1.3vw;filter:brightness(0) invert(1);opacity:.85}
 
+/* ── 감사합니다 (마지막 다크) ── */
+.thanks-inner{text-align:center;position:relative;z-index:1;align-self:center}
+.thanks-inner img{height:2.4vw;filter:brightness(0) invert(1);margin-bottom:2.6vw;opacity:.92}
+.thanks-title{color:#fff;font-size:3.1vw;font-weight:800;letter-spacing:-.01em;margin-bottom:1.3vw}
+.thanks-tagline{color:var(--accent-soft);font-size:1.05vw;font-weight:300;line-height:1.8}
+.thanks-contact{color:rgba(148,168,200,.6);font-size:.9vw;margin-top:2.8vw;letter-spacing:.08em}
+
 /* ── 모션 ── */
 @keyframes drift-a{0%{transform:translate(0,0) scale(1);opacity:.8}50%{opacity:1}100%{transform:translate(7vw,4.5vw) scale(1.25);opacity:.85}}
 @keyframes drift-b{0%{transform:translate(0,0) scale(1);opacity:.85}50%{opacity:1}100%{transform:translate(-5.5vw,-4vw) scale(1.22);opacity:.8}}
@@ -308,6 +315,7 @@ const CSS = `
 .slide.active .cover-sub,.slide.active .close-sub{animation:rise .65s cubic-bezier(.2,.6,.2,1) .24s both}
 .slide.active .cover-steps,.slide.active .close-flow{animation:rise .65s cubic-bezier(.2,.6,.2,1) .34s both}
 .slide.active .cover-meta,.slide.active .close-thanks{animation:rise .65s cubic-bezier(.2,.6,.2,1) .44s both}
+.slide.active .thanks-inner{animation:rise .8s cubic-bezier(.2,.6,.2,1) both}
 .slide.active .cs-head{animation:rise .5s cubic-bezier(.2,.6,.2,1) both}
 .slide.active .cs-title{animation:rise .55s cubic-bezier(.2,.6,.2,1) .08s both}
 .slide.active .lede{animation:rise .6s cubic-bezier(.2,.6,.2,1) .14s both}
@@ -918,7 +926,19 @@ const SLIDES: ReactNode[] = [
     </div>
     <div className="close-thanks">
       <img src="/images/logo.png" alt="RMS GROUP" />
-      <span>감사합니다 · rmsgroup.co.kr</span>
+      <span>RMS</span>
+    </div>
+  </div>,
+
+  /* ── 감사합니다 ── */
+  <div className="dark-stage" key="thanks">
+    <div className="thanks-inner">
+      <img src="/images/logo.png" alt="RMS GROUP" />
+      <div className="thanks-title">감사합니다</div>
+      <div className="thanks-tagline">
+        Improving the quality of life and<br />creating a sustainable &amp; resilient society
+      </div>
+      <div className="thanks-contact">rmsgroup.co.kr</div>
     </div>
   </div>,
 ]
