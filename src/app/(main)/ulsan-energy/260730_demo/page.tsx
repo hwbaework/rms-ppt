@@ -348,11 +348,13 @@ const CSS = `
 .shot-dots i{width:.45vw;height:.45vw;border-radius:50%;background:rgba(255,255,255,.35);transition:background .3s,transform .3s}
 .shot-dots i.on{background:#fff;transform:scale(1.25)}
 
-/* ── 좌측 컬럼 높이 통일 (7~12P) — 절차가 남는 높이를 균등 분배, 기대효과는 하단 고정 ── */
+/* ── 좌측 컬럼 높이 통일 (7~12P) — 칩·카드 박스 자체가 커져서 남는 높이를 채운다
+   (간격을 벌리는 방식 금지 — 3P 타일처럼 박스가 늘어나야 함) ── */
 .proc{flex:1;display:flex;flex-direction:column;min-height:0}
-.proc .pstrip.v{flex:1;justify-content:space-evenly}
-.proc .dead{flex:1;justify-content:space-evenly}
-.fcol>.lk-cards{flex:1;justify-content:space-evenly}
+.proc .pstrip.v{flex:1}
+.proc .pstrip.v .pchip{flex:1;display:flex;flex-direction:column;justify-content:center}
+.fcol>.lk-cards{flex:1}
+.fcol>.lk-cards .lk-card{flex:1}
 
 /* ── 기대효과 리스트 (7~12P 공통 — 절차 아래 체크 행) ── */
 .fx{display:flex;flex-direction:column;gap:.45vw}
