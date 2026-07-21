@@ -1045,8 +1045,8 @@ const SLIDES: ReactNode[] = [
     key="p12"
     no="04"
     sec="하반기 개발 로드맵"
-    title={<>딥링크로 연동되는 <span className="hl">세 개의 신규 서비스</span></>}
-    lede={<>세 기능은 각각 범위가 매우 방대해 — 기존 플랫폼 내 탑재가 아닌 <b>신규 플랫폼 연동</b>으로 서비스합니다.</>}
+    title={<>화면까지 구성된 <span className="hl">세 개의 신규 서비스</span></>}
+    lede={<>세 기능은 범위가 방대해 <b>신규 플랫폼 연동(딥링크)</b>으로 서비스하며 — 화면을 구성해 검토하고 있습니다.</>}
   >
     <div className="feat">
       <div className="fcol">
@@ -1068,8 +1068,8 @@ const SLIDES: ReactNode[] = [
           </div>
         </div>
         <div className="lk-note" style={{ borderTop: 'none', paddingTop: 0, justifyContent: 'flex-start' }}>
-          <span className="material-symbols-outlined">sync_alt</span>
-          딥링크 연동 — <b>하나의 플랫폼에서 자연스럽게 이동</b>, 서비스 연속성 영향 없음
+          <span className="material-symbols-outlined">rate_review</span>
+          세 서비스 모두 <b>화면 구성 완료</b> — 현재 내부 검토 진행 중
         </div>
       </div>
       <ImgSlot
