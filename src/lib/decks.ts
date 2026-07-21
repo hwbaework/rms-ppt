@@ -17,10 +17,18 @@ export const decks: DeckMeta[] = [
   {
     region: '울산 에너지자급자족',
     date: '2026-07-30',
+    title: '통합에너지플랫폼 구축 현황 (작업본)',
+    href: '/ulsan-energy/260730_demo-v2',
+    description: '수정 작업 중인 개정본 — 고정본에서 분기',
+    tags: ['Platform', 'WIP'],
+  },
+  {
+    region: '울산 에너지자급자족',
+    date: '2026-07-30',
     title: '통합에너지플랫폼 구축 현황',
     href: '/ulsan-energy/260730_demo',
-    description: '발표 시나리오 v0.1 — 13페이지 1:1 구성 (경과 · 방향성 · 핵심 기능 5 · 로드맵)',
-    tags: ['Platform', 'RE100', 'Roadmap'],
+    description: '고정 스냅샷 — 경과 · 방향성 · 핵심 기능 4 · 로드맵 · 확장',
+    tags: ['Platform', 'RE100', 'Fixed'],
   },
   {
     region: '울산 에너지자급자족',
