@@ -290,13 +290,14 @@ const CSS = `
 
 /* ── 압축 프로세스 스트립 (캡처에 최대 높이를 주기 위한 한 줄 칩 플로우) ── */
 .pstrip{display:flex;align-items:center;gap:.6vw;flex-wrap:wrap;justify-content:center}
-.pchip{background:var(--chip);border-radius:10px;padding:.45vw 1vw;text-align:left}
-.pchip b{display:block;font-size:.88vw;color:var(--ink);font-weight:700;white-space:nowrap}
+.pchip{background:var(--chip);border:1px solid transparent;border-radius:10px;padding:.45vw 1vw;text-align:left;transition:background .35s,border-color .35s,box-shadow .35s}
+.pchip b{display:block;font-size:.88vw;color:var(--ink);font-weight:700;white-space:nowrap;transition:color .35s}
 .pchip small{display:block;font-size:.72vw;color:var(--muted);margin-top:.08vw;white-space:nowrap}
 .pchip.gray{background:#f1f5f9}
 .pchip.gray b{color:#64748b}
-.pchip.acc{background:var(--tint);border:1px solid var(--tint-line)}
-.pchip.acc b{color:#1d4ed8}
+/* 현재 보이는 캡처와 동기화되는 활성 칩 */
+.pchip.on{background:var(--tint);border-color:var(--tint-line);box-shadow:0 4px 14px rgba(37,99,235,.14)}
+.pchip.on b{color:#1d4ed8}
 
 /* ── 실제 화면 캡처 자동 순환 뷰어 ── */
 .shot{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--hair);background:#0a1220;box-shadow:0 10px 28px rgba(11,21,38,.12);min-height:11vw}
@@ -481,23 +482,52 @@ function Tile({
 }
 
 // 실제 화면 캡처 자동 순환 — 여러 장을 일정 간격으로 크로스페이드 (읽을 시간 고려 4초)
-function AutoShots({ srcs, interval = 4000 }: { srcs: string[]; interval?: number }) {
+// steps를 주면 위 칩 스트립이 현재 캡처와 동기화되어 하이라이트된다
+function AutoShots({
+  srcs,
+  steps,
+  lead,
+  interval = 4000,
+}: {
+  srcs: string[]
+  steps?: { b: string; s: string }[]
+  lead?: { b: string; s: string }
+  interval?: number
+}) {
   const [i, setI] = useState(0)
   useEffect(() => {
     const t = setInterval(() => setI((v) => (v + 1) % srcs.length), interval)
     return () => clearInterval(t)
   }, [srcs.length, interval])
   return (
-    <div className="shot" style={{ flex: 1 }}>
-      {srcs.map((s, idx) => (
-        <img key={s} src={s} alt="플랫폼 화면 캡처" className={idx === i ? 'on' : ''} />
-      ))}
-      <div className="shot-dots">
-        {srcs.map((_, idx) => (
-          <i key={idx} className={idx === i ? 'on' : ''} />
+    <>
+      {steps && (
+        <div className="pstrip">
+          {lead && (
+            <>
+              <span className="pchip gray"><b>{lead.b}</b><small>{lead.s}</small></span>
+              <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
+            </>
+          )}
+          {steps.map((st, idx) => (
+            <span key={st.b} style={{ display: 'contents' }}>
+              {idx > 0 && <span className="mflow-arr material-symbols-outlined">arrow_forward</span>}
+              <span className={`pchip${idx === i ? ' on' : ''}`}><b>{st.b}</b><small>{st.s}</small></span>
+            </span>
+          ))}
+        </div>
+      )}
+      <div className="shot" style={{ flex: 1 }}>
+        {srcs.map((s, idx) => (
+          <img key={s} src={s} alt="플랫폼 화면 캡처" className={idx === i ? 'on' : ''} />
         ))}
+        <div className="shot-dots">
+          {srcs.map((_, idx) => (
+            <i key={idx} className={idx === i ? 'on' : ''} />
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
@@ -841,16 +871,13 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     title={<>신청하면 매칭 — 진입장벽을 <span className="hl">크게 낮췄습니다</span></>}
     lede={<>기존에는 RE100 컨설팅을 <b>어디에 문의해야 할지조차</b> 알기 어려웠습니다.</>}
   >
-    <div className="pstrip">
-      <span className="pchip gray"><b>기존</b><small>어디에 문의해야 할지조차 어려움</small></span>
-      <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
-      <span className="pchip"><b>플랫폼 내 컨설팅 신청</b><small>수요기업</small></span>
-      <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
-      <span className="pchip acc"><b>컨설턴트 매칭</b><small>컨설턴트가 플랫폼에 직접 연계</small></span>
-      <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
-      <span className="pchip"><b>톡 기능</b><small>일정 조율 · 질의를 플랫폼 안에서</small></span>
-    </div>
     <AutoShots
+      lead={{ b: '기존', s: '어디에 문의해야 할지조차 어려움' }}
+      steps={[
+        { b: '플랫폼 내 컨설팅 신청', s: '수요기업' },
+        { b: '컨설턴트 매칭', s: '컨설턴트가 플랫폼에 직접 연계' },
+        { b: '톡 기능', s: '일정 조율 · 질의를 플랫폼 안에서' },
+      ]}
       srcs={[
         '/images/260729_demo/consulting-01.png',
         '/images/260729_demo/consulting-02.png',
