@@ -534,6 +534,7 @@ function AutoShots({
   interval = 4000,
   side,
   extra,
+  map,
 }: {
   srcs: string[]
   steps?: { b: string; s: string }[]
@@ -541,6 +542,8 @@ function AutoShots({
   interval?: number
   side?: boolean
   extra?: ReactNode
+  /** 캡처 i가 보일 때 하이라이트할 단계 인덱스들 (생략 시 1:1) */
+  map?: number[][]
 }) {
   const [i, setI] = useState(0)
   useEffect(() => {
@@ -558,12 +561,15 @@ function AutoShots({
           {arrow}
         </>
       )}
-      {steps.map((st, idx) => (
-        <span key={st.b} style={{ display: 'contents' }}>
-          {idx > 0 && arrow}
-          <span className={`pchip${idx === i ? ' on' : ''}`}><b>{st.b}</b><small>{st.s}</small></span>
-        </span>
-      ))}
+      {steps.map((st, idx) => {
+        const on = map ? (map[i] || []).includes(idx) : idx === i
+        return (
+          <span key={st.b} style={{ display: 'contents' }}>
+            {idx > 0 && arrow}
+            <span className={`pchip${on ? ' on' : ''}`}><b>{st.b}</b><small>{st.s}</small></span>
+          </span>
+        )
+      })}
     </div>
   ) : null
   const shot = (
@@ -990,10 +996,12 @@ const SLIDES: ReactNode[] = [
     <AutoShots
       side
       steps={[
-        { b: '플랫폼 내 컨설팅 신청', s: '수요기업' },
-        { b: '컨설턴트 매칭', s: '컨설턴트가 플랫폼에 직접 연계' },
-        { b: '톡 기능', s: '일정 조율 · 질의를 플랫폼 안에서' },
+        { b: '무료 진단', s: '기본정보 입력 — AI 기반 진단' },
+        { b: '진단 결과 확인', s: '성숙도 등급 · RE 비율' },
+        { b: '컨설턴트 선택 · 신청', s: '마켓플레이스에서 비교' },
+        { b: '매칭 — 컨설팅 진행 · 톡', s: '7단계 진행, 일정 조율 · 질의' },
       ]}
+      map={[[0, 1], [2], [3]]}
       srcs={[
         '/images/260730_demo/consulting-01.png',
         '/images/260730_demo/consulting-02.png',
