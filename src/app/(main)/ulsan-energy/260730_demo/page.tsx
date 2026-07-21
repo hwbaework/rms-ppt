@@ -1020,8 +1020,23 @@ const SLIDES: ReactNode[] = [
   >
     <div className="feat">
       <div className="fcol">
+        {/* 비교군 — 기존 반쪽짜리(회색, 수기에서 끊김) vs RMS 원스톱(파랑) */}
         <div>
-          <div className="block-label"><b>절차</b></div>
+          <div className="block-label"><b>기존 — 반쪽짜리 서비스</b></div>
+          <div className="dead">
+            <div className="dead-row">
+              <span className="dead-ic"><span className="material-symbols-outlined">contract</span></span>
+              <span><b>계약</b><small>플랫폼에서 진행</small></span>
+            </div>
+            <span className="dead-link" />
+            <div className="dead-row stop">
+              <span className="dead-ic"><span className="material-symbols-outlined">edit_off</span></span>
+              <span><b>정산 · 세금계산서</b><small>별도 수기 처리 — 여기서 끊긴다</small></span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="block-label"><b>RMS — 원스톱 통합 처리</b></div>
           <StepCol
             steps={[
               { b: '계약 체결' },
