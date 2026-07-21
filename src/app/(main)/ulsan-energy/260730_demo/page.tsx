@@ -905,7 +905,7 @@ const SLIDES: ReactNode[] = [
             { x: '50%', y: '4%', no: '1', ic: 'location_on', t: '울산 에자자 사업', s: '여기서 시작', v: '' },
             { x: '90%', y: '44%', no: '2', ic: 'touch_app', t: '참여 · 이용', s: '필요한 기능 사용', v: ' hr' },
             { x: '50%', y: '84%', no: '3', ic: 'settings_suggest', t: '관리 · 운영', s: '종료 후에도 업데이트', v: '' },
-            { x: '10%', y: '44%', no: '4', ic: 'travel_explore', t: '지속 확장', s: '이후 사천 · 후평 등 확산', v: ' hl2' },
+            { x: '10%', y: '44%', no: '4', ic: 'travel_explore', t: '타 지역 확산', s: '사천 · 후평 — 이후로도 계속', v: ' hl2' },
           ].map((n) => (
             <div className={`cnode${n.v}`} key={n.no} style={{ left: n.x, top: n.y }}>
               <span className="cnode-ic">
