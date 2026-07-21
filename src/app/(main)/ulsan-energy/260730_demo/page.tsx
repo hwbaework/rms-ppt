@@ -855,16 +855,16 @@ const SLIDES: ReactNode[] = [
                 <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
               </filter>
             </defs>
-            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 63.7 6.4 A 40 40 0 0 1 89.0 35.0" />
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 70.0 9.4 A 40 40 0 0 1 89.0 35.0" />
             <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 89.0 53.0 A 40 40 0 0 1 63.7 81.6" />
             <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 36.3 81.6 A 40 40 0 0 1 11.0 53.0" />
-            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 11.0 35.0 A 40 40 0 0 1 36.3 6.4" />
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 11.0 35.0 A 40 40 0 0 1 30.0 9.4" />
             {/* 빛나는 점이 각 곡선을 미끄러지듯 이동 — 시차를 두고 물결처럼 */}
             {[
-              "M 63.7 6.4 A 40 40 0 0 1 89.0 35.0",
+              "M 70.0 9.4 A 40 40 0 0 1 89.0 35.0",
               "M 89.0 53.0 A 40 40 0 0 1 63.7 81.6",
               "M 36.3 81.6 A 40 40 0 0 1 11.0 53.0",
-              "M 11.0 35.0 A 40 40 0 0 1 36.3 6.4",
+              "M 11.0 35.0 A 40 40 0 0 1 30.0 9.4",
             ].map((d, i) => (
               <circle
                 key={i}
