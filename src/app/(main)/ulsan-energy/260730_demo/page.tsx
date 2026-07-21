@@ -165,6 +165,13 @@ const CSS = `
 .cnode-no{position:absolute;top:-.35vw;right:-.42vw;width:1.1vw;height:1.1vw;border-radius:50%;background:linear-gradient(135deg,#1d4ed8,#3b82f6);border:2px solid #fff;color:#fff;font-size:.56vw;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(29,78,216,.35)}
 .cnode b{font-size:.98vw;color:var(--ink);white-space:nowrap;letter-spacing:-.01em}
 .cnode small{font-size:.8vw;color:var(--muted);white-space:nowrap}
+/* 라벨에 종이색 배경 — 궤도 선이 근처를 지나도 글자를 가리지 않는다 */
+.cnode-tx{display:flex;flex-direction:column;gap:.12vw;align-items:center;background:var(--paper);padding:.15vw .55vw;border-radius:9px}
+/* 좌우 노드 — 라벨을 원 바깥쪽으로 빼서 궤도 선이 글자를 가리지 않게 */
+.cnode.hr{flex-direction:row;gap:.75vw;transform:translate(-1.3vw,-50%)}
+.cnode.hr .cnode-tx{align-items:flex-start;text-align:left}
+.cnode.hl2{flex-direction:row-reverse;gap:.75vw;transform:translate(calc(-100% + 1.3vw),-50%)}
+.cnode.hl2 .cnode-tx{align-items:flex-end;text-align:right}
 /* 살아있는 허브 — 유리질감 구체 + 은은한 펄스 */
 .ihub-wrap{position:absolute;left:50%;top:47%;transform:translate(-50%,-50%);width:5.8vw;height:5.8vw;z-index:1}
 .ihub-c{position:absolute;inset:0;border-radius:50%;background:
@@ -761,16 +768,16 @@ const SLIDES: ReactNode[] = [
                 <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
               </filter>
             </defs>
-            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 59.0 5.0 A 40 40 0 0 1 89.0 35.0" />
-            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 89.0 53.0 A 40 40 0 0 1 59.0 83.0" />
-            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 41.0 83.0 A 40 40 0 0 1 11.0 53.0" />
-            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 11.0 35.0 A 40 40 0 0 1 41.0 5.0" />
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 63.7 6.4 A 40 40 0 0 1 89.0 35.0" />
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 89.0 53.0 A 40 40 0 0 1 63.7 81.6" />
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 36.3 81.6 A 40 40 0 0 1 11.0 53.0" />
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 11.0 35.0 A 40 40 0 0 1 36.3 6.4" />
             {/* 빛나는 점이 각 곡선을 미끄러지듯 이동 — 시차를 두고 물결처럼 */}
             {[
-              "M 59.0 5.0 A 40 40 0 0 1 89.0 35.0",
-              "M 89.0 53.0 A 40 40 0 0 1 59.0 83.0",
-              "M 41.0 83.0 A 40 40 0 0 1 11.0 53.0",
-              "M 11.0 35.0 A 40 40 0 0 1 41.0 5.0",
+              "M 63.7 6.4 A 40 40 0 0 1 89.0 35.0",
+              "M 89.0 53.0 A 40 40 0 0 1 63.7 81.6",
+              "M 36.3 81.6 A 40 40 0 0 1 11.0 53.0",
+              "M 11.0 35.0 A 40 40 0 0 1 36.3 6.4",
             ].map((d, i) => (
               <circle
                 key={i}
@@ -790,18 +797,20 @@ const SLIDES: ReactNode[] = [
             </div>
           </div>
           {[
-            { x: '50%', y: '4%', no: '1', ic: 'location_on', t: '울산 에자자 사업', s: '여기서 시작' },
-            { x: '90%', y: '44%', no: '2', ic: 'person_add', t: '신규 가입', s: '참여 기업이 아니어도' },
-            { x: '50%', y: '84%', no: '3', ic: 'touch_app', t: '참여 · 이용', s: '필요한 기능 사용' },
-            { x: '10%', y: '44%', no: '4', ic: 'settings_suggest', t: '관리 · 운영', s: '종료 후에도 업데이트' },
+            { x: '50%', y: '4%', no: '1', ic: 'location_on', t: '울산 에자자 사업', s: '여기서 시작', v: '' },
+            { x: '90%', y: '44%', no: '2', ic: 'person_add', t: '신규 가입', s: '참여 기업이 아니어도', v: ' hr' },
+            { x: '50%', y: '84%', no: '3', ic: 'touch_app', t: '참여 · 이용', s: '필요한 기능 사용', v: '' },
+            { x: '10%', y: '44%', no: '4', ic: 'settings_suggest', t: '관리 · 운영', s: '종료 후에도 업데이트', v: ' hl2' },
           ].map((n) => (
-            <div className="cnode" key={n.no} style={{ left: n.x, top: n.y }}>
+            <div className={`cnode${n.v}`} key={n.no} style={{ left: n.x, top: n.y }}>
               <span className="cnode-ic">
                 <span className="material-symbols-outlined">{n.ic}</span>
                 <span className="cnode-no">{n.no}</span>
               </span>
-              <b>{n.t}</b>
-              <small>{n.s}</small>
+              <span className="cnode-tx">
+                <b>{n.t}</b>
+                <small>{n.s}</small>
+              </span>
             </div>
           ))}
         </div>
