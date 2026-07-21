@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 통합에너지플랫폼 구축 현황 발표 — 2026.07.29  (에디토리얼 스타일)
+// 통합에너지플랫폼 구축 현황 발표 — 2026.07.30  (에디토리얼 스타일)
 // 원본 자료: "발표자료 시나리오v0.1.hwpx"
 // 구성 원칙: 시나리오 13페이지 = 슬라이드 13장, 순서·페이지 번호 1:1 그대로.
 //   임의 재편성(목차 추가·챕터 묶기) 금지 — 사용자 페이지 구성을 그대로 따른다.
@@ -163,8 +163,8 @@ const CSS = `
 .cnode-ic{position:relative;width:2.6vw;height:2.6vw;border-radius:50%;background:linear-gradient(180deg,#ffffff,#f6f9ff);border:1px solid #e3ebf7;color:var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px rgba(11,21,38,.05),0 10px 22px rgba(37,99,235,.10)}
 .cnode-ic .material-symbols-outlined{font-size:1.2vw}
 .cnode-no{position:absolute;top:-.35vw;right:-.42vw;width:1.1vw;height:1.1vw;border-radius:50%;background:linear-gradient(135deg,#1d4ed8,#3b82f6);border:2px solid #fff;color:#fff;font-size:.56vw;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(29,78,216,.35)}
-.cnode b{font-size:.84vw;color:var(--ink);white-space:nowrap;letter-spacing:-.01em}
-.cnode small{font-size:.68vw;color:var(--muted);white-space:nowrap}
+.cnode b{font-size:.98vw;color:var(--ink);white-space:nowrap;letter-spacing:-.01em}
+.cnode small{font-size:.8vw;color:var(--muted);white-space:nowrap}
 /* 살아있는 허브 — 유리질감 구체 + 은은한 펄스 */
 .ihub-wrap{position:absolute;left:50%;top:47%;transform:translate(-50%,-50%);width:5.8vw;height:5.8vw;z-index:1}
 .ihub-c{position:absolute;inset:0;border-radius:50%;background:
@@ -298,6 +298,23 @@ const CSS = `
 /* 현재 보이는 캡처와 동기화되는 활성 칩 */
 .pchip.on{background:var(--tint);border-color:var(--tint-line);box-shadow:0 4px 14px rgba(37,99,235,.14)}
 .pchip.on b{color:#1d4ed8}
+/* 세로 스트립 — 좌측 텍스트 열에서 위→아래로 흐르는 단계 (8~13P 공통 레이아웃) */
+.pstrip.v{flex-direction:column;align-items:stretch;gap:.5vw}
+.pstrip.v .mflow-arr{align-self:center;font-size:1.15vw}
+.pstrip.v .pchip{padding:.6vw 1.1vw}
+.pstrip.v .pchip b,.pstrip.v .pchip small{white-space:normal}
+
+/* ── 확장 지도 (대한민국 실루엣 단순화 — 울산 → 사천 · 후평) ── */
+.kmap{position:relative;width:15.5vw;aspect-ratio:100/130;align-self:center;margin:0 auto}
+.kmap svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.kland{fill:#eaf1fb;stroke:#c9d8f0;stroke-width:1}
+.karc{fill:none;stroke:#aac3ee;stroke-width:1.3;stroke-dasharray:3 2.4;stroke-linecap:round}
+.kdot{fill:#3b82f6;offset-rotate:0deg;animation:travel 3s linear infinite}
+.kpin{position:absolute;transform:translate(-50%,-50%);z-index:1;display:flex;flex-direction:column;align-items:center;gap:.3vw}
+.kpin i{width:1vw;height:1vw;border-radius:50%;background:#fff;border:2px solid var(--accent);box-shadow:0 2px 8px rgba(37,99,235,.25);display:block}
+.kpin.main i{width:1.3vw;height:1.3vw;background:linear-gradient(135deg,#1d4ed8,#3b82f6);border:2px solid #fff;box-shadow:0 0 0 .35vw rgba(37,99,235,.15),0 4px 12px rgba(37,99,235,.4)}
+.kpin b{font-size:.85vw;color:var(--ink);white-space:nowrap;background:#fff;padding:.12vw .6vw;border-radius:999px;border:1px solid var(--hair);box-shadow:0 2px 6px rgba(11,21,38,.08)}
+.kpin small{font-size:.68vw;color:var(--accent);font-weight:700;white-space:nowrap}
 
 /* ── 실제 화면 캡처 자동 순환 뷰어 ── */
 .shot{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--hair);background:#0a1220;box-shadow:0 10px 28px rgba(11,21,38,.12);min-height:11vw}
@@ -488,46 +505,81 @@ function AutoShots({
   steps,
   lead,
   interval = 4000,
+  side,
 }: {
   srcs: string[]
   steps?: { b: string; s: string }[]
   lead?: { b: string; s: string }
   interval?: number
+  side?: boolean
 }) {
   const [i, setI] = useState(0)
   useEffect(() => {
     const t = setInterval(() => setI((v) => (v + 1) % srcs.length), interval)
     return () => clearInterval(t)
   }, [srcs.length, interval])
+  const arrow = (
+    <span className="mflow-arr material-symbols-outlined">{side ? 'arrow_downward' : 'arrow_forward'}</span>
+  )
+  const strip = steps ? (
+    <div className={`pstrip${side ? ' v' : ''}`}>
+      {lead && (
+        <>
+          <span className="pchip gray"><b>{lead.b}</b><small>{lead.s}</small></span>
+          {arrow}
+        </>
+      )}
+      {steps.map((st, idx) => (
+        <span key={st.b} style={{ display: 'contents' }}>
+          {idx > 0 && arrow}
+          <span className={`pchip${idx === i ? ' on' : ''}`}><b>{st.b}</b><small>{st.s}</small></span>
+        </span>
+      ))}
+    </div>
+  ) : null
+  const shot = (
+    <div className="shot" style={side ? undefined : { flex: 1 }}>
+      {srcs.map((s, idx) => (
+        <img key={s} src={s} alt="플랫폼 화면 캡처" className={idx === i ? 'on' : ''} />
+      ))}
+      <div className="shot-dots">
+        {srcs.map((_, idx) => (
+          <i key={idx} className={idx === i ? 'on' : ''} />
+        ))}
+      </div>
+    </div>
+  )
+  // side: 좌 텍스트(단계 칩) / 우 이미지 — 8~13P 공통 레이아웃
+  if (side) {
+    return (
+      <div className="feat">
+        <div className="fcol">{strip}</div>
+        {shot}
+      </div>
+    )
+  }
   return (
     <>
-      {steps && (
-        <div className="pstrip">
-          {lead && (
-            <>
-              <span className="pchip gray"><b>{lead.b}</b><small>{lead.s}</small></span>
-              <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
-            </>
-          )}
-          {steps.map((st, idx) => (
-            <span key={st.b} style={{ display: 'contents' }}>
-              {idx > 0 && <span className="mflow-arr material-symbols-outlined">arrow_forward</span>}
-              <span className={`pchip${idx === i ? ' on' : ''}`}><b>{st.b}</b><small>{st.s}</small></span>
-            </span>
-          ))}
-        </div>
-      )}
-      <div className="shot" style={{ flex: 1 }}>
-        {srcs.map((s, idx) => (
-          <img key={s} src={s} alt="플랫폼 화면 캡처" className={idx === i ? 'on' : ''} />
-        ))}
-        <div className="shot-dots">
-          {srcs.map((_, idx) => (
-            <i key={idx} className={idx === i ? 'on' : ''} />
-          ))}
-        </div>
-      </div>
+      {strip}
+      {shot}
     </>
+  )
+}
+
+// 세로 단계 열 — 좌측 텍스트/우측 이미지 공통 레이아웃의 왼쪽에 쓰는 단계 칩
+function StepCol({ steps }: { steps: { b: string; s?: string; tone?: 'gray' | 'acc' }[] }) {
+  return (
+    <div className="pstrip v">
+      {steps.map((st, idx) => (
+        <span key={st.b} style={{ display: 'contents' }}>
+          {idx > 0 && <span className="mflow-arr material-symbols-outlined varr">arrow_downward</span>}
+          <span className={`pchip${st.tone === 'gray' ? ' gray' : st.tone === 'acc' ? ' on' : ''}`}>
+            <b>{st.b}</b>
+            {st.s && <small>{st.s}</small>}
+          </span>
+        </span>
+      ))}
+    </div>
   )
 }
 
@@ -553,16 +605,8 @@ const PERSONAS = [
   { x: '15%', y: '30%', c: '#8b5cf6', ic: 'support_agent', t: '컨설턴트' },
 ]
 
-// 목차 — target = 이동할 슬라이드 인덱스 (0 표지, 1 목차, 2~13 = 시나리오 2~13페이지)
-const TOC = [
-  { no: '01', t: '사업 추진 경과', d: '1~2차년도 기반 구축 · 3차년도 개발 현황', target: 2 },
-  { no: '02', t: '플랫폼 방향성', d: '지속가능한 하나의 플랫폼 · 세 가지 질문 · 5개 페르소나', target: 4 },
-  { no: '03', t: '핵심 기능 다섯 가지', d: '컨설팅 · 원스톱 · 모니터링 · 전력거래 · DT', target: 7 },
-  { no: '04', t: '하반기 로드맵', d: '탄소배출관리 · e데이터마켓 · VPP — 딥링크 연동', target: 12 },
-  { no: '05', t: '마무리', d: '울산은 하나의 적용 범위 — 확장 가능한 플랫폼', target: 13 },
-]
-
-const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
+// ※ 이 덱은 사용자 지시로 목차 슬라이드 제외 ("이번에만 해당" — 2026-07 피드백 2번)
+const SLIDES: ReactNode[] = [
   /* ── 1page : 인사 및 발표 개요 ── */
   <div className="dark-stage" key="p1">
     <p className="cover-eyebrow">Ulsan-Mipo Energy Independence · RMS</p>
@@ -576,31 +620,7 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
       <i />
       <span>RMS</span>
       <i />
-      <span>2026. 07. 29</span>
-    </div>
-  </div>,
-
-  /* ── 목차 ── */
-  <div className="toc" key="toc">
-    <div className="toc-left">
-      <p className="toc-eyebrow">Contents</p>
-      <h2 className="toc-title">목차</h2>
-      <p className="toc-lead">
-        울산에 납품하고 끝나는 시스템이 아니라,<br />
-        계속 자라는 하나의 플랫폼을<br />
-        만들고 있습니다.
-      </p>
-    </div>
-    <div className="toc-right">
-      {TOC.map((t) => (
-        <div className="trow" key={t.no} onClick={() => goTo(t.target)}>
-          <span className="trow-no">{t.no}</span>
-          <div>
-            <div className="trow-t">{t.t}</div>
-            <div className="trow-d">{t.d}</div>
-          </div>
-        </div>
-      ))}
+      <span>2026. 07. 30</span>
     </div>
   </div>,
 
@@ -610,7 +630,7 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     key="p2"
     no="01"
     sec="사업 추진 경과 — 1~2차년도"
-    title={<>지금은 <span className="hl">3차년도</span> — 계획대로 진행 중입니다</>}
+    title={<><span className="hl">3차년도</span> — 계획대로 진행 중</>}
     lede={<>1~2차년도에 다진 기반 위에서, 올해는 <b>핵심 기능을 개발하는 해</b>입니다.</>}
   >
     <Flow
@@ -672,7 +692,7 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     key="p3"
     no="01"
     sec="사업 추진 경과 — 3차년도 개발 현황"
-    title={<>상반기 <span className="hl">4</span>개는 구축을 마치고 <span className="hl">QA · 안정화</span> 중입니다</>}
+    title={<>상반기 <span className="hl">4</span>개 구축 완료 — <span className="hl">QA · 안정화</span> 중</>}
     lede={<>지금 보여드리는 것은 <b>현재까지의 구축 결과물</b>입니다.</>}
   >
     <div style={{ paddingTop: '1.3vw' }}>
@@ -702,7 +722,7 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     key="p4"
     no="02"
     sec="플랫폼 방향성"
-    title={<>납품하고 끝나는 시스템이 <span className="hl">아닙니다</span></>}
+    title={<>납품형이 아닌, <span className="hl">지속가능한 메인 플랫폼</span></>}
     lede={<>통상적인 공공 플랫폼은 사업이 끝나면 방치됩니다 — 저희는 <b>처음부터 다르게 설계</b>했습니다.</>}
   >
     <div className="vs">
@@ -740,18 +760,16 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
                 <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
               </filter>
             </defs>
-            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 59.4 6.1 A 42 42 0 0 1 86.0 25.4" />
-            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 91.8 43.3 A 42 42 0 0 1 81.7 74.6" />
-            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 66.4 85.7 A 42 42 0 0 1 33.6 85.7" />
-            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 18.3 74.6 A 42 42 0 0 1 8.2 43.3" />
-            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 14.0 25.4 A 42 42 0 0 1 40.6 6.1" />
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 59.0 5.0 A 40 40 0 0 1 89.0 35.0" />
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 89.0 53.0 A 40 40 0 0 1 59.0 83.0" />
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 41.0 83.0 A 40 40 0 0 1 11.0 53.0" />
+            <path className="cyc-seg" markerEnd="url(#cycArr)" d="M 11.0 35.0 A 40 40 0 0 1 41.0 5.0" />
             {/* 빛나는 점이 각 곡선을 미끄러지듯 이동 — 시차를 두고 물결처럼 */}
             {[
-              "M 59.4 6.1 A 42 42 0 0 1 86.0 25.4",
-              "M 91.8 43.3 A 42 42 0 0 1 81.7 74.6",
-              "M 66.4 85.7 A 42 42 0 0 1 33.6 85.7",
-              "M 18.3 74.6 A 42 42 0 0 1 8.2 43.3",
-              "M 14.0 25.4 A 42 42 0 0 1 40.6 6.1",
+              "M 59.0 5.0 A 40 40 0 0 1 89.0 35.0",
+              "M 89.0 53.0 A 40 40 0 0 1 59.0 83.0",
+              "M 41.0 83.0 A 40 40 0 0 1 11.0 53.0",
+              "M 11.0 35.0 A 40 40 0 0 1 41.0 5.0",
             ].map((d, i) => (
               <circle
                 key={i}
@@ -771,11 +789,10 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
             </div>
           </div>
           {[
-            { x: '50%', y: '5%', no: '1', ic: 'location_on', t: '울산 에자자 사업', s: '여기서 시작' },
-            { x: '90%', y: '34%', no: '2', ic: 'person_add', t: '신규 가입', s: '참여 기업이 아니어도' },
-            { x: '74.7%', y: '81%', no: '3', ic: 'touch_app', t: '참여 · 이용', s: '필요한 기능 사용' },
-            { x: '25.3%', y: '81%', no: '4', ic: 'payments', t: '수익 창출', s: '플랫폼 위에서 거래' },
-            { x: '10%', y: '34%', no: '5', ic: 'settings_suggest', t: '관리 · 운영', s: '종료 후에도 업데이트' },
+            { x: '50%', y: '4%', no: '1', ic: 'location_on', t: '울산 에자자 사업', s: '여기서 시작' },
+            { x: '90%', y: '44%', no: '2', ic: 'person_add', t: '신규 가입', s: '참여 기업이 아니어도' },
+            { x: '50%', y: '84%', no: '3', ic: 'touch_app', t: '참여 · 이용', s: '필요한 기능 사용' },
+            { x: '10%', y: '44%', no: '4', ic: 'settings_suggest', t: '관리 · 운영', s: '종료 후에도 업데이트' },
           ].map((n) => (
             <div className="cnode" key={n.no} style={{ left: n.x, top: n.y }}>
               <span className="cnode-ic">
@@ -796,7 +813,7 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     key="p5"
     no="02"
     sec="플랫폼 방향성 — 사용자 관점에서의 설계"
-    title={<>기업이 궁금한 건 결국 <span className="hl">세 가지</span>입니다</>}
+    title={<>기업이 궁금한 것은 결국 <span className="hl">세 가지</span></>}
     lede={<>플랫폼 기능은 <b>실제 수요기업의 관심사</b>에서 출발했습니다.</>}
   >
     <div className="qrow">
@@ -868,10 +885,11 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     key="p7"
     no="03"
     sec="핵심 기능 ① 컨설팅"
-    title={<>신청하면 매칭 — 진입장벽을 <span className="hl">크게 낮췄습니다</span></>}
+    title={<>신청하면 매칭 — <span className="hl">진입장벽 없는 컨설팅</span></>}
     lede={<>기존에는 RE100 컨설팅을 <b>어디에 문의해야 할지조차</b> 알기 어려웠습니다.</>}
   >
     <AutoShots
+      side
       lead={{ b: '기존', s: '어디에 문의해야 할지조차 어려움' }}
       steps={[
         { b: '플랫폼 내 컨설팅 신청', s: '수요기업' },
@@ -879,9 +897,9 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
         { b: '톡 기능', s: '일정 조율 · 질의를 플랫폼 안에서' },
       ]}
       srcs={[
-        '/images/260729_demo/consulting-01.png',
-        '/images/260729_demo/consulting-02.png',
-        '/images/260729_demo/consulting-03.png',
+        '/images/260730_demo/consulting-01.png',
+        '/images/260730_demo/consulting-02.png',
+        '/images/260730_demo/consulting-03.png',
       ]}
     />
   </ContentSlide>,
@@ -891,29 +909,38 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     key="p8"
     no="03"
     sec="핵심 기능 ② 원스톱 통합 처리"
-    title={<>반쪽짜리가 아닌, <span className="hl">플랫폼 안에서 전부</span></>}
+    title={<>반쪽짜리가 아닌, <span className="hl">원스톱 통합 처리</span></>}
     lede={<>계약은 플랫폼에서 하고 정산 · 세금계산서는 수기로 — 그런 <b>반쪽짜리 서비스가 아닙니다</b>.</>}
   >
     <div className="feat">
+      {/* 비교군 — 반쪽짜리 vs 원스톱 */}
       <div className="fcol">
-        <div className="pbox">
-          <span className="pbox-tag">거래에 수반되는 업무 전체 — 하나의 플랫폼 안에서</span>
-          <div className="mflow">
-            <MNode ic="contract" t="계약" />
-            <Arr />
-            <MNode ic="receipt_long" t="세금계산서 발행" />
-            <Arr />
-            <MNode tone="fill" ic="payments" t="정산" />
+        <div className="vs-panel" style={{ gap: '.7vw' }}>
+          <div className="vs-h"><span className="material-symbols-outlined">content_cut</span>반쪽짜리 서비스</div>
+          <div className="pstrip">
+            <span className="pchip"><b>계약</b><small>플랫폼</small></span>
+            <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
+            <span className="pchip gray"><b>세금계산서 · 정산</b><small>별도 수기 처리</small></span>
           </div>
         </div>
-        <div className="mflow">
-          <span className="tag gray"><i />별도 수기 처리 — 없음</span>
+        <div className="vs-panel ours" style={{ gap: '.7vw' }}>
+          <div className="vs-h"><span className="material-symbols-outlined">all_inclusive</span>원스톱 통합 처리</div>
+          <div className="pstrip">
+            <span className="pchip on"><b>계약</b></span>
+            <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
+            <span className="pchip on"><b>세금계산서 발행</b></span>
+            <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
+            <span className="pchip on"><b>정산</b></span>
+          </div>
+          <div className="mflow">
+            <span className="tag blue"><i />거래에 수반되는 업무 전체 — 하나의 플랫폼 안</span>
+          </div>
         </div>
       </div>
       <ImgSlot
         tall
         t="제안: 세금계산서 · 정산 화면 캡처"
-        d="플랫폼 안에서 세금계산서가 발행되고 정산 내역이 잡히는 화면"
+        d="플랫폼 안에서 세금계산서가 발행되고 정산 내역이 잡히는 화면 — 캡처를 넣으면 자동 순환 뷰어로 교체"
       />
     </div>
   </ContentSlide>,
@@ -927,26 +954,24 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     lede={<>단순 발전량 모니터링은 시중에 이미 많습니다 — 그것만으로는 <b>반쪽짜리</b>라고 판단했습니다.</>}
   >
     <div className="feat">
+      <div className="fcol">
+        <StepCol
+          steps={[
+            { b: '이상상황 감지' },
+            { b: 'A/S · O&M 접수', s: '플랫폼 내에서 바로 연계' },
+            { b: '조치' },
+            { b: '처리 현황 실시간 반영', s: '업데이트까지 완결', tone: 'acc' },
+          ]}
+        />
+        <div className="mflow">
+          <span className="tag gray"><i />발전량만 보는 모니터링은 반쪽</span>
+        </div>
+      </div>
       <ImgSlot
         tall
         t="제안: 모니터링 대시보드 + O&M 접수 화면 캡처"
-        d="이상상황 알림이 뜬 모니터링 화면과, 연결된 A/S · O&M 접수 · 처리 현황 화면"
+        d="이상상황 알림이 뜬 모니터링 화면과, 연결된 A/S · O&M 접수 · 처리 현황 화면 — 캡처를 넣으면 자동 순환 뷰어로 교체"
       />
-      <div className="fcol">
-        <div className="mflow">
-          <MNode ic="warning" t="이상상황 감지" />
-          <Arr />
-          <MNode ic="handyman" t="A/S · O&M 접수" s="플랫폼 내에서 바로 연계" />
-        </div>
-        <div className="mflow">
-          <MNode ic="task_alt" t="조치" />
-          <Arr />
-          <MNode tone="fill" ic="sync" t="처리 현황 실시간 반영" s="업데이트까지 완결" />
-        </div>
-        <div className="mflow">
-          <span className="tag blue"><i />실효적인 모니터링 시스템</span>
-        </div>
-      </div>
     </div>
   </ContentSlide>,
 
@@ -955,23 +980,23 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     key="p10"
     no="03"
     sec="핵심 기능 ④ 전력거래"
-    title={<>RE100 이행에 필요한 전력, <span className="hl">조달을 서비스로</span></>}
+    title={<>RE100 이행을 위한 <span className="hl">재생에너지 전력 조달 서비스</span></>}
     lede={<>수요기업의 RE100 이행에는 <b>재생에너지 전력</b>이 필요하고, 조달 과정이 원활해야 합니다.</>}
   >
     <div className="feat">
       <div className="fcol">
-        <div className="mflow">
-          <MNode ic="solar_power" t="재생에너지 전력" s="발전사업자" />
-          <Arr />
-          <MNode tone="fill" ic="swap_horiz" t="전력거래" s="확보 과정을 서비스로 제공" />
-          <Arr />
-          <MNode ic="factory" t="수요기업" s="RE100 이행" />
-        </div>
+        <StepCol
+          steps={[
+            { b: '재생에너지 전력', s: '발전사업자' },
+            { b: '전력거래', s: '확보 과정을 서비스로 제공', tone: 'acc' },
+            { b: '수요기업', s: 'RE100 이행' },
+          ]}
+        />
       </div>
       <ImgSlot
         tall
         t="제안: 전력거래 화면 캡처"
-        d="수요기업이 재생에너지 전력을 확보하는 거래 화면"
+        d="수요기업이 재생에너지 전력을 확보하는 거래 화면 — 캡처를 넣으면 자동 순환 뷰어로 교체"
       />
     </div>
   </ContentSlide>,
@@ -981,23 +1006,28 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     key="p11"
     no="03"
     sec="핵심 기능 ⑤ DT (디지털 트윈)"
-    title={<>설치 전에, 효과를 <span className="hl">눈으로 확인</span></>}
+    title={<>설치 전에 눈으로 확인하는 <span className="hl">예상 효과</span></>}
     lede={<>신규 가입 기업에 가장 효과적인 것 — 태양광 설치 효과를 <b>직접 눈으로 확인</b>하는 것입니다.</>}
   >
-    <div className="mflow">
-      <MNode ic="apartment" t="설치 전" s="우리 사업장" />
-      <Arr />
-      <MNode tone="fill" ic="view_in_ar" t="DT 시뮬레이션" />
-      <Arr />
-      <MNode ic="insights" t="예상 효과를 시각적으로" />
-      <span className="tag blue" style={{ marginLeft: '1vw' }}><i />발표 후 실제 플랫폼 접속 — 직접 시연</span>
+    <div className="feat">
+      <div className="fcol">
+        <StepCol
+          steps={[
+            { b: '설치 전', s: '우리 사업장' },
+            { b: 'DT 시뮬레이션', tone: 'acc' },
+            { b: '예상 효과 확인', s: '시각적으로' },
+          ]}
+        />
+        <div className="mflow">
+          <span className="tag blue"><i />발표 후 실제 플랫폼 접속 — 직접 시연</span>
+        </div>
+      </div>
+      <ImgSlot
+        tall
+        t="제안: DT 화면 캡처"
+        d="태양광 설치 전 예상 효과를 3D로 보여주는 디지털 트윈 화면 — 캡처를 넣으면 자동 순환 뷰어로 교체"
+      />
     </div>
-    <ImgSlot
-      tall
-      grow
-      t="제안: DT 화면 캡처 (대형)"
-      d="태양광 설치 전 예상 효과를 3D로 보여주는 디지털 트윈 화면 — 이 덱에서 가장 큰 이미지"
-    />
   </ContentSlide>,
 
   /* ── 12page : 하반기 개발 로드맵 ── */
@@ -1008,42 +1038,35 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     title={<>딥링크로 연동되는 <span className="hl">세 개의 신규 서비스</span></>}
     lede={<>세 기능은 각각 범위가 매우 방대해 — 기존 플랫폼 내 탑재가 아닌 <b>신규 플랫폼 연동</b>으로 서비스합니다.</>}
   >
-    <div className="lk-panel">
-      <div className="lk-grid">
-        <div className="lk-hub">
-          <span className="material-symbols-outlined">hub</span>
-          <b>메인 플랫폼</b>
-          <small>지금 보신<br />통합 에너지 플랫폼</small>
-        </div>
-        <div className="lkc">
-          <span className="lk-trunk" />
-          <span className="lk-branch" style={{ top: '15%' }}><i /></span>
-          <span className="lk-branch" style={{ top: '50%' }}><i style={{ animationDelay: '.7s' }} /></span>
-          <span className="lk-branch" style={{ top: '85%' }}><i style={{ animationDelay: '1.4s' }} /></span>
-          <span className="lk-lab">딥링크 연동</span>
-        </div>
+    <div className="feat">
+      <div className="fcol">
         <div className="lk-cards">
           <div className="lk-card">
             <span className="lk-ic"><span className="material-symbols-outlined">co2</span></span>
             <span><b>탄소배출관리</b><small>배출 현황 파악 · 감축 관리</small></span>
-            <span className="tag gray"><i />하반기 착수</span>
+            <span className="tag blue"><i />내부 검토중</span>
           </div>
           <div className="lk-card">
             <span className="lk-ic"><span className="material-symbols-outlined">storefront</span></span>
             <span><b>e데이터마켓</b><small>에너지 데이터 · 탄소배출권 거래</small></span>
-            <span className="tag gray"><i />하반기 착수</span>
+            <span className="tag blue"><i />내부 검토중</span>
           </div>
           <div className="lk-card">
             <span className="lk-ic"><span className="material-symbols-outlined">bolt</span></span>
             <span><b>VPP</b><small>분산자원 통합 가상발전소</small></span>
-            <span className="tag gray"><i />하반기 착수</span>
+            <span className="tag blue"><i />내부 검토중</span>
           </div>
         </div>
+        <div className="lk-note" style={{ borderTop: 'none', paddingTop: 0, justifyContent: 'flex-start' }}>
+          <span className="material-symbols-outlined">sync_alt</span>
+          딥링크 연동 — <b>하나의 플랫폼에서 자연스럽게 이동</b>, 서비스 연속성 영향 없음
+        </div>
       </div>
-      <div className="lk-note">
-        <span className="material-symbols-outlined">sync_alt</span>
-        사용자는 <b>하나의 플랫폼에서 자연스럽게 이동</b>합니다 — 서비스 연속성에는 영향 없음
-      </div>
+      <ImgSlot
+        tall
+        t="제안: 탄소배출관리 · e데이터마켓 · VPP 화면 캡처"
+        d="구성 중인 각 신규 서비스 화면 — 캡처를 넣으면 자동 순환 뷰어로 교체 (내부 검토중 버전 명시)"
+      />
     </div>
   </ContentSlide>,
 
@@ -1052,27 +1075,49 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     key="p13"
     no="05"
     sec="마무리 — 지속가능하고 확장 가능한 플랫폼"
-    title={<>울산은 <span className="hl">하나의 적용 범위</span>입니다</>}
+    title={<>울산에서 <span className="hl">사천 · 후평으로</span> — 전국 확장</>}
     lede={
       <>울산 에자자 사업에 국한된 시스템이 아니라 — 동일한 플랫폼 기반 위에서
-      <b> 타 지역과 신규 가입자로 확장 가능한, 지속가능하고 실효성 있는 서비스</b>를 목표로 구축하고 있습니다.</>
+      <b> 타 지역과 신규 가입자로 확장하는, 지속가능하고 실효성 있는 서비스</b>입니다.</>
     }
   >
-    {/* 울산 코어에서 파동이 퍼지며 타 지역 → 신규 가입자 링으로 확장 — 중앙 주인공 */}
-    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 0 }}>
-      <div className="ripple">
-        <span className="rip-wave" />
-        <span className="rip-wave w2" />
-        <span className="rip r2" />
-        <span className="rip r3" />
-        <div className="rip-core"><b>울산 에자자</b><small>첫 적용</small></div>
-        <span className="rip-lab" style={{ left: '50%', top: '22%' }}>타 지역</span>
-        <span className="rip-lab" style={{ left: '50%', top: '4%' }}>신규 가입자</span>
-        <span className="rip-dot" style={{ left: '71%', top: '32%' }} />
-        <span className="rip-dot" style={{ left: '28%', top: '68%' }} />
-        <span className="rip-dot dim" style={{ left: '85%', top: '30%' }} />
-        <span className="rip-dot dim" style={{ left: '20%', top: '25%' }} />
-        <span className="rip-dot dim" style={{ left: '65%', top: '89%' }} />
+    <div className="feat">
+      <div className="fcol">
+        <StepCol
+          steps={[
+            { b: '울산 에자자', s: '첫 적용', tone: 'acc' },
+            { b: '사천 · 후평', s: '확산 적용' },
+            { b: '신규 가입자', s: '동일한 플랫폼 기반 위에서 접근' },
+          ]}
+        />
+      </div>
+      {/* 확장 지도 — 울산에서 사천 · 후평으로 뻗어나가는 그림 (단순화한 대한민국 실루엣) */}
+      <div className="kmap">
+        <svg viewBox="0 0 100 130" aria-hidden>
+          <path
+            className="kland"
+            d="M34 16 L46 8 L60 6 L64 14 L66 26 L70 42 L74 58 L78 72 L79 80 L74 88 L66 94 L56 98 L44 96 L34 100 L27 92 L24 82 L27 72 L22 62 L26 50 L22 38 L27 26 Z"
+          />
+          <ellipse className="kland" cx="30" cy="116" rx="7" ry="4" />
+          <path id="karc1" className="karc" d="M 74 85 Q 64 96 55 91" />
+          <path id="karc2" className="karc" d="M 74 85 Q 78 45 49 24" />
+          {["M 74 85 Q 64 96 55 91", "M 74 85 Q 78 45 49 24"].map((d, i) => (
+            <circle key={i} r="1.2" className="kdot" style={{ offsetPath: `path('${d}')`, animationDelay: `${-i * 1.5}s` }} />
+          ))}
+        </svg>
+        <div className="kpin main" style={{ left: '74%', top: '65.4%' }}>
+          <i />
+          <b>울산</b>
+          <small>첫 적용</small>
+        </div>
+        <div className="kpin" style={{ left: '55%', top: '70%' }}>
+          <i />
+          <b>사천</b>
+        </div>
+        <div className="kpin" style={{ left: '49%', top: '18.5%' }}>
+          <i />
+          <b>후평</b>
+        </div>
       </div>
     </div>
     <div className="ans">
@@ -1103,7 +1148,7 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
 
 export default function Page() {
   const [idx, setIdx] = useState(0)
-  const slides = useMemo(() => buildSlides(setIdx), [])
+  const slides = useMemo(() => SLIDES, [])
   const total = slides.length
 
   const next = useCallback(() => setIdx((i) => Math.min(total - 1, i + 1)), [total])
