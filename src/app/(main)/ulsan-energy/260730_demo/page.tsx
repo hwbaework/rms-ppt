@@ -324,6 +324,12 @@ const CSS = `
 
 /* ── 확장 지도 (대한민국 실루엣 단순화 — 울산 → 사천 · 후평) ── */
 .kmap{position:relative;width:15.5vw;aspect-ratio:100/130;align-self:center;margin:0 auto}
+/* 마무리 풀하이트 지도 — 본문 높이 전체를 차지 */
+.finale{display:grid;grid-template-columns:1fr auto;gap:2.6vw;flex:1;min-height:0;align-items:stretch}
+.kmap.big{width:auto;height:100%;max-width:none;align-self:stretch;margin:0}
+/* 울산 → 사천 → 후평 순차 점등 */
+.kmap.big .kpin i{animation:pinlight 6s ease-in-out infinite}
+@keyframes pinlight{0%,22%,100%{transform:scale(1)}6%,14%{transform:scale(1.4);box-shadow:0 0 0 .5vw rgba(37,99,235,.18),0 0 16px rgba(59,130,246,.65)}}
 .kmap svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .kland{fill:#eaf1fb;stroke:#c9d8f0;stroke-width:1}
 .karc{fill:none;stroke:#aac3ee;stroke-width:1.3;stroke-dasharray:3 2.4;stroke-linecap:round}
@@ -1154,19 +1160,30 @@ const SLIDES: ReactNode[] = [
       <b> 타 지역과 신규 가입자로 확장하는, 지속가능하고 실효성 있는 서비스</b>입니다.</>
     }
   >
-    <div className="feat">
+    <div className="finale">
       <div className="fcol">
-        <StepCol
-          steps={[
-            { b: '울산 에자자', s: '첫 적용', tone: 'acc' },
-            { b: '사천 · 후평', s: '확산 적용' },
-            { b: '신규 가입자', s: '동일한 플랫폼 기반 위에서 접근' },
-          ]}
-        />
+        <div className="proc">
+          <div className="block-label"><b>확장 로드맵</b></div>
+          <StepCol
+            steps={[
+              { b: '울산 에자자', s: '첫 적용', tone: 'acc' },
+              { b: '사천 · 후평', s: '확산 적용' },
+              { b: '이후 — 신규 지역 · 신규 가입자', s: '동일한 플랫폼 기반 위에서 계속 확장' },
+            ]}
+          />
+        </div>
+        <div>
+          <div className="block-label"><b>이어서</b></div>
+          <div className="pstrip">
+            <span className="pchip on"><b>시연 영상</b><small>페르소나별 화면 · 기능</small></span>
+            <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
+            <span className="pchip"><b>실제 플랫폼 시연</b><small>관리자 계정 · DT</small></span>
+          </div>
+        </div>
       </div>
       {/* 확장 지도 — 울산에서 사천 · 후평으로. 경계는 Natural Earth 10m(최고 해상도 · 퍼블릭 도메인) 실데이터 투영 — 울릉도 · 독도 · 백령도 포함,
           핀 좌표도 실제 경위도(울산 129.31E/35.54N · 사천 128.06E/35.00N · 춘천 후평 127.73E/37.87N) 투영값 */}
-      <div className="kmap">
+      <div className="kmap big">
         <svg viewBox="0 0 100 130" aria-hidden>
           <path
             className="kland"
@@ -1184,23 +1201,16 @@ const SLIDES: ReactNode[] = [
           <small>첫 적용</small>
         </div>
         <div className="kpin" style={{ left: '54.3%', top: '62.6%' }}>
-          <i />
+          <i style={{ animationDelay: '2s' }} />
           <b>사천</b>
+          <small>확산 적용</small>
         </div>
         <div className="kpin" style={{ left: '49.5%', top: '22.7%' }}>
-          <i />
+          <i style={{ animationDelay: '4s' }} />
           <b>후평</b>
+          <small>확산 적용</small>
         </div>
       </div>
-    </div>
-    <div className="ans">
-      <span className="material-symbols-outlined">play_circle</span>
-      <span className="ans-t">이어서 보시겠습니다</span>
-      <span className="ans-fn">
-        <span className="ans-pill">① 시연 영상 — 페르소나별 화면 · 기능</span>
-        <span className="ans-arr">→</span>
-        <span className="ans-pill">② 실제 플랫폼 시연 — 관리자 계정 · DT</span>
-      </span>
     </div>
   </ContentSlide>,
 
