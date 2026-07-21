@@ -111,6 +111,11 @@ const CSS = `
 .press-ic{width:2.6vw;height:2.6vw;border-radius:50%;margin:0 auto .45vw;display:flex;align-items:center;justify-content:center;background:var(--tint);color:var(--accent)}
 .press-ic .material-symbols-outlined{font-size:1.35vw}
 .press-card.soon .press-ic{background:#eef1f7;color:#64748b}
+/* 타일 상단 실제 화면 썸네일 — 구축 결과물의 증거 */
+.press-thumb{height:5vw;border-radius:10px;overflow:hidden;border:1px solid var(--hair);margin-bottom:.55vw;background:#0a1220}
+.press-thumb img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.press-thumb.empty{display:flex;align-items:center;justify-content:center;border-style:dashed;border-color:#c7d2e3;background:var(--chip);color:#94a3b8}
+.press-thumb.empty .material-symbols-outlined{font-size:1.4vw}
 .press-k{color:var(--ink);font-size:1.08vw;font-weight:800;letter-spacing:-.01em}
 .press-d{color:var(--muted);font-size:.8vw;line-height:1.55;margin-top:.3vw}
 
@@ -513,6 +518,7 @@ function Tile({
   soon,
   bar,
   st,
+  thumb,
 }: {
   ic: string
   k: string
@@ -520,10 +526,20 @@ function Tile({
   soon?: boolean
   bar?: 'wip' | 'todo' | 'done'
   st?: ReactNode
+  /** 실제 화면 썸네일 경로 — 빈 문자열이면 점선 자리 표시 */
+  thumb?: string
 }) {
   return (
     <div className={`press-card${soon ? ' soon' : ''}`}>
-      <div className="press-ic"><span className="material-symbols-outlined">{ic}</span></div>
+      {thumb !== undefined ? (
+        thumb ? (
+          <div className="press-thumb"><img src={thumb} alt={`${k} 화면`} /></div>
+        ) : (
+          <div className="press-thumb empty"><span className="material-symbols-outlined">add_photo_alternate</span></div>
+        )
+      ) : (
+        <div className="press-ic"><span className="material-symbols-outlined">{ic}</span></div>
+      )}
       <div className="press-k">{k}</div>
       {d && <div className="press-d">{d}</div>}
       {bar === 'wip' && <div className="wip"><i /></div>}
@@ -814,10 +830,10 @@ const SLIDES: ReactNode[] = [
     </div>
     <div className="split43">
       <div className="press">
-        <Tile ic="support_agent" k="컨설팅" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
-        <Tile ic="monitoring" k="모니터링" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
-        <Tile ic="swap_horiz" k="전력거래" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
-        <Tile ic="view_in_ar" k="DT(디지털트윈)" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
+        <Tile ic="support_agent" thumb="/images/260730_demo/consulting-01.png" k="컨설팅" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
+        <Tile ic="monitoring" thumb="/images/260730_demo/monitoring-01.png" k="모니터링" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
+        <Tile ic="swap_horiz" thumb="/images/260730_demo/trading-01.png" k="전력거래" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
+        <Tile ic="view_in_ar" thumb="" k="DT(디지털트윈)" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
       </div>
       <div className="press p3">
         <Tile soon ic="co2" k="탄소배출관리" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
