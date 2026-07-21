@@ -242,7 +242,12 @@ const CSS = `
 .yt-h2{flex:1;border:1.5px dashed #b9c6dd;border-left:none;border-radius:0 999px 999px 0;background:var(--chip);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:.87vw;font-weight:700}
 .yt-now{position:absolute;top:-1.3vw;transform:translateX(-50%);color:var(--accent);font-size:.72vw;font-weight:800;display:flex;flex-direction:column;align-items:center;line-height:1.2;z-index:1}
 .yt-now:after{content:"";width:2px;height:3.3vw;background:var(--accent);border-radius:2px;margin-top:.15vw;box-shadow:0 0 8px rgba(37,99,235,.45)}
-.split43{display:grid;grid-template-columns:53fr 47fr;gap:1vw}
+.split43{display:grid;grid-template-columns:53fr 47fr;gap:1vw;flex:1;min-height:0;align-items:stretch}
+.split43 .press{height:100%}
+.split43 .press-card{justify-content:center;gap:.15vw}
+.split43 .press-card .press-ic{width:3.2vw;height:3.2vw;margin-bottom:.6vw}
+.split43 .press-card .press-ic .material-symbols-outlined{font-size:1.6vw}
+.split43 .wip-done,.split43 .wip-empty{width:70%;margin-left:auto;margin-right:auto}
 /* 구축 중 — 움직이는 작업 스트라이프 (진행률 주장 없이 "작업 중" 상태 표시) */
 .wip{height:.4vw;border-radius:999px;overflow:hidden;background:#e6ecf7;margin-top:.55vw}
 .wip i{display:block;height:100%;border-radius:999px;background:repeating-linear-gradient(-45deg,#2563eb 0 .45vw,#60a5fa .45vw .9vw);background-size:1.28vw 100%;animation:crawl 1.1s linear infinite}
@@ -858,10 +863,10 @@ const SLIDES: ReactNode[] = [
     </div>
     <div className="split43">
       <div className="press">
-        <Tile ic="support_agent" thumb="/images/260730_demo/consulting-01.png" k="컨설팅" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
-        <Tile ic="monitoring" thumb="/images/260730_demo/monitoring-01.png" k="모니터링" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
-        <Tile ic="swap_horiz" thumb="/images/260730_demo/trading-01.png" k="전력거래" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
-        <Tile ic="view_in_ar" thumb="" k="DT(디지털트윈)" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
+        <Tile ic="support_agent" k="컨설팅" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
+        <Tile ic="monitoring" k="모니터링" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
+        <Tile ic="swap_horiz" k="전력거래" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
+        <Tile ic="view_in_ar" k="DT(디지털트윈)" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
       </div>
       <div className="press p3">
         <Tile soon ic="co2" k="탄소배출관리" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
