@@ -286,7 +286,9 @@ const CSS = `
 @keyframes lkdot{0%{left:0;opacity:0}15%{opacity:1}85%{opacity:1}100%{left:100%;opacity:0}}
 .lk-lab{position:absolute;left:50%;top:31%;transform:translate(-50%,-50%);background:var(--tint);border:1px solid var(--tint-line);color:var(--accent);border-radius:999px;padding:.16vw .8vw;font-size:.74vw;font-weight:700;white-space:nowrap;z-index:1}
 .lk-cards{display:flex;flex-direction:column;gap:.85vw}
-.lk-card{display:flex;align-items:center;gap:.95vw;background:#fff;border:1px solid var(--hair);border-radius:14px;padding:.95vw 1.15vw;box-shadow:0 2px 5px rgba(11,21,38,.04),0 10px 22px rgba(37,99,235,.07)}
+.lk-card{display:flex;align-items:center;gap:.95vw;background:#fff;border:1px solid var(--hair);border-radius:14px;padding:.95vw 1.15vw;box-shadow:0 2px 5px rgba(11,21,38,.04),0 10px 22px rgba(37,99,235,.07);transition:border-color .35s,box-shadow .35s,background .35s}
+/* 현재 보이는 캡처와 동기화되는 활성 카드 */
+.lk-card.on{border-color:#93c5fd;background:linear-gradient(180deg,#ffffff,#f5f9ff);box-shadow:0 8px 24px rgba(37,99,235,.16)}
 .lk-ic{width:2.7vw;height:2.7vw;border-radius:50%;background:var(--tint);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .lk-ic .material-symbols-outlined{font-size:1.35vw}
 .lk-card b{display:block;font-size:1vw;color:var(--ink);font-weight:800;letter-spacing:-.01em}
@@ -571,6 +573,49 @@ function AutoShots({
       {strip}
       {shot}
     </>
+  )
+}
+
+// 로드맵 쇼케이스 — 신규 서비스 3종 캡처가 순환하고, 보이는 화면의 카드가 함께 하이라이트
+function RoadmapShowcase() {
+  const [i, setI] = useState(0)
+  const items = [
+    { ic: 'co2', t: '탄소배출관리', s: '배출 현황 파악 · 감축 관리', src: '/images/260730_demo/carbon.png' },
+    { ic: 'storefront', t: 'e데이터마켓', s: '에너지 데이터 · 탄소배출권 거래', src: '/images/260730_demo/e-data.png' },
+    { ic: 'bolt', t: 'VPP', s: '분산자원 통합 가상발전소', src: '/images/260730_demo/vpp.png' },
+  ]
+  useEffect(() => {
+    const t = setInterval(() => setI((v) => (v + 1) % items.length), 4000)
+    return () => clearInterval(t)
+  }, [items.length])
+  return (
+    <div className="feat">
+      <div className="fcol">
+        <div className="lk-cards">
+          {items.map((it, idx) => (
+            <div className={`lk-card${idx === i ? ' on' : ''}`} key={it.t}>
+              <span className="lk-ic"><span className="material-symbols-outlined">{it.ic}</span></span>
+              <span><b>{it.t}</b><small>{it.s}</small></span>
+              <span className="tag blue"><i />내부 검토중</span>
+            </div>
+          ))}
+        </div>
+        <div className="lk-note" style={{ borderTop: 'none', paddingTop: 0, justifyContent: 'flex-start' }}>
+          <span className="material-symbols-outlined">rate_review</span>
+          세 서비스 모두 <b>화면 구성 완료</b> — 현재 내부 검토 진행 중
+        </div>
+      </div>
+      <div className="shot">
+        {items.map((it, idx) => (
+          <img key={it.src} src={it.src} alt={`${it.t} 화면 캡처`} className={idx === i ? 'on' : ''} />
+        ))}
+        <div className="shot-dots">
+          {items.map((_, idx) => (
+            <i key={idx} className={idx === i ? 'on' : ''} />
+          ))}
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -1048,36 +1093,7 @@ const SLIDES: ReactNode[] = [
     title={<>화면까지 구성된 <span className="hl">세 개의 신규 서비스</span></>}
     lede={<>세 기능은 범위가 방대해 <b>신규 플랫폼 연동(딥링크)</b>으로 서비스하며 — 화면을 구성해 검토하고 있습니다.</>}
   >
-    <div className="feat">
-      <div className="fcol">
-        <div className="lk-cards">
-          <div className="lk-card">
-            <span className="lk-ic"><span className="material-symbols-outlined">co2</span></span>
-            <span><b>탄소배출관리</b><small>배출 현황 파악 · 감축 관리</small></span>
-            <span className="tag blue"><i />내부 검토중</span>
-          </div>
-          <div className="lk-card">
-            <span className="lk-ic"><span className="material-symbols-outlined">storefront</span></span>
-            <span><b>e데이터마켓</b><small>에너지 데이터 · 탄소배출권 거래</small></span>
-            <span className="tag blue"><i />내부 검토중</span>
-          </div>
-          <div className="lk-card">
-            <span className="lk-ic"><span className="material-symbols-outlined">bolt</span></span>
-            <span><b>VPP</b><small>분산자원 통합 가상발전소</small></span>
-            <span className="tag blue"><i />내부 검토중</span>
-          </div>
-        </div>
-        <div className="lk-note" style={{ borderTop: 'none', paddingTop: 0, justifyContent: 'flex-start' }}>
-          <span className="material-symbols-outlined">rate_review</span>
-          세 서비스 모두 <b>화면 구성 완료</b> — 현재 내부 검토 진행 중
-        </div>
-      </div>
-      <ImgSlot
-        tall
-        t="제안: 탄소배출관리 · e데이터마켓 · VPP 화면 캡처"
-        d="구성 중인 각 신규 서비스 화면 — 캡처를 넣으면 자동 순환 뷰어로 교체 (내부 검토중 버전 명시)"
-      />
-    </div>
+    <RoadmapShowcase />
   </ContentSlide>,
 
   /* ── 13page : 마무리 — 지속가능하고 확장 가능한 플랫폼 ── */
