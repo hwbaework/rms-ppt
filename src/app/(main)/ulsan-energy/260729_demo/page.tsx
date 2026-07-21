@@ -298,39 +298,22 @@ const CSS = `
 .coda{color:var(--body);font-size:1vw;line-height:1.8;border-top:1px solid var(--hair);padding-top:.9vw;text-align:center}
 .coda b{color:var(--accent);font-weight:700}
 
-/* ── 마무리(13p) 다크 ── */
-.close-title{color:#fff;font-size:2.9vw;font-weight:900;letter-spacing:-.02em;line-height:1.25;margin-bottom:1.1vw;position:relative;z-index:1}
-.close-title .hl{color:var(--accent-soft)}
-.close-sub{color:rgba(191,209,238,.85);font-size:1.12vw;font-weight:300;line-height:1.85;margin-bottom:2.4vw;position:relative;z-index:1}
-.close-sub b{color:#fff;font-weight:600}
-.close-flow{display:flex;align-items:center;gap:.8vw;margin-bottom:3vw;position:relative;z-index:1;flex-wrap:wrap}
-.close-node{display:inline-flex;align-items:center;gap:.5vw;border:1px solid rgba(127,168,232,.35);border-radius:999px;padding:.4vw 1.15vw;color:rgba(191,209,238,.92);font-size:.9vw;font-weight:600}
-.close-node .material-symbols-outlined{font-size:1vw;color:var(--accent-soft)}
-.close-node.on{background:rgba(37,99,235,.28);border-color:rgba(127,168,232,.6);color:#fff}
-.close-thanks{color:rgba(148,168,200,.75);font-size:.97vw;position:relative;z-index:1;display:flex;align-items:center;gap:1vw}
-.close-thanks img{height:1.3vw;filter:brightness(0) invert(1);opacity:.85}
-
-/* ── 13p 확장 리플 (울산 코어에서 타 지역·신규 가입자로 퍼져나간다) ── */
-.close-grid{flex-direction:row;align-items:center;gap:3.5vw}
-.close-left{flex:1.1;position:relative;z-index:1}
-.close-next-lab{color:rgba(127,168,232,.8);letter-spacing:.3em;text-transform:uppercase;font-size:.68vw;font-weight:700;margin-bottom:.7vw}
-.close-logo{margin-top:3vw}
-.close-logo img{height:1.5vw;filter:brightness(0) invert(1);opacity:.85}
-.ripple{position:relative;width:26vw;height:26vw;flex-shrink:0;z-index:1}
-.rip{position:absolute;border-radius:50%;border:1px solid rgba(127,168,232,.28)}
+/* ── 확장 리플 (울산 코어에서 타 지역·신규 가입자로 퍼져나간다 — 라이트 톤) ── */
+.ripple{position:relative;width:21.5vw;height:21.5vw;flex-shrink:0;margin:0 auto;align-self:center}
+.rip{position:absolute;border-radius:50%;border:1px solid #c9d8f0}
 .rip.r2{inset:22%}
-.rip.r3{inset:4%;border-color:rgba(127,168,232,.18)}
+.rip.r3{inset:4%;border-color:#dfe8f6}
 .rip-core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:6vw;height:6vw;border-radius:50%;background:
   radial-gradient(circle at 32% 26%,rgba(255,255,255,.32) 0%,transparent 45%),
   linear-gradient(135deg,#2563eb,#3b82f6);
-  box-shadow:0 0 42px rgba(59,130,246,.5),inset 0 1px 0 rgba(255,255,255,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;z-index:1}
+  box-shadow:0 10px 30px rgba(37,99,235,.3),inset 0 1px 0 rgba(255,255,255,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;z-index:1}
 .rip-core b{font-size:.85vw;line-height:1.3}
 .rip-core small{font-size:.64vw;opacity:.8;margin-top:.1vw}
-.rip-wave{position:absolute;inset:38.5%;border-radius:50%;border:1.5px solid rgba(96,165,250,.5);animation:ripwave 3.8s ease-out infinite;pointer-events:none}
+.rip-wave{position:absolute;inset:38.5%;border-radius:50%;border:1.5px solid rgba(37,99,235,.4);animation:ripwave 3.8s ease-out infinite;pointer-events:none}
 .rip-wave.w2{animation-delay:1.9s}
-@keyframes ripwave{from{transform:scale(1);opacity:.65}to{transform:scale(4);opacity:0}}
-.rip-lab{position:absolute;transform:translate(-50%,-50%);background:rgba(10,22,46,.8);border:1px solid rgba(127,168,232,.35);border-radius:999px;padding:.26vw .95vw;color:#cdddf7;font-size:.82vw;font-weight:600;white-space:nowrap;z-index:1}
-.rip-dot{position:absolute;width:.5vw;height:.5vw;border-radius:50%;background:#7fa8e8;box-shadow:0 0 8px rgba(127,168,232,.7);transform:translate(-50%,-50%)}
+@keyframes ripwave{from{transform:scale(1);opacity:.6}to{transform:scale(4);opacity:0}}
+.rip-lab{position:absolute;transform:translate(-50%,-50%);background:#fff;border:1px solid var(--tint-line);border-radius:999px;padding:.26vw .95vw;color:#1d4ed8;font-size:.82vw;font-weight:700;white-space:nowrap;z-index:1;box-shadow:0 2px 8px rgba(37,99,235,.1)}
+.rip-dot{position:absolute;width:.5vw;height:.5vw;border-radius:50%;background:#60a5fa;box-shadow:0 0 8px rgba(96,165,250,.55);transform:translate(-50%,-50%)}
 .rip-dot.dim{opacity:.55;width:.4vw;height:.4vw}
 
 /* ── 감사합니다 (마지막 다크) ── */
@@ -350,10 +333,9 @@ const CSS = `
 .blob.b4{animation:drift-b 9s ease-in-out infinite alternate}
 @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .slide.active .cover-eyebrow{animation:rise .65s cubic-bezier(.2,.6,.2,1) both}
-.slide.active .cover-title,.slide.active .close-title{animation:rise .65s cubic-bezier(.2,.6,.2,1) .12s both}
-.slide.active .cover-sub,.slide.active .close-sub{animation:rise .65s cubic-bezier(.2,.6,.2,1) .24s both}
-.slide.active .cover-steps,.slide.active .close-flow{animation:rise .65s cubic-bezier(.2,.6,.2,1) .34s both}
-.slide.active .cover-meta,.slide.active .close-thanks{animation:rise .65s cubic-bezier(.2,.6,.2,1) .44s both}
+.slide.active .cover-title{animation:rise .65s cubic-bezier(.2,.6,.2,1) .12s both}
+.slide.active .cover-sub{animation:rise .65s cubic-bezier(.2,.6,.2,1) .24s both}
+.slide.active .cover-meta{animation:rise .65s cubic-bezier(.2,.6,.2,1) .44s both}
 .slide.active .thanks-inner{animation:rise .8s cubic-bezier(.2,.6,.2,1) both}
 .slide.active .toc-left>*{animation:rise .6s cubic-bezier(.2,.6,.2,1) both}
 .slide.active .toc-left>:nth-child(2){animation-delay:.1s}
@@ -998,41 +980,44 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
   </ContentSlide>,
 
   /* ── 13page : 마무리 — 지속가능하고 확장 가능한 플랫폼 ── */
-  <div className="dark-stage close-grid" key="p13">
-    <div className="close-left">
-      <p className="cover-eyebrow">Sustainable &amp; Expandable</p>
-      <h1 className="close-title">울산은 <span className="hl">하나의<br />적용 범위</span>입니다</h1>
-      <p className="close-sub">
-        울산 에자자 사업에 국한된 시스템이 아니라 — 동일한 플랫폼 기반 위에서<br />
-        <b>타 지역과 신규 가입자로 확장 가능한, 지속가능하고 실효성 있는 서비스</b>를<br />
-        목표로 구축하고 있습니다
-      </p>
-      <p className="close-next-lab">Next</p>
-      <div className="close-flow" style={{ marginBottom: 0 }}>
-        <span className="close-node on"><span className="material-symbols-outlined">play_circle</span>이어서 — 시연 영상</span>
-        <span className="cover-step-arr">→</span>
-        <span className="close-node"><span className="material-symbols-outlined">computer</span>실제 플랫폼 시연</span>
+  <ContentSlide
+    key="p13"
+    no="05"
+    sec="마무리 — 지속가능하고 확장 가능한 플랫폼"
+    title={<>울산은 <span className="hl">하나의 적용 범위</span>입니다</>}
+    lede={
+      <>울산 에자자 사업에 국한된 시스템이 아니라 — 동일한 플랫폼 기반 위에서
+      <b> 타 지역과 신규 가입자로 확장 가능한, 지속가능하고 실효성 있는 서비스</b>를 목표로 구축하고 있습니다.</>
+    }
+  >
+    <div className="feat">
+      <div className="fcol">
+        <div>
+          <div className="block-label"><b>이어서 — 발표를 마치면</b></div>
+          <div className="mflow">
+            <MNode tone="fill" ic="play_circle" t="시연 영상" s="페르소나별 화면 · 기능" />
+            <Arr />
+            <MNode ic="computer" t="실제 플랫폼 시연" s="관리자 계정 · DT 직접" />
+          </div>
+        </div>
       </div>
-      <div className="close-logo">
-        <img src="/images/logo.png" alt="RMS GROUP" />
+      {/* 울산 코어에서 파동이 퍼지며 타 지역 → 신규 가입자 링으로 확장 */}
+      <div className="ripple">
+        <span className="rip-wave" />
+        <span className="rip-wave w2" />
+        <span className="rip r2" />
+        <span className="rip r3" />
+        <div className="rip-core"><b>울산 에자자</b><small>첫 적용</small></div>
+        <span className="rip-lab" style={{ left: '50%', top: '22%' }}>타 지역</span>
+        <span className="rip-lab" style={{ left: '50%', top: '4%' }}>신규 가입자</span>
+        <span className="rip-dot" style={{ left: '71%', top: '32%' }} />
+        <span className="rip-dot" style={{ left: '28%', top: '68%' }} />
+        <span className="rip-dot dim" style={{ left: '85%', top: '30%' }} />
+        <span className="rip-dot dim" style={{ left: '20%', top: '25%' }} />
+        <span className="rip-dot dim" style={{ left: '65%', top: '89%' }} />
       </div>
     </div>
-    {/* 울산 코어에서 파동이 퍼지며 타 지역 → 신규 가입자 링으로 확장 */}
-    <div className="ripple">
-      <span className="rip-wave" />
-      <span className="rip-wave w2" />
-      <span className="rip r2" />
-      <span className="rip r3" />
-      <div className="rip-core"><b>울산 에자자</b><small>첫 적용</small></div>
-      <span className="rip-lab" style={{ left: '50%', top: '22%' }}>타 지역</span>
-      <span className="rip-lab" style={{ left: '50%', top: '4%' }}>신규 가입자</span>
-      <span className="rip-dot" style={{ left: '71%', top: '32%' }} />
-      <span className="rip-dot" style={{ left: '28%', top: '68%' }} />
-      <span className="rip-dot dim" style={{ left: '85%', top: '30%' }} />
-      <span className="rip-dot dim" style={{ left: '20%', top: '25%' }} />
-      <span className="rip-dot dim" style={{ left: '65%', top: '89%' }} />
-    </div>
-  </div>,
+  </ContentSlide>,
 
   /* ── 감사합니다 ── */
   <div className="dark-stage" key="thanks">
