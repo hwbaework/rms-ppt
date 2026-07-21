@@ -288,6 +288,14 @@ const CSS = `
 .lk-note .material-symbols-outlined{font-size:1.15vw;color:var(--accent)}
 .lk-note b{color:var(--ink);font-weight:700}
 
+/* ── 실제 화면 캡처 자동 순환 뷰어 ── */
+.shot{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--hair);background:#0a1220;box-shadow:0 10px 28px rgba(11,21,38,.12);min-height:11vw}
+.shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .7s ease}
+.shot img.on{opacity:1}
+.shot-dots{position:absolute;bottom:.7vw;left:50%;transform:translateX(-50%);display:flex;gap:.4vw;z-index:1}
+.shot-dots i{width:.45vw;height:.45vw;border-radius:50%;background:rgba(255,255,255,.35);transition:background .3s,transform .3s}
+.shot-dots i.on{background:#fff;transform:scale(1.25)}
+
 /* ── 이미지 플레이스홀더 (실제 화면 캡처 자리 — 가장 중요) ── */
 .imgslot{border:2px dashed #c7d2e3;border-radius:14px;background:var(--chip);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.1vw;gap:.35vw;min-height:9vw}
 .imgslot.tall{min-height:12vw}
@@ -458,6 +466,27 @@ function Tile({
       {bar === 'done' && <div className="wip-done" />}
       {bar === 'todo' && <div className="wip-empty" />}
       {st && <div className="press-st">{st}</div>}
+    </div>
+  )
+}
+
+// 실제 화면 캡처 자동 순환 — 여러 장을 일정 간격으로 크로스페이드 (읽을 시간 고려 4초)
+function AutoShots({ srcs, interval = 4000 }: { srcs: string[]; interval?: number }) {
+  const [i, setI] = useState(0)
+  useEffect(() => {
+    const t = setInterval(() => setI((v) => (v + 1) % srcs.length), interval)
+    return () => clearInterval(t)
+  }, [srcs.length, interval])
+  return (
+    <div className="shot" style={{ flex: 1 }}>
+      {srcs.map((s, idx) => (
+        <img key={s} src={s} alt="플랫폼 화면 캡처" className={idx === i ? 'on' : ''} />
+      ))}
+      <div className="shot-dots">
+        {srcs.map((_, idx) => (
+          <i key={idx} className={idx === i ? 'on' : ''} />
+        ))}
+      </div>
     </div>
   )
 }
@@ -811,11 +840,12 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
       <Arr />
       <MNode ic="forum" t="톡 기능" s="일정 조율 · 질의를 플랫폼 안에서 처리" />
     </div>
-    <ImgSlot
-      tall
-      grow
-      t="제안: 컨설팅 신청 → 매칭 → 톡 화면 캡처"
-      d="수요기업의 컨설팅 신청 화면과, 매칭된 컨설턴트와의 톡(일정 조율 · 질의) 화면"
+    <AutoShots
+      srcs={[
+        '/images/260729_demo/consulting-01.png',
+        '/images/260729_demo/consulting-02.png',
+        '/images/260729_demo/consulting-03.png',
+      ]}
     />
   </ContentSlide>,
 
