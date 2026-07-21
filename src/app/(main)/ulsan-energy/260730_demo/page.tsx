@@ -342,6 +342,12 @@ const CSS = `
 .shot-dots i{width:.45vw;height:.45vw;border-radius:50%;background:rgba(255,255,255,.35);transition:background .3s,transform .3s}
 .shot-dots i.on{background:#fff;transform:scale(1.25)}
 
+/* ── 좌측 컬럼 높이 통일 (7~12P) — 절차가 남는 높이를 균등 분배, 기대효과는 하단 고정 ── */
+.proc{flex:1;display:flex;flex-direction:column;min-height:0}
+.proc .pstrip.v{flex:1;justify-content:space-evenly}
+.proc .dead{flex:1;justify-content:space-evenly}
+.fcol>.lk-cards{flex:1;justify-content:space-evenly}
+
 /* ── 기대효과 리스트 (7~12P 공통 — 절차 아래 체크 행) ── */
 .fx{display:flex;flex-direction:column;gap:.45vw}
 .fx-row{display:flex;align-items:center;gap:.6vw;background:#fff;border:1px solid var(--hair);border-radius:10px;padding:.5vw .9vw}
@@ -589,7 +595,7 @@ function AutoShots({
     return (
       <div className="feat">
         <div className="fcol">
-          <div>
+          <div className="proc">
             <div className="block-label"><b>절차</b></div>
             {strip}
           </div>
@@ -1029,7 +1035,7 @@ const SLIDES: ReactNode[] = [
     <div className="feat">
       <div className="fcol">
         {/* 비교군 — 기존 반쪽짜리(회색, 수기에서 끊김) vs RMS 원스톱(파랑) */}
-        <div>
+        <div className="proc">
           <div className="block-label"><b>기존 — 반쪽짜리 서비스</b></div>
           <div className="dead">
             <div className="dead-row">
@@ -1043,7 +1049,7 @@ const SLIDES: ReactNode[] = [
             </div>
           </div>
         </div>
-        <div>
+        <div className="proc">
           <div className="block-label"><b>RMS — 원스톱 통합 처리</b></div>
           <StepCol
             steps={[
@@ -1078,7 +1084,7 @@ const SLIDES: ReactNode[] = [
   >
     <div className="feat">
       <div className="fcol">
-        <div>
+        <div className="proc">
           <div className="block-label"><b>절차</b></div>
           <StepCol
             steps={[
@@ -1114,7 +1120,7 @@ const SLIDES: ReactNode[] = [
   >
     <div className="feat">
       <div className="fcol">
-        <div>
+        <div className="proc">
           <div className="block-label"><b>절차</b></div>
           <StepCol
             steps={[
@@ -1149,7 +1155,7 @@ const SLIDES: ReactNode[] = [
   >
     <div className="feat">
       <div className="fcol">
-        <div>
+        <div className="proc">
           <div className="block-label"><b>절차</b></div>
           <StepCol
             steps={[
