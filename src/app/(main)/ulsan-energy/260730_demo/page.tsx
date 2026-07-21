@@ -349,6 +349,16 @@ const CSS = `
 /* 마무리 풀하이트 지도 — 본문 높이 전체를 차지 */
 .finale{display:grid;grid-template-columns:1fr auto;gap:2.6vw;flex:1;min-height:0;align-items:stretch}
 .kmap.big{width:auto;height:100%;max-width:none;align-self:stretch;margin:0}
+/* 확장 히어로 — 지도가 무대 중앙, 주위에 확장 메시지 카드가 떠 있다 */
+.finale2{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.fnote{position:absolute;background:#fff;border:1px solid var(--hair);border-radius:12px;padding:.75vw 1.05vw;box-shadow:0 8px 24px rgba(11,21,38,.08);max-width:17vw;z-index:1}
+.fnote b{display:flex;align-items:center;gap:.45vw;font-size:.94vw;color:var(--ink);font-weight:700}
+.fnote b .material-symbols-outlined{font-size:1.05vw;color:var(--accent)}
+.fnote small{display:block;font-size:.76vw;color:var(--muted);margin-top:.2vw;line-height:1.6}
+.kpin.ghost i{background:#fff;border:2px dashed #93c5fd;box-shadow:none;animation:ghostblink 2.6s ease-in-out infinite}
+@keyframes ghostblink{0%,100%{opacity:.45}50%{opacity:1}}
+.kpin.ghost b{color:#1d4ed8;border-style:dashed;border-color:#bfdbfe}
+.karc.ghosted{stroke:#c9d8f0;stroke-dasharray:1.6 2.2}
 /* 울산 → 사천 → 후평 순차 점등 */
 .kmap.big .kpin i{animation:pinlight 6s ease-in-out infinite}
 @keyframes pinlight{0%,22%,100%{transform:scale(1)}6%,14%{transform:scale(1.4);box-shadow:0 0 0 .5vw rgba(37,99,235,.18),0 0 16px rgba(59,130,246,.65)}}
@@ -1191,26 +1201,19 @@ const SLIDES: ReactNode[] = [
       <b> 타 지역과 신규 가입자로 확장하는, 지속가능하고 실효성 있는 서비스</b>입니다.</>
     }
   >
-    <div className="finale">
-      <div className="fcol">
-        <div className="proc">
-          <div className="block-label"><b>확장 로드맵</b></div>
-          <StepCol
-            steps={[
-              { b: '울산 에자자', s: '첫 적용', tone: 'acc' },
-              { b: '사천 · 후평', s: '확산 적용' },
-              { b: '이후 — 신규 지역 · 신규 가입자', s: '동일한 플랫폼 기반 위에서 계속 확장' },
-            ]}
-          />
-        </div>
-        <div>
-          <div className="block-label"><b>이어서</b></div>
-          <div className="pstrip">
-            <span className="pchip on"><b>시연 영상</b><small>페르소나별 화면 · 기능</small></span>
-            <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
-            <span className="pchip"><b>실제 플랫폼 시연</b><small>관리자 계정 · DT</small></span>
-          </div>
-        </div>
+    <div className="finale2">
+      {/* 지도 주위에 떠 있는 확장 메시지 카드 */}
+      <div className="fnote" style={{ left: '5%', top: '10%' }}>
+        <b><span className="material-symbols-outlined">hub</span>하나의 플랫폼 기반</b>
+        <small>지역이 늘어도 같은 기반 위에서 — 새로 만들지 않습니다</small>
+      </div>
+      <div className="fnote" style={{ left: '5%', bottom: '12%' }}>
+        <b><span className="material-symbols-outlined">person_add</span>신규 가입자</b>
+        <small>에자자 참여 기업이 아니어도, 어느 지역에서든 접근</small>
+      </div>
+      <div className="fnote" style={{ right: '5%', top: '16%' }}>
+        <b><span className="material-symbols-outlined">update</span>지속 운영</b>
+        <small>사업 종료 이후에도 운영 · 업데이트가 계속됩니다</small>
       </div>
       {/* 확장 지도 — 울산에서 사천 · 후평으로. 경계는 Natural Earth 10m(최고 해상도 · 퍼블릭 도메인) 실데이터 투영 — 울릉도 · 독도 · 백령도 포함,
           핀 좌표도 실제 경위도(울산 129.31E/35.54N · 사천 128.06E/35.00N · 춘천 후평 127.73E/37.87N) 투영값 */}
@@ -1222,6 +1225,8 @@ const SLIDES: ReactNode[] = [
           />
           <path className="karc" d="M 72.5 71.7 Q 64 84 56.3 81.2" />
           <path className="karc" d="M 72.5 71.7 Q 77 46 51.8 30.3" />
+          {/* 다음 지역으로 이어지는 점선 — 확장은 계속된다 */}
+          <path className="karc ghosted" d="M 72.5 71.7 Q 55 61 36 52.5" />
           {["M 72.5 71.7 Q 64 84 56.3 81.2", "M 72.5 71.7 Q 77 46 51.8 30.3"].map((d, i) => (
             <circle key={i} r="1.2" className="kdot" style={{ offsetPath: `path('${d}')`, animationDelay: `${-i * 1.5}s` }} />
           ))}
@@ -1240,6 +1245,11 @@ const SLIDES: ReactNode[] = [
           <i style={{ animationDelay: '4s' }} />
           <b>후평</b>
           <small>확산 적용</small>
+        </div>
+        <div className="kpin ghost" style={{ left: '34%', top: '40%' }}>
+          <i />
+          <b>다음 지역</b>
+          <small>계속 확장</small>
         </div>
       </div>
     </div>
