@@ -290,7 +290,7 @@ const CSS = `
 
 /* ── 실제 화면 캡처 자동 순환 뷰어 ── */
 .shot{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--hair);background:#0a1220;box-shadow:0 10px 28px rgba(11,21,38,.12);min-height:11vw}
-.shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .7s ease}
+.shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;opacity:0;transition:opacity .7s ease}
 .shot img.on{opacity:1}
 .shot-dots{position:absolute;bottom:.7vw;left:50%;transform:translateX(-50%);display:flex;gap:.4vw;z-index:1}
 .shot-dots i{width:.45vw;height:.45vw;border-radius:50%;background:rgba(255,255,255,.35);transition:background .3s,transform .3s}
