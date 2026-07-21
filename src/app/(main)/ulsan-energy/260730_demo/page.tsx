@@ -192,7 +192,15 @@ const CSS = `
 .hub-c b{font-size:.84vw;line-height:1.35}
 .hub-c small{font-size:.62vw;opacity:.75}
 .pnode{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:.3vw;z-index:1;text-align:center}
-.pnode-ic{width:3.2vw;height:3.2vw;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 5px 16px rgba(11,21,38,.16)}
+.pnode-ic{width:3.2vw;height:3.2vw;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 5px 16px rgba(11,21,38,.16);animation:personaPop 7.5s ease-in-out infinite}
+@keyframes personaPop{0%,14%,100%{transform:scale(1)}4%,10%{transform:scale(1.16);box-shadow:0 8px 24px rgba(37,99,235,.32)}}
+/* 연결선 대시가 허브 쪽으로 계속 흘러들어온다 */
+.hub svg line{animation:lineflow 1.4s linear infinite}
+@keyframes lineflow{to{stroke-dashoffset:2.5}}
+/* 허브 주위로 퍼지는 링 */
+.hub-ring{position:absolute;left:50%;top:50%;width:9.5vw;height:9.5vw;border-radius:50%;border:1.5px solid rgba(37,99,235,.3);animation:hubring 3s ease-out infinite;pointer-events:none}
+.hub-ring.r2{animation-delay:1.5s}
+@keyframes hubring{from{transform:translate(-50%,-50%) scale(1);opacity:.6}to{transform:translate(-50%,-50%) scale(1.6);opacity:0}}
 .pnode-ic .material-symbols-outlined{font-size:1.5vw}
 .pnode b{font-size:.82vw;color:var(--ink)}
 
@@ -683,8 +691,8 @@ const SLIDES: ReactNode[] = [
     key="p2"
     no="01"
     sec="사업 추진 경과 — 1~2차년도"
-    title={<><span className="hl">3차년도</span> — 계획대로 진행 중</>}
-    lede={<>1~2차년도에 다진 기반 위에서, 올해는 <b>핵심 기능을 개발하는 해</b>입니다.</>}
+    title={<>3차년도 — <span className="hl">핵심 기능 개발</span>의 해</>}
+    lede={<>1~2차년도에 다진 기반 위에서, <b>계획된 일정에 따라 정상적으로</b> 개발을 진행하고 있습니다.</>}
   >
     <Flow
       steps={[
@@ -915,14 +923,16 @@ const SLIDES: ReactNode[] = [
           <line key={i} x1="50" y1="50" x2={parseFloat(p.x)} y2={parseFloat(p.y)} stroke="#d5ddeb" strokeWidth=".35" strokeDasharray="1.4 1.1" />
         ))}
       </svg>
+      <span className="hub-ring" />
+      <span className="hub-ring r2" />
       <div className="hub-c">
         <span className="material-symbols-outlined">hub</span>
         <b>통합 에너지<br />플랫폼</b>
         <small>역할별 UI/UX · 기능</small>
       </div>
-      {PERSONAS.map((p) => (
+      {PERSONAS.map((p, i) => (
         <div className="pnode" key={p.t} style={{ left: p.x, top: p.y }}>
-          <div className="pnode-ic" style={{ background: p.c }}>
+          <div className="pnode-ic" style={{ background: p.c, animationDelay: `${i * 1.5}s` }}>
             <span className="material-symbols-outlined">{p.ic}</span>
           </div>
           <b>{p.t}</b>
@@ -1117,30 +1127,30 @@ const SLIDES: ReactNode[] = [
           ]}
         />
       </div>
-      {/* 확장 지도 — 울산에서 사천 · 후평으로 뻗어나가는 그림 (단순화한 대한민국 실루엣) */}
+      {/* 확장 지도 — 울산에서 사천 · 후평으로. 경계는 Natural Earth 50m(퍼블릭 도메인) 실데이터 투영,
+          핀 좌표도 실제 경위도(울산 129.31E/35.54N · 사천 128.06E/35.00N · 춘천 후평 127.73E/37.87N) 투영값 */}
       <div className="kmap">
         <svg viewBox="0 0 100 130" aria-hidden>
           <path
             className="kland"
-            d="M34 16 L46 8 L60 6 L64 14 L66 26 L70 42 L74 58 L78 72 L79 80 L74 88 L66 94 L56 98 L44 96 L34 100 L27 92 L24 82 L27 72 L22 62 L26 50 L22 38 L27 26 Z"
+            d="M29.0 22.9L29.6 22.5L29.6 21.9L29.6 19.9L31.2 18.5L33.5 15.6L34.6 14.1L35.8 12.6L37.3 11.6L38.7 11.2L41.0 11.0L45.3 11.2L46.2 11.0L49.2 10.8L49.9 11.1L52.1 11.3L54.5 11.1L55.7 10.7L56.9 9.9L57.9 8.6L58.9 6.2L60.0 4.4L60.6 4.0L65.0 14.1L69.3 20.6L72.9 25.3L78.0 34.4L79.5 39.2L79.7 42.2L80.5 46.3L79.8 48.7L80.0 52.4L79.7 54.4L79.1 55.8L79.0 58.5L79.2 59.9L79.3 61.9L79.7 62.6L80.3 62.9L81.2 62.2L82.3 61.9L82.1 64.2L80.7 70.1L79.5 74.3L77.9 78.0L75.8 81.4L73.3 82.8L71.6 83.2L68.2 83.4L65.5 82.8L63.1 83.3L62.1 84.0L61.4 85.2L61.9 87.1L61.9 88.4L60.8 88.3L58.8 87.5L56.6 87.4L55.5 87.0L54.5 85.0L53.4 85.1L51.5 86.3L48.6 86.6L47.6 87.2L47.3 88.0L47.7 89.1L49.1 90.4L48.6 91.8L47.1 92.5L45.9 90.8L45.2 89.1L44.3 89.0L43.0 89.5L42.7 91.3L43.3 92.5L44.4 94.0L42.9 95.6L42.6 96.8L41.6 97.6L38.8 95.7L39.2 94.4L40.4 93.1L40.5 91.8L40.2 91.0L36.2 94.4L33.8 98.2L32.5 97.9L32.0 96.9L31.2 96.5L28.6 99.0L28.1 100.9L27.2 101.0L26.8 100.1L26.7 98.4L26.3 96.9L23.6 94.8L22.3 92.9L23.0 91.8L25.3 92.4L27.0 92.3L26.7 91.4L26.1 91.0L27.3 90.5L28.3 89.5L27.5 89.2L26.2 89.8L25.2 89.5L24.8 87.0L23.5 84.5L22.8 82.1L24.1 80.7L24.7 78.5L25.9 75.3L26.5 74.3L28.1 73.5L28.7 72.7L27.8 72.3L26.4 71.9L26.4 71.0L27.4 70.5L28.4 69.5L30.5 68.2L31.2 65.9L30.6 65.3L29.3 64.8L29.6 63.6L30.1 62.7L29.9 62.2L28.4 60.7L27.3 59.3L27.6 57.7L27.4 55.4L27.5 53.4L27.5 52.3L26.7 49.9L26.4 47.4L25.4 47.8L24.6 48.4L21.7 47.5L20.8 47.5L20.4 45.7L21.5 43.4L23.9 41.5L25.3 41.2L26.4 40.4L28.0 40.1L30.0 41.4L31.8 41.7L32.7 44.0L33.4 44.5L33.5 43.6L34.9 42.6L35.3 41.9L34.9 41.5L33.3 41.1L31.8 38.2L31.6 37.0L31.1 36.2L31.9 33.9L30.2 31.3L29.3 30.5L29.4 28.1L28.6 26.6L28.1 25.8L27.8 24.4L28.0 23.8L28.8 23.5L29.0 22.9ZM23.5 125.5L22.7 126.0L21.9 125.7L21.7 125.5L20.8 124.2L20.5 123.5L21.2 122.3L23.7 120.2L30.1 118.2L31.3 118.1L33.9 118.9L34.4 120.5L34.0 121.9L33.4 122.9L30.4 124.4L28.1 125.2L23.5 125.5ZM67.2 90.1L65.5 91.5L63.2 89.6L62.7 88.6L64.4 87.1L65.9 85.3L66.9 85.2L67.2 90.1ZM55.0 89.9L54.8 92.1L53.5 92.2L52.7 90.8L51.9 91.5L51.5 91.5L50.9 89.7L50.8 88.4L52.3 87.3L53.2 87.9L54.5 88.3L55.0 89.9ZM21.8 99.7L20.6 100.0L20.0 99.3L19.5 99.1L19.8 98.0L21.7 96.0L22.0 95.4L23.8 95.8L24.4 96.8L23.6 98.4L21.8 99.7ZM27.0 24.0L26.9 26.9L25.9 26.8L25.2 26.5L24.9 25.9L24.2 23.2L25.0 22.0L26.5 22.9L27.0 24.0ZM20.7 91.6L20.4 92.1L19.6 92.0L18.8 90.4L18.5 89.2L17.7 88.5L19.0 87.4L20.6 89.4L20.7 91.6ZM25.1 51.9L24.9 53.4L23.7 52.4L23.3 49.2L24.5 50.2L25.1 51.9Z"
           />
-          <ellipse className="kland" cx="30" cy="116" rx="7" ry="4" />
-          <path id="karc1" className="karc" d="M 74 85 Q 64 96 55 91" />
-          <path id="karc2" className="karc" d="M 74 85 Q 78 45 49 24" />
-          {["M 74 85 Q 64 96 55 91", "M 74 85 Q 78 45 49 24"].map((d, i) => (
+          <path className="karc" d="M 77.6 73.4 Q 68 88 57 85.2" />
+          <path className="karc" d="M 77.6 73.4 Q 81.5 38 51.5 22" />
+          {["M 77.6 73.4 Q 68 88 57 85.2", "M 77.6 73.4 Q 81.5 38 51.5 22"].map((d, i) => (
             <circle key={i} r="1.2" className="kdot" style={{ offsetPath: `path('${d}')`, animationDelay: `${-i * 1.5}s` }} />
           ))}
         </svg>
-        <div className="kpin main" style={{ left: '74%', top: '65.4%' }}>
+        <div className="kpin main" style={{ left: '77.6%', top: '56.5%' }}>
           <i />
           <b>울산</b>
           <small>첫 적용</small>
         </div>
-        <div className="kpin" style={{ left: '55%', top: '70%' }}>
+        <div className="kpin" style={{ left: '55%', top: '65.7%' }}>
           <i />
           <b>사천</b>
         </div>
-        <div className="kpin" style={{ left: '49%', top: '18.5%' }}>
+        <div className="kpin" style={{ left: '49%', top: '16.1%' }}>
           <i />
           <b>후평</b>
         </div>
