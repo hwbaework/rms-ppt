@@ -53,6 +53,22 @@ const CSS = `
 .cover-meta img{height:1.35vw;filter:brightness(0) invert(1);opacity:.9}
 .cover-meta i{width:3px;height:3px;border-radius:50%;background:rgba(148,168,200,.5)}
 
+/* ── 목차 (좌 네이비 패널 + 우 에디토리얼 리스트) ── */
+.toc{display:flex}
+.toc-left{width:35%;background:transparent;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;padding:0 3.6vw}
+.toc-left:before{content:"";position:absolute;left:-10vw;bottom:-14vw;width:30vw;height:30vw;border:1px solid rgba(127,168,232,.15);border-radius:50%}
+.toc-eyebrow{color:var(--accent-soft);letter-spacing:.4em;text-transform:uppercase;font-size:.72vw;font-weight:600;margin-bottom:1.1vw}
+.toc-title{color:#fff;font-size:2.7vw;font-weight:800;letter-spacing:-.01em;margin-bottom:1.2vw}
+.toc-lead{color:rgba(191,209,238,.72);font-size:1vw;font-weight:300;line-height:1.8}
+.toc-right{flex:1;background:var(--paper);display:flex;flex-direction:column;justify-content:center;padding:0 3.6vw}
+.trow{display:flex;align-items:center;gap:1.6vw;padding:1.1vw .4vw;border-bottom:1px solid var(--hair);transition:background .2s;cursor:pointer}
+.trow:first-child{border-top:1px solid var(--hair)}
+.trow:hover{background:#f4f7fd}
+.trow-no{color:#c3ccda;font-size:1.5vw;font-weight:300;letter-spacing:.02em;width:2.9vw;flex-shrink:0;transition:color .2s}
+.trow:hover .trow-no{color:var(--accent)}
+.trow-t{color:var(--ink);font-size:1.08vw;font-weight:700;margin-bottom:.22vw}
+.trow-d{color:var(--muted);font-size:.85vw;line-height:1.5}
+
 /* ── 본문 공통 ── */
 .cs{background:var(--paper);display:flex;flex-direction:column}
 .cs-body{flex:1;display:flex;flex-direction:column;padding:3% 6.5% 80px}
@@ -339,6 +355,14 @@ const CSS = `
 .slide.active .cover-steps,.slide.active .close-flow{animation:rise .65s cubic-bezier(.2,.6,.2,1) .34s both}
 .slide.active .cover-meta,.slide.active .close-thanks{animation:rise .65s cubic-bezier(.2,.6,.2,1) .44s both}
 .slide.active .thanks-inner{animation:rise .8s cubic-bezier(.2,.6,.2,1) both}
+.slide.active .toc-left>*{animation:rise .6s cubic-bezier(.2,.6,.2,1) both}
+.slide.active .toc-left>:nth-child(2){animation-delay:.1s}
+.slide.active .toc-left>:nth-child(3){animation-delay:.2s}
+.slide.active .trow{animation:rise .5s cubic-bezier(.2,.6,.2,1) both}
+.slide.active .trow:nth-child(2){animation-delay:.07s}
+.slide.active .trow:nth-child(3){animation-delay:.14s}
+.slide.active .trow:nth-child(4){animation-delay:.21s}
+.slide.active .trow:nth-child(5){animation-delay:.28s}
 .slide.active .cs-head{animation:rise .5s cubic-bezier(.2,.6,.2,1) both}
 .slide.active .cs-title{animation:rise .55s cubic-bezier(.2,.6,.2,1) .08s both}
 .slide.active .lede{animation:rise .6s cubic-bezier(.2,.6,.2,1) .14s both}
@@ -477,7 +501,16 @@ const PERSONAS = [
   { x: '15%', y: '30%', c: '#8b5cf6', ic: 'support_agent', t: '컨설턴트' },
 ]
 
-const SLIDES: ReactNode[] = [
+// 목차 — target = 이동할 슬라이드 인덱스 (0 표지, 1 목차, 2~13 = 시나리오 2~13페이지)
+const TOC = [
+  { no: '01', t: '사업 추진 경과', d: '1~2차년도 기반 구축 · 3차년도 개발 현황', target: 2 },
+  { no: '02', t: '플랫폼 방향성', d: '지속가능한 하나의 플랫폼 · 세 가지 질문 · 5개 페르소나', target: 4 },
+  { no: '03', t: '핵심 기능 다섯 가지', d: '컨설팅 · 원스톱 · 모니터링 · 전력거래 · DT', target: 7 },
+  { no: '04', t: '하반기 로드맵', d: '탄소배출관리 · e데이터마켓 · VPP — 딥링크 연동', target: 12 },
+  { no: '05', t: '마무리', d: '울산은 하나의 적용 범위 — 확장 가능한 플랫폼', target: 13 },
+]
+
+const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
   /* ── 1page : 인사 및 발표 개요 ── */
   <div className="dark-stage" key="p1">
     <p className="cover-eyebrow">Ulsan-Mipo Energy Independence · RMS</p>
@@ -495,9 +528,39 @@ const SLIDES: ReactNode[] = [
     </div>
   </div>,
 
+  /* ── 목차 ── */
+  <div className="toc" key="toc">
+    <div className="toc-left">
+      <p className="toc-eyebrow">Contents</p>
+      <h2 className="toc-title">목차</h2>
+      <p className="toc-lead">
+        울산에 납품하고 끝나는 시스템이 아니라,<br />
+        계속 자라는 하나의 플랫폼을<br />
+        만들고 있습니다.
+      </p>
+    </div>
+    <div className="toc-right">
+      {TOC.map((t) => (
+        <div className="trow" key={t.no} onClick={() => goTo(t.target)}>
+          <span className="trow-no">{t.no}</span>
+          <div>
+            <div className="trow-t">{t.t}</div>
+            <div className="trow-d">{t.d}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>,
+
   /* ── 2page : 사업 추진 경과 (1~2차년도) ── */
   /*    연차별 단계·3차년도 할 일·구축률: [울산미포에자자] 3차년도 사업계획서(2026.03) 재구성 */
-  <ContentSlide key="p2" no="02" sec="사업 추진 경과 (1~2차년도)" title={<>지금은 <span className="hl">3차년도</span> — 계획대로 진행 중입니다</>}>
+  <ContentSlide
+    key="p2"
+    no="02"
+    sec="사업 추진 경과 (1~2차년도)"
+    title={<>지금은 <span className="hl">3차년도</span> — 계획대로 진행 중입니다</>}
+    lede={<>1~2차년도에 다진 기반 위에서, 올해는 <b>핵심 기능을 개발하는 해</b>입니다.</>}
+  >
     <Flow
       steps={[
         { no: '1차년도 · 2024', name: '요구사항 분석 · 설계', sub: '프로세스 · 아키텍처 설계, 관제 시나리오 분석' },
@@ -583,7 +646,13 @@ const SLIDES: ReactNode[] = [
   </ContentSlide>,
 
   /* ── 4page : RMS가 추구하는 플랫폼 방향성 ── */
-  <ContentSlide key="p4" no="04" sec="RMS가 추구하는 플랫폼 방향성" title={<>납품하고 끝나는 시스템이 <span className="hl">아닙니다</span></>}>
+  <ContentSlide
+    key="p4"
+    no="04"
+    sec="RMS가 추구하는 플랫폼 방향성"
+    title={<>납품하고 끝나는 시스템이 <span className="hl">아닙니다</span></>}
+    lede={<>통상적인 공공 플랫폼은 사업이 끝나면 방치됩니다 — 저희는 <b>처음부터 다르게 설계</b>했습니다.</>}
+  >
     <div className="vs">
       <div className="vs-panel">
         <div className="vs-h"><span className="material-symbols-outlined">inventory_2</span>통상적인 지자체 · 공공 플랫폼</div>
@@ -748,6 +817,7 @@ const SLIDES: ReactNode[] = [
     no="07"
     sec="핵심 기능 ① 컨설팅"
     title={<>신청하면 매칭 — 진입장벽을 <span className="hl">크게 낮췄습니다</span></>}
+    lede={<>기존에는 RE100 컨설팅을 <b>어디에 문의해야 할지조차</b> 알기 어려웠습니다.</>}
   >
     <div className="mflow">
       <MNode tone="gray" ic="psychology_alt" t="기존" s="어디에 문의해야 할지조차 알기 어려움" />
@@ -981,7 +1051,7 @@ const SLIDES: ReactNode[] = [
 
 export default function Page() {
   const [idx, setIdx] = useState(0)
-  const slides = useMemo(() => SLIDES, [])
+  const slides = useMemo(() => buildSlides(setIdx), [])
   const total = slides.length
 
   const next = useCallback(() => setIdx((i) => Math.min(total - 1, i + 1)), [total])
