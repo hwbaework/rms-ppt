@@ -897,9 +897,9 @@ const SLIDES: ReactNode[] = [
           </div>
           {[
             { x: '50%', y: '4%', no: '1', ic: 'location_on', t: '울산 에자자 사업', s: '여기서 시작', v: '' },
-            { x: '90%', y: '44%', no: '2', ic: 'person_add', t: '신규 가입', s: '참여 기업이 아니어도', v: ' hr' },
-            { x: '50%', y: '84%', no: '3', ic: 'touch_app', t: '참여 · 이용', s: '필요한 기능 사용', v: '' },
-            { x: '10%', y: '44%', no: '4', ic: 'settings_suggest', t: '관리 · 운영', s: '종료 후에도 업데이트', v: ' hl2' },
+            { x: '90%', y: '44%', no: '2', ic: 'touch_app', t: '참여 · 이용', s: '필요한 기능 사용', v: ' hr' },
+            { x: '50%', y: '84%', no: '3', ic: 'settings_suggest', t: '관리 · 운영', s: '종료 후에도 업데이트', v: '' },
+            { x: '10%', y: '44%', no: '4', ic: 'travel_explore', t: '지속 확장', s: '이후 사천 · 후평 등 확산', v: ' hl2' },
           ].map((n) => (
             <div className={`cnode${n.v}`} key={n.no} style={{ left: n.x, top: n.y }}>
               <span className="cnode-ic">
@@ -944,10 +944,9 @@ const SLIDES: ReactNode[] = [
     </div>
     <div className="ans">
       <span className="material-symbols-outlined">hub</span>
-      <span className="ans-t">다섯 가지 핵심 기능은, 이 세 가지를 해결하기 위한 서비스입니다</span>
+      <span className="ans-t">네 가지 핵심 기능은, 이 세 가지를 해결하기 위한 서비스입니다</span>
       <span className="ans-fn">
         <span className="ans-pill">컨설팅</span>
-        <span className="ans-pill">원스톱</span>
         <span className="ans-pill">모니터링</span>
         <span className="ans-pill">전력거래</span>
         <span className="ans-pill">DT</span>
@@ -1024,61 +1023,11 @@ const SLIDES: ReactNode[] = [
     />
   </ContentSlide>,
 
-  /* ── 8page : 핵심 기능 ② 원스톱 통합 처리 ── */
-  <ContentSlide
-    key="p8"
-    no="03"
-    sec="핵심 기능 ② 원스톱 통합 처리"
-    title={<>반쪽짜리가 아닌, <span className="hl">원스톱 통합 처리</span></>}
-    lede={<>계약은 플랫폼에서 하고 정산 · 세금계산서는 수기로 — 그런 <b>반쪽짜리 서비스가 아닙니다</b>.</>}
-  >
-    <div className="feat">
-      <div className="fcol">
-        {/* 비교군 — 기존 반쪽짜리(회색, 수기에서 끊김) vs RMS 원스톱(파랑) */}
-        <div className="proc">
-          <div className="block-label"><b>기존 — 반쪽짜리 서비스</b></div>
-          <div className="dead">
-            <div className="dead-row">
-              <span className="dead-ic"><span className="material-symbols-outlined">contract</span></span>
-              <span><b>계약</b><small>플랫폼에서 진행</small></span>
-            </div>
-            <span className="dead-link" />
-            <div className="dead-row stop">
-              <span className="dead-ic"><span className="material-symbols-outlined">edit_off</span></span>
-              <span><b>정산 · 세금계산서</b><small>별도 수기 처리 — 여기서 끊긴다</small></span>
-            </div>
-          </div>
-        </div>
-        <div className="proc">
-          <div className="block-label"><b>RMS — 원스톱 통합 처리</b></div>
-          <StepCol
-            steps={[
-              { b: '계약 체결' },
-              { b: '세금계산서 발행' },
-              { b: '정산', s: '거래 업무 전체를 플랫폼 안에서', tone: 'acc' },
-            ]}
-          />
-        </div>
-        <Effects
-          items={[
-            '별도 수기 처리 제로',
-            '거래에 수반되는 업무 전체를 한 곳에서 처리',
-          ]}
-        />
-      </div>
-      <ImgSlot
-        tall
-        t="제안: 세금계산서 · 정산 화면 캡처"
-        d="플랫폼 안에서 세금계산서가 발행되고 정산 내역이 잡히는 화면 — 캡처를 넣으면 자동 순환 뷰어로 교체"
-      />
-    </div>
-  </ContentSlide>,
-
-  /* ── 9page : 핵심 기능 ③ 모니터링 + O&M 연계 ── */
+  /* ── 9page : 핵심 기능 ② 모니터링 + O&M 연계 (※ 원스톱은 사용자 지시로 제외) ── */
   <ContentSlide
     key="p9"
     no="03"
-    sec="핵심 기능 ③ 모니터링 + O&M 연계"
+    sec="핵심 기능 ② 모니터링 + O&M 연계"
     title={<>감지에서 조치 · 결과까지, <span className="hl">하나의 흐름</span></>}
     lede={<>단순 발전량 모니터링은 시중에 이미 많습니다 — 그것만으로는 <b>반쪽짜리</b>라고 판단했습니다.</>}
   >
@@ -1114,7 +1063,7 @@ const SLIDES: ReactNode[] = [
   <ContentSlide
     key="p10"
     no="03"
-    sec="핵심 기능 ④ 전력거래"
+    sec="핵심 기능 ③ 전력거래"
     title={<>RE100 이행을 위한 <span className="hl">재생에너지 전력 조달 서비스</span></>}
     lede={<>수요기업의 RE100 이행에는 <b>재생에너지 전력</b>이 필요하고, 조달 과정이 원활해야 합니다.</>}
   >
@@ -1149,7 +1098,7 @@ const SLIDES: ReactNode[] = [
   <ContentSlide
     key="p11"
     no="03"
-    sec="핵심 기능 ⑤ DT (디지털 트윈)"
+    sec="핵심 기능 ④ DT (디지털 트윈)"
     title={<>설치 전에 눈으로 확인하는 <span className="hl">예상 효과</span></>}
     lede={<>신규 가입 기업에 가장 효과적인 것 — 태양광 설치 효과를 <b>직접 눈으로 확인</b>하는 것입니다.</>}
   >
