@@ -342,6 +342,15 @@ const CSS = `
 .shot-dots i{width:.45vw;height:.45vw;border-radius:50%;background:rgba(255,255,255,.35);transition:background .3s,transform .3s}
 .shot-dots i.on{background:#fff;transform:scale(1.25)}
 
+/* ── 기대효과 리스트 (7~12P 공통 — 절차 아래 체크 행) ── */
+.fx{display:flex;flex-direction:column;gap:.45vw}
+.fx-row{display:flex;align-items:center;gap:.6vw;background:#fff;border:1px solid var(--hair);border-radius:10px;padding:.5vw .9vw}
+.fx-row .material-symbols-outlined{font-size:1.05vw;color:#10b981;flex-shrink:0}
+.fx-row span:last-child{font-size:.87vw;color:var(--ink);font-weight:600;line-height:1.5}
+.lk-cards.sm .lk-card{padding:.6vw .95vw}
+.lk-cards.sm .lk-card b{font-size:.92vw}
+.lk-cards.sm .lk-card small{font-size:.72vw}
+
 /* ── 이미지 플레이스홀더 (실제 화면 캡처 자리 — 가장 중요) ── */
 .imgslot{border:2px dashed #c7d2e3;border-radius:14px;background:var(--chip);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.1vw;gap:.35vw;min-height:9vw}
 .imgslot.tall{min-height:12vw}
@@ -524,12 +533,14 @@ function AutoShots({
   lead,
   interval = 4000,
   side,
+  extra,
 }: {
   srcs: string[]
   steps?: { b: string; s: string }[]
   lead?: { b: string; s: string }
   interval?: number
   side?: boolean
+  extra?: ReactNode
 }) {
   const [i, setI] = useState(0)
   useEffect(() => {
@@ -567,11 +578,17 @@ function AutoShots({
       </div>
     </div>
   )
-  // side: 좌 텍스트(단계 칩) / 우 이미지 — 8~13P 공통 레이아웃
+  // side: 좌 텍스트(절차 + 기대효과) / 우 이미지 — 7~12P 공통 레이아웃
   if (side) {
     return (
       <div className="feat">
-        <div className="fcol">{strip}</div>
+        <div className="fcol">
+          <div>
+            <div className="block-label"><b>절차</b></div>
+            {strip}
+          </div>
+          {extra}
+        </div>
         {shot}
       </div>
     )
@@ -599,7 +616,7 @@ function RoadmapShowcase() {
   return (
     <div className="feat">
       <div className="fcol">
-        <div className="lk-cards">
+        <div className="lk-cards sm">
           {items.map((it, idx) => (
             <div className={`lk-card${idx === i ? ' on' : ''}`} key={it.t}>
               <span className="lk-ic"><span className="material-symbols-outlined">{it.ic}</span></span>
@@ -608,10 +625,22 @@ function RoadmapShowcase() {
             </div>
           ))}
         </div>
-        <div className="lk-note" style={{ borderTop: 'none', paddingTop: 0, justifyContent: 'flex-start' }}>
-          <span className="material-symbols-outlined">rate_review</span>
-          세 서비스 모두 <b>화면 구성 완료</b> — 현재 내부 검토 진행 중
+        <div>
+          <div className="block-label"><b>절차</b></div>
+          <div className="pstrip">
+            <span className="pchip"><b>화면 구성 완료</b></span>
+            <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
+            <span className="pchip on"><b>내부 검토 진행</b><small>현재</small></span>
+            <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
+            <span className="pchip"><b>하반기 개발 · 연동</b><small>딥링크</small></span>
+          </div>
         </div>
+        <Effects
+          items={[
+            '하나의 플랫폼처럼 자연스러운 이동 — 서비스 연속성 유지',
+            '탄소 · 데이터 · VPP까지 서비스 확장',
+          ]}
+        />
       </div>
       <div className="shot">
         {items.map((it, idx) => (
@@ -622,6 +651,23 @@ function RoadmapShowcase() {
             <i key={idx} className={idx === i ? 'on' : ''} />
           ))}
         </div>
+      </div>
+    </div>
+  )
+}
+
+// 기대효과 블록 — 7~12P 공통 (절차 아래)
+function Effects({ items }: { items: string[] }) {
+  return (
+    <div>
+      <div className="block-label"><b>기대효과</b></div>
+      <div className="fx">
+        {items.map((t) => (
+          <div className="fx-row" key={t}>
+            <span className="material-symbols-outlined">check_circle</span>
+            <span>{t}</span>
+          </div>
+        ))}
       </div>
     </div>
   )
@@ -966,6 +1012,14 @@ const SLIDES: ReactNode[] = [
         '/images/260730_demo/consulting-02.png',
         '/images/260730_demo/consulting-03.png',
       ]}
+      extra={
+        <Effects
+          items={[
+            'RE100 컨설팅 진입장벽 해소',
+            '메일 · 전화 없이 플랫폼 안에서 소통 완결',
+          ]}
+        />
+      }
     />
   </ContentSlide>,
 
@@ -978,29 +1032,24 @@ const SLIDES: ReactNode[] = [
     lede={<>계약은 플랫폼에서 하고 정산 · 세금계산서는 수기로 — 그런 <b>반쪽짜리 서비스가 아닙니다</b>.</>}
   >
     <div className="feat">
-      {/* 비교군 — 반쪽짜리 vs 원스톱 */}
       <div className="fcol">
-        <div className="vs-panel" style={{ gap: '.7vw' }}>
-          <div className="vs-h"><span className="material-symbols-outlined">content_cut</span>반쪽짜리 서비스</div>
-          <div className="pstrip">
-            <span className="pchip"><b>계약</b><small>플랫폼</small></span>
-            <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
-            <span className="pchip gray"><b>세금계산서 · 정산</b><small>별도 수기 처리</small></span>
-          </div>
+        <div>
+          <div className="block-label"><b>절차</b></div>
+          <StepCol
+            steps={[
+              { b: '기존', s: '계약만 플랫폼 — 정산 · 세금계산서는 수기', tone: 'gray' },
+              { b: '계약' },
+              { b: '세금계산서 발행' },
+              { b: '정산', s: '거래 업무 전체를 플랫폼 안에서', tone: 'acc' },
+            ]}
+          />
         </div>
-        <div className="vs-panel ours" style={{ gap: '.7vw' }}>
-          <div className="vs-h"><span className="material-symbols-outlined">all_inclusive</span>원스톱 통합 처리</div>
-          <div className="pstrip">
-            <span className="pchip on"><b>계약</b></span>
-            <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
-            <span className="pchip on"><b>세금계산서 발행</b></span>
-            <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
-            <span className="pchip on"><b>정산</b></span>
-          </div>
-          <div className="mflow">
-            <span className="tag blue"><i />거래에 수반되는 업무 전체 — 하나의 플랫폼 안</span>
-          </div>
-        </div>
+        <Effects
+          items={[
+            '별도 수기 처리 제로',
+            '거래에 수반되는 업무 전체를 한 곳에서 처리',
+          ]}
+        />
       </div>
       <ImgSlot
         tall
@@ -1020,17 +1069,23 @@ const SLIDES: ReactNode[] = [
   >
     <div className="feat">
       <div className="fcol">
-        <StepCol
-          steps={[
-            { b: '이상상황 감지' },
-            { b: 'A/S · O&M 접수', s: '플랫폼 내에서 바로 연계' },
-            { b: '조치' },
-            { b: '처리 현황 실시간 반영', s: '업데이트까지 완결', tone: 'acc' },
+        <div>
+          <div className="block-label"><b>절차</b></div>
+          <StepCol
+            steps={[
+              { b: '이상상황 감지' },
+              { b: 'A/S · O&M 접수', s: '플랫폼 내에서 바로 연계' },
+              { b: '조치' },
+              { b: '처리 현황 실시간 반영', s: '업데이트까지 완결', tone: 'acc' },
+            ]}
+          />
+        </div>
+        <Effects
+          items={[
+            '감지에서 결과 확인까지 하나의 흐름으로 완결',
+            '처리 현황을 실시간으로 확인',
           ]}
         />
-        <div className="mflow">
-          <span className="tag gray"><i />발전량만 보는 모니터링은 반쪽</span>
-        </div>
       </div>
       <ImgSlot
         tall
@@ -1050,11 +1105,20 @@ const SLIDES: ReactNode[] = [
   >
     <div className="feat">
       <div className="fcol">
-        <StepCol
-          steps={[
-            { b: '재생에너지 전력', s: '발전사업자' },
-            { b: '전력거래', s: '확보 과정을 서비스로 제공', tone: 'acc' },
-            { b: '수요기업', s: 'RE100 이행' },
+        <div>
+          <div className="block-label"><b>절차</b></div>
+          <StepCol
+            steps={[
+              { b: '재생에너지 전력', s: '발전사업자' },
+              { b: '전력거래', s: '확보 과정을 서비스로 제공', tone: 'acc' },
+              { b: '수요기업', s: 'RE100 이행' },
+            ]}
+          />
+        </div>
+        <Effects
+          items={[
+            '재생에너지 전력 조달 원활화',
+            '수요기업의 RE100 이행 지원',
           ]}
         />
       </div>
@@ -1076,11 +1140,20 @@ const SLIDES: ReactNode[] = [
   >
     <div className="feat">
       <div className="fcol">
-        <StepCol
-          steps={[
-            { b: '설치 전', s: '우리 사업장' },
-            { b: 'DT 시뮬레이션', tone: 'acc' },
-            { b: '예상 효과 확인', s: '시각적으로' },
+        <div>
+          <div className="block-label"><b>절차</b></div>
+          <StepCol
+            steps={[
+              { b: '설치 전', s: '우리 사업장' },
+              { b: 'DT 시뮬레이션', tone: 'acc' },
+              { b: '예상 효과 확인', s: '시각적으로' },
+            ]}
+          />
+        </div>
+        <Effects
+          items={[
+            '설치 전 도입 의사결정 지원',
+            '신규 가입 기업에 가장 효과적인 소구점',
           ]}
         />
         <div className="mflow">
