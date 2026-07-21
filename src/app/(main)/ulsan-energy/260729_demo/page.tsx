@@ -204,6 +204,7 @@ const CSS = `
 .ans-t{font-size:1.05vw;font-weight:700;flex:1}
 .ans-fn{display:flex;gap:.45vw;flex-wrap:wrap;justify-content:flex-end}
 .ans-pill{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);border-radius:999px;padding:.2vw .85vw;font-size:.76vw;font-weight:600;color:#dbe7ff;white-space:nowrap}
+.ans-arr{color:#9db9e8;font-size:.9vw;font-weight:700}
 
 /* ── 기능 슬라이드 분할 ── */
 .feat{display:grid;grid-template-columns:1fr 1fr;gap:1.1vw;flex:1;align-items:stretch}
@@ -990,18 +991,8 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
       <b> 타 지역과 신규 가입자로 확장 가능한, 지속가능하고 실효성 있는 서비스</b>를 목표로 구축하고 있습니다.</>
     }
   >
-    <div className="feat">
-      <div className="fcol">
-        <div>
-          <div className="block-label"><b>이어서 — 발표를 마치면</b></div>
-          <div className="mflow">
-            <MNode tone="fill" ic="play_circle" t="시연 영상" s="페르소나별 화면 · 기능" />
-            <Arr />
-            <MNode ic="computer" t="실제 플랫폼 시연" s="관리자 계정 · DT 직접" />
-          </div>
-        </div>
-      </div>
-      {/* 울산 코어에서 파동이 퍼지며 타 지역 → 신규 가입자 링으로 확장 */}
+    {/* 울산 코어에서 파동이 퍼지며 타 지역 → 신규 가입자 링으로 확장 — 중앙 주인공 */}
+    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 0 }}>
       <div className="ripple">
         <span className="rip-wave" />
         <span className="rip-wave w2" />
@@ -1016,6 +1007,15 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
         <span className="rip-dot dim" style={{ left: '20%', top: '25%' }} />
         <span className="rip-dot dim" style={{ left: '65%', top: '89%' }} />
       </div>
+    </div>
+    <div className="ans">
+      <span className="material-symbols-outlined">play_circle</span>
+      <span className="ans-t">이어서 보시겠습니다</span>
+      <span className="ans-fn">
+        <span className="ans-pill">① 시연 영상 — 페르소나별 화면 · 기능</span>
+        <span className="ans-arr">→</span>
+        <span className="ans-pill">② 실제 플랫폼 시연 — 관리자 계정 · DT</span>
+      </span>
     </div>
   </ContentSlide>,
 
