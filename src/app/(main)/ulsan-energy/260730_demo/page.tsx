@@ -242,12 +242,7 @@ const CSS = `
 .yt-h2{flex:1;border:1.5px dashed #b9c6dd;border-left:none;border-radius:0 999px 999px 0;background:var(--chip);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:.87vw;font-weight:700}
 .yt-now{position:absolute;top:-1.3vw;transform:translateX(-50%);color:var(--accent);font-size:.72vw;font-weight:800;display:flex;flex-direction:column;align-items:center;line-height:1.2;z-index:1}
 .yt-now:after{content:"";width:2px;height:3.3vw;background:var(--accent);border-radius:2px;margin-top:.15vw;box-shadow:0 0 8px rgba(37,99,235,.45)}
-.split43{display:grid;grid-template-columns:53fr 47fr;gap:1vw;flex:1;min-height:0;align-items:stretch}
-.split43 .press{height:100%}
-.split43 .press-card{justify-content:center;gap:.15vw}
-.split43 .press-card .press-ic{width:3.2vw;height:3.2vw;margin-bottom:.6vw}
-.split43 .press-card .press-ic .material-symbols-outlined{font-size:1.6vw}
-.split43 .wip-done,.split43 .wip-empty{width:70%;margin-left:auto;margin-right:auto}
+.split43{display:grid;grid-template-columns:53fr 47fr;gap:1vw}
 /* 구축 중 — 움직이는 작업 스트라이프 (진행률 주장 없이 "작업 중" 상태 표시) */
 .wip{height:.4vw;border-radius:999px;overflow:hidden;background:#e6ecf7;margin-top:.55vw}
 .wip i{display:block;height:100%;border-radius:999px;background:repeating-linear-gradient(-45deg,#2563eb 0 .45vw,#60a5fa .45vw .9vw);background-size:1.28vw 100%;animation:crawl 1.1s linear infinite}
