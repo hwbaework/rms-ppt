@@ -242,6 +242,35 @@ const CSS = `
 /* ── 근거 캡션 ── */
 .srcline{color:var(--muted);font-size:.74vw;line-height:1.6}
 
+/* ── 딥링크 연동 다이어그램 (허브 → 트렁크·분기선 → 신규 플랫폼 3) ── */
+.lk-panel{background:linear-gradient(180deg,#ffffff,#f7faff);border:1px solid #dbe6f5;border-radius:16px;padding:1.5vw 1.8vw;display:flex;flex-direction:column;gap:1.2vw;flex:1;justify-content:center;box-shadow:0 6px 24px rgba(37,99,235,.07)}
+.lk-grid{display:grid;grid-template-columns:auto 7vw 1fr;align-items:center}
+.lk-hub{width:10vw;padding:1.4vw .9vw;border-radius:18px;background:
+  radial-gradient(circle at 30% 22%,rgba(255,255,255,.35) 0%,transparent 45%),
+  linear-gradient(135deg,#1e40af 0%,#2563eb 55%,#3b82f6 100%);
+  border:1px solid rgba(255,255,255,.22);color:#fff;display:flex;flex-direction:column;align-items:center;gap:.35vw;text-align:center;box-shadow:0 12px 30px rgba(30,64,175,.32),inset 0 1px 0 rgba(255,255,255,.28)}
+.lk-hub .material-symbols-outlined{font-size:1.7vw}
+.lk-hub b{font-size:.98vw;letter-spacing:-.01em}
+.lk-hub small{font-size:.72vw;opacity:.8;line-height:1.5}
+.lkc{position:relative;align-self:stretch}
+.lkc:before{content:"";position:absolute;left:0;right:50%;top:50%;height:2px;margin-top:-1px;background:#c9d8f0}
+.lk-trunk{position:absolute;left:50%;top:15%;bottom:15%;width:2px;margin-left:-1px;background:#c9d8f0;border-radius:2px}
+.lk-branch{position:absolute;left:50%;right:.35vw;height:2px;margin-top:-1px;background:linear-gradient(90deg,#c9d8f0,#aac3ee)}
+.lk-branch:after{content:"";position:absolute;right:-1px;top:50%;width:.5vw;height:.5vw;border-top:2px solid #aac3ee;border-right:2px solid #aac3ee;transform:translateY(-50%) rotate(45deg)}
+.lk-branch i{position:absolute;top:50%;left:0;width:.5vw;height:.5vw;border-radius:50%;background:#3b82f6;box-shadow:0 0 8px rgba(59,130,246,.75);transform:translate(-50%,-50%);animation:lkdot 2.2s linear infinite}
+@keyframes lkdot{0%{left:0;opacity:0}15%{opacity:1}85%{opacity:1}100%{left:100%;opacity:0}}
+.lk-lab{position:absolute;left:50%;top:31%;transform:translate(-50%,-50%);background:var(--tint);border:1px solid var(--tint-line);color:var(--accent);border-radius:999px;padding:.16vw .8vw;font-size:.74vw;font-weight:700;white-space:nowrap;z-index:1}
+.lk-cards{display:flex;flex-direction:column;gap:.85vw}
+.lk-card{display:flex;align-items:center;gap:.95vw;background:#fff;border:1px solid var(--hair);border-radius:14px;padding:.95vw 1.15vw;box-shadow:0 2px 5px rgba(11,21,38,.04),0 10px 22px rgba(37,99,235,.07)}
+.lk-ic{width:2.7vw;height:2.7vw;border-radius:50%;background:var(--tint);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.lk-ic .material-symbols-outlined{font-size:1.35vw}
+.lk-card b{display:block;font-size:1vw;color:var(--ink);font-weight:800;letter-spacing:-.01em}
+.lk-card small{display:block;font-size:.76vw;color:var(--muted);margin-top:.14vw;line-height:1.5}
+.lk-card .tag{margin-left:auto;flex-shrink:0}
+.lk-note{display:flex;align-items:center;justify-content:center;gap:.6vw;border-top:1px solid var(--hair);padding-top:1vw;color:var(--body);font-size:.98vw}
+.lk-note .material-symbols-outlined{font-size:1.15vw;color:var(--accent)}
+.lk-note b{color:var(--ink);font-weight:700}
+
 /* ── 이미지 플레이스홀더 (실제 화면 캡처 자리 — 가장 중요) ── */
 .imgslot{border:2px dashed #c7d2e3;border-radius:14px;background:var(--chip);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.1vw;gap:.35vw;min-height:9vw}
 .imgslot.tall{min-height:12vw}
@@ -828,20 +857,43 @@ const SLIDES: ReactNode[] = [
     title={<>딥링크로 연동되는 <span className="hl">세 개의 신규 서비스</span></>}
     lede={<>세 기능은 각각 범위가 매우 방대해 — 기존 플랫폼 내 탑재가 아닌 <b>신규 플랫폼 연동</b>으로 서비스합니다.</>}
   >
-    <div className="press p3">
-      <Tile ic="co2" k="탄소배출관리" />
-      <Tile ic="storefront" k="e데이터마켓" />
-      <Tile ic="hub" k="VPP" />
+    <div className="lk-panel">
+      <div className="lk-grid">
+        <div className="lk-hub">
+          <span className="material-symbols-outlined">hub</span>
+          <b>메인 플랫폼</b>
+          <small>지금 보신<br />통합 에너지 플랫폼</small>
+        </div>
+        <div className="lkc">
+          <span className="lk-trunk" />
+          <span className="lk-branch" style={{ top: '15%' }}><i /></span>
+          <span className="lk-branch" style={{ top: '50%' }}><i style={{ animationDelay: '.7s' }} /></span>
+          <span className="lk-branch" style={{ top: '85%' }}><i style={{ animationDelay: '1.4s' }} /></span>
+          <span className="lk-lab">딥링크 연동</span>
+        </div>
+        <div className="lk-cards">
+          <div className="lk-card">
+            <span className="lk-ic"><span className="material-symbols-outlined">co2</span></span>
+            <span><b>탄소배출관리</b><small>배출 현황 파악 · 감축 관리</small></span>
+            <span className="tag gray"><i />하반기 착수</span>
+          </div>
+          <div className="lk-card">
+            <span className="lk-ic"><span className="material-symbols-outlined">storefront</span></span>
+            <span><b>e데이터마켓</b><small>에너지 데이터 · 탄소배출권 거래</small></span>
+            <span className="tag gray"><i />하반기 착수</span>
+          </div>
+          <div className="lk-card">
+            <span className="lk-ic"><span className="material-symbols-outlined">bolt</span></span>
+            <span><b>VPP</b><small>분산자원 통합 가상발전소</small></span>
+            <span className="tag gray"><i />하반기 착수</span>
+          </div>
+        </div>
+      </div>
+      <div className="lk-note">
+        <span className="material-symbols-outlined">sync_alt</span>
+        사용자는 <b>하나의 플랫폼에서 자연스럽게 이동</b>합니다 — 서비스 연속성에는 영향 없음
+      </div>
     </div>
-    <div className="mflow">
-      <MNode tone="fill" ic="hub" t="메인 플랫폼" />
-      <span className="mlink">
-        <span className="mlink-lab">딥링크 연동</span>
-        <span className="mflow-arr material-symbols-outlined">arrow_forward</span>
-      </span>
-      <MNode ic="open_in_new" t="신규 플랫폼" />
-    </div>
-    <p className="coda">사용자는 <b>하나의 플랫폼에서 자연스럽게 이동</b> — 서비스 연속성에는 영향 없음</p>
   </ContentSlide>,
 
   /* ── 13page : 마무리 — 지속가능하고 확장 가능한 플랫폼 ── */
