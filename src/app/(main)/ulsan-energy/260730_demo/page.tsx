@@ -1037,32 +1037,29 @@ const SLIDES: ReactNode[] = [
     title={<>감지에서 조치 · 결과까지, <span className="hl">하나의 흐름</span></>}
     lede={<>단순 발전량 모니터링은 시중에 이미 많습니다 — 그것만으로는 <b>반쪽짜리</b>라고 판단했습니다.</>}
   >
-    <div className="feat">
-      <div className="fcol">
-        <div className="proc">
-          <div className="block-label"><b>절차</b></div>
-          <StepCol
-            steps={[
-              { b: '이상상황 감지' },
-              { b: 'A/S · O&M 접수', s: '플랫폼 내에서 바로 연계' },
-              { b: '조치' },
-              { b: '처리 현황 실시간 반영', s: '업데이트까지 완결', tone: 'acc' },
-            ]}
-          />
-        </div>
+    <AutoShots
+      side
+      steps={[
+        { b: '이상상황 감지', s: '모니터링 알림' },
+        { b: 'A/S · O&M 접수', s: '플랫폼 내에서 바로 연계' },
+        { b: '조치', s: '처리 진행' },
+        { b: '처리 현황 실시간 반영', s: '업데이트까지 완결' },
+      ]}
+      srcs={[
+        '/images/260730_demo/monitoring-01.png',
+        '/images/260730_demo/monitoring-02.png',
+        '/images/260730_demo/monitoring-03.png',
+        '/images/260730_demo/monitoring-04.png',
+      ]}
+      extra={
         <Effects
           items={[
             '감지에서 결과 확인까지 하나의 흐름으로 완결',
             '처리 현황을 실시간으로 확인',
           ]}
         />
-      </div>
-      <ImgSlot
-        tall
-        t="제안: 모니터링 대시보드 + O&M 접수 화면 캡처"
-        d="이상상황 알림이 뜬 모니터링 화면과, 연결된 A/S · O&M 접수 · 처리 현황 화면 — 캡처를 넣으면 자동 순환 뷰어로 교체"
-      />
-    </div>
+      }
+    />
   </ContentSlide>,
 
   /* ── 10page : 핵심 기능 ④ 전력거래 ── */
@@ -1073,31 +1070,27 @@ const SLIDES: ReactNode[] = [
     title={<>RE100 이행을 위한 <span className="hl">재생에너지 전력 조달 서비스</span></>}
     lede={<>수요기업의 RE100 이행에는 <b>재생에너지 전력</b>이 필요하고, 조달 과정이 원활해야 합니다.</>}
   >
-    <div className="feat">
-      <div className="fcol">
-        <div className="proc">
-          <div className="block-label"><b>절차</b></div>
-          <StepCol
-            steps={[
-              { b: '재생에너지 전력 조회', s: '발전사업자가 공급하는 전력' },
-              { b: '거래 체결', tone: 'acc' },
-              { b: '전력 확보', s: '수요기업의 RE100 이행' },
-            ]}
-          />
-        </div>
+    <AutoShots
+      side
+      steps={[
+        { b: '재생에너지 전력 조회', s: '발전사업자가 공급하는 전력' },
+        { b: '거래 체결', s: '플랫폼에서 계약' },
+        { b: '전력 확보', s: '수요기업의 RE100 이행' },
+      ]}
+      srcs={[
+        '/images/260730_demo/trading-01.png',
+        '/images/260730_demo/trading-02.png',
+        '/images/260730_demo/trading-03.png',
+      ]}
+      extra={
         <Effects
           items={[
             '재생에너지 전력 조달 원활화',
             '수요기업의 RE100 이행 지원',
           ]}
         />
-      </div>
-      <ImgSlot
-        tall
-        t="제안: 전력거래 화면 캡처"
-        d="수요기업이 재생에너지 전력을 확보하는 거래 화면 — 캡처를 넣으면 자동 순환 뷰어로 교체"
-      />
-    </div>
+      }
+    />
   </ContentSlide>,
 
   /* ── 11page : 핵심 기능 ⑤ DT(디지털 트윈) ── */
