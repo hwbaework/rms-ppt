@@ -198,6 +198,7 @@ const CSS = `
 .q-chip .material-symbols-outlined{font-size:1.3vw}
 .q-text{position:relative;z-index:1;font-size:1.3vw;font-weight:800;color:var(--ink);line-height:1.55;letter-spacing:-.015em}
 .q-text .hl{color:var(--accent)}
+.q-cap{display:block;font-size:.85vw;color:var(--muted);font-weight:500;margin-top:.5vw;letter-spacing:0}
 .qcol:after{content:"";position:absolute;left:50%;bottom:-1.15vw;width:1.5px;height:1.15vw;background:linear-gradient(180deg,#dbe3f0,#93c5fd)}
 .ans{margin-top:1.15vw;background:linear-gradient(90deg,#0f2a5f,#1d4ed8 55%,#2563eb);border-radius:14px;padding:1vw 1.6vw;display:flex;align-items:center;gap:1.1vw;color:#fff;box-shadow:0 10px 28px rgba(30,64,175,.25)}
 .ans>.material-symbols-outlined{font-size:1.35vw;color:#bcd3fa}
@@ -813,29 +814,29 @@ const SLIDES: ReactNode[] = [
     key="p5"
     no="02"
     sec="플랫폼 방향성 — 사용자 관점에서의 설계"
-    title={<>기업이 궁금한 것은 결국 <span className="hl">세 가지</span></>}
-    lede={<>플랫폼 기능은 <b>실제 수요기업의 관심사</b>에서 출발했습니다.</>}
+    title={<>수요기업에게 필요한 <span className="hl">세 가지</span></>}
+    lede={<>플랫폼의 핵심 기능은 <b>수요기업에게 실제로 필요한 것</b>을 기준으로 구성했습니다.</>}
   >
     <div className="qrow">
       <div className="qcol">
         <span className="q-ghost">01</span>
         <span className="q-chip"><span className="material-symbols-outlined">flag</span></span>
-        <div className="q-text">RE100을 이행하려면<br /><span className="hl">어떻게</span> 해야 하나?</div>
+        <div className="q-text"><span className="hl">RE100 이행</span> 방향<span className="q-cap">어떻게 이행할 것인가</span></div>
       </div>
       <div className="qcol">
         <span className="q-ghost">02</span>
         <span className="q-chip"><span className="material-symbols-outlined">route</span></span>
-        <div className="q-text">그 <span className="hl">구체적인 방법</span>은<br />무엇인가?</div>
+        <div className="q-text">구체적인 <span className="hl">실행 방법</span><span className="q-cap">무엇부터 시작할 것인가</span></div>
       </div>
       <div className="qcol">
         <span className="q-ghost">03</span>
         <span className="q-chip"><span className="material-symbols-outlined">insights</span></span>
-        <div className="q-text">태양광을 설치하면<br /><span className="hl">실제 효과</span>가 얼마나 되나?</div>
+        <div className="q-text">태양광 <span className="hl">설치 효과 검증</span><span className="q-cap">실제 효과가 얼마나 되는가</span></div>
       </div>
     </div>
     <div className="ans">
       <span className="material-symbols-outlined">hub</span>
-      <span className="ans-t">핵심 기능 전부가, 이 세 질문에 답하기 위한 서비스입니다</span>
+      <span className="ans-t">다섯 가지 핵심 기능은, 이 세 가지를 해결하기 위한 서비스입니다</span>
       <span className="ans-fn">
         <span className="ans-pill">컨설팅</span>
         <span className="ans-pill">원스톱</span>
