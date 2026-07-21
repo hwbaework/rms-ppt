@@ -408,7 +408,7 @@ function ContentSlide({
     <div className="cs">
       <div className="cs-body">
         <div className="cs-head">
-          <span className="cs-no">{no}p</span>
+          <span className="cs-no">{no}</span>
           <span className="cs-sec">{sec}</span>
           <span className="cs-hair" />
         </div>
@@ -556,8 +556,8 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
   /*    연차별 단계·3차년도 할 일·구축률: [울산미포에자자] 3차년도 사업계획서(2026.03) 재구성 */
   <ContentSlide
     key="p2"
-    no="02"
-    sec="사업 추진 경과 (1~2차년도)"
+    no="01"
+    sec="사업 추진 경과 — 1~2차년도"
     title={<>지금은 <span className="hl">3차년도</span> — 계획대로 진행 중입니다</>}
     lede={<>1~2차년도에 다진 기반 위에서, 올해는 <b>핵심 기능을 개발하는 해</b>입니다.</>}
   >
@@ -618,8 +618,8 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
   /* ── 3page : 3차년도 개발 현황 요약 ── */
   <ContentSlide
     key="p3"
-    no="03"
-    sec="3차년도 개발 현황 요약"
+    no="01"
+    sec="사업 추진 경과 — 3차년도 개발 현황"
     title={<>상반기 <span className="hl">4</span>개는 구축을 마치고 <span className="hl">QA · 안정화</span> 중입니다</>}
     lede={<>지금 보여드리는 것은 <b>현재까지의 구축 결과물</b>입니다.</>}
   >
@@ -648,8 +648,8 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
   /* ── 4page : RMS가 추구하는 플랫폼 방향성 ── */
   <ContentSlide
     key="p4"
-    no="04"
-    sec="RMS가 추구하는 플랫폼 방향성"
+    no="02"
+    sec="플랫폼 방향성"
     title={<>납품하고 끝나는 시스템이 <span className="hl">아닙니다</span></>}
     lede={<>통상적인 공공 플랫폼은 사업이 끝나면 방치됩니다 — 저희는 <b>처음부터 다르게 설계</b>했습니다.</>}
   >
@@ -742,8 +742,8 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
   /* ── 5page : 사용자 관점에서의 설계 ── */
   <ContentSlide
     key="p5"
-    no="05"
-    sec="사용자 관점에서의 설계"
+    no="02"
+    sec="플랫폼 방향성 — 사용자 관점에서의 설계"
     title={<>기업이 궁금한 건 결국 <span className="hl">세 가지</span>입니다</>}
     lede={<>플랫폼 기능은 <b>실제 수요기업의 관심사</b>에서 출발했습니다.</>}
   >
@@ -780,8 +780,8 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
   /* ── 6page : 플랫폼 구조 — 5개 페르소나 ── */
   <ContentSlide
     key="p6"
-    no="06"
-    sec="플랫폼 구조 — 5개 페르소나"
+    no="02"
+    sec="플랫폼 방향성 — 5개 페르소나"
     title={<>하나의 플랫폼, <span className="hl">다섯 개의 화면</span></>}
     lede={<>페르소나별로 UI/UX와 제공 기능이 다르게 설계 — <b>본인 역할에 필요한 기능만 간결하게</b> 사용합니다.</>}
   >
@@ -814,7 +814,7 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
   /* ── 7page : 핵심 기능 ① 컨설팅 ── */
   <ContentSlide
     key="p7"
-    no="07"
+    no="03"
     sec="핵심 기능 ① 컨설팅"
     title={<>신청하면 매칭 — 진입장벽을 <span className="hl">크게 낮췄습니다</span></>}
     lede={<>기존에는 RE100 컨설팅을 <b>어디에 문의해야 할지조차</b> 알기 어려웠습니다.</>}
@@ -839,7 +839,7 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
   /* ── 8page : 핵심 기능 ② 원스톱 통합 처리 ── */
   <ContentSlide
     key="p8"
-    no="08"
+    no="03"
     sec="핵심 기능 ② 원스톱 통합 처리"
     title={<>반쪽짜리가 아닌, <span className="hl">플랫폼 안에서 전부</span></>}
     lede={<>계약은 플랫폼에서 하고 정산 · 세금계산서는 수기로 — 그런 <b>반쪽짜리 서비스가 아닙니다</b>.</>}
@@ -871,7 +871,7 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
   /* ── 9page : 핵심 기능 ③ 모니터링 + O&M 연계 ── */
   <ContentSlide
     key="p9"
-    no="09"
+    no="03"
     sec="핵심 기능 ③ 모니터링 + O&M 연계"
     title={<>감지에서 조치 · 결과까지, <span className="hl">하나의 흐름</span></>}
     lede={<>단순 발전량 모니터링은 시중에 이미 많습니다 — 그것만으로는 <b>반쪽짜리</b>라고 판단했습니다.</>}
@@ -903,7 +903,7 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
   /* ── 10page : 핵심 기능 ④ 전력거래 ── */
   <ContentSlide
     key="p10"
-    no="10"
+    no="03"
     sec="핵심 기능 ④ 전력거래"
     title={<>RE100 이행에 필요한 전력, <span className="hl">조달을 서비스로</span></>}
     lede={<>수요기업의 RE100 이행에는 <b>재생에너지 전력</b>이 필요하고, 조달 과정이 원활해야 합니다.</>}
@@ -929,7 +929,7 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
   /* ── 11page : 핵심 기능 ⑤ DT(디지털 트윈) ── */
   <ContentSlide
     key="p11"
-    no="11"
+    no="03"
     sec="핵심 기능 ⑤ DT (디지털 트윈)"
     title={<>설치 전에, 효과를 <span className="hl">눈으로 확인</span></>}
     lede={<>신규 가입 기업에 가장 효과적인 것 — 태양광 설치 효과를 <b>직접 눈으로 확인</b>하는 것입니다.</>}
@@ -953,7 +953,7 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
   /* ── 12page : 하반기 개발 로드맵 ── */
   <ContentSlide
     key="p12"
-    no="12"
+    no="04"
     sec="하반기 개발 로드맵"
     title={<>딥링크로 연동되는 <span className="hl">세 개의 신규 서비스</span></>}
     lede={<>세 기능은 각각 범위가 매우 방대해 — 기존 플랫폼 내 탑재가 아닌 <b>신규 플랫폼 연동</b>으로 서비스합니다.</>}
