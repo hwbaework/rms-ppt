@@ -274,12 +274,13 @@ const CSS = `
 
 /* ── 단계 레인 (트랙 라벨 + 스텝 칩 체인 — 사업계획서 세부추진일정 재구성) ── */
 .glanes{background:var(--card);border:1px solid var(--hair);border-radius:14px;overflow:hidden}
-.glane{display:flex;align-items:center;gap:1vw;padding:.6vw 1vw;border-bottom:1px solid var(--hair)}
+.glane{display:flex;align-items:center;gap:1.2vw;padding:.95vw 1.2vw;border-bottom:1px solid var(--hair)}
 .glane:last-child{border-bottom:none}
 .glane-who{width:13.5vw;flex-shrink:0;display:flex;align-items:center;gap:.5vw;color:var(--ink);font-size:.88vw;font-weight:700}
 .glane-who .material-symbols-outlined{font-size:1.05vw;color:var(--accent)}
 .glane-steps{flex:1;display:flex;align-items:center;gap:.45vw;flex-wrap:wrap}
-.gchip{background:var(--chip);border-radius:8px;padding:.34vw .75vw;color:var(--ink);font-size:.81vw;font-weight:600;white-space:nowrap}
+.gchip{background:var(--chip);border-radius:8px;padding:.42vw .85vw;color:var(--ink);font-size:.81vw;font-weight:600;white-space:nowrap}
+.glane-steps{gap:.65vw}
 .gchip.on{background:var(--tint);border:1px solid var(--tint-line);color:#1d4ed8}
 .garr{color:#c3ccda;font-size:.85vw;flex-shrink:0}
 
@@ -786,54 +787,46 @@ const SLIDES: ReactNode[] = [
     title={<>3차년도 — <span className="hl">핵심 기능 개발</span></>}
     lede={<>1~2차년도에 다진 기반 위에서, <b>계획된 일정에 따라 정상적으로</b> 개발을 진행하고 있습니다.</>}
   >
-    <div className="years">
-      <div className="ycard done">
-        <div className="y-head">
-          <span className="y-year">1차년도<small>2024</small></span>
-          <span className="tag blue"><i />완료</span>
+    <Flow
+      steps={[
+        { no: '1차년도 · 2024', name: '요구사항 분석 · 설계', sub: '프로세스 · 아키텍처 설계, 관제 시나리오 분석' },
+        { no: '2차년도 · 2025', name: '기반 구축', sub: '네트워크 · 데이터센터 설계, 통합관제센터(상황실) 구축' },
+        { no: '3차년도 · 올해', name: '핵심 기능 개발', sub: '계획된 일정에 따라 정상 진행 중', final: true },
+        { no: '4차년도 · 2027', name: '고도화 · 이관', sub: '테스트 · 교육 · 시스템 이관, 플랫폼 고도화' },
+      ]}
+    />
+
+    <div style={{ marginTop: '.8vw' }}>
+      <div className="block-label"><b>3차년도 — ESG 에너지 플랫폼, 단계별로 해야 할 일</b></div>
+      <div className="glanes">
+        <div className="glane">
+          <div className="glane-who"><span className="material-symbols-outlined">dns</span>수집인프라 · 데이터센터</div>
+          <div className="glane-steps">
+            <span className="gchip">현장 설치</span><span className="garr">→</span>
+            <span className="gchip">단위 · 통합 테스트</span><span className="garr">→</span>
+            <span className="gchip on">운영 · 안정화</span>
+          </div>
         </div>
-        <div className="y-items">
-          <div className="y-item"><span className="material-symbols-outlined">check_circle</span>요구사항 분석 · 프로세스 설계</div>
-          <div className="y-item"><span className="material-symbols-outlined">check_circle</span>플랫폼 아키텍처 설계</div>
-          <div className="y-item"><span className="material-symbols-outlined">check_circle</span>관제 가시화 요건 · 시나리오 설계</div>
+        <div className="glane">
+          <div className="glane-who"><span className="material-symbols-outlined">hub</span>ESG 에너지 플랫폼</div>
+          <div className="glane-steps">
+            <span className="gchip">프로세스 설계</span><span className="garr">→</span>
+            <span className="gchip">개발 설계</span><span className="garr">→</span>
+            <span className="gchip">플랫폼 구축</span><span className="garr">→</span>
+            <span className="gchip on">테스트 · 안정화</span>
+          </div>
         </div>
-      </div>
-      <div className="ycard done">
-        <div className="y-head">
-          <span className="y-year">2차년도<small>2025</small></span>
-          <span className="tag blue"><i />완료</span>
-        </div>
-        <div className="y-items">
-          <div className="y-item"><span className="material-symbols-outlined">check_circle</span>네트워크 · 데이터센터 설계</div>
-          <div className="y-item"><span className="material-symbols-outlined">check_circle</span>통합관제센터(상황실) 구축</div>
-          <div className="y-item"><span className="material-symbols-outlined">check_circle</span>플랫폼 구축 착수</div>
-        </div>
-      </div>
-      <div className="ycard now">
-        <span className="y-badge">올해 — 정상 진행 중</span>
-        <div className="y-head">
-          <span className="y-year">3차년도<small>2026</small></span>
-          <span className="tag blue live"><i />진행</span>
-        </div>
-        <div className="y-items">
-          <div className="y-item"><span className="material-symbols-outlined">bolt</span>핵심 기능 개발 — 컨설팅 · 모니터링 · 전력거래 · DT</div>
-          <div className="y-item"><span className="material-symbols-outlined">sync</span>구축 완료분 QA · 안정화</div>
-          <div className="y-item"><span className="material-symbols-outlined">pending</span>하반기 — 신규 3종 개발</div>
-        </div>
-      </div>
-      <div className="ycard todo">
-        <div className="y-head">
-          <span className="y-year">4차년도<small>2027</small></span>
-          <span className="tag gray"><i />예정</span>
-        </div>
-        <div className="y-items">
-          <div className="y-item"><span className="material-symbols-outlined">schedule</span>테스트 · 교육 · 시스템 이관</div>
-          <div className="y-item"><span className="material-symbols-outlined">schedule</span>플랫폼 고도화</div>
+        <div className="glane">
+          <div className="glane-who"><span className="material-symbols-outlined">monitoring</span>통합관제센터</div>
+          <div className="glane-steps">
+            <span className="gchip">디버깅</span><span className="garr">→</span>
+            <span className="gchip on">안정화</span>
+          </div>
         </div>
       </div>
     </div>
 
-    <div>
+    <div style={{ marginTop: '.8vw' }}>
       <div className="block-label"><b>ESG 에너지 플랫폼 구축률 — 연차별 목표</b></div>
       <div className="pbar">
         <div className="pseg y1" style={{ width: '15%' }}>1차 15%</div>
