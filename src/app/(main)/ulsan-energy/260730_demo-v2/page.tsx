@@ -245,6 +245,13 @@ const CSS = `
 .yt-now{position:absolute;top:-1.3vw;transform:translateX(-50%);color:var(--accent);font-size:.72vw;font-weight:800;display:flex;flex-direction:column;align-items:center;line-height:1.2;z-index:1}
 .yt-now:after{content:"";width:2px;height:3.3vw;background:var(--accent);border-radius:2px;margin-top:.15vw;box-shadow:0 0 8px rgba(37,99,235,.45)}
 .split43{display:grid;grid-template-columns:53fr 47fr;gap:1vw}
+/* 하단 요약 바 제거 후 — 타일이 남는 높이를 채운다(설명 포함해 균형 있게) */
+.split43.fill{flex:1;min-height:0;align-items:stretch;margin-top:.4vw}
+.split43.fill .press{height:100%}
+.split43.fill .press-card{justify-content:center;gap:.45vw}
+.split43.fill .press-card .press-ic{width:3vw;height:3vw;margin-bottom:.2vw}
+.split43.fill .press-card .press-ic .material-symbols-outlined{font-size:1.5vw}
+.split43.fill .wip-done,.split43.fill .wip-empty{width:72%;margin:.2vw auto 0}
 /* 구축 중 — 움직이는 작업 스트라이프 (진행률 주장 없이 "작업 중" 상태 표시) */
 .wip{height:.4vw;border-radius:999px;overflow:hidden;background:#e6ecf7;margin-top:.55vw}
 .wip i{display:block;height:100%;border-radius:999px;background:repeating-linear-gradient(-45deg,#2563eb 0 .45vw,#60a5fa .45vw .9vw);background-size:1.28vw 100%;animation:crawl 1.1s linear infinite}
@@ -843,10 +850,10 @@ const PERSONAS = [
 // 마무리 확장 — 관제 대시보드 틀(좌 카피 · 우 발전소 목록)은 유지, 가운데는 실제 MapLibre 지도가
 // 울산 → 사천 → 후평 → 전국으로 카메라를 날려(flyTo) "위치가 바뀌는" 확장을 실제로 보여준다
 const FIN_STOPS = [
-  { center: [129.311, 35.539] as [number, number], zoom: 8.8, name: '울산 에자자', sub: '첫 적용 · 운영 중', step: 0 },
+  { center: [129.311, 35.539] as [number, number], zoom: 8.8, name: '울산', sub: '첫 적용', step: 0 },
   { center: [128.064, 35.004] as [number, number], zoom: 8.8, name: '사천', sub: '확산 적용', step: 1 },
   { center: [127.734, 37.874] as [number, number], zoom: 8.8, name: '후평', sub: '확산 적용', step: 1 },
-  { center: [127.8, 36.3] as [number, number], zoom: 6.1, name: '전국으로', sub: '같은 플랫폼 기반 위에서 계속 확장', step: 2, wide: true },
+  { center: [127.8, 36.3] as [number, number], zoom: 6.1, name: '전국단위 확산', sub: '같은 플랫폼 기반 위에서', step: 2, wide: true },
 ]
 function FinaleExpand() {
   const mapRef = useRef<HTMLDivElement>(null)
@@ -925,7 +932,6 @@ function FinaleExpand() {
         <img className="finctl-fallback" src="/images/260730_demo/monitoring-dashboard.png" alt="통합관제 대시보드" />
       )}
       <div className="finctl-scrim" />
-      <div className="fin-live"><i />LIVE · 통합관제 운영 중</div>
 
       {/* 중앙 조준 락온 — 지도가 날아와 도착한 지역을 잠근다 */}
       <div className={`finctl-lock${cur.wide ? ' wide' : ''}`}>
@@ -937,11 +943,11 @@ function FinaleExpand() {
       {/* 좌측 확장 카피 */}
       <div className="fin-copy">
         <p className="fin-eyebrow">Sustainable &amp; Expandable</p>
-        <h3 className="fin-title">울산에서 <span className="hl">사천 · 후평으로</span><br />계속 확장</h3>
+        <h3 className="fin-title">울산 · 사천 · 후평 —<br /><span className="hl">전국단위 확산</span></h3>
         <div className="fin-steps">
-          <div className={`fin-step${cur.step === 0 ? ' on' : ''}`}><span className="fs-no">1</span><b>울산 에자자</b><small>첫 적용 · 운영 중</small></div>
+          <div className={`fin-step${cur.step === 0 ? ' on' : ''}`}><span className="fs-no">1</span><b>울산</b><small>첫 적용</small></div>
           <div className={`fin-step${cur.step === 1 ? ' on' : ''}`}><span className="fs-no">2</span><b>사천 · 후평</b><small>확산 적용</small></div>
-          <div className={`fin-step next${cur.step === 2 ? ' on' : ''}`}><span className="fs-no">→</span><b>다음 지역</b><small>같은 플랫폼 기반 위에서</small></div>
+          <div className={`fin-step next${cur.step === 2 ? ' on' : ''}`}><span className="fs-no">→</span><b>전국단위 확산</b><small>같은 플랫폼 기반 위에서</small></div>
         </div>
       </div>
 
@@ -1046,29 +1052,18 @@ const SLIDES: ReactNode[] = [
         <span className="yt-now" style={{ left: '58%' }}>지금 · 7월</span>
       </div>
     </div>
-    <div className="split43">
+    <div className="split43 fill">
       <div className="press">
-        <Tile ic="support_agent" k="컨설팅" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
-        <Tile ic="monitoring" k="모니터링" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
-        <Tile ic="swap_horiz" k="전력거래" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
-        <Tile ic="view_in_ar" k="DT(디지털트윈)" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
+        <Tile ic="support_agent" k="컨설팅" d="무료 진단 · 컨설턴트 매칭" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
+        <Tile ic="monitoring" k="모니터링" d="통합관제 · 이상 감지 · O&M 연계" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
+        <Tile ic="swap_horiz" k="전력거래" d="재생에너지 전력 조달" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
+        <Tile ic="view_in_ar" k="DT(디지털트윈)" d="설치 전 예상 효과 시뮬레이션" bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
       </div>
       <div className="press p3">
-        <Tile soon ic="co2" k="탄소배출관리" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
-        <Tile soon ic="storefront" k="e데이터마켓" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
-        <Tile soon ic="hub" k="VPP" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
+        <Tile soon ic="co2" k="탄소배출관리" d="배출 현황 · 감축 관리" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
+        <Tile soon ic="storefront" k="e데이터마켓" d="에너지 데이터 · 배출권 거래" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
+        <Tile soon ic="hub" k="VPP" d="분산자원 통합 가상발전소" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
       </div>
-    </div>
-    <div className="ans">
-      <span className="material-symbols-outlined">rocket_launch</span>
-      <span className="ans-t">상반기 4종은 구축을 마치고 안정화 단계 — 하반기 3종으로 이어집니다</span>
-      <span className="ans-fn">
-        <span className="ans-pill">상반기 4</span>
-        <span className="ans-arr">+</span>
-        <span className="ans-pill">하반기 3</span>
-        <span className="ans-arr">=</span>
-        <span className="ans-pill">7대 서비스</span>
-      </span>
     </div>
   </ContentSlide>,
 
@@ -1286,14 +1281,12 @@ const SLIDES: ReactNode[] = [
         { b: '이상상황 감지', s: '모니터링 알림' },
         { b: 'A/S · O&M 접수', s: '플랫폼 내에서 바로 연계' },
         { b: '조치', s: '처리 진행' },
-        { b: '처리 현황 실시간 반영', s: '업데이트까지 완결' },
       ]}
       srcs={[
         '/images/260730_demo/monitoring-dashboard.png',
         '/images/260730_demo/monitoring-01.png',
         '/images/260730_demo/monitoring-02.png',
         '/images/260730_demo/monitoring-03.png',
-        '/images/260730_demo/monitoring-04.png',
       ]}
       extra={
         <Effects
