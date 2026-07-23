@@ -1,7 +1,8 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
+import 'maplibre-gl/dist/maplibre-gl.css'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 통합에너지플랫폼 구축 현황 발표 — 2026.07.30  (에디토리얼 스타일)
@@ -353,7 +354,33 @@ const CSS = `
 .kmap.big{width:auto;height:100%;max-width:none;align-self:stretch;margin:0}
 /* 확장 히어로 — 지도가 무대 중앙, 주위에 확장 메시지 카드가 떠 있다 */
 .finale2{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
-/* ── 12P: 실제 통합관제 위성 대시보드를 배경으로, 확장 스토리를 오버레이 ── */
+/* ── 12P: 관제 대시보드 틀 + 가운데 실제 MapLibre fly-to 지도 ── */
+.finctl{position:relative;flex:1;min-height:0;border-radius:16px;overflow:hidden;border:1px solid #1e3358;box-shadow:0 16px 44px rgba(4,12,28,.35);background:#0a1424}
+.finctl-map{position:absolute;inset:0;width:100%;height:100%}
+.finctl-map canvas{outline:none}
+/* 지도 로드 실패 시 폴백 — 통합관제 대시보드 이미지 */
+.finctl-fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+/* 좌측 그라데이션 스크림 — 카피 가독 확보(지도는 우측으로 갈수록 선명) */
+.finctl-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(6,14,30,.92) 0%,rgba(6,14,30,.55) 34%,rgba(6,14,30,0) 60%,rgba(6,14,30,.6) 100%)}
+/* 중앙 락온 프레임 — 지도가 도착한 지역을 잠근다 */
+.finctl-lock{position:absolute;left:calc(50% + 3vw);top:48%;transform:translate(-50%,-50%);z-index:2;width:6.5vw;height:4.6vw;pointer-events:none;transition:width .5s,height .5s}
+.finctl-lock.wide{width:11vw;height:8vw}
+.finctl-lock .rc{position:absolute;width:1vw;height:1vw;border:2px solid rgba(96,165,250,.95)}
+.finctl-lock .rc.tl{left:0;top:0;border-right:none;border-bottom:none}
+.finctl-lock .rc.tr{right:0;top:0;border-left:none;border-bottom:none}
+.finctl-lock .rc.bl{left:0;bottom:0;border-right:none;border-top:none}
+.finctl-lock .rc.br{right:0;bottom:0;border-left:none;border-top:none}
+/* 우측 발전소 목록 패널 */
+.finctl-side{position:absolute;right:1.1vw;top:1.1vw;bottom:1.1vw;z-index:2;width:15vw;background:rgba(8,18,36,.72);border:1px solid rgba(127,168,232,.22);border-radius:12px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:.9vw 1vw;display:flex;flex-direction:column;gap:.5vw}
+.fcs-head{display:flex;align-items:center;justify-content:space-between;color:#fff;font-size:.85vw;font-weight:800;padding-bottom:.55vw;border-bottom:1px solid rgba(127,168,232,.18)}
+.fcs-head span{color:var(--accent-soft);font-size:.68vw;font-weight:600}
+.fcs-row{display:flex;align-items:center;gap:.55vw;flex:1}
+.fcs-dot{width:.5vw;height:.5vw;border-radius:50%;background:#22c55e;box-shadow:0 0 6px rgba(34,197,94,.7);flex-shrink:0}
+.fcs-name{color:#dbe7ff;font-size:.78vw;font-weight:600;width:5.2vw;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fcs-bar{flex:1;height:.42vw;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden}
+.fcs-bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#22c55e,#4ade80)}
+.fcs-pct{color:#cdddf7;font-size:.72vw;font-weight:700;width:2.2vw;text-align:right;flex-shrink:0}
+/* (구) 위성 이미지 배경 방식 — MapLibre로 대체, 스타일만 잔존 참조용 */
 .finale3{position:relative;flex:1;min-height:0;border-radius:16px;overflow:hidden;border:1px solid #1e3358;box-shadow:0 16px 44px rgba(4,12,28,.35)}
 .finale3 .fin-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;animation:finKen 24s ease-in-out infinite alternate}
 /* 배경 미세 줌·팬 — 화면이 살아 움직이는 느낌 */
@@ -823,35 +850,106 @@ const PERSONAS = [
   { x: '15%', y: '30%', c: '#8b5cf6', ic: 'support_agent', t: '컨설턴트' },
 ]
 
-// 마무리 확장 — 통합관제 대시보드 위를 조준 뷰파인더가 지역을 옮겨 다닌다(위치가 바뀌는 확장 연출)
+// 마무리 확장 — 관제 대시보드 틀(좌 카피 · 우 발전소 목록)은 유지, 가운데는 실제 MapLibre 지도가
+// 울산 → 사천 → 후평 → 전국으로 카메라를 날려(flyTo) "위치가 바뀌는" 확장을 실제로 보여준다
+const FIN_STOPS = [
+  { center: [129.311, 35.539] as [number, number], zoom: 8.8, name: '울산 에자자', sub: '첫 적용 · 운영 중', step: 0 },
+  { center: [128.064, 35.004] as [number, number], zoom: 8.8, name: '사천', sub: '확산 적용', step: 1 },
+  { center: [127.734, 37.874] as [number, number], zoom: 8.8, name: '후평', sub: '확산 적용', step: 1 },
+  { center: [127.8, 36.3] as [number, number], zoom: 6.1, name: '전국으로', sub: '같은 플랫폼 기반 위에서 계속 확장', step: 2, wide: true },
+]
+const FIN_PLANTS = [
+  { n: '용인금속1', p: 54 }, { n: '태성산업', p: 82 }, { n: '건호이엔씨', p: 49 },
+  { n: '한일튜브', p: 66 }, { n: '한길', p: 85 }, { n: '용인금속2', p: 59 },
+]
+
 function FinaleExpand() {
-  const spots = [
-    { x: '57%', y: '58%', name: '울산 에자자', sub: '첫 적용 · 운영 중', step: 0 },
-    { x: '47%', y: '41%', name: '사천', sub: '확산 적용', step: 1 },
-    { x: '65%', y: '36%', name: '후평', sub: '확산 적용', step: 1 },
-    { x: '52%', y: '67%', name: '다음 지역', sub: '계속 확장', step: 2, ghost: true },
-  ]
+  const mapRef = useRef<HTMLDivElement>(null)
   const [i, setI] = useState(0)
+  const [mapFailed, setMapFailed] = useState(false)
+  const iRef = useRef(0)
+
   useEffect(() => {
-    const t = setInterval(() => setI((v) => (v + 1) % spots.length), 2600)
-    return () => clearInterval(t)
-  }, [spots.length])
-  const cur = spots[i]
+    let map: import('maplibre-gl').Map | undefined
+    let timer: ReturnType<typeof setInterval> | undefined
+    let loaded = false
+    let cancelled = false
+    // 지도가 일정 시간 내 안 뜨면(오프라인·타일 지연 등) 대시보드 이미지로 폴백
+    const fallbackTimer = setTimeout(() => {
+      if (!loaded && !cancelled) setMapFailed(true)
+    }, 6000)
+    ;(async () => {
+      try {
+        const maplibregl = await import('maplibre-gl')
+        if (cancelled || !mapRef.current) return
+        map = new maplibregl.Map({
+          container: mapRef.current,
+          // 벡터(worker 파싱)보다 안정적인 래스터 다크 타일 — 파이프라인 단순, load 빠름
+          style: {
+            version: 8,
+            sources: {
+              carto: {
+                type: 'raster',
+                tiles: [
+                  'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png',
+                  'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png',
+                  'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png',
+                ],
+                tileSize: 256,
+                attribution: '© CARTO © OpenStreetMap',
+              },
+            },
+            layers: [{ id: 'carto', type: 'raster', source: 'carto' }],
+          },
+          center: FIN_STOPS[0].center,
+          zoom: FIN_STOPS[0].zoom,
+          interactive: false,
+          attributionControl: false,
+        })
+        map.on('error', (e) => console.error('[MAPLIBRE]', (e as { error?: Error })?.error?.message || e))
+        map.on('load', () => {
+          loaded = true
+          setMapFailed(false)
+          map!.resize()
+          timer = setInterval(() => {
+            const next = (iRef.current + 1) % FIN_STOPS.length
+            iRef.current = next
+            setI(next)
+            const s = FIN_STOPS[next]
+            map!.flyTo({ center: s.center, zoom: s.zoom, speed: 0.7, curve: 1.5, essential: true })
+          }, 3400)
+        })
+      } catch (err) {
+        console.error('[MAPLIBRE import]', err)
+        if (!cancelled) setMapFailed(true)
+      }
+    })()
+    return () => {
+      cancelled = true
+      clearTimeout(fallbackTimer)
+      if (timer) clearInterval(timer)
+      map?.remove()
+    }
+  }, [])
+
+  const cur = FIN_STOPS[i]
   return (
-    <div className="finale3">
-      {/* 실제 통합관제 위성 대시보드를 배경으로 — 라이브 관제 위에 확장 스토리를 얹는다 */}
-      <img className="fin-bg" src="/images/260730_demo/monitoring-dashboard.png" alt="통합관제 대시보드" />
-      <div className="fin-scrim" />
-      <div className="fin-scan" />
+    <div className="finctl">
+      <div ref={mapRef} className="finctl-map" style={{ visibility: mapFailed ? 'hidden' : 'visible' }} />
+      {mapFailed && (
+        <img className="finctl-fallback" src="/images/260730_demo/monitoring-dashboard.png" alt="통합관제 대시보드" />
+      )}
+      <div className="finctl-scrim" />
       <div className="fin-live"><i />LIVE · 통합관제 운영 중</div>
 
-      {/* 조준 뷰파인더 — 지역을 순차로 옮겨 다니며 위치가 바뀐다 */}
-      <div className={`fin-reticle${cur.ghost ? ' ghost' : ''}`} style={{ left: cur.x, top: cur.y }}>
+      {/* 중앙 조준 락온 — 지도가 날아와 도착한 지역을 잠근다 */}
+      <div className={`finctl-lock${cur.wide ? ' wide' : ''}`}>
         <span className="rc tl" /><span className="rc tr" /><span className="rc bl" /><span className="rc br" />
         <span className="fin-ret-dot" />
         <div className="fin-ret-lab"><b>{cur.name}</b><small>{cur.sub}</small></div>
       </div>
 
+      {/* 좌측 확장 카피 */}
       <div className="fin-copy">
         <p className="fin-eyebrow">Sustainable &amp; Expandable</p>
         <h3 className="fin-title">울산에서 <span className="hl">사천 · 후평으로</span><br />계속 확장</h3>
@@ -861,6 +959,19 @@ function FinaleExpand() {
           <div className={`fin-step next${cur.step === 2 ? ' on' : ''}`}><span className="fs-no">→</span><b>다음 지역</b><small>같은 플랫폼 기반 위에서</small></div>
         </div>
       </div>
+
+      {/* 우측 발전소 목록 패널 (관제 대시보드 느낌 유지) */}
+      <aside className="finctl-side">
+        <div className="fcs-head">발전소 목록<span>가동 6/6기</span></div>
+        {FIN_PLANTS.map((p) => (
+          <div className="fcs-row" key={p.n}>
+            <span className="fcs-dot" />
+            <span className="fcs-name">{p.n}</span>
+            <span className="fcs-bar"><i style={{ width: `${p.p}%` }} /></span>
+            <span className="fcs-pct">{p.p}%</span>
+          </div>
+        ))}
+      </aside>
     </div>
   )
 }
