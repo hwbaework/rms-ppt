@@ -355,7 +355,21 @@ const CSS = `
 .finale2{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
 /* ── 12P: 실제 통합관제 위성 대시보드를 배경으로, 확장 스토리를 오버레이 ── */
 .finale3{position:relative;flex:1;min-height:0;border-radius:16px;overflow:hidden;border:1px solid #1e3358;box-shadow:0 16px 44px rgba(4,12,28,.35)}
-.finale3 .fin-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.finale3 .fin-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;animation:finKen 24s ease-in-out infinite alternate}
+/* 배경 미세 줌·팬 — 화면이 살아 움직이는 느낌 */
+@keyframes finKen{from{transform:scale(1.06)}to{transform:scale(1.13) translate(-1.5%,-1%)}}
+/* 조준 뷰파인더 — 위치 사이를 부드럽게 이동(위치가 바뀌는 확장 연출) */
+.fin-reticle{position:absolute;transform:translate(-50%,-50%);z-index:2;width:7vw;height:4.8vw;pointer-events:none;transition:left 1.1s cubic-bezier(.45,.05,.2,1),top 1.1s cubic-bezier(.45,.05,.2,1)}
+.fin-reticle .rc{position:absolute;width:1vw;height:1vw;border:2px solid rgba(96,165,250,.95)}
+.fin-reticle .rc.tl{left:0;top:0;border-right:none;border-bottom:none}
+.fin-reticle .rc.tr{right:0;top:0;border-left:none;border-bottom:none}
+.fin-reticle .rc.bl{left:0;bottom:0;border-right:none;border-top:none}
+.fin-reticle .rc.br{right:0;bottom:0;border-left:none;border-top:none}
+.fin-reticle.ghost .rc{border-color:rgba(127,168,232,.75);border-style:dashed}
+.fin-ret-dot{position:absolute;left:50%;top:50%;width:.55vw;height:.55vw;border-radius:50%;background:#60a5fa;transform:translate(-50%,-50%);box-shadow:0 0 12px rgba(96,165,250,.9);animation:finpulse 1.6s ease-in-out infinite}
+.fin-ret-lab{position:absolute;left:50%;top:calc(100% + .35vw);transform:translateX(-50%);white-space:nowrap;text-align:center;background:rgba(8,18,36,.82);border:1px solid rgba(127,168,232,.4);border-radius:8px;padding:.3vw .85vw;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.fin-ret-lab b{color:#fff;font-size:.9vw;font-weight:800}
+.fin-ret-lab small{display:block;color:var(--accent-soft);font-size:.7vw;margin-top:.08vw}
 /* 어둡게 + 좌측 그라데이션으로 텍스트 가독 확보 */
 .finale3 .fin-scrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,14,30,.9) 0%,rgba(6,14,30,.6) 42%,rgba(6,14,30,.15) 100%)}
 /* 라이브 관제 배지 (좌상단, 깜빡이지 않는 은은한 점) */
@@ -376,6 +390,9 @@ const CSS = `
 .fin-step.next .fs-no{background:transparent;border:1.5px dashed rgba(127,168,232,.6);color:var(--accent-soft)}
 .fin-step b{color:#fff;font-size:.92vw;font-weight:700}
 .fin-step small{color:rgba(191,209,238,.7);font-size:.72vw;margin-left:.35vw}
+/* 뷰파인더가 그 지역에 있을 때 해당 스텝이 켜진다 */
+.fin-step{transition:border-color .4s,box-shadow .4s,background .4s}
+.fin-step.on{border-color:rgba(96,165,250,.7);background:rgba(37,99,235,.28);box-shadow:0 6px 20px rgba(37,99,235,.28)}
 .fnote{position:absolute;background:#fff;border:1px solid var(--hair);border-radius:12px;padding:.75vw 1.05vw;box-shadow:0 8px 24px rgba(11,21,38,.08);max-width:17vw;z-index:1}
 .fnote b{display:flex;align-items:center;gap:.45vw;font-size:.94vw;color:var(--ink);font-weight:700}
 .fnote b .material-symbols-outlined{font-size:1.05vw;color:var(--accent)}
@@ -805,6 +822,48 @@ const PERSONAS = [
   { x: '24%', y: '86%', c: '#64748b', ic: 'admin_panel_settings', t: '플랫폼관리자' },
   { x: '15%', y: '30%', c: '#8b5cf6', ic: 'support_agent', t: '컨설턴트' },
 ]
+
+// 마무리 확장 — 통합관제 대시보드 위를 조준 뷰파인더가 지역을 옮겨 다닌다(위치가 바뀌는 확장 연출)
+function FinaleExpand() {
+  const spots = [
+    { x: '57%', y: '58%', name: '울산 에자자', sub: '첫 적용 · 운영 중', step: 0 },
+    { x: '47%', y: '41%', name: '사천', sub: '확산 적용', step: 1 },
+    { x: '65%', y: '36%', name: '후평', sub: '확산 적용', step: 1 },
+    { x: '52%', y: '67%', name: '다음 지역', sub: '계속 확장', step: 2, ghost: true },
+  ]
+  const [i, setI] = useState(0)
+  useEffect(() => {
+    const t = setInterval(() => setI((v) => (v + 1) % spots.length), 2600)
+    return () => clearInterval(t)
+  }, [spots.length])
+  const cur = spots[i]
+  return (
+    <div className="finale3">
+      {/* 실제 통합관제 위성 대시보드를 배경으로 — 라이브 관제 위에 확장 스토리를 얹는다 */}
+      <img className="fin-bg" src="/images/260730_demo/monitoring-dashboard.png" alt="통합관제 대시보드" />
+      <div className="fin-scrim" />
+      <div className="fin-scan" />
+      <div className="fin-live"><i />LIVE · 통합관제 운영 중</div>
+
+      {/* 조준 뷰파인더 — 지역을 순차로 옮겨 다니며 위치가 바뀐다 */}
+      <div className={`fin-reticle${cur.ghost ? ' ghost' : ''}`} style={{ left: cur.x, top: cur.y }}>
+        <span className="rc tl" /><span className="rc tr" /><span className="rc bl" /><span className="rc br" />
+        <span className="fin-ret-dot" />
+        <div className="fin-ret-lab"><b>{cur.name}</b><small>{cur.sub}</small></div>
+      </div>
+
+      <div className="fin-copy">
+        <p className="fin-eyebrow">Sustainable &amp; Expandable</p>
+        <h3 className="fin-title">울산에서 <span className="hl">사천 · 후평으로</span><br />계속 확장</h3>
+        <div className="fin-steps">
+          <div className={`fin-step${cur.step === 0 ? ' on' : ''}`}><span className="fs-no">1</span><b>울산 에자자</b><small>첫 적용 · 운영 중</small></div>
+          <div className={`fin-step${cur.step === 1 ? ' on' : ''}`}><span className="fs-no">2</span><b>사천 · 후평</b><small>확산 적용</small></div>
+          <div className={`fin-step next${cur.step === 2 ? ' on' : ''}`}><span className="fs-no">→</span><b>다음 지역</b><small>같은 플랫폼 기반 위에서</small></div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 // ※ 이 덱은 사용자 지시로 목차 슬라이드 제외 ("이번에만 해당" — 2026-07 피드백 2번)
 const SLIDES: ReactNode[] = [
@@ -1254,22 +1313,7 @@ const SLIDES: ReactNode[] = [
       <b> 타 지역과 신규 가입자로 확장하는, 지속가능하고 실효성 있는 서비스</b>입니다.</>
     }
   >
-    <div className="finale3">
-      {/* 실제 통합관제 위성 대시보드를 배경으로 — 라이브 관제 위에 확장 스토리를 얹는다 */}
-      <img className="fin-bg" src="/images/260730_demo/monitoring-dashboard.png" alt="통합관제 대시보드" />
-      <div className="fin-scrim" />
-      <div className="fin-scan" />
-      <div className="fin-live"><i />LIVE · 통합관제 운영 중</div>
-      <div className="fin-copy">
-        <p className="fin-eyebrow">Sustainable &amp; Expandable</p>
-        <h3 className="fin-title">울산에서 <span className="hl">사천 · 후평으로</span><br />계속 확장</h3>
-        <div className="fin-steps">
-          <div className="fin-step"><span className="fs-no">1</span><b>울산 에자자</b><small>첫 적용 · 운영 중</small></div>
-          <div className="fin-step"><span className="fs-no">2</span><b>사천 · 후평</b><small>확산 적용</small></div>
-          <div className="fin-step next"><span className="fs-no">→</span><b>다음 지역</b><small>같은 플랫폼 기반 위에서</small></div>
-        </div>
-      </div>
-    </div>
+    <FinaleExpand />
   </ContentSlide>,
 
   /* ── 감사합니다 ── */
