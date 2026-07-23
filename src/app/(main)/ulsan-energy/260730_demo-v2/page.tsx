@@ -83,6 +83,8 @@ const CSS = `
 .lede{color:var(--body);font-size:1vw;line-height:1.75;margin-bottom:1vw}
 .lede b{color:var(--ink);font-weight:700}
 .area{flex:1;display:flex;flex-direction:column;gap:1.1vw}
+/* 본문 블록을 세로로 고르게 분산해 하단까지 채운다(빈 공간 방지) */
+.area.fill{justify-content:space-between;gap:0}
 
 /* ── 스텝 플로우 (점 + 라인) ── */
 .flow{display:flex}
@@ -246,13 +248,13 @@ const CSS = `
 .yt-now:after{content:"";width:2px;height:3.3vw;background:var(--accent);border-radius:2px;margin-top:.15vw;box-shadow:0 0 8px rgba(37,99,235,.45)}
 .split43{display:grid;grid-template-columns:53fr 47fr;gap:1vw}
 /* 타일 — 아이콘·이름·설명·바 여유 있게(설명 추가로 자연 높이 상향) */
-.split43.fill{margin-top:.4vw}
+.split43.fill{margin-top:0}
 .split43.fill .press-card{gap:.4vw;padding:1.1vw .85vw}
 .split43.fill .press-card .press-ic{width:3vw;height:3vw;margin-bottom:.15vw}
 .split43.fill .press-card .press-ic .material-symbols-outlined{font-size:1.5vw}
 .split43.fill .wip-done,.split43.fill .wip-empty{width:72%;margin:.25vw auto 0}
 /* ── 3P 하단 내용 블록 — 4개 기능이 하나로 연결됨을 설명 ── */
-.p3note{margin-top:1vw;background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:1vw 1.4vw;display:flex;align-items:center;gap:1.1vw}
+.p3note{background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:1vw 1.4vw;display:flex;align-items:center;gap:1.1vw}
 .p3note-ic{width:2.6vw;height:2.6vw;border-radius:50%;background:var(--tint);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .p3note-ic .material-symbols-outlined{font-size:1.35vw}
 .p3note-t{flex:1}
@@ -558,12 +560,15 @@ function ContentSlide({
   title,
   lede,
   children,
+  fill,
 }: {
   no: string
   sec: string
   title: ReactNode
   lede?: ReactNode
   children: ReactNode
+  /** true면 본문 블록을 세로로 고르게 분산해 하단까지 채운다 */
+  fill?: boolean
 }) {
   return (
     <div className="cs">
@@ -575,7 +580,7 @@ function ContentSlide({
         </div>
         <h2 className="cs-title">{title}</h2>
         {lede && <p className="lede">{lede}</p>}
-        <div className="area">{children}</div>
+        <div className={`area${fill ? ' fill' : ''}`}>{children}</div>
       </div>
     </div>
   )
@@ -990,6 +995,7 @@ const SLIDES: ReactNode[] = [
     sec="사업 추진 경과 — 1~2차년도"
     title={<>3차년도 — <span className="hl">핵심 기능 개발</span></>}
     lede={<>1~2차년도에 다진 기반 위에서, <b>계획된 일정에 따라 정상적으로</b> 개발을 진행하고 있습니다.</>}
+    fill
   >
     <Flow
       steps={[
@@ -1000,7 +1006,7 @@ const SLIDES: ReactNode[] = [
       ]}
     />
 
-    <div style={{ marginTop: '.8vw' }}>
+    <div>
       <div className="block-label"><b>3차년도 — ESG 에너지 플랫폼, 단계별로 해야 할 일</b></div>
       <div className="glanes">
         <div className="glane">
@@ -1030,18 +1036,18 @@ const SLIDES: ReactNode[] = [
       </div>
     </div>
 
-    <div style={{ marginTop: '.8vw' }}>
+    <div>
       <div className="block-label"><b>ESG 에너지 플랫폼 구축률 — 연차별 목표</b></div>
       <div className="pbar">
-        <div className="pseg y1" style={{ width: '15%' }}>1차 15%</div>
-        <div className="pseg y2" style={{ width: '35%' }}>2차 35%</div>
+        <div className="pseg y1" style={{ width: '20%' }}>1차 20%</div>
+        <div className="pseg y2" style={{ width: '40%' }}>2차 40%</div>
         <div className="pseg y3" style={{ width: '30%' }}>3차 30%</div>
-        <div className="pseg y4" style={{ width: '20%' }}>4차 20%</div>
+        <div className="pseg y4" style={{ width: '10%' }}>4차 · 고도화</div>
       </div>
       <div className="pbar-cap">
-        <span className="pbar-mark" style={{ left: '80%' }}>3차년도 말 누적 80%</span>
+        <span className="pbar-mark" style={{ left: '90%' }}>3차년도 말 누적 90%</span>
       </div>
-      <p className="srcline">근거 — [울산미포에자자] 3차년도 사업계획서(2026.03) 성과지표 · 추진일정 총괄계획 재구성</p>
+      <p className="srcline">3차년도까지 구축 90% 완료 · 4차년도(2027)는 테스트 · 이관 · 고도화 단계</p>
     </div>
   </ContentSlide>,
 
@@ -1052,8 +1058,9 @@ const SLIDES: ReactNode[] = [
     sec="사업 추진 경과 — 3차년도 개발 현황"
     title={<>상반기 <span className="hl">4</span>개 구축 완료 — <span className="hl">QA · 안정화</span></>}
     lede={<>지금 보여드리는 것은 <b>현재까지의 구축 결과물</b>입니다.</>}
+    fill
   >
-    <div style={{ paddingTop: '1.3vw' }}>
+    <div>
       <div className="yeartrack">
         <div className="yt-h1"><span className="material-symbols-outlined">task_alt</span>상반기 — 4개 구축 완료 · 안정화</div>
         <div className="yt-h2">하반기 — 3개 개발 계획 (12p 로드맵)</div>
