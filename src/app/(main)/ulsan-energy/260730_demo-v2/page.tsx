@@ -245,13 +245,20 @@ const CSS = `
 .yt-now{position:absolute;top:-1.3vw;transform:translateX(-50%);color:var(--accent);font-size:.72vw;font-weight:800;display:flex;flex-direction:column;align-items:center;line-height:1.2;z-index:1}
 .yt-now:after{content:"";width:2px;height:3.3vw;background:var(--accent);border-radius:2px;margin-top:.15vw;box-shadow:0 0 8px rgba(37,99,235,.45)}
 .split43{display:grid;grid-template-columns:53fr 47fr;gap:1vw}
-/* 하단 요약 바 제거 후 — 타일이 남는 높이를 채운다(설명 포함해 균형 있게) */
-.split43.fill{flex:1;min-height:0;align-items:stretch;margin-top:.4vw}
-.split43.fill .press{height:100%}
-.split43.fill .press-card{justify-content:center;gap:.45vw}
-.split43.fill .press-card .press-ic{width:3vw;height:3vw;margin-bottom:.2vw}
+/* 타일 — 아이콘·이름·설명·바 여유 있게(설명 추가로 자연 높이 상향) */
+.split43.fill{margin-top:.4vw}
+.split43.fill .press-card{gap:.4vw;padding:1.1vw .85vw}
+.split43.fill .press-card .press-ic{width:3vw;height:3vw;margin-bottom:.15vw}
 .split43.fill .press-card .press-ic .material-symbols-outlined{font-size:1.5vw}
-.split43.fill .wip-done,.split43.fill .wip-empty{width:72%;margin:.2vw auto 0}
+.split43.fill .wip-done,.split43.fill .wip-empty{width:72%;margin:.25vw auto 0}
+/* ── 3P 하단 내용 블록 — 4개 기능이 하나로 연결됨을 설명 ── */
+.p3note{margin-top:1vw;background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:1vw 1.4vw;display:flex;align-items:center;gap:1.1vw}
+.p3note-ic{width:2.6vw;height:2.6vw;border-radius:50%;background:var(--tint);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.p3note-ic .material-symbols-outlined{font-size:1.35vw}
+.p3note-t{flex:1}
+.p3note-t b{display:block;color:var(--ink);font-size:.95vw;font-weight:800;margin-bottom:.22vw}
+.p3note-t p{color:var(--body);font-size:.82vw;line-height:1.7}
+.p3note-t p .hl{color:var(--accent);font-weight:700}
 /* 구축 중 — 움직이는 작업 스트라이프 (진행률 주장 없이 "작업 중" 상태 표시) */
 .wip{height:.4vw;border-radius:999px;overflow:hidden;background:#e6ecf7;margin-top:.55vw}
 .wip i{display:block;height:100%;border-radius:999px;background:repeating-linear-gradient(-45deg,#2563eb 0 .45vw,#60a5fa .45vw .9vw);background-size:1.28vw 100%;animation:crawl 1.1s linear infinite}
@@ -852,8 +859,8 @@ const PERSONAS = [
 const FIN_STOPS = [
   { center: [129.311, 35.539] as [number, number], zoom: 8.8, name: '울산', sub: '첫 적용', step: 0 },
   { center: [128.064, 35.004] as [number, number], zoom: 8.8, name: '사천', sub: '확산 적용', step: 1 },
-  { center: [127.734, 37.874] as [number, number], zoom: 8.8, name: '후평', sub: '확산 적용', step: 1 },
-  { center: [127.8, 36.3] as [number, number], zoom: 6.1, name: '전국단위 확산', sub: '같은 플랫폼 기반 위에서', step: 2, wide: true },
+  { center: [127.734, 37.874] as [number, number], zoom: 8.8, name: '후평', sub: '확산 적용', step: 2 },
+  { center: [127.8, 36.3] as [number, number], zoom: 6.1, name: '전국단위 확산', sub: '같은 플랫폼 기반 위에서', step: 3, wide: true },
 ]
 function FinaleExpand() {
   const mapRef = useRef<HTMLDivElement>(null)
@@ -946,8 +953,9 @@ function FinaleExpand() {
         <h3 className="fin-title">울산 · 사천 · 후평 —<br /><span className="hl">전국단위 확산</span></h3>
         <div className="fin-steps">
           <div className={`fin-step${cur.step === 0 ? ' on' : ''}`}><span className="fs-no">1</span><b>울산</b><small>첫 적용</small></div>
-          <div className={`fin-step${cur.step === 1 ? ' on' : ''}`}><span className="fs-no">2</span><b>사천 · 후평</b><small>확산 적용</small></div>
-          <div className={`fin-step next${cur.step === 2 ? ' on' : ''}`}><span className="fs-no">→</span><b>전국단위 확산</b><small>같은 플랫폼 기반 위에서</small></div>
+          <div className={`fin-step${cur.step === 1 ? ' on' : ''}`}><span className="fs-no">2</span><b>사천</b><small>확산 적용</small></div>
+          <div className={`fin-step${cur.step === 2 ? ' on' : ''}`}><span className="fs-no">3</span><b>후평</b><small>확산 적용</small></div>
+          <div className={`fin-step next${cur.step === 3 ? ' on' : ''}`}><span className="fs-no">→</span><b>전국단위 확산</b><small>같은 플랫폼 기반 위에서</small></div>
         </div>
       </div>
 
@@ -1063,6 +1071,17 @@ const SLIDES: ReactNode[] = [
         <Tile soon ic="co2" k="탄소배출관리" d="배출 현황 · 감축 관리" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
         <Tile soon ic="storefront" k="e데이터마켓" d="에너지 데이터 · 배출권 거래" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
         <Tile soon ic="hub" k="VPP" d="분산자원 통합 가상발전소" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
+      </div>
+    </div>
+    <div className="p3note">
+      <span className="p3note-ic"><span className="material-symbols-outlined">linked_services</span></span>
+      <div className="p3note-t">
+        <b>각 기능은 따로 도는 것이 아니라, 하나의 플랫폼 안에서 연결됩니다</b>
+        <p>
+          <span className="hl">컨설팅</span>으로 RE100 방향을 잡고 · <span className="hl">전력거래</span>로 재생에너지를 조달하고 ·
+          <span className="hl"> 모니터링</span>으로 운영·관제하고 · <span className="hl">DT</span>로 설치 효과를 먼저 확인합니다.
+          하반기에는 탄소배출관리·e데이터마켓·VPP를 더해 발전부터 거래·관리까지 아우릅니다.
+        </p>
       </div>
     </div>
   </ContentSlide>,
