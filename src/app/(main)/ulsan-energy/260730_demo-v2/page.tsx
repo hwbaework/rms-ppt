@@ -363,23 +363,13 @@ const CSS = `
 /* 좌측 그라데이션 스크림 — 카피 가독 확보(지도는 우측으로 갈수록 선명) */
 .finctl-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(6,14,30,.92) 0%,rgba(6,14,30,.55) 34%,rgba(6,14,30,0) 60%,rgba(6,14,30,.6) 100%)}
 /* 중앙 락온 프레임 — 지도가 도착한 지역을 잠근다 */
-.finctl-lock{position:absolute;left:calc(50% + 3vw);top:48%;transform:translate(-50%,-50%);z-index:2;width:6.5vw;height:4.6vw;pointer-events:none;transition:width .5s,height .5s}
+.finctl-lock{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;width:6.5vw;height:4.6vw;pointer-events:none;transition:width .5s,height .5s}
 .finctl-lock.wide{width:11vw;height:8vw}
 .finctl-lock .rc{position:absolute;width:1vw;height:1vw;border:2px solid rgba(96,165,250,.95)}
 .finctl-lock .rc.tl{left:0;top:0;border-right:none;border-bottom:none}
 .finctl-lock .rc.tr{right:0;top:0;border-left:none;border-bottom:none}
 .finctl-lock .rc.bl{left:0;bottom:0;border-right:none;border-top:none}
 .finctl-lock .rc.br{right:0;bottom:0;border-left:none;border-top:none}
-/* 우측 발전소 목록 패널 */
-.finctl-side{position:absolute;right:1.1vw;top:1.1vw;bottom:1.1vw;z-index:2;width:15vw;background:rgba(8,18,36,.72);border:1px solid rgba(127,168,232,.22);border-radius:12px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:.9vw 1vw;display:flex;flex-direction:column;gap:.5vw}
-.fcs-head{display:flex;align-items:center;justify-content:space-between;color:#fff;font-size:.85vw;font-weight:800;padding-bottom:.55vw;border-bottom:1px solid rgba(127,168,232,.18)}
-.fcs-head span{color:var(--accent-soft);font-size:.68vw;font-weight:600}
-.fcs-row{display:flex;align-items:center;gap:.55vw;flex:1}
-.fcs-dot{width:.5vw;height:.5vw;border-radius:50%;background:#22c55e;box-shadow:0 0 6px rgba(34,197,94,.7);flex-shrink:0}
-.fcs-name{color:#dbe7ff;font-size:.78vw;font-weight:600;width:5.2vw;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fcs-bar{flex:1;height:.42vw;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden}
-.fcs-bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#22c55e,#4ade80)}
-.fcs-pct{color:#cdddf7;font-size:.72vw;font-weight:700;width:2.2vw;text-align:right;flex-shrink:0}
 /* (구) 위성 이미지 배경 방식 — MapLibre로 대체, 스타일만 잔존 참조용 */
 .finale3{position:relative;flex:1;min-height:0;border-radius:16px;overflow:hidden;border:1px solid #1e3358;box-shadow:0 16px 44px rgba(4,12,28,.35)}
 .finale3 .fin-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;animation:finKen 24s ease-in-out infinite alternate}
@@ -858,11 +848,6 @@ const FIN_STOPS = [
   { center: [127.734, 37.874] as [number, number], zoom: 8.8, name: '후평', sub: '확산 적용', step: 1 },
   { center: [127.8, 36.3] as [number, number], zoom: 6.1, name: '전국으로', sub: '같은 플랫폼 기반 위에서 계속 확장', step: 2, wide: true },
 ]
-const FIN_PLANTS = [
-  { n: '용인금속1', p: 54 }, { n: '태성산업', p: 82 }, { n: '건호이엔씨', p: 49 },
-  { n: '한일튜브', p: 66 }, { n: '한길', p: 85 }, { n: '용인금속2', p: 59 },
-]
-
 function FinaleExpand() {
   const mapRef = useRef<HTMLDivElement>(null)
   const [i, setI] = useState(0)
@@ -960,18 +945,6 @@ function FinaleExpand() {
         </div>
       </div>
 
-      {/* 우측 발전소 목록 패널 (관제 대시보드 느낌 유지) */}
-      <aside className="finctl-side">
-        <div className="fcs-head">발전소 목록<span>가동 6/6기</span></div>
-        {FIN_PLANTS.map((p) => (
-          <div className="fcs-row" key={p.n}>
-            <span className="fcs-dot" />
-            <span className="fcs-name">{p.n}</span>
-            <span className="fcs-bar"><i style={{ width: `${p.p}%` }} /></span>
-            <span className="fcs-pct">{p.p}%</span>
-          </div>
-        ))}
-      </aside>
     </div>
   )
 }
