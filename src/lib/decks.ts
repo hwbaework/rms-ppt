@@ -16,6 +16,14 @@ export type DeckMeta = {
 export const decks: DeckMeta[] = [
   {
     region: '울산 에너지자급자족',
+    date: '2026-07-23',
+    title: 'LASEE 설치기업 페르소나·프로세스',
+    href: '/ulsan-energy/260723_lasee',
+    description: '설치기업 페르소나 추가 — 등록·자동배정·설치·검수·이상감지 End-to-End',
+    tags: ['Persona', 'Process', 'LASEE'],
+  },
+  {
+    region: '울산 에너지자급자족',
     date: '2026-07-30',
     title: '통합에너지플랫폼 구축 현황 (작업본)',
     href: '/ulsan-energy/260730_demo-v2',
