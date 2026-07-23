@@ -353,6 +353,29 @@ const CSS = `
 .kmap.big{width:auto;height:100%;max-width:none;align-self:stretch;margin:0}
 /* 확장 히어로 — 지도가 무대 중앙, 주위에 확장 메시지 카드가 떠 있다 */
 .finale2{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+/* ── 12P: 실제 통합관제 위성 대시보드를 배경으로, 확장 스토리를 오버레이 ── */
+.finale3{position:relative;flex:1;min-height:0;border-radius:16px;overflow:hidden;border:1px solid #1e3358;box-shadow:0 16px 44px rgba(4,12,28,.35)}
+.finale3 .fin-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+/* 어둡게 + 좌측 그라데이션으로 텍스트 가독 확보 */
+.finale3 .fin-scrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,14,30,.9) 0%,rgba(6,14,30,.6) 42%,rgba(6,14,30,.15) 100%)}
+/* 라이브 관제 배지 (좌상단, 깜빡이지 않는 은은한 점) */
+.fin-live{position:absolute;top:1.1vw;left:1.3vw;z-index:2;display:flex;align-items:center;gap:.5vw;background:rgba(8,18,36,.72);border:1px solid rgba(127,168,232,.3);border-radius:999px;padding:.32vw 1vw;color:#cdddf7;font-size:.82vw;font-weight:700;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.fin-live i{width:.5vw;height:.5vw;border-radius:50%;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.8);animation:finpulse 2.4s ease-in-out infinite}
+@keyframes finpulse{0%,100%{opacity:.5}50%{opacity:1}}
+/* 스캔 라인 — 관제 화면 느낌(가로선이 아래로 천천히 흐름) */
+.fin-scan{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(96,165,250,.55),transparent);z-index:2;pointer-events:none;animation:finscan 6s linear infinite}
+@keyframes finscan{0%{top:0;opacity:0}8%{opacity:1}92%{opacity:1}100%{top:100%;opacity:0}}
+/* 좌측 오버레이 텍스트 블록 */
+.fin-copy{position:absolute;left:2.4vw;top:50%;transform:translateY(-50%);z-index:2;max-width:34%}
+.fin-eyebrow{color:var(--accent-soft);letter-spacing:.28em;text-transform:uppercase;font-size:.72vw;font-weight:700;margin-bottom:.9vw}
+.fin-title{color:#fff;font-size:2vw;font-weight:900;letter-spacing:-.02em;line-height:1.28;margin-bottom:1.1vw}
+.fin-title .hl{color:var(--accent-soft)}
+.fin-steps{display:flex;flex-direction:column;gap:.55vw}
+.fin-step{display:flex;align-items:center;gap:.7vw;background:rgba(12,24,46,.6);border:1px solid rgba(127,168,232,.22);border-radius:11px;padding:.55vw .9vw;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.fin-step .fs-no{width:1.5vw;height:1.5vw;border-radius:50%;background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:#fff;font-size:.72vw;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fin-step.next .fs-no{background:transparent;border:1.5px dashed rgba(127,168,232,.6);color:var(--accent-soft)}
+.fin-step b{color:#fff;font-size:.92vw;font-weight:700}
+.fin-step small{color:rgba(191,209,238,.7);font-size:.72vw;margin-left:.35vw}
 .fnote{position:absolute;background:#fff;border:1px solid var(--hair);border-radius:12px;padding:.75vw 1.05vw;box-shadow:0 8px 24px rgba(11,21,38,.08);max-width:17vw;z-index:1}
 .fnote b{display:flex;align-items:center;gap:.45vw;font-size:.94vw;color:var(--ink);font-weight:700}
 .fnote b .material-symbols-outlined{font-size:1.05vw;color:var(--accent)}
@@ -360,22 +383,6 @@ const CSS = `
 .kpin.ghost i{background:#fff;border:2px dashed #93c5fd;box-shadow:none}
 .kpin.ghost b{color:#1d4ed8;border-style:dashed;border-color:#bfdbfe}
 .karc.ghosted{stroke:#c9d8f0;stroke-dasharray:1.6 2.2}
-/* ── 12P 지도: 진입 시 1회 시네마틱 등장 (반복 깜빡임 제거 → 눈 피로 해소) ── */
-.kmap.big .kpin{opacity:0}
-.slide.active .kmap.big .kpin{animation:pinRise .7s cubic-bezier(.2,.75,.25,1.4) both}
-.slide.active .kmap.big .kpin.k1{animation-delay:.35s}
-.slide.active .kmap.big .kpin.k2{animation-delay:1.15s}
-.slide.active .kmap.big .kpin.k3{animation-delay:1.85s}
-.slide.active .kmap.big .kpin.ghost{animation-delay:2.7s}
-@keyframes pinRise{0%{opacity:0;transform:translate(-50%,-50%) translateY(1vw) scale(.35)}55%{opacity:1;transform:translate(-50%,-50%) translateY(-.15vw) scale(1.2)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
-/* 울산에서 퍼지는 충격파 — 진입 시 3회 후 정지(지속 깜빡임 아님) */
-.kwave{position:absolute;left:50%;top:.65vw;width:1vw;height:1vw;border-radius:50%;border:2px solid rgba(37,99,235,.55);transform:translate(-50%,-50%);opacity:0;pointer-events:none}
-.slide.active .kwave{animation:kwave 2s ease-out .5s 3}
-.slide.active .kwave.w2{animation-delay:1.5s}
-@keyframes kwave{0%{opacity:.6;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(9)}}
-/* 연결 곡선은 지도 등장 후 부드럽게 나타남 */
-.slide.active .kmap.big .karc{animation:fadeSoft 1s ease .7s both}
-@keyframes fadeSoft{from{opacity:0}to{opacity:1}}
 .kmap svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .kland{fill:#eaf1fb;stroke:#c9d8f0;stroke-width:1}
 .karc{fill:none;stroke:#aac3ee;stroke-width:1.3;stroke-dasharray:3 2.4;stroke-linecap:round}
@@ -1247,57 +1254,19 @@ const SLIDES: ReactNode[] = [
       <b> 타 지역과 신규 가입자로 확장하는, 지속가능하고 실효성 있는 서비스</b>입니다.</>
     }
   >
-    <div className="finale2">
-      {/* 지도 주위에 떠 있는 확장 메시지 카드 */}
-      <div className="fnote" style={{ left: '5%', top: '10%' }}>
-        <b><span className="material-symbols-outlined">hub</span>하나의 플랫폼 기반</b>
-        <small>지역이 늘어도 같은 기반 위에서 — 새로 만들지 않습니다</small>
-      </div>
-      <div className="fnote" style={{ left: '5%', bottom: '12%' }}>
-        <b><span className="material-symbols-outlined">person_add</span>신규 가입자</b>
-        <small>에자자 참여 기업이 아니어도, 어느 지역에서든 접근</small>
-      </div>
-      <div className="fnote" style={{ right: '5%', top: '16%' }}>
-        <b><span className="material-symbols-outlined">update</span>지속 운영</b>
-        <small>사업 종료 이후에도 운영 · 업데이트가 계속됩니다</small>
-      </div>
-      {/* 확장 지도 — 울산에서 사천 · 후평으로. 경계는 Natural Earth 10m(최고 해상도 · 퍼블릭 도메인) 실데이터 투영 — 울릉도 · 독도 · 백령도 포함,
-          핀 좌표도 실제 경위도(울산 129.31E/35.54N · 사천 128.06E/35.00N · 춘천 후평 127.73E/37.87N) 투영값 */}
-      <div className="kmap big">
-        <svg viewBox="0 0 100 130" aria-hidden>
-          <path
-            className="kland"
-            d="M58.7 15.9L59.2 16.7L59.8 18.0L60.0 18.6L60.3 19.5L61.6 22.0L62.6 24.6L63.3 25.5L63.5 26.0L65.9 29.4L66.9 30.8L68.0 32.0L68.9 33.0L69.0 33.4L69.0 33.8L69.1 34.2L69.6 34.5L70.1 36.1L70.3 36.5L70.8 36.8L71.4 38.1L71.8 38.6L72.0 39.1L72.8 40.2L73.0 40.8L73.2 42.2L73.5 42.9L74.3 44.0L74.2 44.4L74.0 44.8L74.1 45.5L74.2 47.1L74.4 47.9L74.9 49.4L74.9 50.2L74.7 50.9L74.4 51.5L74.1 52.2L74.2 53.0L74.4 53.7L74.5 54.5L74.4 56.0L73.9 56.9L73.7 57.2L73.6 57.5L73.6 59.7L73.7 60.2L74.0 61.0L74.1 61.4L74.2 61.9L73.9 62.1L73.6 62.4L73.8 62.9L74.3 63.5L75.0 63.2L75.9 62.2L76.3 62.1L76.5 62.7L76.5 63.1L76.3 63.4L75.8 64.5L75.8 65.0L75.6 66.2L75.2 67.3L75.2 68.0L74.9 69.1L74.6 69.7L74.6 70.3L74.8 70.6L74.7 71.0L74.7 71.5L74.6 72.2L74.2 72.8L73.9 72.6L73.8 72.2L73.6 71.9L73.3 72.2L73.6 72.4L73.7 72.9L73.5 73.2L73.2 73.4L73.3 74.1L73.0 74.6L73.3 74.8L72.9 75.2L72.3 75.8L71.8 76.0L71.7 76.5L71.7 76.9L71.5 77.4L71.3 77.9L71.1 78.2L70.8 78.7L70.4 78.7L70.1 78.7L69.7 79.0L69.9 79.4L69.5 79.8L69.2 79.6L68.9 79.3L68.5 79.7L68.4 80.0L68.3 80.4L67.9 80.1L68.0 80.7L67.6 80.6L67.3 80.2L67.3 79.8L67.4 79.3L66.8 80.0L66.6 79.7L66.5 79.3L66.3 80.0L65.9 80.0L64.9 80.0L64.8 79.5L64.7 80.0L64.2 79.9L63.8 79.6L63.6 79.0L63.3 79.4L62.9 78.9L62.4 78.9L62.4 78.3L62.3 77.7L61.8 78.1L62.0 78.6L62.1 79.1L62.3 79.5L62.5 79.8L62.5 80.3L62.9 80.4L62.4 80.5L62.1 80.1L61.1 79.6L60.4 79.7L60.4 80.1L59.6 80.4L59.1 80.6L59.0 81.1L60.3 80.6L60.6 80.9L60.7 81.3L60.4 81.7L59.8 81.7L59.8 82.1L59.8 82.7L59.7 83.5L60.1 83.4L60.1 83.8L59.7 84.3L59.0 84.4L59.3 84.1L58.6 83.9L58.2 83.5L58.6 83.1L58.3 82.4L57.8 83.2L57.2 82.8L56.7 82.6L56.4 82.9L56.4 83.5L55.4 83.4L55.1 83.2L55.0 82.8L54.7 82.8L54.2 82.7L54.2 82.3L54.2 80.8L54.3 80.4L54.4 80.0L54.2 80.3L54.0 80.6L53.4 80.9L53.7 81.5L53.1 81.6L52.7 81.9L52.6 81.4L52.3 81.1L52.3 81.7L52.1 82.2L51.8 82.5L51.4 82.5L51.0 82.4L50.6 82.3L49.9 82.2L49.6 82.0L49.3 81.7L49.3 82.0L49.2 82.5L48.5 83.2L47.9 83.1L47.7 82.6L47.3 82.7L47.2 83.1L47.4 83.7L47.6 84.1L47.8 84.4L48.2 84.8L49.0 84.3L49.6 84.4L50.1 84.2L50.1 84.6L49.9 85.3L49.7 86.2L49.1 86.6L48.7 86.4L48.1 86.9L48.1 87.4L48.2 88.3L47.8 88.1L47.4 88.0L47.0 87.6L46.9 87.2L47.0 86.8L47.2 86.4L47.3 86.1L47.2 85.6L46.9 85.1L46.6 84.9L46.5 84.2L46.5 83.8L46.0 84.2L45.3 84.6L44.4 84.6L44.7 85.0L45.0 85.2L44.4 85.4L44.1 85.6L44.2 85.9L44.6 85.9L44.7 86.9L45.2 87.3L45.6 87.6L45.9 88.1L45.5 88.0L46.0 88.3L46.2 88.9L45.9 89.2L45.4 89.2L44.7 88.8L44.3 88.7L43.9 89.0L44.0 89.6L44.4 89.7L44.9 89.5L45.2 89.8L44.5 90.5L44.3 90.8L43.6 91.0L43.8 91.5L43.4 91.5L42.8 90.7L42.6 90.3L42.1 89.7L41.3 90.0L41.0 90.2L40.6 89.8L40.7 89.4L41.0 89.2L41.4 88.7L41.6 88.3L41.9 88.1L41.8 88.7L41.6 89.2L42.1 89.2L42.4 89.0L42.6 88.7L42.6 88.2L42.4 87.9L42.3 87.4L42.8 86.8L43.1 87.2L43.1 87.6L43.4 87.8L43.7 87.6L43.9 87.1L43.8 86.6L43.6 86.2L43.4 86.4L42.8 86.3L42.4 85.7L42.2 86.0L41.9 86.8L41.5 87.2L41.0 87.1L40.6 87.3L40.4 87.6L39.7 88.1L39.4 88.3L39.1 88.4L38.9 88.9L38.8 89.2L38.6 89.6L37.9 90.6L37.9 91.4L37.4 91.3L37.2 91.6L37.3 92.0L36.7 91.7L36.2 91.5L35.9 91.1L36.0 90.2L35.9 89.8L36.0 89.3L35.7 88.9L35.4 89.1L35.2 89.5L35.4 90.0L34.9 90.3L35.3 90.9L34.8 91.2L34.8 91.7L34.5 91.7L34.2 92.1L33.6 92.3L33.1 93.8L33.0 94.1L32.7 94.1L32.0 94.3L31.9 93.6L31.8 93.3L31.2 93.3L31.3 92.7L31.7 92.3L31.7 91.9L31.3 91.8L31.2 91.3L31.1 90.6L31.4 90.4L31.8 90.3L32.1 90.3L31.9 90.0L32.1 89.6L31.7 89.5L31.3 89.4L31.0 89.8L30.6 89.8L30.1 89.8L29.8 89.5L29.4 89.3L29.0 89.3L28.6 88.9L28.6 88.6L28.5 88.2L28.2 88.0L28.2 87.4L28.3 86.9L28.4 86.5L28.5 86.0L28.9 86.1L29.4 86.9L29.2 87.3L29.3 87.7L29.6 88.6L30.5 88.8L30.8 89.0L31.1 88.7L30.6 88.6L30.2 88.2L30.3 87.8L30.0 88.1L29.8 87.7L29.7 87.3L29.7 86.7L30.1 86.7L30.8 86.8L30.8 87.2L31.0 87.5L31.3 87.8L31.7 88.1L32.0 88.3L31.8 87.8L32.2 87.9L32.6 88.1L33.0 88.3L32.8 88.0L32.3 87.6L32.1 87.2L31.6 86.6L31.0 86.4L30.6 86.4L30.3 86.2L29.9 86.3L29.6 86.2L29.7 85.8L30.4 85.7L30.9 85.5L31.6 86.0L32.0 86.1L32.0 85.4L32.5 85.1L33.2 85.3L33.7 85.0L33.4 84.6L32.6 84.7L32.6 84.3L32.8 83.9L32.7 83.3L32.3 83.4L32.1 83.8L32.2 84.2L32.0 84.6L31.9 85.2L31.4 85.5L31.5 85.1L31.1 85.0L30.5 85.0L30.1 85.2L29.7 85.3L29.7 84.9L30.0 84.6L30.2 84.2L30.2 83.8L30.4 83.5L30.1 83.0L30.0 82.7L30.2 82.2L30.6 81.8L30.2 81.7L29.9 81.9L29.7 82.2L29.7 82.6L29.3 82.8L28.8 82.6L28.7 82.1L29.0 81.9L29.3 82.0L29.3 81.6L29.7 81.2L29.6 80.8L29.2 80.2L28.9 80.0L28.7 80.3L28.4 80.5L28.4 80.1L28.0 79.6L28.1 79.0L28.7 79.1L29.1 79.1L29.2 78.6L29.3 79.0L29.2 79.5L29.5 80.0L29.7 80.3L30.1 80.3L30.2 80.8L30.4 81.1L30.8 80.3L30.8 79.7L30.5 79.5L30.1 78.9L29.6 78.3L29.6 78.0L29.7 77.7L29.5 77.2L29.1 77.3L28.7 77.3L29.2 77.0L29.7 76.9L29.5 76.6L29.8 76.3L29.8 76.0L29.8 75.6L30.2 74.8L30.5 75.2L30.9 75.2L30.4 74.5L30.4 73.9L30.7 73.4L31.1 72.5L31.4 72.0L31.9 71.8L32.4 71.7L32.9 71.7L33.3 71.2L33.9 71.4L34.1 71.7L34.1 71.1L33.8 70.7L31.7 71.0L31.0 70.6L31.0 70.1L31.4 69.7L31.7 69.4L32.0 69.1L32.4 68.9L32.9 68.6L33.3 68.0L33.4 67.5L33.8 67.2L34.4 67.1L34.9 67.1L35.2 67.4L35.6 67.7L35.7 67.4L35.6 67.0L35.2 66.8L34.8 66.6L34.4 66.3L34.6 66.0L35.7 65.9L36.1 65.6L36.4 65.4L36.2 65.1L34.9 65.5L34.6 65.5L33.9 65.4L33.2 65.4L33.1 64.6L32.5 64.4L31.9 64.5L31.8 63.9L33.2 63.8L33.9 63.7L34.6 63.6L35.1 63.6L35.9 63.0L36.6 62.7L36.9 62.5L36.1 62.5L35.5 62.8L35.0 63.2L34.3 63.4L34.0 63.2L33.9 62.8L33.6 62.2L33.6 61.9L33.3 61.7L32.8 61.0L32.4 61.0L31.9 60.6L31.6 61.0L31.5 60.5L32.0 60.2L32.4 60.1L33.0 60.3L32.8 59.9L32.5 59.7L32.1 59.5L32.3 58.6L32.5 58.2L31.9 57.7L32.6 57.2L32.6 56.8L31.9 56.7L31.6 56.4L31.5 55.8L32.1 55.5L32.3 55.1L32.9 55.0L32.4 54.8L31.9 55.4L31.5 55.3L31.3 54.9L31.3 54.6L31.6 54.0L31.3 53.7L31.0 53.4L31.0 52.8L31.4 52.5L31.7 52.3L31.7 51.9L31.3 51.6L31.6 51.3L31.1 50.9L31.2 50.4L31.3 50.0L30.9 50.2L30.6 50.4L30.7 51.0L30.6 51.4L30.7 51.8L30.5 52.2L30.1 52.2L29.6 52.0L29.6 51.0L29.7 50.7L29.6 50.1L29.2 50.0L29.1 50.5L28.6 50.7L29.0 51.4L29.0 51.9L29.2 52.3L28.8 52.5L28.5 52.8L28.5 52.5L28.6 51.9L28.2 51.2L28.3 50.9L28.2 50.4L27.6 51.0L27.1 51.1L26.6 51.1L26.5 50.7L27.2 50.6L27.3 50.2L27.0 49.8L26.5 49.6L26.4 50.3L26.2 50.6L26.1 50.0L26.1 49.6L26.5 49.0L26.6 48.6L26.7 49.0L27.1 49.2L27.0 48.8L27.4 48.9L27.7 48.6L27.4 48.6L27.1 48.3L27.3 47.9L27.0 47.6L27.3 47.2L27.6 47.0L27.5 47.5L28.1 47.6L28.4 47.0L28.3 46.4L28.4 46.0L28.7 45.9L28.7 46.5L28.8 46.9L28.9 47.4L28.7 47.7L28.7 48.3L28.4 48.6L28.4 49.0L28.8 48.8L29.4 49.1L29.1 48.5L29.0 48.1L29.4 48.2L29.8 48.0L29.7 47.5L30.1 47.4L30.3 47.1L30.3 46.7L30.1 46.4L29.7 46.3L29.4 46.1L29.7 45.7L29.4 45.5L29.8 45.4L30.5 45.1L30.8 45.5L30.6 45.8L30.6 46.3L30.9 46.1L31.1 46.3L31.1 46.8L31.0 47.7L31.2 48.1L31.4 47.6L31.7 46.8L31.7 46.3L32.2 46.6L32.4 47.0L32.5 46.5L31.5 45.4L32.0 45.6L32.4 45.8L32.3 45.4L31.7 45.0L31.6 44.6L31.8 44.3L32.2 44.6L32.5 44.8L32.9 45.1L33.4 45.4L33.4 45.9L33.5 46.4L33.4 46.9L33.7 46.5L33.6 46.0L33.9 45.5L34.4 45.4L34.9 45.5L35.3 45.6L35.8 46.1L35.9 46.5L35.6 47.3L36.1 46.8L36.4 47.2L36.4 47.7L36.3 48.1L36.5 48.6L36.6 49.1L36.3 49.4L36.5 49.7L36.7 49.3L36.9 48.8L36.8 48.4L37.4 48.5L36.9 48.0L37.1 47.5L38.0 47.2L38.4 46.9L38.8 46.6L38.9 46.1L39.2 45.7L39.4 45.4L38.6 45.6L38.5 46.4L38.0 46.6L37.5 46.6L37.0 46.2L36.4 45.7L36.2 45.2L37.1 45.1L37.5 45.0L37.4 44.7L37.3 44.4L37.1 44.0L37.2 43.6L36.8 43.9L36.7 44.5L36.2 44.5L35.2 44.4L35.2 44.0L35.2 43.5L35.4 43.2L35.8 42.8L36.4 42.7L36.8 42.6L36.9 42.1L36.3 42.4L35.9 42.2L35.3 42.3L34.8 42.9L34.3 43.0L34.3 42.6L34.5 42.3L34.1 42.4L34.0 41.9L34.4 41.8L34.7 41.4L34.3 41.4L34.0 41.2L33.8 40.7L34.3 40.6L34.8 40.6L35.2 40.8L35.4 41.1L35.8 41.2L35.9 40.7L36.2 40.3L36.6 40.5L36.7 40.1L36.2 39.9L35.8 40.0L35.4 39.9L34.9 39.7L34.3 39.3L34.5 38.7L33.9 38.2L33.6 38.7L33.2 38.4L33.3 38.1L33.4 37.6L32.9 37.3L32.9 36.7L33.5 36.4L33.1 36.3L33.0 35.8L33.0 35.3L32.8 34.9L32.6 34.5L32.4 34.1L32.3 33.7L32.2 33.1L32.0 31.6L32.2 31.3L33.0 31.6L33.5 31.5L33.9 31.6L34.0 32.1L33.9 32.7L33.9 33.1L34.3 33.5L34.9 33.7L35.2 33.7L35.0 33.5L34.1 32.9L34.4 32.2L34.4 31.8L34.2 31.3L34.2 30.9L34.3 30.6L34.3 30.1L34.0 30.3L33.9 28.7L33.9 28.3L34.4 28.2L34.8 28.0L35.3 27.6L36.6 25.7L36.8 25.5L37.4 25.0L37.6 24.8L37.9 24.0L38.1 23.6L38.4 23.2L39.2 22.6L40.1 22.0L41.1 21.6L42.0 21.5L42.5 21.6L44.3 21.4L45.7 21.8L46.1 21.8L47.0 21.5L49.8 21.3L50.1 21.6L50.5 21.9L51.5 21.7L53.0 21.8L54.0 21.7L55.0 21.3L55.9 20.7L56.7 20.0L57.0 19.5L57.3 19.0L57.5 18.4L57.6 17.8L57.4 17.2L57.5 16.6L57.9 16.3L58.7 15.9ZM38.0 109.0L37.9 109.4L37.9 109.8L37.7 110.2L37.5 110.5L37.0 110.9L36.8 111.3L36.6 111.7L36.5 112.1L36.1 112.1L35.6 112.2L35.0 112.6L33.6 112.9L33.1 113.3L32.5 113.5L31.8 113.4L31.1 113.5L30.5 113.4L29.1 113.4L28.7 113.6L28.4 114.1L27.9 114.0L27.6 113.4L27.2 113.3L26.7 112.8L26.6 112.2L26.8 111.5L27.1 111.0L27.7 110.6L28.2 109.8L28.6 109.7L28.8 109.3L29.4 109.0L30.9 108.6L31.3 108.3L32.7 108.1L33.7 107.7L35.1 107.5L35.8 107.5L36.2 107.6L36.6 108.0L37.3 108.3L37.7 109.1ZM64.3 83.9L64.2 84.3L64.0 84.6L64.2 85.0L63.8 85.2L63.4 85.0L63.3 85.4L63.1 85.7L63.2 86.0L63.5 86.3L62.2 86.8L62.4 86.5L62.1 86.2L62.2 85.7L61.8 85.9L61.6 85.6L62.0 85.3L62.1 84.8L62.0 84.3L61.3 84.8L60.9 84.7L60.6 84.2L60.6 83.7L61.0 83.3L61.8 83.1L62.2 83.2L62.5 83.4L62.4 82.9L62.3 82.3L63.5 81.7L63.3 81.4L63.6 80.9L64.0 81.1L63.9 82.0L64.0 82.5L64.1 82.9L63.8 83.7L64.3 83.5ZM29.8 90.6L29.8 91.1L29.4 92.0L29.1 92.3L28.8 92.0L28.7 92.3L27.3 93.1L26.5 93.2L26.4 92.9L26.0 92.3L26.0 92.7L25.7 92.3L25.9 91.7L26.3 91.2L26.7 91.2L26.9 90.8L27.1 90.5L27.5 90.3L27.9 90.3L28.2 89.9L27.7 89.3L28.1 89.2L28.5 89.5L28.8 89.8L29.3 89.7L29.8 90.6ZM54.4 84.8L54.4 85.2L54.3 85.7L54.4 86.0L54.1 86.4L54.3 86.8L54.0 87.0L53.5 86.8L53.0 86.9L52.9 86.6L52.7 85.8L52.3 85.8L52.1 86.5L51.6 86.6L51.4 86.2L51.3 85.8L50.9 84.5L50.9 83.9L51.1 83.5L51.4 83.4L51.5 83.0L51.8 82.7L52.2 82.6L52.5 83.0L52.3 83.5L52.0 83.9L52.1 84.3L52.7 84.7L52.8 85.0L53.5 84.8L54.3 84.8ZM31.6 34.5L31.3 34.3L30.2 34.4L29.6 33.9L30.1 33.8L30.3 33.4L29.6 32.3L29.6 31.1L30.2 30.4L30.7 30.5L31.1 31.0L31.6 31.2L31.8 31.7L31.7 32.1L31.9 32.6L32.0 33.3L32.1 33.8L31.8 34.4ZM32.4 36.0L32.7 36.3L32.5 36.6L32.1 36.6L31.6 36.9L31.3 37.2L30.7 37.7L30.3 37.4L30.0 37.2L29.5 37.3L29.4 36.9L30.3 36.3L30.8 36.2L31.4 36.1L31.5 35.7L31.9 35.8L32.2 35.9ZM30.1 55.1L30.2 55.4L30.4 55.7L29.7 56.0L29.5 55.7L29.7 55.3L29.4 55.5L29.3 55.2L29.5 54.8L29.2 54.8L29.1 54.4L29.0 53.8L29.0 53.4L28.8 52.9L29.2 52.5L29.7 52.7L29.5 53.0L29.8 53.7L29.8 54.1L30.1 54.5L30.1 54.8ZM35.4 94.0L35.4 94.4L35.0 94.2L34.5 94.2L34.3 94.0L33.9 93.7L33.6 93.5L33.6 93.1L33.6 92.6L33.9 92.4L34.4 92.4L34.8 92.7L34.9 93.0L35.0 93.5L35.4 94.0ZM95.8 35.4L96.0 36.1L95.8 36.6L95.7 36.9L95.0 37.0L94.6 36.8L94.4 36.5L94.3 36.1L94.7 35.7L95.2 35.6L95.6 35.4ZM41.3 90.8L41.8 90.8L42.2 90.9L42.3 91.5L41.9 91.9L41.3 92.0L40.9 91.9L40.5 91.7L40.6 91.3L40.9 90.9L41.3 90.8ZM50.2 87.2L50.5 87.5L50.7 88.2L50.7 88.7L50.4 89.1L49.6 88.5L49.6 87.9L50.0 87.6L50.1 87.1L49.9 86.7L50.3 86.6L50.4 87.0ZM5.7 27.5L5.9 28.0L5.4 28.0L5.0 28.0L5.3 28.3L5.0 28.6L4.4 28.6L4.0 28.2L4.2 27.5L4.5 27.7L5.3 27.4L5.7 27.5ZM54.5 84.3L53.8 84.3L53.4 84.4L53.0 84.3L53.0 83.7L53.3 83.2L53.7 83.0L53.6 83.5L53.6 83.9L53.9 83.4L54.3 83.7L54.4 84.2ZM28.5 30.8L29.1 30.8L29.1 31.3L28.5 31.5L27.9 31.4L27.5 31.5L27.6 30.8L28.0 30.5L28.5 30.8ZM25.8 80.6L25.4 80.5L25.2 79.8L25.5 79.5L25.8 79.1L26.4 78.8L26.2 79.2L26.1 79.5L26.3 80.0L26.0 80.2L25.8 80.6ZM29.2 83.9L29.5 84.4L29.2 84.7L28.7 84.1L28.3 84.2L27.9 84.3L28.2 83.9L28.5 83.6L28.5 83.2L28.8 83.0L29.3 83.4L28.9 83.6L29.2 83.9ZM35.3 92.7L35.4 92.1L35.9 91.7L36.4 91.7L36.4 92.0L36.8 92.4L36.4 92.4L35.8 92.7L35.6 93.1L35.4 92.7ZM24.3 85.5L24.3 85.8L23.9 85.9L23.5 85.8L23.3 86.3L23.0 86.6L22.7 86.3L22.7 85.8L23.0 85.5L23.3 85.5L24.1 85.3ZM25.0 83.1L25.4 82.9L25.6 83.4L25.4 83.8L25.0 84.0L24.7 83.9L24.2 84.0L24.4 83.3L24.9 83.2ZM26.8 86.3L26.8 86.7L26.4 86.7L26.1 86.5L25.7 86.4L25.3 85.8L25.8 85.6L26.2 85.8L26.6 85.9L26.8 86.3Z"
-          />
-          <path className="karc" d="M 72.5 71.7 Q 64 84 56.3 81.2" />
-          <path className="karc" d="M 72.5 71.7 Q 77 46 51.8 30.3" />
-          {/* 다음 지역으로 이어지는 점선 — 확장은 계속된다 */}
-          <path className="karc ghosted" d="M 72.5 71.7 Q 55 61 36 52.5" />
-          {["M 72.5 71.7 Q 64 84 56.3 81.2", "M 72.5 71.7 Q 77 46 51.8 30.3"].map((d, i) => (
-            <circle key={i} r="1.2" className="kdot" style={{ offsetPath: `path('${d}')`, animationDelay: `${-i * 1.5}s` }} />
-          ))}
-        </svg>
-        <div className="kpin main k1" style={{ left: '72.5%', top: '55.2%' }}>
-          <span className="kwave" />
-          <span className="kwave w2" />
-          <i />
-          <b>울산</b>
-          <small>첫 적용</small>
-        </div>
-        <div className="kpin k2" style={{ left: '54.3%', top: '62.6%' }}>
-          <i />
-          <b>사천</b>
-          <small>확산 적용</small>
-        </div>
-        <div className="kpin k3" style={{ left: '49.5%', top: '22.7%' }}>
-          <i />
-          <b>후평</b>
-          <small>확산 적용</small>
-        </div>
-        <div className="kpin ghost" style={{ left: '34%', top: '40%' }}>
-          <i />
-          <b>다음 지역</b>
-          <small>계속 확장</small>
+    <div className="finale3">
+      {/* 실제 통합관제 위성 대시보드를 배경으로 — 라이브 관제 위에 확장 스토리를 얹는다 */}
+      <img className="fin-bg" src="/images/260730_demo/monitoring-dashboard.png" alt="통합관제 대시보드" />
+      <div className="fin-scrim" />
+      <div className="fin-scan" />
+      <div className="fin-live"><i />LIVE · 통합관제 운영 중</div>
+      <div className="fin-copy">
+        <p className="fin-eyebrow">Sustainable &amp; Expandable</p>
+        <h3 className="fin-title">울산에서 <span className="hl">사천 · 후평으로</span><br />계속 확장</h3>
+        <div className="fin-steps">
+          <div className="fin-step"><span className="fs-no">1</span><b>울산 에자자</b><small>첫 적용 · 운영 중</small></div>
+          <div className="fin-step"><span className="fs-no">2</span><b>사천 · 후평</b><small>확산 적용</small></div>
+          <div className="fin-step next"><span className="fs-no">→</span><b>다음 지역</b><small>같은 플랫폼 기반 위에서</small></div>
         </div>
       </div>
     </div>
