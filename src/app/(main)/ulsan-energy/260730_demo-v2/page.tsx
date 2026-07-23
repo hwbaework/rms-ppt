@@ -247,21 +247,33 @@ const CSS = `
 .yt-now{position:absolute;top:-1.3vw;transform:translateX(-50%);color:var(--accent);font-size:.72vw;font-weight:800;display:flex;flex-direction:column;align-items:center;line-height:1.2;z-index:1}
 .yt-now:after{content:"";width:2px;height:3.3vw;background:var(--accent);border-radius:2px;margin-top:.15vw;box-shadow:0 0 8px rgba(37,99,235,.45)}
 .split43{display:grid;grid-template-columns:53fr 47fr;gap:1vw}
-/* ── 3P 타일: 상단(아이콘·이름) 정렬 · 기능 목록 · 하단(바·태그) 고정 — 높이 꽉 채움 ── */
-.split43.fill{flex:1;min-height:0;align-items:stretch;margin-top:0}
-.split43.fill .press{height:100%}
+/* ── 3P 타일: 자연 높이 · 상단 아이콘·이름 정렬 · 하단 바·태그 고정 ── */
+.split43.fill{margin-top:0;align-items:stretch}
 .split43.fill .press-card{padding:1vw .95vw;text-align:left;gap:0}
-.press-top{display:flex;align-items:center;gap:.6vw;margin-bottom:.6vw}
+.press-main{flex:1;display:flex;flex-direction:column;gap:.9vw}
+.press-top{display:flex;align-items:center;gap:.6vw;margin-bottom:.7vw}
 .press-top .press-ic{width:2.2vw;height:2.2vw;margin:0;flex-shrink:0}
 .press-top .press-ic .material-symbols-outlined{font-size:1.15vw}
 .press-top .press-k{font-size:.98vw;text-align:left;white-space:nowrap}
-.press-feats{flex:1;list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.34vw}
-.press-feats li{position:relative;padding-left:.75vw;color:var(--body);font-size:.76vw;line-height:1.45;word-break:keep-all}
-.press-feats li:before{content:"";position:absolute;left:0;top:.5vw;width:.28vw;height:.28vw;border-radius:50%;background:var(--accent)}
+.press-feats{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.7vw}
+.press-feats li{position:relative;padding-left:.85vw;color:var(--body);font-size:.83vw;line-height:1.55;word-break:keep-all}
+.press-feats li:before{content:"";position:absolute;left:0;top:.55vw;width:.32vw;height:.32vw;border-radius:50%;background:var(--accent)}
 .press-card.soon .press-feats li:before{background:#94a3b8}
-.press-bottom{margin-top:.6vw}
+/* 하반기 구성 중 상태 — 지어낸 기능 대신 정직하게 표시 */
+.press-plan{display:flex;flex-direction:column;gap:.5vw;align-items:flex-start}
+.press-plan-badge{display:inline-flex;align-items:center;gap:.35vw;background:#eef1f7;border:1px solid #dbe1ea;border-radius:999px;padding:.25vw .75vw;color:#64748b;font-size:.78vw;font-weight:700}
+.press-plan-badge .material-symbols-outlined{font-size:.95vw}
+.press-plan-d{color:var(--muted);font-size:.79vw;line-height:1.6;word-break:keep-all}
+.press-bottom{margin-top:.7vw}
 .split43.fill .wip-done,.split43.fill .wip-empty{width:100%;margin:0 0 .5vw}
 .split43.fill .press-st{justify-content:flex-start}
+/* ── 3P 하단 설명 스트립 ── */
+.p3sum{background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:.95vw 1.4vw;display:flex;align-items:center;gap:1vw}
+.p3sum-ic{width:2.4vw;height:2.4vw;border-radius:50%;background:var(--tint);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.p3sum-ic .material-symbols-outlined{font-size:1.25vw}
+.p3sum p{color:var(--body);font-size:.86vw;line-height:1.65}
+.p3sum p b{color:var(--ink);font-weight:700}
+.p3sum p .hl{color:var(--accent);font-weight:700}
 /* ── 3P 하단 내용 블록 — 4개 기능이 하나로 연결됨을 설명 ── */
 .p3note{background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:1vw 1.4vw;display:flex;align-items:center;gap:1.1vw}
 .p3note-ic{width:2.6vw;height:2.6vw;border-radius:50%;background:var(--tint);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -631,6 +643,7 @@ function Tile({
   k,
   d,
   feats,
+  planning,
   soon,
   bar,
   st,
@@ -641,6 +654,8 @@ function Tile({
   d?: string
   /** 기능 목록 — 타일 안에 어떤 기능이 있는지 몇 줄로 정리 */
   feats?: string[]
+  /** 아직 세부 기능 미확정(구성 중) — 지어낸 기능 대신 구성 중 표시 */
+  planning?: string
   soon?: boolean
   bar?: 'wip' | 'todo' | 'done'
   st?: ReactNode
@@ -649,26 +664,34 @@ function Tile({
 }) {
   return (
     <div className={`press-card${soon ? ' soon' : ''}`}>
-      <div className="press-top">
-        {thumb !== undefined ? (
-          thumb ? (
-            <div className="press-thumb"><img src={thumb} alt={`${k} 화면`} /></div>
+      <div className="press-main">
+        <div className="press-top">
+          {thumb !== undefined ? (
+            thumb ? (
+              <div className="press-thumb"><img src={thumb} alt={`${k} 화면`} /></div>
+            ) : (
+              <div className="press-thumb empty"><span className="material-symbols-outlined">add_photo_alternate</span></div>
+            )
           ) : (
-            <div className="press-thumb empty"><span className="material-symbols-outlined">add_photo_alternate</span></div>
-          )
-        ) : (
-          <div className="press-ic"><span className="material-symbols-outlined">{ic}</span></div>
+            <div className="press-ic"><span className="material-symbols-outlined">{ic}</span></div>
+          )}
+          <div className="press-k">{k}</div>
+        </div>
+        {feats && (
+          <ul className="press-feats">
+            {feats.map((f) => (
+              <li key={f}>{f}</li>
+            ))}
+          </ul>
         )}
-        <div className="press-k">{k}</div>
+        {planning && (
+          <div className="press-plan">
+            <span className="press-plan-badge"><span className="material-symbols-outlined">pending</span>지금 구성 중</span>
+            <span className="press-plan-d">{planning}</span>
+          </div>
+        )}
+        {d && <div className="press-d">{d}</div>}
       </div>
-      {feats && (
-        <ul className="press-feats">
-          {feats.map((f) => (
-            <li key={f}>{f}</li>
-          ))}
-        </ul>
-      )}
-      {d && <div className="press-d">{d}</div>}
       <div className="press-bottom">
         {bar === 'wip' && <div className="wip"><i /></div>}
         {bar === 'done' && <div className="wip-done" />}
@@ -1081,6 +1104,7 @@ const SLIDES: ReactNode[] = [
     sec="사업 추진 경과 — 3차년도 개발 현황"
     title={<>상반기 <span className="hl">4</span>개 구축 완료 — <span className="hl">QA · 안정화</span></>}
     lede={<>지금 보여드리는 것은 <b>현재까지의 구축 결과물</b>입니다.</>}
+    fill
   >
     <div>
       <div className="yeartrack">
@@ -1091,16 +1115,23 @@ const SLIDES: ReactNode[] = [
     </div>
     <div className="split43 fill">
       <div className="press">
-        <Tile ic="support_agent" k="컨설팅" feats={['무료 진단 (A~F 등급)', '컨설턴트 매칭 · 톡 상담', 'RE100 이행 7단계 진행']} bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
-        <Tile ic="monitoring" k="모니터링" feats={['통합관제 대시보드', '이상 감지 · 알림', 'A/S · O&M 접수 · 처리']} bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
-        <Tile ic="swap_horiz" k="전력거래" feats={['재생에너지 전력 조회', '거래 등록 · 체결', 'Lease · On/Off-site']} bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
-        <Tile ic="view_in_ar" k="DT" feats={['3D 설치 시뮬레이션', '예상 발전량 · 효과', '디지털 트윈']} bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
+        <Tile ic="support_agent" k="컨설팅" feats={['무료 진단 (A~F 등급)', '컨설턴트 매칭', '톡 상담 · 자료 요청', 'RE100 이행 7단계']} bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
+        <Tile ic="monitoring" k="모니터링" feats={['통합관제 대시보드', '발전량 실시간 감시', '이상 감지 · 알림', 'A/S · O&M 접수']} bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
+        <Tile ic="swap_horiz" k="전력거래" feats={['재생에너지 전력 조회', '거래 등록 · 체결', 'Lease · On/Off-site', '전력 확보']} bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
+        <Tile ic="view_in_ar" k="DT" feats={['설치 전 3D 시뮬레이션', '예상 발전량 · 효과 확인']} bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
       </div>
       <div className="press p3">
-        <Tile soon ic="co2" k="탄소배출관리" feats={['배출량 산정', '온실가스 명세서', '감축 관리']} bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
-        <Tile soon ic="storefront" k="e데이터마켓" feats={['에너지 데이터 거래', '탄소배출권 거래']} bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
-        <Tile soon ic="hub" k="VPP" feats={['분산자원 통합', '가상발전소 운영']} bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
+        <Tile soon ic="co2" k="탄소배출관리" planning="탄소 배출 현황 파악 · 감축 관리 영역" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
+        <Tile soon ic="storefront" k="e데이터마켓" planning="에너지 데이터 · 탄소배출권 거래 영역" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
+        <Tile soon ic="hub" k="VPP" planning="분산자원 통합 가상발전소 영역" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
       </div>
+    </div>
+    <div className="p3sum">
+      <span className="p3sum-ic"><span className="material-symbols-outlined">deployed_code</span></span>
+      <p>
+        상반기 <b>컨설팅 · 모니터링 · 전력거래 · DT</b> 4대 서비스는 구축을 마치고 <span className="hl">QA · 안정화</span> 단계에 있으며,
+        하반기에는 <b>탄소배출관리 · e데이터마켓 · VPP</b>를 더해 진단부터 거래 · 관리까지 하나의 플랫폼으로 완성해 나갑니다.
+      </p>
     </div>
   </ContentSlide>,
 
