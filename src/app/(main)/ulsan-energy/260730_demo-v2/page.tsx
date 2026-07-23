@@ -357,13 +357,25 @@ const CSS = `
 .fnote b{display:flex;align-items:center;gap:.45vw;font-size:.94vw;color:var(--ink);font-weight:700}
 .fnote b .material-symbols-outlined{font-size:1.05vw;color:var(--accent)}
 .fnote small{display:block;font-size:.76vw;color:var(--muted);margin-top:.2vw;line-height:1.6}
-.kpin.ghost i{background:#fff;border:2px dashed #93c5fd;box-shadow:none;animation:ghostblink 2.6s ease-in-out infinite}
-@keyframes ghostblink{0%,100%{opacity:.45}50%{opacity:1}}
+.kpin.ghost i{background:#fff;border:2px dashed #93c5fd;box-shadow:none}
 .kpin.ghost b{color:#1d4ed8;border-style:dashed;border-color:#bfdbfe}
 .karc.ghosted{stroke:#c9d8f0;stroke-dasharray:1.6 2.2}
-/* 울산 → 사천 → 후평 순차 점등 */
-.kmap.big .kpin i{animation:pinlight 6s ease-in-out infinite}
-@keyframes pinlight{0%,22%,100%{transform:scale(1)}6%,14%{transform:scale(1.4);box-shadow:0 0 0 .5vw rgba(37,99,235,.18),0 0 16px rgba(59,130,246,.65)}}
+/* ── 12P 지도: 진입 시 1회 시네마틱 등장 (반복 깜빡임 제거 → 눈 피로 해소) ── */
+.kmap.big .kpin{opacity:0}
+.slide.active .kmap.big .kpin{animation:pinRise .7s cubic-bezier(.2,.75,.25,1.4) both}
+.slide.active .kmap.big .kpin.k1{animation-delay:.35s}
+.slide.active .kmap.big .kpin.k2{animation-delay:1.15s}
+.slide.active .kmap.big .kpin.k3{animation-delay:1.85s}
+.slide.active .kmap.big .kpin.ghost{animation-delay:2.7s}
+@keyframes pinRise{0%{opacity:0;transform:translate(-50%,-50%) translateY(1vw) scale(.35)}55%{opacity:1;transform:translate(-50%,-50%) translateY(-.15vw) scale(1.2)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+/* 울산에서 퍼지는 충격파 — 진입 시 3회 후 정지(지속 깜빡임 아님) */
+.kwave{position:absolute;left:50%;top:.65vw;width:1vw;height:1vw;border-radius:50%;border:2px solid rgba(37,99,235,.55);transform:translate(-50%,-50%);opacity:0;pointer-events:none}
+.slide.active .kwave{animation:kwave 2s ease-out .5s 3}
+.slide.active .kwave.w2{animation-delay:1.5s}
+@keyframes kwave{0%{opacity:.6;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(9)}}
+/* 연결 곡선은 지도 등장 후 부드럽게 나타남 */
+.slide.active .kmap.big .karc{animation:fadeSoft 1s ease .7s both}
+@keyframes fadeSoft{from{opacity:0}to{opacity:1}}
 .kmap svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .kland{fill:#eaf1fb;stroke:#c9d8f0;stroke-width:1}
 .karc{fill:none;stroke:#aac3ee;stroke-width:1.3;stroke-dasharray:3 2.4;stroke-linecap:round}
@@ -377,6 +389,11 @@ const CSS = `
 /* ── 실제 화면 캡처 자동 순환 뷰어 ── */
 .shot{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--hair);background:#0a1220;box-shadow:0 10px 28px rgba(11,21,38,.12);min-height:11vw}
 .shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;opacity:0;transition:opacity .7s ease}
+/* 캡처 미첨부 시 자리 표시 (WIP — 파일 넣으면 자동 교체) */
+.shot-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5vw;background:#0e1a30;color:#5b6b86;opacity:0;transition:opacity .7s ease}
+.shot-ph.on{opacity:1}
+.shot-ph .material-symbols-outlined{font-size:2.4vw}
+.shot-ph span:last-child{font-size:.9vw;font-weight:600;letter-spacing:.02em}
 .shot img.on{opacity:1}
 .shot-dots{position:absolute;bottom:.7vw;left:50%;transform:translateX(-50%);display:flex;gap:.4vw;z-index:1}
 .shot-dots i{width:.45vw;height:.45vw;border-radius:50%;background:rgba(255,255,255,.35);transition:background .3s,transform .3s}
@@ -600,10 +617,19 @@ function AutoShots({
   map?: number[][]
 }) {
   const [i, setI] = useState(0)
+  const [failed, setFailed] = useState<Record<number, boolean>>({})
   useEffect(() => {
     const t = setInterval(() => setI((v) => (v + 1) % srcs.length), interval)
     return () => clearInterval(t)
   }, [srcs.length, interval])
+  // 하이드레이션 전 404는 img onError를 놓치므로 클라이언트에서 프리로드로 재확인
+  useEffect(() => {
+    srcs.forEach((s, idx) => {
+      const im = new window.Image()
+      im.onerror = () => setFailed((f) => ({ ...f, [idx]: true }))
+      im.src = s
+    })
+  }, [srcs])
   const arrow = (
     <span className="mflow-arr material-symbols-outlined">{side ? 'arrow_downward' : 'arrow_forward'}</span>
   )
@@ -628,9 +654,22 @@ function AutoShots({
   ) : null
   const shot = (
     <div className="shot" style={side ? undefined : { flex: 1 }}>
-      {srcs.map((s, idx) => (
-        <img key={s} src={s} alt="플랫폼 화면 캡처" className={idx === i ? 'on' : ''} />
-      ))}
+      {srcs.map((s, idx) =>
+        failed[idx] ? (
+          <div key={s} className={`shot-ph${idx === i ? ' on' : ''}`}>
+            <span className="material-symbols-outlined">add_photo_alternate</span>
+            <span>화면 캡처 대기</span>
+          </div>
+        ) : (
+          <img
+            key={s}
+            src={s}
+            alt="플랫폼 화면 캡처"
+            className={idx === i ? 'on' : ''}
+            onError={() => setFailed((f) => ({ ...f, [idx]: true }))}
+          />
+        )
+      )}
       <div className="shot-dots">
         {srcs.map((_, idx) => (
           <i key={idx} className={idx === i ? 'on' : ''} />
@@ -870,6 +909,17 @@ const SLIDES: ReactNode[] = [
         <Tile soon ic="hub" k="VPP" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
       </div>
     </div>
+    <div className="ans">
+      <span className="material-symbols-outlined">rocket_launch</span>
+      <span className="ans-t">상반기 4종은 구축을 마치고 안정화 단계 — 하반기 3종으로 이어집니다</span>
+      <span className="ans-fn">
+        <span className="ans-pill">상반기 4</span>
+        <span className="ans-arr">+</span>
+        <span className="ans-pill">하반기 3</span>
+        <span className="ans-arr">=</span>
+        <span className="ans-pill">7대 서비스</span>
+      </span>
+    </div>
   </ContentSlide>,
 
   /* ── 4page : RMS가 추구하는 플랫폼 방향성 ── */
@@ -1076,18 +1126,20 @@ const SLIDES: ReactNode[] = [
     key="p9"
     no="03"
     sec="핵심 기능 ② 모니터링 + O&M 연계"
-    title={<>감지에서 조치 · 결과까지, <span className="hl">하나의 흐름</span></>}
-    lede={<>단순 발전량 모니터링은 시중에 이미 많습니다 — 그것만으로는 <b>반쪽짜리</b>라고 판단했습니다.</>}
+    title={<>단순 모니터링을 넘어 — <span className="hl">통합관제</span></>}
+    lede={<>발전량만 보는 모니터링은 <b>반쪽짜리</b>입니다 — 전체 발전소를 한 화면에서 관제하고, 감지·조치·결과까지 하나로 잇습니다.</>}
   >
     <AutoShots
       side
       steps={[
+        { b: '통합관제', s: '전체 발전소를 한 화면에서 관제' },
         { b: '이상상황 감지', s: '모니터링 알림' },
         { b: 'A/S · O&M 접수', s: '플랫폼 내에서 바로 연계' },
         { b: '조치', s: '처리 진행' },
         { b: '처리 현황 실시간 반영', s: '업데이트까지 완결' },
       ]}
       srcs={[
+        '/images/260730_demo/monitoring-dashboard.png',
         '/images/260730_demo/monitoring-01.png',
         '/images/260730_demo/monitoring-02.png',
         '/images/260730_demo/monitoring-03.png',
@@ -1096,8 +1148,8 @@ const SLIDES: ReactNode[] = [
       extra={
         <Effects
           items={[
+            '전체 발전소를 한 화면에서 통합관제',
             '감지에서 결과 확인까지 하나의 흐름으로 완결',
-            '처리 현황을 실시간으로 확인',
           ]}
         />
       }
@@ -1225,18 +1277,20 @@ const SLIDES: ReactNode[] = [
             <circle key={i} r="1.2" className="kdot" style={{ offsetPath: `path('${d}')`, animationDelay: `${-i * 1.5}s` }} />
           ))}
         </svg>
-        <div className="kpin main" style={{ left: '72.5%', top: '55.2%' }}>
+        <div className="kpin main k1" style={{ left: '72.5%', top: '55.2%' }}>
+          <span className="kwave" />
+          <span className="kwave w2" />
           <i />
           <b>울산</b>
           <small>첫 적용</small>
         </div>
-        <div className="kpin" style={{ left: '54.3%', top: '62.6%' }}>
-          <i style={{ animationDelay: '2s' }} />
+        <div className="kpin k2" style={{ left: '54.3%', top: '62.6%' }}>
+          <i />
           <b>사천</b>
           <small>확산 적용</small>
         </div>
-        <div className="kpin" style={{ left: '49.5%', top: '22.7%' }}>
-          <i style={{ animationDelay: '4s' }} />
+        <div className="kpin k3" style={{ left: '49.5%', top: '22.7%' }}>
+          <i />
           <b>후평</b>
           <small>확산 적용</small>
         </div>
