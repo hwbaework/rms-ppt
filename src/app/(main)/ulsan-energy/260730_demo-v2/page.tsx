@@ -287,6 +287,9 @@ const CSS = `
 .wip i{display:block;height:100%;border-radius:999px;background:repeating-linear-gradient(-45deg,#2563eb 0 .45vw,#60a5fa .45vw .9vw);background-size:1.28vw 100%;animation:crawl 1.1s linear infinite}
 @keyframes crawl{to{background-position:1.28vw 0}}
 .wip-empty{height:.4vw;border-radius:999px;border:1.5px dashed #c9d3e2;margin-top:.55vw}
+/* 하반기 — 미착수 아님, 일부 구성 진행(옅은 회색 부분 채움) */
+.wip-early{height:.4vw;border-radius:999px;background:#eef1f7;overflow:hidden;margin-top:.55vw}
+.wip-early i{display:block;height:100%;width:30%;border-radius:999px;background:linear-gradient(90deg,#94a3b8,#c4cdda)}
 /* 구축 완료 — 꽉 찬 바 + 은은한 스윕 (지금은 QA·안정화 단계) */
 .wip-done{height:.4vw;border-radius:999px;background:linear-gradient(90deg,#1d4ed8,#3b82f6);position:relative;overflow:hidden;margin-top:.55vw}
 .wip-done:after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.5) 50%,transparent 70%);transform:translateX(-100%);animation:sheen 2.4s ease-in-out infinite}
@@ -324,6 +327,9 @@ const CSS = `
 .garr{color:#c3ccda;font-size:.85vw;flex-shrink:0}
 
 /* ── 구축률 누적 바 (연차별 목표 세그먼트) ── */
+/* 표와 붙지 않게 별도 패널로 분리 */
+.pbar-block{margin-top:1.5vw;background:#f7f9fc;border:1px solid var(--hair);border-radius:14px;padding:1vw 1.2vw .9vw}
+.pbar-block .block-label{margin-bottom:.7vw}
 .pbar{display:flex;height:1.5vw;border-radius:8px;overflow:hidden}
 .pseg{display:flex;align-items:center;justify-content:center;color:#fff;font-size:.74vw;font-weight:700;white-space:nowrap}
 .pseg.y1{background:#93c5fd}
@@ -519,6 +525,74 @@ const CSS = `
 .rip-dot{position:absolute;width:.5vw;height:.5vw;border-radius:50%;background:#60a5fa;box-shadow:0 0 8px rgba(96,165,250,.55);transform:translate(-50%,-50%)}
 .rip-dot.dim{opacity:.55;width:.4vw;height:.4vw}
 
+/* ── 경과(3P) 연차 그리드 — 위(연차 카드) + 아래(할 일)를 같은 열에 정렬 ── */
+/* 열: 1차 · 화살표 · 2차 · 화살표 · 3차(넓게) · 화살표 · 4차 */
+.yrgrid{flex:1;min-height:0;display:grid;grid-template-columns:11.5vw 1.6vw 11.5vw 1.6vw 1fr 1.6vw 8.5vw;grid-template-rows:auto 1fr;column-gap:.55vw;row-gap:.7vw;align-items:stretch}
+.gc1{grid-column:1}.gc2{grid-column:2}.gc3{grid-column:3}.gc4{grid-column:4}.gc5{grid-column:5}.gc6{grid-column:6}.gc7{grid-column:7}
+/* 1행 — 연차 카드 */
+.yr-mini,.yr-hero,.yr-next,.yr-arr{grid-row:1}
+.yr-mini{background:#f5f7fb;border:1px solid var(--hair);border-radius:12px;padding:.7vw .85vw;display:flex;flex-direction:column;justify-content:center;gap:.24vw}
+.yr-mini .yr-yr{display:flex;align-items:center;gap:.35vw;color:#64748b;font-size:.76vw;font-weight:800}
+.yr-mini .yr-yr .material-symbols-outlined{font-size:.9vw;color:#10b981}
+.yr-mini .yr-nm{color:var(--ink);font-size:.85vw;font-weight:700}
+.yr-arr{align-self:center;justify-self:center;color:#c3ccda;font-size:1.1vw}
+.yr-hero{border:1.5px solid #7fb0f5;border-radius:14px;background:linear-gradient(135deg,#eaf2ff,#f5f9ff);padding:.8vw 1.1vw;display:flex;flex-direction:column;justify-content:center;gap:.22vw;box-shadow:0 8px 24px rgba(37,99,235,.14);position:relative}
+.yr-hero-badge{position:absolute;top:-.7vw;left:1.1vw;background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:#fff;font-size:.72vw;font-weight:800;border-radius:999px;padding:.18vw .8vw;display:inline-flex;align-items:center;gap:.3vw}
+.yr-hero-badge i{width:.42vw;height:.42vw;border-radius:50%;background:#fff;animation:livepulse 1.6s ease-in-out infinite}
+.yr-hero-yr{color:var(--accent);font-size:.82vw;font-weight:800}
+.yr-hero-nm{color:var(--ink);font-size:1.2vw;font-weight:800;letter-spacing:-.02em}
+.yr-next{border:1.5px dashed #cbd5e1;border-radius:12px;background:var(--chip);padding:.7vw .8vw;display:flex;flex-direction:column;justify-content:center;gap:.22vw}
+.yr-next .yr-yr{color:#94a3b8;font-size:.74vw;font-weight:800}
+.yr-next .yr-nm{color:#64748b;font-size:.8vw;font-weight:700}
+/* 2행 — 각 연차 아래 할 일(같은 열 폭) */
+.yrtasks{grid-row:2;margin:0;list-style:none;border:1px solid var(--hair);border-radius:12px;background:#fbfcfe;padding:.75vw .8vw;display:flex;flex-direction:column;justify-content:center;gap:.7vw}
+.yrtasks li{display:flex;align-items:center;gap:.5vw;color:var(--ink);font-size:.82vw;font-weight:600;line-height:1.2;word-break:keep-all}
+.yrtasks li .material-symbols-outlined{font-size:1.25vw;color:#94a3b8;flex-shrink:0}
+.yrtasks.done{opacity:.96}
+.yrtasks.now{border:1.5px solid #7fb0f5;background:linear-gradient(180deg,#eff6ff,#fbfdff);box-shadow:0 8px 22px rgba(37,99,235,.12)}
+.yrtasks.now li .material-symbols-outlined{color:var(--accent)}
+.yrtasks.next{border:1.5px dashed #cbd5e1;background:#f9fafb}
+.yrtasks.next li{color:#94a3b8}
+.yrtasks.next li .material-symbols-outlined{color:#cbd5e1}
+
+/* ── RMS 방향성(2P) — 좌 설명 텍스트 / 우 도식(하나의 플랫폼 → 확장) ── */
+.v2grid{flex:1;min-height:0;display:grid;grid-template-columns:.82fr 1.18fr;align-items:center;gap:2.4vw}
+/* 좌 — 깔끔한 설명 문단(제목처럼 안 보이게 본문 크기) */
+.v2txt{display:flex;flex-direction:column;gap:1.1vw}
+.v2txt p{color:var(--body);font-size:.98vw;line-height:1.9;word-break:keep-all}
+.v2txt p b{color:var(--ink);font-weight:800}
+.v2txt p .hl{color:var(--accent);font-weight:800}
+.v2txt-tags{display:flex;gap:.55vw;margin-top:.3vw}
+.v2txt-tags span{background:var(--tint);border:1px solid var(--tint-line);color:#1d4ed8;font-size:.85vw;font-weight:800;border-radius:999px;padding:.32vw 1.05vw}
+/* 우 — 도식 컬럼(코어 세로 + 확장) */
+.v2dia{align-self:stretch;display:flex;flex-direction:column;justify-content:center}
+.v2core{position:relative;display:flex;flex-direction:column;gap:.75vw;border:1.5px solid #b9d2f8;border-radius:20px;background:linear-gradient(160deg,#f4f9ff,#e7f0ff);padding:2vw 1.5vw 1.4vw;box-shadow:0 12px 30px rgba(37,99,235,.12)}
+.v2core-tab{position:absolute;top:-.95vw;left:1.5vw;background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:#fff;font-size:.92vw;font-weight:800;border-radius:999px;padding:.34vw 1.1vw;box-shadow:0 6px 16px rgba(29,78,216,.32);display:inline-flex;align-items:center;gap:.45vw}
+.v2core-tab .material-symbols-outlined{font-size:1.05vw}
+.v2node{display:flex;align-items:center;gap:.9vw;background:#fff;border:1px solid var(--tint-line);border-radius:13px;padding:.85vw 1.1vw;box-shadow:0 2px 8px rgba(11,21,38,.05)}
+.v2node.done{border-color:#7fb0f5;background:linear-gradient(135deg,#ffffff,#e9f1ff);box-shadow:0 8px 22px rgba(37,99,235,.15)}
+.v2node-ic{width:2.7vw;height:2.7vw;border-radius:50%;background:var(--tint);color:var(--accent);display:grid;place-items:center;flex-shrink:0}
+.v2node.done .v2node-ic{background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:#fff;box-shadow:0 6px 16px rgba(37,99,235,.32)}
+.v2node-ic .material-symbols-outlined{font-size:1.4vw}
+.v2node-t b{display:block;font-size:1.02vw;color:var(--ink);font-weight:800}
+.v2node-t small{display:block;font-size:.82vw;color:var(--muted);margin-top:.12vw;line-height:1.4}
+.v2core-seam{display:flex;justify-content:flex-start;padding-left:2.45vw}
+.v2core-seam:before{content:"";width:2px;height:.95vw;background:#bcd3f5;border-radius:2px}
+/* 코어 → 확장 다리(아래로) */
+.v2bridge{display:flex;align-items:center;justify-content:center;gap:.5vw;padding:.7vw 0;color:#7ba7ea}
+.v2bridge .material-symbols-outlined{font-size:1.7vw}
+.v2bridge span{font-size:.8vw;font-weight:800;color:#94a3b8;white-space:nowrap}
+/* 확장 — 코어 밖, 점선 */
+.v2exp{position:relative;display:flex;flex-direction:column;gap:.75vw;border:1.5px dashed #a9c4ef;border-radius:20px;background:repeating-linear-gradient(135deg,#fbfdff 0 12px,#f3f8ff 12px 24px);padding:2vw 1.4vw 1.4vw}
+.v2exp-tab{position:absolute;top:-.95vw;left:1.4vw;background:#fff;border:1.5px solid #a9c4ef;color:#1d4ed8;font-size:.92vw;font-weight:800;border-radius:999px;padding:.32vw 1.1vw;display:inline-flex;align-items:center;gap:.4vw}
+.v2exp-tab .material-symbols-outlined{font-size:1.05vw}
+.v2exp-row{display:flex;gap:.8vw}
+.v2exp-item{flex:1;display:flex;align-items:center;gap:.6vw;background:#fff;border:1px solid var(--tint-line);border-radius:11px;padding:.7vw .85vw;color:var(--ink);font-size:.9vw;font-weight:700;line-height:1.25;word-break:keep-all}
+.v2exp-item .material-symbols-outlined{font-size:1.3vw;color:var(--accent);flex-shrink:0}
+.v2exp-item small{display:block;color:var(--muted);font-size:.74vw;font-weight:600;margin-top:.1vw}
+.v2exp-grow{display:flex;align-items:center;gap:.5vw;justify-content:center;color:#1d4ed8;font-size:.9vw;font-weight:800}
+.v2exp-grow .material-symbols-outlined{font-size:1.15vw}
+
 /* ── 감사합니다 (마지막 다크) ── */
 .thanks-inner{text-align:center;position:relative;z-index:1;align-self:center}
 .thanks-inner img{height:2.4vw;filter:brightness(0) invert(1);margin-bottom:2.6vw;opacity:.92}
@@ -596,7 +670,7 @@ function ContentSlide({
     <div className="cs">
       <div className="cs-body">
         <div className="cs-head">
-          <span className="cs-no">{no}</span>
+          {no && <span className="cs-no">{no}</span>}
           <span className="cs-sec">{sec}</span>
           <span className="cs-hair" />
         </div>
@@ -658,7 +732,7 @@ function Tile({
   /** 아직 세부 기능 미확정(구성 중) — 지어낸 기능 대신 구성 중 표시 */
   planning?: string
   soon?: boolean
-  bar?: 'wip' | 'todo' | 'done'
+  bar?: 'wip' | 'todo' | 'done' | 'early'
   st?: ReactNode
   /** 실제 화면 썸네일 경로 — 빈 문자열이면 점선 자리 표시 */
   thumb?: string
@@ -696,6 +770,7 @@ function Tile({
       <div className="press-bottom">
         {bar === 'wip' && <div className="wip"><i /></div>}
         {bar === 'done' && <div className="wip-done" />}
+        {bar === 'early' && <div className="wip-early"><i /></div>}
         {bar === 'todo' && <div className="wip-empty" />}
         {st && <div className="press-st">{st}</div>}
       </div>
@@ -1036,7 +1111,73 @@ const SLIDES: ReactNode[] = [
     </div>
   </div>,
 
-  /* ── 2page : 사업 추진 경과 (1~2차년도) ── */
+  /* ── 2page : RMS의 방향성 (표지 다음 개요 — 이후 페이지 한 칸씩 밀림) ── */
+  <ContentSlide
+    key="p-vision"
+    no=""
+    sec="RMS의 방향성"
+    title={<>지속가능한, <span className="hl">미래 확장형 플랫폼</span></>}
+    lede={<>납품하고 끝나는 시스템이 아니라 — <b>수요기업이 RE100을 시작부터 끝까지 이행</b>하고, 울산을 넘어 <b>계속 확장</b>하는 플랫폼을 지향합니다.</>}
+    fill
+  >
+    <div className="v2grid">
+      {/* 좌 — 설명 텍스트 */}
+      <div className="v2txt">
+        <p>
+          <b>컨설팅</b>을 통해 접근성을 높이고, <b>컨설턴트</b>가 RE100 이행 수단을 제공합니다.
+          이 과정을 <b className="hl">하나의 플랫폼 안에서 시작부터 끝까지</b> 이행할 수 있도록 구성했습니다.
+        </p>
+        <p>
+          나아가 <b>e데이터마켓</b>은 울산에 한정된 데이터에 머물지 않고, <b>신규 플랫폼과 연동</b>해
+          실제 필요한 데이터까지 <b className="hl">서비스 범위를 대폭 확장</b>합니다.
+        </p>
+        <div className="v2txt-tags"><span>지속가능</span><span>미래 확장형</span></div>
+      </div>
+
+      {/* 우 — 도식: 하나의 플랫폼(코어) → 확장 */}
+      <div className="v2dia">
+        <div className="v2core">
+          <span className="v2core-tab"><span className="material-symbols-outlined">hub</span>하나의 플랫폼</span>
+          <div className="v2node">
+            <span className="v2node-ic"><span className="material-symbols-outlined">support_agent</span></span>
+            <div className="v2node-t"><b>컨설팅</b><small>접근성 향상 · 진입장벽 해소</small></div>
+          </div>
+          <div className="v2core-seam" />
+          <div className="v2node">
+            <span className="v2node-ic"><span className="material-symbols-outlined">handshake</span></span>
+            <div className="v2node-t"><b>컨설턴트</b><small>RE100 이행 수단 제공</small></div>
+          </div>
+          <div className="v2core-seam" />
+          <div className="v2node done">
+            <span className="v2node-ic"><span className="material-symbols-outlined">task_alt</span></span>
+            <div className="v2node-t"><b>시작부터 끝까지 이행</b><small>한 플랫폼에서 RE100 완결</small></div>
+          </div>
+        </div>
+
+        <div className="v2bridge">
+          <span className="material-symbols-outlined">arrow_downward</span>
+          <span>밖으로 확장</span>
+        </div>
+
+        <div className="v2exp">
+          <span className="v2exp-tab"><span className="material-symbols-outlined">rocket_launch</span>미래 확장</span>
+          <div className="v2exp-row">
+            <div className="v2exp-item">
+              <span className="material-symbols-outlined">storefront</span>
+              <div><b>e데이터마켓</b><small>실제 필요한 데이터까지</small></div>
+            </div>
+            <div className="v2exp-item">
+              <span className="material-symbols-outlined">device_hub</span>
+              <div><b>신규 플랫폼 연동</b><small>울산 데이터를 넘어</small></div>
+            </div>
+          </div>
+          <div className="v2exp-grow"><span className="material-symbols-outlined">public</span>울산 → 전국으로 범위 확장</div>
+        </div>
+      </div>
+    </div>
+  </ContentSlide>,
+
+  /* ── 3page : 사업 추진 경과 (1~2차년도) ── */
   /*    연차별 단계·3차년도 할 일·구축률: [울산미포에자자] 3차년도 사업계획서(2026.03) 재구성 */
   <ContentSlide
     key="p2"
@@ -1046,46 +1187,55 @@ const SLIDES: ReactNode[] = [
     lede={<>1~2차년도에 다진 기반 위에서, <b>계획된 일정에 따라 정상적으로</b> 개발을 진행하고 있습니다.</>}
     fill
   >
-    <Flow
-      steps={[
-        { no: '1차년도 · 2024', name: '요구사항 분석 · 설계', sub: '프로세스 · 아키텍처 설계, 관제 시나리오 분석' },
-        { no: '2차년도 · 2025', name: '기반 구축', sub: '네트워크 · 데이터센터 설계, 통합관제센터(상황실) 구축' },
-        { no: '3차년도 · 올해', name: '핵심 기능 개발', sub: '계획된 일정에 따라 정상 진행 중', final: true },
-        { no: '4차년도 · 2027', name: '고도화 · 이관', sub: '테스트 · 교육 · 시스템 이관, 플랫폼 고도화' },
-      ]}
-    />
-
-    <div>
-      <div className="block-label"><b>3차년도 — ESG 에너지 플랫폼, 단계별로 해야 할 일</b></div>
-      <div className="glanes">
-        <div className="glane">
-          <div className="glane-who"><span className="material-symbols-outlined">dns</span>수집인프라 · 데이터센터</div>
-          <div className="glane-steps">
-            <span className="gchip">현장 설치</span><span className="garr">→</span>
-            <span className="gchip">단위 · 통합 테스트</span><span className="garr">→</span>
-            <span className="gchip on">운영 · 안정화</span>
-          </div>
-        </div>
-        <div className="glane">
-          <div className="glane-who"><span className="material-symbols-outlined">hub</span>ESG 에너지 플랫폼</div>
-          <div className="glane-steps">
-            <span className="gchip">프로세스 설계</span><span className="garr">→</span>
-            <span className="gchip">개발 설계</span><span className="garr">→</span>
-            <span className="gchip">플랫폼 구축</span><span className="garr">→</span>
-            <span className="gchip on">테스트 · 안정화</span>
-          </div>
-        </div>
-        <div className="glane">
-          <div className="glane-who"><span className="material-symbols-outlined">monitoring</span>통합관제센터</div>
-          <div className="glane-steps">
-            <span className="gchip">디버깅</span><span className="garr">→</span>
-            <span className="gchip on">안정화</span>
-          </div>
-        </div>
+    {/* 위(연차 카드) + 아래(할 일)를 같은 그리드 열에 정렬 — 1·2차 절제 · 3차 강조 */}
+    <div className="yrgrid">
+      {/* 1행 — 연차 카드 */}
+      <div className="yr-mini gc1">
+        <span className="yr-yr"><span className="material-symbols-outlined">check_circle</span>1차년도 · 2024</span>
+        <span className="yr-nm">현황조사 · 요구 정의</span>
       </div>
+      <span className="yr-arr gc2 material-symbols-outlined">arrow_forward</span>
+      <div className="yr-mini gc3">
+        <span className="yr-yr"><span className="material-symbols-outlined">check_circle</span>2차년도 · 2025</span>
+        <span className="yr-nm">플랫폼 · 인프라 설계</span>
+      </div>
+      <span className="yr-arr gc4 material-symbols-outlined">arrow_forward</span>
+      <div className="yr-hero gc5">
+        <span className="yr-hero-badge"><i />올해 · 진행 중</span>
+        <span className="yr-hero-yr">3차년도 · 2026</span>
+        <span className="yr-hero-nm">핵심 기능 개발</span>
+      </div>
+      <span className="yr-arr gc6 material-symbols-outlined">arrow_forward</span>
+      <div className="yr-next gc7">
+        <span className="yr-yr">4차년도 · 2027</span>
+        <span className="yr-nm">고도화 · 이관</span>
+      </div>
+
+      {/* 2행 — 각 연차 아래 할 일(같은 열 폭에 정렬) */}
+      <ul className="yrtasks done gc1">
+        <li><span className="material-symbols-outlined">assessment</span>에너지 현황조사</li>
+        <li><span className="material-symbols-outlined">groups</span>신재생 수요 발굴</li>
+        <li><span className="material-symbols-outlined">architecture</span>요구 · 아키텍처 설계</li>
+        <li><span className="material-symbols-outlined">schema</span>관제 시나리오 설계</li>
+      </ul>
+      <ul className="yrtasks done gc3">
+        <li><span className="material-symbols-outlined">design_services</span>플랫폼 프로세스 설계</li>
+        <li><span className="material-symbols-outlined">draw</span>플랫폼 개발 설계</li>
+        <li><span className="material-symbols-outlined">lan</span>상황실 서버 · 인프라 설계</li>
+      </ul>
+      <ul className="yrtasks now gc5">
+        <li><span className="material-symbols-outlined">build_circle</span>핵심 기능 개발</li>
+        <li><span className="material-symbols-outlined">dns</span>상황실 서버 · 데이터센터 구축</li>
+        <li><span className="material-symbols-outlined">monitoring</span>통합관제 모니터링</li>
+        <li><span className="material-symbols-outlined">tune</span>통합 · 안정화</li>
+      </ul>
+      <ul className="yrtasks next gc7">
+        <li><span className="material-symbols-outlined">rocket_launch</span>기능 고도화</li>
+        <li><span className="material-symbols-outlined">move_up</span>운영 이관</li>
+      </ul>
     </div>
 
-    <div>
+    <div className="pbar-block">
       <div className="block-label"><b>ESG 에너지 플랫폼 구축률 — 연차별 목표</b></div>
       <div className="pbar">
         <div className="pseg y1" style={{ width: '20%' }}>1차 20%</div>
@@ -1096,7 +1246,6 @@ const SLIDES: ReactNode[] = [
       <div className="pbar-cap">
         <span className="pbar-mark" style={{ left: '90%' }}>3차년도 말 누적 90%</span>
       </div>
-      <p className="srcline">3차년도까지 구축 90% 완료 · 4차년도(2027)는 테스트 · 이관 · 고도화 단계</p>
     </div>
   </ContentSlide>,
 
@@ -1124,9 +1273,9 @@ const SLIDES: ReactNode[] = [
         <Tile ic="view_in_ar" k="DT" feats={['설치 전 3D 시뮬레이션', '예상 발전량 · 효과 확인']} bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
       </div>
       <div className="press p3">
-        <Tile soon ic="co2" k="탄소배출관리" planning="탄소 배출 현황 파악 · 감축 관리 영역" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
-        <Tile soon ic="storefront" k="e데이터마켓" planning="에너지 데이터 · 탄소배출권 거래 영역" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
-        <Tile soon ic="hub" k="VPP" planning="분산자원 통합 가상발전소 영역" bar="todo" st={<span className="tag gray"><i />하반기 착수</span>} />
+        <Tile soon ic="co2" k="탄소배출관리" planning="탄소 배출 현황 파악 · 감축 관리 영역" bar="early" st={<span className="tag gray"><i />일부 구성 · 하반기 확대</span>} />
+        <Tile soon ic="storefront" k="e데이터마켓" planning="에너지 데이터 · 탄소배출권 거래 영역" bar="early" st={<span className="tag gray"><i />일부 구성 · 하반기 확대</span>} />
+        <Tile soon ic="hub" k="VPP" planning="분산자원 통합 가상발전소 영역" bar="early" st={<span className="tag gray"><i />일부 구성 · 하반기 확대</span>} />
       </div>
     </div>
     <div className="p3sum">
