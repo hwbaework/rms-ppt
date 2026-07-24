@@ -9,11 +9,10 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://rms-ppt.pairworks.net'),
   title: 'ppt',
   robots: { index: false, follow: false }, // 기존 noindex 유지
-  // 카톡·SNS 링크 미리보기(Open Graph) — 루트는 "발표자료 모음(아카이브)". 덱별 제목은 각 덱 폴더의 layout.tsx에서 덮어씀
+  // 카톡·SNS 링크 미리보기(Open Graph) — 모든 페이지(루트·각 덱 URL) 공통. 덱별 별도 설정 없이 이거 하나만 쓴다
   openGraph: {
-    title: 'RMS 발표자료 모음',
-    description: 'RMS에서 진행한 발표자료 아카이브',
-    url: 'https://rms-ppt.pairworks.net',
+    title: 'PRESENTATION',
+    description: 'Interactive Presentation',
     siteName: 'RMS',
     locale: 'ko_KR',
     type: 'website',
