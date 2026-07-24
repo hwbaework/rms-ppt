@@ -393,12 +393,13 @@ const CSS = `
 .finale2{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
 /* ── 12P: 관제 대시보드 틀 + 가운데 실제 MapLibre fly-to 지도 ── */
 .finctl{position:relative;flex:1;min-height:0;border-radius:16px;overflow:hidden;border:1px solid #1e3358;box-shadow:0 16px 44px rgba(4,12,28,.35);background:#0a1424}
-.finctl-map{position:absolute;inset:0;width:100%;height:100%}
+/* 프로젝터에서 다크 타일이 까맣게 죽어 보여서 밝기·대비 보정 */
+.finctl-map{position:absolute;inset:0;width:100%;height:100%;filter:brightness(2.1) contrast(1.02) saturate(1.2)}
 .finctl-map canvas{outline:none}
 /* 지도 로드 실패 시 폴백 — 통합관제 대시보드 이미지 */
 .finctl-fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
 /* 좌측 그라데이션 스크림 — 카피 가독 확보(지도는 우측으로 갈수록 선명) */
-.finctl-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(6,14,30,.92) 0%,rgba(6,14,30,.55) 34%,rgba(6,14,30,0) 60%,rgba(6,14,30,.6) 100%)}
+.finctl-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(6,14,30,.82) 0%,rgba(6,14,30,.35) 32%,rgba(6,14,30,0) 55%,rgba(6,14,30,0) 100%)}
 /* 중앙 락온 프레임 — 지도가 도착한 지역을 잠근다 */
 .finctl-lock{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;width:6.5vw;height:4.6vw;pointer-events:none;transition:width .5s,height .5s}
 .finctl-lock.wide{width:11vw;height:8vw}
@@ -909,9 +910,10 @@ const PERSONAS = [
 // 울산 → 사천 → 후평 → 전국으로 카메라를 날려(flyTo) "위치가 바뀌는" 확장을 실제로 보여준다
 const FIN_STOPS = [
   { center: [129.311, 35.539] as [number, number], zoom: 8.8, name: '울산', sub: '첫 적용', step: 0 },
-  { center: [128.064, 35.004] as [number, number], zoom: 8.8, name: '사천', sub: '확산 적용', step: 1 },
-  { center: [127.734, 37.874] as [number, number], zoom: 8.8, name: '후평', sub: '확산 적용', step: 2 },
-  { center: [127.8, 36.3] as [number, number], zoom: 6.1, name: '전국단위 확산', sub: '같은 플랫폼 기반 위에서', step: 3, wide: true },
+  { center: [126.705, 37.456] as [number, number], zoom: 8.8, name: '인천', sub: '확산 적용', step: 1 },
+  { center: [128.064, 35.004] as [number, number], zoom: 8.8, name: '사천', sub: '확산 적용', step: 2 },
+  { center: [127.734, 37.874] as [number, number], zoom: 8.8, name: '후평', sub: '확산 적용', step: 3 },
+  { center: [127.8, 36.3] as [number, number], zoom: 6.1, name: '전국단위 확산', sub: '같은 플랫폼 기반 위에서', step: 4, wide: true },
 ]
 function FinaleExpand() {
   const mapRef = useRef<HTMLDivElement>(null)
@@ -1004,9 +1006,10 @@ function FinaleExpand() {
         <h3 className="fin-title">울산 · 사천 · 후평 —<br /><span className="hl">전국단위 확산</span></h3>
         <div className="fin-steps">
           <div className={`fin-step${cur.step === 0 ? ' on' : ''}`}><span className="fs-no">1</span><b>울산</b><small>첫 적용</small></div>
-          <div className={`fin-step${cur.step === 1 ? ' on' : ''}`}><span className="fs-no">2</span><b>사천</b><small>확산 적용</small></div>
-          <div className={`fin-step${cur.step === 2 ? ' on' : ''}`}><span className="fs-no">3</span><b>후평</b><small>확산 적용</small></div>
-          <div className={`fin-step next${cur.step === 3 ? ' on' : ''}`}><span className="fs-no">→</span><b>전국단위 확산</b><small>같은 플랫폼 기반 위에서</small></div>
+          <div className={`fin-step${cur.step === 1 ? ' on' : ''}`}><span className="fs-no">2</span><b>인천</b><small>확산 적용</small></div>
+          <div className={`fin-step${cur.step === 2 ? ' on' : ''}`}><span className="fs-no">3</span><b>사천</b><small>확산 적용</small></div>
+          <div className={`fin-step${cur.step === 3 ? ' on' : ''}`}><span className="fs-no">4</span><b>후평</b><small>확산 적용</small></div>
+          <div className={`fin-step next${cur.step === 4 ? ' on' : ''}`}><span className="fs-no">→</span><b>전국단위 확산</b><small>같은 플랫폼 기반 위에서</small></div>
         </div>
       </div>
 
