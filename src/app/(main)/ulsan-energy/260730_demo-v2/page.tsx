@@ -579,7 +579,7 @@ const CSS = `
 
 /* ── 감사합니다 (마지막 다크) ── */
 .thanks-inner{text-align:center;position:relative;z-index:1;align-self:center}
-.thanks-inner img{height:2.4vw;filter:brightness(0) invert(1);margin-bottom:2.6vw;opacity:.92}
+.thanks-inner img{height:2.4vw;margin-bottom:2.6vw;opacity:.95}
 .thanks-title{color:#fff;font-size:3.1vw;font-weight:800;letter-spacing:-.01em;margin-bottom:1.3vw}
 .thanks-tagline{color:var(--accent-soft);font-size:1.05vw;font-weight:300;line-height:1.8}
 .thanks-contact{color:rgba(148,168,200,.6);font-size:.9vw;margin-top:2.8vw;letter-spacing:.08em}
@@ -1593,7 +1593,7 @@ const SLIDES: ReactNode[] = [
   /* ── 감사합니다 ── */
   <div className="dark-stage" key="thanks">
     <div className="thanks-inner">
-      <img src="/images/logo.png" alt="RMS GROUP" />
+      <img src="/images/rmsplatform-logo-white.png" alt="RMS PLATFORM" />
       <div className="thanks-title">감사합니다</div>
       <div className="thanks-tagline">
         Improving the quality of life and<br />creating a sustainable &amp; resilient society
