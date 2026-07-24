@@ -9,12 +9,12 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://rms-ppt.pairworks.net'),
   title: 'ppt',
   robots: { index: false, follow: false }, // 기존 noindex 유지
-  // 카톡·SNS 링크 미리보기(Open Graph) — 이미지는 public/og-image.png 에 넣으면 자동 노출
+  // 카톡·SNS 링크 미리보기(Open Graph) — 루트는 "발표자료 모음(아카이브)". 덱별 제목은 각 덱 폴더의 layout.tsx에서 덮어씀
   openGraph: {
-    title: '지속가능한 통합 에너지 플랫폼',
-    description: '울산미포 에너지자급자족 · 통합에너지플랫폼 구축 현황과 방향성',
+    title: 'RMS 발표자료 모음',
+    description: 'RMS에서 진행한 발표자료 아카이브',
     url: 'https://rms-ppt.pairworks.net',
-    siteName: 'RMS PLATFORM',
+    siteName: 'RMS',
     locale: 'ko_KR',
     type: 'website',
     images: [{ url: '/images/og-image.png', width: 1728, height: 910 }],
