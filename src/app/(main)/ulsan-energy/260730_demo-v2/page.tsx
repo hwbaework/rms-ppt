@@ -399,8 +399,8 @@ const CSS = `
 .finale2{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
 /* ── 12P: 관제 대시보드 틀 + 가운데 실제 MapLibre fly-to 지도 ── */
 .finctl{position:relative;flex:1;min-height:0;border-radius:16px;overflow:hidden;border:1px solid #1e3358;box-shadow:0 16px 44px rgba(4,12,28,.35);background:#0a1424}
-/* 프로젝터에서 다크 타일이 까맣게 죽어 보여서 밝기·대비 보정 */
-.finctl-map{position:absolute;inset:0;width:100%;height:100%;filter:brightness(2.1) contrast(1.02) saturate(1.2)}
+/* 색 있는(Voyager) 타일 — 밝은 톤 유지하되 너무 밝지 않게 살짝 톤다운 */
+.finctl-map{position:absolute;inset:0;width:100%;height:100%;filter:brightness(0.88) contrast(1.03) saturate(1.06)}
 .finctl-map canvas{outline:none}
 /* 지도 로드 실패 시 폴백 — 통합관제 대시보드 이미지 */
 .finctl-fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
@@ -1018,9 +1018,9 @@ function FinaleExpand() {
               carto: {
                 type: 'raster',
                 tiles: [
-                  'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png',
-                  'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png',
-                  'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png',
+                  'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
+                  'https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
+                  'https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
                 ],
                 tileSize: 256,
                 attribution: '© CARTO © OpenStreetMap',
