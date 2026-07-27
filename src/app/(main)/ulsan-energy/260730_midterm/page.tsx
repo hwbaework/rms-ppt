@@ -772,7 +772,7 @@ const SLIDES: ReactNode[] = [
           <span style={{ paddingLeft: '1vw' }}>비고</span>
         </div>
         {/* 연료전지 — 구분은 하나, 행 안에서 RPS/CHPS로 분리 (전체 구분은 5개) */}
-        <div className="exp-r" style={{ flex: 1.55 }}>
+        <div className="exp-r" style={{ flex: 1.45 }}>
           <div className="exp-name">
             <span className="exp-cat">신재생에너지 인프라</span>
             <b>연료전지 발전</b>
@@ -784,7 +784,7 @@ const SLIDES: ReactNode[] = [
               <div className="ms">
                 <div className="ms-i">
                   <b>25.10</b>
-                  <span>연료전지동 설치 · 입고 완료</span>
+                  <span>연료전지동 설치 및 연료전지 입고 완료</span>
                 </div>
                 <div className="ms-i">
                   <b>25.10</b>
@@ -801,7 +801,7 @@ const SLIDES: ReactNode[] = [
               <div className="ms">
                 <div className="ms-i">
                   <b>25.09</b>
-                  <span>기초 토목공사 진행</span>
+                  <span>기초 토목공사 (진행 중)</span>
                 </div>
                 <div className="ms-i">
                   <b>25.11</b>
@@ -817,7 +817,7 @@ const SLIDES: ReactNode[] = [
           </div>
         </div>
         {/* 태양광 — 우측 지표(자가소비/전력거래)와 좌우 범위가 맞도록 유형 분리 */}
-        <div className="exp-r" style={{ flex: 1.85 }}>
+        <div className="exp-r" style={{ flex: 1.75 }}>
           <div className="exp-name">
             <span className="exp-cat">신재생에너지 인프라</span>
             <b>태양광 발전</b>
@@ -829,15 +829,15 @@ const SLIDES: ReactNode[] = [
               <div className="ms">
                 <div className="ms-i">
                   <b>25.06</b>
-                  <span>5개 업체 계약 완료</span>
+                  <span>5개 업체 계약 완료 (자가소비 5개 업체)</span>
                 </div>
                 <div className="ms-i">
                   <b>25.10</b>
-                  <span>현장검토 · 설계 완료</span>
+                  <span>5개 업체 현장검토 및 설계 완료 (총 0.91MW)</span>
                 </div>
                 <div className="ms-i">
                   <b>25.11</b>
-                  <span>착공 — 연내 구축</span>
+                  <span>착공 (연내 구축완료 예정)</span>
                 </div>
               </div>
             </div>
@@ -850,7 +850,7 @@ const SLIDES: ReactNode[] = [
                 </div>
                 <div className="ms-i">
                   <b>25.11</b>
-                  <span>착공 — 연내 구축</span>
+                  <span>착공 (연내 구축완료 예정)</span>
                 </div>
               </div>
             </div>
@@ -867,13 +867,14 @@ const SLIDES: ReactNode[] = [
           name="ESG 에너지 플랫폼"
           sub="알엠에쓰플렛폼"
           steps={[
-            { m: '25.04~06', t: '정보구조도 · 메뉴구조도 설계' },
-            { m: '25.05~07', t: '디자인 시안 · 시각 가이드라인' },
-            { m: '25.06~08', t: '세부 프로세스(통합관제 · 컨설팅) 설계' },
-            { m: '25.08', t: '개발환경 설정 · 인터페이스 정의' },
-            { m: '25.09', t: '화면 디자인 · 퍼블리싱' },
+            { m: '25.04~06', t: '정보구조도 및 메뉴구조도 설계' },
+            { m: '25.05~07', t: '디자인 시안 제작 및 시각적 가이드라인 설정' },
+            { m: '25.06~08', t: '세부 프로세스(통합관제, 컨설팅) 설계' },
+            { m: '25.08', t: '개발환경 설정 및 인터페이스 정의' },
+            { m: '25.09', t: '화면 디자인 및 퍼블리싱' },
             { m: '25.10~11', t: '플랫폼 개발 구축' },
-            { m: '25.11', t: '테스트 · 상황실 구축 완료' },
+            { m: '25.11', t: '테스트 시나리오 작성/수행' },
+            { m: '25.11', t: '상황실 구축완료' },
           ]}
           note={
             <>
@@ -884,32 +885,34 @@ const SLIDES: ReactNode[] = [
           }
         />
         <ExpRow
-          grow={0.85}
+          grow={1.35}
           cat="탄소저감 지원"
           name="ORC 발전시설"
           sub="울산미포ORC발전"
           steps={[
-            { m: '25.01~12', t: '기본 · 상세설계' },
-            { m: '25.01~', t: '모듈 · Dry cooler 등 주요 설비 제작' },
-            { m: '25.11', t: '모듈 FAT' },
-            { m: '25.03~12', t: '수요기업 발굴 · 계약 진행' },
+            { m: '25.02~04', t: 'ORC 인프라 특수목적법인 설립 및 수행기관 참여' },
+            { m: '25.01~', t: 'ORC 모듈, Dry cooler 등 주요 설비 제작' },
+            { m: '25.01~12', t: 'ORC 발전시설 구축 기본 및 상세설계' },
+            { m: '25.11', t: 'ORC 모듈 FAT(Factory Acceptance Test)' },
+            { m: '25.03~12', t: '생산 전력 수요기업 발굴 및 계약 진행' },
           ]}
           note={
             <>
-              특수목적법인 설립 및 수행기관 참여(25.02~04)
+              연료전지 발전배열 활용 <b>자급자족 고도화 설비 지원</b>
+              <br />
+              (ORC 발전시설 구축)
             </>
           }
         />
         <ExpRow
-          grow={0.85}
+          grow={0.75}
           cat="탄소저감 지원"
           name="양방향 EV충전"
           sub="울산테크노파크"
           steps={[
-            { m: '25.06', t: '기본 · 실시설계' },
-            { m: '25.09', t: '장비심의 · 실시설계 준공 및 보완' },
-            { m: '25.12', t: 'PCS 구매 · 납품 완료' },
-            { m: '유찰', t: '26년 재추진 준비', warn: true },
+            { m: '25.06', t: '양방향 EV 충전설비 기본 및 실시설계' },
+            { m: '25.09', t: '장비심의, 실시설계 준공 및 보완 완료' },
+            { m: '25.12', t: 'PCS 구매 및 납품 완료' },
           ]}
           note={
             <>
@@ -922,10 +925,10 @@ const SLIDES: ReactNode[] = [
       {/* 우 1/3 — 원본 8p 성과지표 달성률: 행 높이 비율을 좌측과 동일하게(가로줄 정렬) */}
       <div className="kpanel">
         <div className="kp-hd">성과지표 검토 (2차년도)</div>
-        <div className="krow" style={{ flex: 1.55 }}>
+        <div className="krow" style={{ flex: 1.45 }}>
           <Gauge b="연료전지발전" s="롯데SK에너루트" pct={100} val="19.8 / 19.8 MW" chip="달성 100%" chipKind="done" />
         </div>
-        <div className="krow" style={{ flex: 1.85 }}>
+        <div className="krow" style={{ flex: 1.75 }}>
           <Gauge
             b="태양광 · 자가소비형"
             s="에스에너지"
@@ -948,7 +951,7 @@ const SLIDES: ReactNode[] = [
         <div className="krow" style={{ flex: 1.45 }}>
           <Gauge b="ESG 에너지 플랫폼 구축률" s="알엠에쓰플렛폼" pct={100} val="35 / 35%" chip="달성 100%" chipKind="done" />
         </div>
-        <div className="krow" style={{ flex: 0.85 }}>
+        <div className="krow" style={{ flex: 1.35 }}>
           <div className="kg dim">
             <div className="kg-head">
               <b>
@@ -960,7 +963,7 @@ const SLIDES: ReactNode[] = [
             <div className="kg-note">2차년도 목표 없음 — 3차년도 1.8MW 구축 목표</div>
           </div>
         </div>
-        <div className="krow" style={{ flex: 0.85 }}>
+        <div className="krow" style={{ flex: 0.75 }}>
           <Gauge
             b="양방향 EV 충전기"
             s="울산테크노파크"
