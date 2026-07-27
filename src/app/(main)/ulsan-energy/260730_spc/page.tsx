@@ -636,10 +636,10 @@ const SLIDES: ReactNode[] = [
       key="p4"
       no="04"
       sec="수요모집 정상화 계획"
-      title={<>그렇다면 — 태양광 수요는 <span className="hl">어떻게 모집할 것인가</span></>}
+      title={<>수요모집 <span className="hl">정상화 계획</span></>}
       lede={
         <>
-          산단 내 우선 접촉과 인근 산단 연계, 주 단위 관리 체계로 <b>3차년도 성과 달성에 집중</b>합니다.
+          타겟 선별 · 유관기관 공동 대응 · PMO 관리 체계로 <b>3차년도 목표 2.67MW</b>를 달성하겠습니다.
         </>
       }
       fill
