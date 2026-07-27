@@ -657,9 +657,12 @@ const SLIDES: ReactNode[] = [
             <div className="plan-t">
               <b>타겟 집중</b>
               <small>
-                울산 미포국가산단 소재 기업을 우선 접촉하여 수용가 확보 — 내부 수용가만으로 목표 달성이 어려울
-                가능성에 대비, 필요 시 인근 산단 연계 확보 방안 검토
+                내부 수용가만으로 목표 달성이 어려울 가능성에 대비 — 필요 시 인근 산단 연계 확보 방안 검토
               </small>
+            </div>
+            <div className="plan-meta">
+              <b>우선 접촉</b>
+              <small>울산 미포국가산단 소재 기업</small>
             </div>
           </div>
           <div className="plan-row">
@@ -669,7 +672,11 @@ const SLIDES: ReactNode[] = [
             </span>
             <div className="plan-t">
               <b>공동 대응</b>
-              <small>산업단지공단 울산지역본부 · 울산광역시 협력 — 입주기업 대상 합동 사업설명회 개최</small>
+              <small>산업단지공단 울산지역본부 · 울산광역시 협력 — 입주기업 대상 개최</small>
+            </div>
+            <div className="plan-meta">
+              <b>합동 설명회</b>
+              <small>유관기관 협력</small>
             </div>
           </div>
           <div className="plan-row">
