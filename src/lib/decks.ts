@@ -16,6 +16,14 @@ export type DeckMeta = {
 export const decks: DeckMeta[] = [
   {
     region: '울산 에너지자급자족',
+    date: '2026-07-30',
+    title: 'SPC 설립 시기 변경 보고',
+    href: '/ulsan-energy/260730_spc',
+    description: '전력거래용 태양광 SPC 설립 3차→4차년도 조정 — 사유 · 일정 · 수요모집 정상화',
+    tags: ['SPC', '태양광', '변경신청'],
+  },
+  {
+    region: '울산 에너지자급자족',
     date: '2026-07-23',
     title: 'LASEE 설치기업 페르소나·프로세스',
     href: '/ulsan-energy/260723_lasee',
