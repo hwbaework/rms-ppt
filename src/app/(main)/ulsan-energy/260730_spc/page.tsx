@@ -48,22 +48,6 @@ const CSS = `
 .cover-meta img{height:1.5vw;opacity:1}
 .cover-meta i{width:3px;height:3px;border-radius:50%;background:rgba(148,168,200,.5)}
 
-/* ── 목차 (좌 네이비 패널 + 우 에디토리얼 리스트 — 행 클릭 시 해당 장으로 이동) ── */
-.toc{display:flex}
-.toc-left{width:35%;background:transparent;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;padding:0 3.6vw}
-.toc-left:before{content:"";position:absolute;left:-10vw;bottom:-14vw;width:30vw;height:30vw;border:1px solid rgba(127,168,232,.15);border-radius:50%}
-.toc-eyebrow{color:var(--accent-soft);letter-spacing:.4em;text-transform:uppercase;font-size:.72vw;font-weight:600;margin-bottom:1.1vw}
-.toc-title{color:#fff;font-size:2.7vw;font-weight:800;letter-spacing:-.01em;margin-bottom:1.2vw}
-.toc-lead{color:rgba(191,209,238,.72);font-size:1vw;font-weight:300;line-height:1.8}
-.toc-right{flex:1;background:var(--paper);display:flex;flex-direction:column;justify-content:center;padding:0 3.6vw}
-.trow{display:flex;align-items:center;gap:1.6vw;padding:1.1vw .4vw;border-bottom:1px solid var(--hair);transition:background .2s;cursor:pointer}
-.trow:first-child{border-top:1px solid var(--hair)}
-.trow:hover{background:#f4f7fd}
-.trow-no{color:#c3ccda;font-size:1.5vw;font-weight:300;letter-spacing:.02em;width:2.9vw;flex-shrink:0;transition:color .2s}
-.trow:hover .trow-no{color:var(--accent)}
-.trow-t{color:var(--ink);font-size:1.08vw;font-weight:700;margin-bottom:.22vw}
-.trow-d{color:var(--muted);font-size:.85vw;line-height:1.5}
-
 /* ── 본문 공통 ── */
 .cs{background:var(--paper);display:flex;flex-direction:column}
 .cs-body{flex:1;display:flex;flex-direction:column;padding:3% 6.5% 80px}
@@ -78,18 +62,28 @@ const CSS = `
 .area{flex:1;display:flex;flex-direction:column;gap:1.1vw}
 .area.fill{justify-content:space-between;gap:1.1vw}
 
-/* ── 분기 단계 카드 3장 (일정 슬라이드) — 화살표로 이어지는 시기별 카드 ── */
+/* ── 분기 단계 (일정 슬라이드) — 점·라인 레일이 컬럼을 관통하고, 아래 카드가 내용 ── */
 .grow{flex:1;min-height:0;display:flex;flex-direction:column}
-.ph3{display:flex;gap:.8vw;flex:1;min-height:0;align-items:stretch}
-.ph{flex:1;border:1px solid var(--hair);border-radius:14px;background:#fff;padding:1.1vw 1.2vw;display:flex;flex-direction:column;gap:.7vw;justify-content:center}
+.phrow{display:flex;gap:.9vw;flex:1;min-height:0;align-items:stretch}
+.phcol{flex:1;display:flex;flex-direction:column;min-width:0}
+.phcol.now{flex:.62}
+.step-line{display:flex;align-items:center;gap:.55vw;margin-bottom:.65vw}
+.step-dot{width:.55vw;height:.55vw;border-radius:50%;border:2px solid var(--accent);background:var(--paper);flex-shrink:0}
+.step-dot.fill{background:var(--accent)}
+.step-dot.gray{border-color:#b6c2d6}
+.step-no{color:var(--accent);font-size:.78vw;font-weight:800;letter-spacing:.06em;white-space:nowrap}
+.step-no.gray{color:var(--muted)}
+.step-line:after{content:"";flex:1;height:1px;background:var(--hair)}
+.phcol:last-child .step-line:after{display:none}
+.ph{flex:1;border:1px solid var(--hair);border-radius:14px;background:#fff;padding:1.2vw 1.3vw;display:flex;flex-direction:column;gap:.8vw;justify-content:center}
 .ph.final{border:1.5px solid #93c5fd;background:linear-gradient(180deg,#ffffff,#f7faff);box-shadow:0 8px 24px rgba(37,99,235,.12)}
-.ph-q{display:inline-flex;align-self:flex-start;background:var(--tint);border:1px solid var(--tint-line);color:#1d4ed8;border-radius:999px;padding:.2vw .9vw;font-size:.78vw;font-weight:800;white-space:nowrap}
-.ph.final .ph-q{background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:#fff;border-color:transparent;box-shadow:0 5px 14px rgba(29,78,216,.3)}
-.ph-t{color:var(--ink);font-size:1.02vw;font-weight:800;letter-spacing:-.01em;line-height:1.35}
-.ph-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.5vw}
-.ph-list li{position:relative;padding-left:.85vw;color:var(--body);font-size:.85vw;line-height:1.6;word-break:keep-all}
+.ph.nowcard{background:var(--chip);border-style:dashed;box-shadow:none}
+.ph-t{color:var(--ink);font-size:1.05vw;font-weight:800;letter-spacing:-.01em;line-height:1.35}
+.ph.nowcard .ph-t{color:#475569}
+.ph-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.6vw}
+.ph-list li{position:relative;padding-left:.85vw;color:var(--body);font-size:.87vw;line-height:1.62;word-break:keep-all}
 .ph-list li:before{content:"";position:absolute;left:0;top:.55vw;width:.32vw;height:.32vw;border-radius:50%;background:var(--accent)}
-.ph3-arr{align-self:center;color:#c3ccda;font-size:1.35vw;flex-shrink:0}
+.ph.nowcard .ph-list li:before{background:#94a3b8}
 /* 사업 영향 — 체크 행 3개 가로 스트립 */
 .fxrow3{display:grid;grid-template-columns:repeat(3,1fr);gap:.9vw}
 
@@ -180,40 +174,49 @@ const CSS = `
 .fx-row .material-symbols-outlined{font-size:1.05vw;color:#10b981;flex-shrink:0;margin-top:.1vw}
 .fx-row span:last-child{font-size:.87vw;color:var(--ink);font-weight:600;line-height:1.55;word-break:keep-all}
 
-/* ── 정상화 계획 — 좌 계획 레인 3행 / 우 KPI·마일스톤 ── */
-.norm{display:grid;grid-template-columns:1.25fr .75fr;gap:1.2vw;flex:1;min-height:0;align-items:stretch}
-.plan{background:#fff;border:1px solid var(--hair);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
-.plan-row{flex:1;display:flex;align-items:center;gap:1vw;padding:.9vw 1.3vw;border-bottom:1px solid var(--hair)}
+/* ── 정상화 계획 — 좌 계획 레인 3행(번호·아이콘·스탯) / 우 딥네이비 KPI 카드 ── */
+.norm{display:grid;grid-template-columns:1.22fr .78fr;gap:1.2vw;flex:1;min-height:0;align-items:stretch}
+.plan{background:#fff;border:1px solid var(--hair);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 6px 24px rgba(11,21,38,.05)}
+.plan-row{flex:1;display:flex;align-items:center;gap:1.1vw;padding:1vw 1.5vw;border-bottom:1px solid var(--hair)}
 .plan-row:last-child{border-bottom:none}
-.plan-ic{width:2.7vw;height:2.7vw;border-radius:50%;background:var(--tint);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.plan-no{color:#c3ccda;font-size:1.45vw;font-weight:300;letter-spacing:.02em;width:2.2vw;flex-shrink:0}
+.plan-ic{width:2.8vw;height:2.8vw;border-radius:50%;background:linear-gradient(180deg,#ffffff,#f6f9ff);border:1px solid #e3ebf7;color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 5px rgba(11,21,38,.05),0 8px 18px rgba(37,99,235,.09)}
 .plan-ic .material-symbols-outlined{font-size:1.35vw}
 .plan-t{flex:1;min-width:0}
-.plan-t b{display:block;color:var(--ink);font-size:.98vw;font-weight:800}
-.plan-t small{display:block;color:var(--muted);font-size:.8vw;line-height:1.6;margin-top:.15vw;word-break:keep-all}
-.plan-row .tag{flex-shrink:0}
-/* 우측 마일스톤 — 세로 스텝 칩 */
-.mcol{display:flex;flex-direction:column;justify-content:center;gap:.9vw}
-.vstep{display:flex;flex-direction:column;gap:.4vw}
-.vstep-arr{align-self:center;color:#c3ccda;font-size:1.1vw}
-.vchip{background:var(--chip);border:1px solid transparent;border-radius:10px;padding:.6vw 1.05vw}
-.vchip b{display:block;color:var(--ink);font-size:.9vw;font-weight:700}
-.vchip small{display:block;color:var(--muted);font-size:.74vw;margin-top:.08vw}
-.vchip.acc{background:var(--tint);border-color:var(--tint-line)}
-.vchip.acc b{color:#1d4ed8}
-
-/* ── KPI 스탯 (하이라인 사이 큰 숫자) ── */
-.kpi{display:flex;flex-direction:column;justify-content:center;gap:.3vw;border-top:2px solid var(--ink);border-bottom:1px solid var(--hair);padding:1vw .2vw}
-.kpi-n{font-size:3vw;font-weight:900;color:var(--accent);letter-spacing:-.03em;line-height:1.05}
-.kpi-n small{font-size:1.2vw;font-weight:800;margin-left:.15vw}
-.kpi-l{color:var(--ink);font-size:.92vw;font-weight:700}
-.kpi-s{color:var(--muted);font-size:.78vw;line-height:1.6}
-/* 목표 규모 비교 미니 바 — 2.1MW가 기존 연간 목표(0.9MW)보다 큰 물량임을 한눈에 */
-.kpi-cmp{display:flex;flex-direction:column;gap:.4vw;margin-top:.45vw}
-.kpi-cmp-row{display:flex;align-items:center;gap:.5vw}
-.kpi-cmp-row i{height:.55vw;border-radius:999px;background:#c9d8f0;display:block;flex-shrink:0}
-.kpi-cmp-row.big i{background:linear-gradient(90deg,#1d4ed8,#3b82f6)}
-.kpi-cmp-row span{color:var(--muted);font-size:.7vw;font-weight:600;white-space:nowrap}
-.kpi-cmp-row.big span{color:var(--accent);font-weight:800}
+.plan-t b{display:block;color:var(--ink);font-size:1vw;font-weight:800;letter-spacing:-.01em}
+.plan-t small{display:block;color:var(--muted);font-size:.8vw;line-height:1.6;margin-top:.18vw;word-break:keep-all}
+.plan-meta{flex-shrink:0;text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:.2vw}
+.plan-meta b{color:var(--accent);font-size:1.25vw;font-weight:900;letter-spacing:-.02em;line-height:1.1}
+.plan-meta small{color:var(--muted);font-size:.7vw;font-weight:600}
+/* 관리 체계 — 주간 운영 루프: 받아서(취합) → 하고(점검·보고) → 될거다(보완 반영) */
+.plan-t .tag{margin-left:.5vw;vertical-align:middle}
+.wflow{display:flex;align-items:center;gap:.4vw;flex-wrap:wrap;margin-top:.5vw}
+.wchip{background:var(--chip);border:1px solid transparent;border-radius:9px;padding:.34vw .75vw}
+.wchip b{display:block;color:var(--ink);font-size:.76vw;font-weight:700;white-space:nowrap}
+.wchip small{display:block;color:var(--muted);font-size:.64vw;font-weight:600;white-space:nowrap;margin-top:.05vw}
+.wchip.acc{background:var(--tint);border-color:var(--tint-line)}
+.wchip.acc b{color:#1d4ed8}
+.wflow>.material-symbols-outlined{font-size:.92vw;color:#c3ccda;flex-shrink:0}
+/* 우측 — 딥네이비 KPI 카드 (표지 톤과 이어지는 고급 카드) */
+.mcard{position:relative;overflow:hidden;border-radius:18px;background:radial-gradient(120% 140% at 82% -20%,#1d3f7d 0%,#102a58 55%,#0a1732 100%);padding:1.7vw 1.6vw;display:flex;flex-direction:column;justify-content:center;gap:.85vw;box-shadow:0 16px 40px rgba(8,17,32,.3)}
+.mcard:before{content:"";position:absolute;width:15vw;height:15vw;border-radius:50%;right:-5vw;top:-6vw;background:radial-gradient(circle at 35% 32%,rgba(255,255,255,.13),transparent 62%)}
+.mcard>*{position:relative}
+.mcard-eyebrow{color:var(--accent-soft);letter-spacing:.32em;text-transform:uppercase;font-size:.64vw;font-weight:700}
+.mcard-n{color:#fff;font-size:3.1vw;font-weight:900;letter-spacing:-.03em;line-height:1}
+.mcard-n small{font-size:1.25vw;font-weight:800;margin-left:.2vw}
+.mcard-l{color:rgba(191,209,238,.85);font-size:.84vw;line-height:1.6}
+.mcard-cmp{display:flex;flex-direction:column;gap:.45vw;margin:.2vw 0}
+.mcard-cmp-row{display:flex;align-items:center;gap:.55vw}
+.mcard-cmp-row i{height:.55vw;border-radius:999px;background:rgba(255,255,255,.2);display:block;flex-shrink:0}
+.mcard-cmp-row.big i{background:linear-gradient(90deg,#60a5fa,#93c5fd);box-shadow:0 0 12px rgba(96,165,250,.45)}
+.mcard-cmp-row span{color:rgba(191,209,238,.75);font-size:.7vw;font-weight:600;white-space:nowrap}
+.mcard-cmp-row.big span{color:#fff;font-weight:800}
+.mcard-hr{height:1px;background:rgba(127,168,232,.25)}
+.mstep{background:rgba(255,255,255,.06);border:1px solid rgba(127,168,232,.3);border-radius:12px;padding:.65vw 1.05vw;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.mstep b{display:block;color:#fff;font-size:.9vw;font-weight:700}
+.mstep small{display:block;color:rgba(191,209,238,.75);font-size:.74vw;margin-top:.1vw;line-height:1.55}
+.mstep.acc{background:rgba(37,99,235,.32);border-color:rgba(96,165,250,.6);box-shadow:0 6px 20px rgba(37,99,235,.28)}
+.mstep-arr{align-self:center;color:rgba(127,168,232,.65);font-size:1.05vw}
 
 /* ── 요약 3단 카드 (변경 내용 · 판단 · 3차년도 계획) ── */
 .sum3{display:grid;grid-template-columns:repeat(3,1fr);gap:1vw;flex:1;min-height:0;align-items:stretch}
@@ -256,14 +259,6 @@ const CSS = `
 .slide.active .cover-sub{animation:rise .65s cubic-bezier(.2,.6,.2,1) .24s both}
 .slide.active .cover-meta{animation:rise .65s cubic-bezier(.2,.6,.2,1) .44s both}
 .slide.active .thanks-inner{animation:rise .8s cubic-bezier(.2,.6,.2,1) both}
-.slide.active .toc-left>*{animation:rise .6s cubic-bezier(.2,.6,.2,1) both}
-.slide.active .toc-left>:nth-child(2){animation-delay:.1s}
-.slide.active .toc-left>:nth-child(3){animation-delay:.2s}
-.slide.active .trow{animation:rise .5s cubic-bezier(.2,.6,.2,1) both}
-.slide.active .trow:nth-child(2){animation-delay:.07s}
-.slide.active .trow:nth-child(3){animation-delay:.14s}
-.slide.active .trow:nth-child(4){animation-delay:.21s}
-.slide.active .trow:nth-child(5){animation-delay:.28s}
 .slide.active .cs-head{animation:rise .5s cubic-bezier(.2,.6,.2,1) both}
 .slide.active .cs-title{animation:rise .55s cubic-bezier(.2,.6,.2,1) .08s both}
 .slide.active .lede{animation:rise .6s cubic-bezier(.2,.6,.2,1) .14s both}
@@ -323,34 +318,42 @@ function ContentSlide({
   )
 }
 
-// 분기 단계 카드 (일정 슬라이드)
-function Phase({ q, t, items, final }: { q: string; t: string; items: string[]; final?: boolean }) {
+// 분기 단계 컬럼 (일정 슬라이드) — 상단 점·라인 레일 + 아래 내용 카드
+function Phase({
+  q,
+  t,
+  items,
+  final,
+  now,
+}: {
+  q: string
+  t: string
+  items: string[]
+  final?: boolean
+  /** 현재 상태 노드 — 회색 점선 카드 */
+  now?: boolean
+}) {
   return (
-    <div className={`ph${final ? ' final' : ''}`}>
-      <span className="ph-q">{q}</span>
-      <div className="ph-t">{t}</div>
-      <ul className="ph-list">
-        {items.map((it) => (
-          <li key={it}>{it}</li>
-        ))}
-      </ul>
+    <div className={`phcol${now ? ' now' : ''}`}>
+      <div className="step-line">
+        <span className={`step-dot${final ? ' fill' : ''}${now ? ' gray' : ''}`} />
+        <span className={`step-no${now ? ' gray' : ''}`}>{q}</span>
+      </div>
+      <div className={`ph${final ? ' final' : ''}${now ? ' nowcard' : ''}`}>
+        <div className="ph-t">{t}</div>
+        <ul className="ph-list">
+          {items.map((it) => (
+            <li key={it}>{it}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   )
 }
 
-/* ─────────────────────────── 슬라이드 — 시나리오 5페이지 1:1 ─────────────────────────── */
+/* ─────────────────────────── 슬라이드 — 시나리오 5페이지 1:1 (목차 없음 — 사용자 지시) ─────────────────────────── */
 
-// 목차 행 클릭 → 해당 장으로 이동해야 하므로 슬라이드 배열을 함수로 생성
-function makeSlides(goTo: (i: number) => void): ReactNode[] {
-  const TOC = [
-    { no: '01', t: '보고 개요', d: 'SPC 설립 시기 — 3차년도(2026) → 4차년도(2027년 상반기) 조정', at: 2 },
-    { no: '02', t: '변경 신청 사유', d: '수요물량 미확보 · 조기 설립 시 비효율 · 본 사업 리스크', at: 3 },
-    { no: '03', t: '변경 후 추진 일정 · 사업 영향', d: '26년 3~4분기 사전 검토 → 27년 상반기 설립 — 설치 일정 영향 없음', at: 4 },
-    { no: '04', t: '수요모집 정상화 계획', d: '우선 타겟 50개사 · 유관기관 공동 대응 · PMO 관리 체계', at: 5 },
-    { no: '05', t: '요약 및 요청사항', d: '협약 핵심 목표 변경 없음 — 변경 사업계획서 반영 계획', at: 6 },
-  ]
-
-  return [
+const SLIDES: ReactNode[] = [
     /* ── 표지 ── */
     <div className="dark-stage" key="cover">
       <p className="cover-eyebrow">Ulsan-Mipo Energy Independence</p>
@@ -363,30 +366,6 @@ function makeSlides(goTo: (i: number) => void): ReactNode[] {
         <img src="/images/rmsplatform-logo-white.png" alt="RMS PLATFORM" />
         <i />
         <span>2026. 07. 30</span>
-      </div>
-    </div>,
-
-    /* ── 목차 ── */
-    <div className="toc" key="toc">
-      <div className="toc-left">
-        <p className="toc-eyebrow">Contents</p>
-        <h2 className="toc-title">목차</h2>
-        <p className="toc-lead">
-          SPC 설립 시기를 4차년도(2027년 상반기)로
-          <br />
-          조정하고자 하는 변경 신청 건 보고입니다.
-        </p>
-      </div>
-      <div className="toc-right">
-        {TOC.map((r) => (
-          <div className="trow" key={r.no} onClick={() => goTo(r.at)}>
-            <span className="trow-no">{r.no}</span>
-            <div>
-              <div className="trow-t">{r.t}</div>
-              <div className="trow-d">{r.d}</div>
-            </div>
-          </div>
-        ))}
       </div>
     </div>,
 
@@ -541,17 +520,18 @@ function makeSlides(goTo: (i: number) => void): ReactNode[] {
               <span className="cum-mark end">누적 목표 3.0MW</span>
             </div>
           </div>
-          {/* 자가소비형 — 참고 (같은 MW 축: 전체 폭의 30% = 0.9MW) */}
+          {/* 자가소비형 — 참고. 같은 MW 축(전체 폭 = 3.0MW)이라 막대 길이 30% = 0.9MW */}
           <div className="cum">
             <div className="cum-head">
               <b>자가소비형 태양광 (참고)</b>
-              <small>목표 0.9MW</small>
+              <small>목표 0.9MW · 이월 0.32MW</small>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '.8vw' }}>
-              <div className="cum-bar" style={{ width: '30%' }}>
-                <div className="cum-done" style={{ width: '64.4%' }}>0.58MW</div>
-              </div>
-              <span className="srcline" style={{ marginTop: 0 }}>0.58 / 0.9MW 구축 · 64.4% (이월 0.32MW)</span>
+            <div className="cum-bar" style={{ width: '30%' }}>
+              <div className="cum-done" style={{ width: '64.4%' }} />
+            </div>
+            <div className="cum-cap">
+              <span className="cum-mark acc" style={{ left: '19.3%' }}>구축 0.58MW · 64.4%</span>
+              <span className="cum-mark" style={{ left: '30%' }}>목표 0.9MW</span>
             </div>
           </div>
         </div>
@@ -577,19 +557,23 @@ function makeSlides(goTo: (i: number) => void): ReactNode[] {
         <div className="block-label">
           <b>SPC 설립 추진 일정 (변경 후)</b>
         </div>
-        <div className="ph3">
+        <div className="phrow">
+          <Phase
+            now
+            q="현재 · 26년 7월"
+            t="수요모집 집중"
+            items={['컨소시엄 전원이 태양광 수요모집 추진 중']}
+          />
           <Phase
             q="26년 3~4분기"
             t="수요물량 확보 · 설립 사전 검토"
             items={['수요물량 확보에 집중', '출자구조 · 정관 · 자본금 산정 등 사전 검토 병행']}
           />
-          <span className="ph3-arr material-symbols-outlined">arrow_forward</span>
           <Phase
             q="27년 1분기"
             t="설비 설치 · 법인 설립 등기"
             items={['태양광 발전설비 설치', '출자자 협약 체결', '법인 설립 등기 완료']}
           />
-          <span className="ph3-arr material-symbols-outlined">arrow_forward</span>
           <Phase
             final
             q="27년 2분기"
@@ -633,68 +617,98 @@ function makeSlides(goTo: (i: number) => void): ReactNode[] {
       fill
     >
       <div className="norm">
-        {/* 좌 — 정상화 계획 3행 */}
+        {/* 좌 — 정상화 계획 3행 (번호 · 아이콘 · 우측 핵심 스탯) */}
         <div className="plan">
           <div className="plan-row">
+            <span className="plan-no">01</span>
             <span className="plan-ic">
               <span className="material-symbols-outlined">ads_click</span>
             </span>
             <div className="plan-t">
               <b>타겟 집중</b>
-              <small>울산미포산단 입주기업 중 지붕면적 · 계약전력 기준으로 우선 타겟 50개사 선별 — 집중 공략</small>
+              <small>울산미포산단 입주기업 중 지붕면적 · 계약전력 기준으로 우선 타겟을 선별해 집중 공략</small>
+            </div>
+            <div className="plan-meta">
+              <b>50개사</b>
+              <small>우선 타겟</small>
             </div>
           </div>
           <div className="plan-row">
+            <span className="plan-no">02</span>
             <span className="plan-ic">
               <span className="material-symbols-outlined">handshake</span>
             </span>
             <div className="plan-t">
               <b>공동 대응</b>
-              <small>산업단지공단 울산지역본부 · 울산광역시 협력 — 입주기업 합동 사업설명회 개최, 공단 명의 안내 공문 발송</small>
+              <small>산업단지공단 울산지역본부 · 울산광역시 협력 — 입주기업 합동 사업설명회, 공단 명의 안내 공문 발송</small>
+            </div>
+            <div className="plan-meta">
+              <b>합동 설명회</b>
+              <small>공단 명의 공문</small>
             </div>
           </div>
           <div className="plan-row">
+            <span className="plan-no">03</span>
             <span className="plan-ic">
               <span className="material-symbols-outlined">fact_check</span>
             </span>
             <div className="plan-t">
-              <b>관리 체계</b>
-              <small>PMO 주관 주 단위 수요발굴 실적 점검 · 울산지역본부 주간보고 체계</small>
+              <b>
+                관리 체계 — 주간 운영 루프
+                <span className="tag blue live">
+                  <i />기 운영 중
+                </span>
+              </b>
+              <div className="wflow">
+                <span className="wchip">
+                  <b>실적 취합</b>
+                  <small>컨소시엄 참여사</small>
+                </span>
+                <span className="material-symbols-outlined">arrow_forward</span>
+                <span className="wchip">
+                  <b>주 단위 점검</b>
+                  <small>PMO 주관</small>
+                </span>
+                <span className="material-symbols-outlined">arrow_forward</span>
+                <span className="wchip">
+                  <b>주간보고</b>
+                  <small>울산지역본부</small>
+                </span>
+                <span className="material-symbols-outlined">arrow_forward</span>
+                <span className="wchip acc">
+                  <b>점검 결과 반영</b>
+                  <small>타겟 · 대응 보완</small>
+                </span>
+              </div>
             </div>
-            <span className="tag blue live">
-              <i />기 운영 중
-            </span>
           </div>
         </div>
-        {/* 우 — 목표 규모 KPI + 마일스톤 */}
-        <div className="mcol">
-          <div className="kpi">
-            <div className="kpi-n">
-              2.1<small>MW</small>
-            </div>
-            <div className="kpi-l">3차년도 전력거래 목표</div>
-            <div className="kpi-cmp">
-              <div className="kpi-cmp-row">
-                <i style={{ width: '39%' }} />
-                <span>기존 연간 목표 0.9MW</span>
-              </div>
-              <div className="kpi-cmp-row big">
-                <i style={{ width: '91%' }} />
-                <span>2.1MW</span>
-              </div>
-            </div>
-            <div className="kpi-s">기존 연간 목표의 2.3배 물량 — 집중 대응으로 달성</div>
+        {/* 우 — 딥네이비 KPI 카드 (목표 규모 + 마일스톤) */}
+        <div className="mcard">
+          <span className="mcard-eyebrow">3rd-Year Target</span>
+          <div className="mcard-n">
+            2.1<small>MW</small>
           </div>
-          <div className="vstep">
-            <div className="vchip">
-              <b>26년 하반기 — 계약 집중</b>
-              <small>우선 타겟 50개사 · 유관기관 합동 수요모집</small>
+          <p className="mcard-l">3차년도 전력거래 목표 — 기존 연간 목표의 2.3배 물량</p>
+          <div className="mcard-cmp">
+            <div className="mcard-cmp-row">
+              <i style={{ width: '36%' }} />
+              <span>기존 연간 목표 0.9MW</span>
             </div>
-            <span className="vstep-arr material-symbols-outlined">arrow_downward</span>
-            <div className="vchip acc">
-              <b>27년 상반기 — 설치 완료</b>
-              <small>확보 물량 즉시 설치 착수 — 목표 2.1MW 달성</small>
+            <div className="mcard-cmp-row big">
+              <i style={{ width: '84%' }} />
+              <span>2.1MW</span>
             </div>
+          </div>
+          <div className="mcard-hr" />
+          <div className="mstep">
+            <b>26년 하반기 — 계약 집중</b>
+            <small>우선 타겟 50개사 · 유관기관 합동 수요모집</small>
+          </div>
+          <span className="mstep-arr material-symbols-outlined">arrow_downward</span>
+          <div className="mstep acc">
+            <b>27년 상반기 — 설치 완료</b>
+            <small>확보 물량 즉시 설치 착수 — 목표 2.1MW 달성</small>
           </div>
         </div>
       </div>
@@ -790,15 +804,13 @@ function makeSlides(goTo: (i: number) => void): ReactNode[] {
         </div>
       </div>
     </div>,
-  ]
-}
+]
 
 /* ─────────────────────────── 플레이어 ─────────────────────────── */
 
 export default function Page() {
   const [idx, setIdx] = useState(0)
-  const goTo = useCallback((i: number) => setIdx(i), [])
-  const slides = useMemo(() => makeSlides(goTo), [goTo])
+  const slides = useMemo(() => SLIDES, [])
   const total = slides.length
 
   const next = useCallback(() => setIdx((i) => Math.min(total - 1, i + 1)), [total])
