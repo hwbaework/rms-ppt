@@ -408,7 +408,7 @@ const SLIDES: ReactNode[] = [
           </div>
           <div className="shift-li">
             <span className="material-symbols-outlined">warning</span>
-            <span>본 사업 수요모집 차질</span>
+            <span>3차년도 수요모집 차질</span>
           </div>
         </div>
         <div className="shift-mid">
@@ -503,8 +503,7 @@ const SLIDES: ReactNode[] = [
           <div className="q-text">
             조기 설립 시 <span className="hl">비효율 발생</span>
             <span className="q-cap">
-              매출 기반 없이 법인 설립비용과 운영 고정비(회계 · 세무 · 공시, 관리인력)만 발생 — 국비가 투입되는 본 사업의
-              재정 건전성 저해
+              매출기반 없이 특수 목적 법인 설립비용 및 운영 고정비 발생 — 특수 목적 법인 재정의 건전성 저해
             </span>
           </div>
         </div>
@@ -514,9 +513,9 @@ const SLIDES: ReactNode[] = [
             <span className="material-symbols-outlined">warning</span>
           </span>
           <div className="q-text">
-            본 사업 <span className="hl">수요모집 차질</span>
+            3차년도 <span className="hl">수요모집 차질</span>
             <span className="q-cap">
-              3차년도 설립 강행 시 역량이 분산 — 본 사업의 안정성 저하로 이어질 우려
+              3차년도 설립 강행 시 역량이 분산 — 3차년도 안정성 저하로 이어질 우려
             </span>
           </div>
         </div>
@@ -606,6 +605,11 @@ const SLIDES: ReactNode[] = [
             ]}
           />
         </div>
+        {/* SPC 설립 협의 관리 주석 — 26년 3~4분기 · 27년 카드 아래 */}
+        <p className="srcline" style={{ marginTop: '.5vw', marginLeft: '26%' }}>
+          ※ SPC 설립 관련 참여기관 간 협의 내용은 회의록 · 협약서 등으로 체계적으로 관리하고, 지분구조 · 출자방식 · 정관
+          등 주요사항을 문서화하여 발전설비 구축 이후 SPC 운영 과정에서 발생할 수 있는 이슈를 최소화
+        </p>
       </div>
       <div>
         <div className="block-label">
@@ -631,10 +635,6 @@ const SLIDES: ReactNode[] = [
             </span>
           </div>
         </div>
-        <p className="srcline" style={{ marginTop: '.6vw' }}>
-          ※ SPC 설립 관련 참여기관 간 협의 내용은 회의록 · 협약서 등으로 체계적으로 관리하고, 지분구조 · 출자방식 · 정관
-          등 주요사항을 문서화하여 발전설비 구축 이후 SPC 운영 과정에서 발생할 수 있는 이슈를 최소화
-        </p>
       </div>
     </ContentSlide>,
 
@@ -705,7 +705,7 @@ const SLIDES: ReactNode[] = [
                   <small>PMO 기관 · 태양광 구축 참여기관 협업 추진</small>
                 </span>
                 <span className="material-symbols-outlined">arrow_forward</span>
-                <span className="wgoal">3차년도 성과 달성에 집중!</span>
+                <span className="wgoal">3차년도 성과 달성</span>
               </div>
             </div>
           </div>
