@@ -404,7 +404,7 @@ const SLIDES: ReactNode[] = [
           </div>
           <div className="shift-li">
             <span className="material-symbols-outlined">warning</span>
-            <span>수요모집 자체에 차질</span>
+            <span>본 사업 수요모집 차질</span>
           </div>
         </div>
         <div className="shift-mid">
@@ -510,7 +510,7 @@ const SLIDES: ReactNode[] = [
             <span className="material-symbols-outlined">warning</span>
           </span>
           <div className="q-text">
-            수요모집 자체에 <span className="hl">차질</span>
+            본 사업 <span className="hl">수요모집 차질</span>
             <span className="q-cap">
               3차년도 설립 강행 시 역량이 분산 — 본 사업의 안정성 저하로 이어질 우려
             </span>
