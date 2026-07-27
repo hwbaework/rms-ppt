@@ -158,6 +158,8 @@ const CSS = `
 /* 준비 중(잔여) — 진행률 주장 없이 움직이는 스트라이프 */
 .cum-prep{flex:1;background:repeating-linear-gradient(-45deg,#cfdff9 0 .5vw,#e9f1fd .5vw 1vw);background-size:1.42vw 100%;animation:crawl 1.1s linear infinite;display:flex;align-items:center;justify-content:center;color:#2c4f96;font-size:.74vw;font-weight:700;white-space:nowrap}
 @keyframes crawl{to{background-position:1.42vw 0}}
+/* 이월분 — 구축과 준비 사이의 중간 톤 세그먼트 */
+.cum-mid{background:linear-gradient(90deg,#7ea8ec,#9fc0f3);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.72vw;font-weight:700;white-space:nowrap;flex-shrink:0}
 /* 연차 목표 경계선(2차 0.9 | 3차 +2.1) */
 .cum-sep{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed rgba(255,255,255,.75);z-index:1}
 .cum-cap{position:relative;height:1.15vw}
@@ -173,6 +175,25 @@ const CSS = `
 .fx-row{display:flex;align-items:flex-start;gap:.6vw;background:var(--chip);border:1px solid var(--hair);border-radius:10px;padding:.65vw .95vw}
 .fx-row .material-symbols-outlined{font-size:1.05vw;color:#10b981;flex-shrink:0;margin-top:.1vw}
 .fx-row span:last-child{font-size:.87vw;color:var(--ink);font-weight:600;line-height:1.55;word-break:keep-all}
+
+/* ── SPC 역할 — 기능 3타일 + 수익 활용 각주 ── */
+.role-intro{color:var(--body);font-size:.9vw;line-height:1.7;word-break:keep-all;margin-bottom:.8vw}
+.role-intro b{color:var(--ink);font-weight:700}
+.role-intro .hl{color:var(--accent);font-weight:700}
+.role3{display:grid;grid-template-columns:repeat(3,1fr);gap:.7vw}
+.role{background:#fff;border:1px solid var(--hair);border-radius:11px;padding:.75vw .95vw;display:flex;align-items:center;gap:.65vw}
+.role .role-no{width:1.4vw;height:1.4vw;border-radius:50%;background:var(--tint);color:var(--accent);font-size:.7vw;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.role .material-symbols-outlined{font-size:1.2vw;color:var(--accent);flex-shrink:0}
+.role b{font-size:.84vw;color:var(--ink);font-weight:700;line-height:1.5;word-break:keep-all}
+.role-ft{display:flex;align-items:flex-start;gap:.55vw;margin-top:.7vw;color:var(--body);font-size:.82vw;line-height:1.6;word-break:keep-all}
+.role-ft .material-symbols-outlined{font-size:1vw;color:var(--accent);flex-shrink:0;margin-top:.1vw}
+.role-ft b{color:var(--ink);font-weight:700}
+
+/* ── 추진 단계(결론) — 번호 행 ── */
+.concl{display:flex;flex-direction:column;gap:.5vw}
+.concl-row{display:flex;align-items:center;gap:.7vw;background:#fff;border:1px solid var(--hair);border-radius:11px;padding:.6vw 1vw}
+.concl-no{width:1.55vw;height:1.55vw;border-radius:50%;background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:#fff;font-size:.74vw;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.concl-row span:last-child{font-size:.87vw;color:var(--ink);font-weight:600;line-height:1.55;word-break:keep-all}
 
 /* ── 정상화 계획 — 좌 계획 레인 3행(번호·아이콘·스탯) / 우 딥네이비 KPI 카드 ── */
 .norm{display:grid;grid-template-columns:1.22fr .78fr;gap:1.2vw;flex:1;min-height:0;align-items:stretch}
@@ -217,27 +238,6 @@ const CSS = `
 .mstep small{display:block;color:rgba(191,209,238,.75);font-size:.74vw;margin-top:.1vw;line-height:1.55}
 .mstep.acc{background:rgba(37,99,235,.32);border-color:rgba(96,165,250,.6);box-shadow:0 6px 20px rgba(37,99,235,.28)}
 .mstep-arr{align-self:center;color:rgba(127,168,232,.65);font-size:1.05vw}
-
-/* ── 요약 3단 카드 (변경 내용 · 판단 · 3차년도 계획) ── */
-.sum3{display:grid;grid-template-columns:repeat(3,1fr);gap:1vw;flex:1;min-height:0;align-items:stretch}
-.sum{border:1px solid var(--hair);border-radius:14px;background:#fff;padding:1.1vw 1.2vw;display:flex;flex-direction:column;gap:.7vw;justify-content:center}
-.sum-h{display:flex;align-items:center;gap:.55vw;font-size:.95vw;font-weight:800;color:var(--ink)}
-.sum-h .no{color:var(--accent);font-size:.8vw;font-weight:800;letter-spacing:.1em}
-.sum-shift{display:flex;align-items:center;gap:.45vw;flex-wrap:wrap}
-.sum-chip{background:#eef1f7;color:#64748b;border-radius:8px;padding:.4vw .8vw;font-size:.83vw;font-weight:700;white-space:nowrap}
-.sum-chip.acc{background:var(--tint);border:1px solid var(--tint-line);color:#1d4ed8}
-.sum-shift .material-symbols-outlined{color:var(--accent);font-size:1vw}
-.sli{display:flex;align-items:flex-start;gap:.55vw;color:var(--body);font-size:.85vw;line-height:1.6;word-break:keep-all}
-.sli .material-symbols-outlined{font-size:1vw;flex-shrink:0;margin-top:.12vw;color:#10b981}
-.sli.bad .material-symbols-outlined{color:#94a3b8}
-.sli b{color:var(--ink)}
-
-/* ── 마침 요청 바 ── */
-.ans{background:linear-gradient(90deg,#0f2a5f,#1d4ed8 55%,#2563eb);border-radius:14px;padding:1vw 1.6vw;display:flex;align-items:center;gap:1.1vw;color:#fff;box-shadow:0 10px 28px rgba(30,64,175,.25)}
-.ans>.material-symbols-outlined{font-size:1.35vw;color:#bcd3fa}
-.ans-t{font-size:1.02vw;font-weight:700;flex:1;line-height:1.6}
-.ans-fn{display:flex;gap:.45vw;flex-wrap:wrap;justify-content:flex-end}
-.ans-pill{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);border-radius:999px;padding:.2vw .85vw;font-size:.76vw;font-weight:600;color:#dbe7ff;white-space:nowrap}
 
 /* ── 감사합니다 (마지막 다크) ── */
 .thanks-inner{text-align:center;position:relative;z-index:1;align-self:center}
@@ -357,10 +357,10 @@ const SLIDES: ReactNode[] = [
     /* ── 표지 ── */
     <div className="dark-stage" key="cover">
       <p className="cover-eyebrow">Ulsan-Mipo Energy Independence</p>
-      <h1 className="cover-title">SPC 설립 시기<br />변경 신청 보고</h1>
+      <h1 className="cover-title">3차년도 사업 변경 신청<br />사전 보고 <span style={{ fontWeight: 300, opacity: 0.85 }}>(태양광 SPC 설립)</span></h1>
       <p className="cover-sub">
         울산미포 에너지자급자족 인프라 구축 및 운영사업<br />
-        전력거래용 태양광 발전사업 SPC — 3차년도에서 4차년도로 조정
+        태양광 SPC 설립 시기 — 3차년도(2026)에서 4차년도(2027년 상반기)로 조정
       </p>
       <div className="cover-meta">
         <img src="/images/rmsplatform-logo-white.png" alt="RMS PLATFORM" />
@@ -389,15 +389,19 @@ const SLIDES: ReactNode[] = [
           <div className="shift-yr">
             3차년도<small>2026년</small>
           </div>
-          <p className="shift-d">협약상 당초 SPC 설립 예정 시기</p>
+          <p className="shift-d">협약상 당초 SPC 설립 예정 시기 — 지금 설립하면</p>
           <div className="shift-hr" />
           <div className="shift-li">
-            <span className="material-symbols-outlined">hourglass_top</span>
-            <span>3차년도 신규 계약 물량 준비 중 (미확정)</span>
+            <span className="material-symbols-outlined">search_off</span>
+            <span>수요물량 미확보</span>
           </div>
           <div className="shift-li">
-            <span className="material-symbols-outlined">payments</span>
-            <span>지금 설립 시 매출 기반 없이 고정비만 발생</span>
+            <span className="material-symbols-outlined">money_off</span>
+            <span>조기 설립 시 비효율 발생</span>
+          </div>
+          <div className="shift-li">
+            <span className="material-symbols-outlined">warning</span>
+            <span>본 사업 리스크</span>
           </div>
         </div>
         <div className="shift-mid">
@@ -409,37 +413,50 @@ const SLIDES: ReactNode[] = [
           <div className="shift-yr">
             4차년도<small>2027년 상반기</small>
           </div>
-          <p className="shift-d">수요물량 확보 후 설립</p>
+          <p className="shift-d">사업 운영 기반 마련 후 설립</p>
           <div className="shift-hr" />
           <div className="shift-li">
-            <span className="material-symbols-outlined">account_balance</span>
-            <span>SPC 재무 건전성 확보</span>
+            <span className="material-symbols-outlined">foundation</span>
+            <span>발전물량 확보 등 사업 운영 기반이 마련되는 시점에 SPC 설립</span>
           </div>
           <div className="shift-li">
-            <span className="material-symbols-outlined">pie_chart</span>
-            <span>출자구조를 실제 물량 기준으로 확정</span>
+            <span className="material-symbols-outlined">autorenew</span>
+            <span>안정적인 수익 창출 기반 위에 SPC 중심의 발전사업 운영 체계로 전환</span>
           </div>
         </div>
       </div>
-      <div className="keep">
-        <span className="keep-ic blue">
-          <span className="material-symbols-outlined">apartment</span>
-        </span>
-        <b>SPC의 역할</b>
-        <p>
-          전력거래용 태양광 발전설비의 <b>소유 · 운영</b>과 <b>전력 판매 수익 관리</b>를 담당하는 발전사업 법인 —
-          설립의 실익은 관리 대상 발전물량이 확보된 이후에 발생
+      <div className="panel">
+        <div className="block-label">
+          <b>SPC의 역할</b>
+        </div>
+        <p className="role-intro">
+          본 사업으로 구축된 태양광 발전시설(<b>전력거래형 4.2MW · 자가소비형 0.9MW</b>)의 지속적이고 안정적인{' '}
+          <b>운영(20년)</b>과 장기적 수익관리 체계 확보를 위해 <span className="hl">독립 SPC 설립</span>을 추진 —{' '}
+          <b>VPP 플랫폼 기반</b>으로 발전사업 운영과 데이터 관리 기능을 수행할 예정입니다.
         </p>
-      </div>
-      <div className="keep">
-        <span className="keep-ic">
-          <span className="material-symbols-outlined">verified</span>
-        </span>
-        <b>협약상 핵심 목표 변경 없음</b>
-        <div className="keep-items">
-          <span>설치 목표량</span>
-          <span>총사업비</span>
-          <span>사업기간</span>
+        <div className="role3">
+          <div className="role">
+            <span className="role-no">①</span>
+            <span className="material-symbols-outlined">swap_horiz</span>
+            <b>PPA(전력구매계약) 거래 및 정산관리</b>
+          </div>
+          <div className="role">
+            <span className="role-no">②</span>
+            <span className="material-symbols-outlined">monitoring</span>
+            <b>주요 설비 운전상태 · 실시간 계측정보 모니터링</b>
+          </div>
+          <div className="role">
+            <span className="role-no">③</span>
+            <span className="material-symbols-outlined">query_stats</span>
+            <b>설비 정보 관리 · 발전량 / 효율 분석</b>
+          </div>
+        </div>
+        <div className="role-ft">
+          <span className="material-symbols-outlined">payments</span>
+          <span>
+            ④ 발전 · PPA 거래로 발생하는 <b>전력판매 수익은 투자자금 상환과 운영비용으로 활용</b>하며, 설비의 장기적
+            안정운영을 위해 <b>O&amp;M 수행 역량을 SPC 운영체계 내 반영</b>
+          </span>
         </div>
       </div>
     </ContentSlide>,
@@ -467,8 +484,8 @@ const SLIDES: ReactNode[] = [
           <div className="q-text">
             수요물량 <span className="hl">미확보</span>
             <span className="q-cap">
-              전력거래용 태양광은 2차년도까지 0.33MW 구축. 3차년도 목표는 기존 연간 목표보다 큰 2.1MW로, 신규 계약을{' '}
-              준비 중 — 현재 컨소시엄 전원이 수요모집에 집중
+              전력거래용 태양광은 2차년도까지 0.33MW 구축. 3차년도 목표 2.1MW의 신규 계약을 준비 중 — 현재 컨소시엄
+              전원이 수요모집에 집중
             </span>
           </div>
         </div>
@@ -503,15 +520,16 @@ const SLIDES: ReactNode[] = [
           <b>태양광 구축 실적 — 전체 목표 중 얼마나 했나</b>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1vw' }}>
-          {/* 전력거래용 — SPC 관리 대상: 전체 목표 3.0MW 기준, 0.33MW 구축 · 잔여 준비 중 */}
+          {/* 전력거래용 — SPC 관리 대상: 구축 0.33 + 이월분 0.57 + 3차 목표 2.1 준비 중 */}
           <div className="cum">
             <div className="cum-head">
               <b>전력거래용 태양광 (SPC 관리 대상)</b>
-              <small>전체 목표 3.0MW = 2차년도 0.9 + 3차년도 2.1 (기존 연간 목표의 2.3배)</small>
+              <small>전체 목표 3.0MW = 2차년도 0.9 + 3차년도 2.1</small>
             </div>
             <div className="cum-bar">
               <div className="cum-done" style={{ width: '11%' }} />
-              <div className="cum-prep">잔여 2.67MW 준비 중 — 26년 하반기 계약 · 27년 상반기 설치</div>
+              <div className="cum-mid" style={{ width: '19%' }}>이월분 0.57MW</div>
+              <div className="cum-prep">준비 중 — 26년 하반기 수용가 확보 및 구축</div>
               <span className="cum-sep" style={{ left: '30%' }} />
             </div>
             <div className="cum-cap">
@@ -524,10 +542,11 @@ const SLIDES: ReactNode[] = [
           <div className="cum">
             <div className="cum-head">
               <b>자가소비형 태양광 (참고)</b>
-              <small>전체 목표 0.9MW · 이월 0.32MW</small>
+              <small>전체 목표 0.9MW</small>
             </div>
             <div className="cum-bar">
               <div className="cum-done" style={{ width: '64.4%' }} />
+              <div className="cum-prep">잔여 0.32MW — 26년 하반기 확보 · 구축</div>
             </div>
             <div className="cum-cap">
               <span className="cum-mark acc" style={{ left: '64.4%' }}>구축 0.58MW · 64.4%</span>
@@ -543,12 +562,12 @@ const SLIDES: ReactNode[] = [
     <ContentSlide
       key="p3"
       no="03"
-      sec="변경 후 추진 일정 및 사업 영향"
-      title={<>물량 확보 → 설립 — <span className="hl">설치 일정 영향 없는</span> 추진</>}
+      sec="변경 후 추진 일정"
+      title={<>태양광 발전 물량 확보 우선(~26년) → <span className="hl">SPC 설립(27년~)</span></>}
       lede={
         <>
-          26년 하반기에 수요물량 확보와 설립 사전 검토를 병행하고, <b>27년 상반기에 설립부터 전력거래 개시 준비까지</b>{' '}
-          완료합니다.
+          발전 물량 확보에 우선 집중한 뒤, <b>안정적인 수익 창출 기반을 바탕으로 SPC 중심의 발전사업 운영 체계</b>로
+          전환합니다.
         </>
       }
       fill
@@ -561,45 +580,54 @@ const SLIDES: ReactNode[] = [
           <Phase
             now
             q="현재 · 26년 7월"
-            t="수요모집 집중"
-            items={['컨소시엄 전원이 태양광 수요모집 추진 중']}
+            t="태양광 수요모집"
+            items={['태양광 발전시설 구축기관이 수용가 모집 추진']}
           />
           <Phase
             q="26년 3~4분기"
-            t="수요물량 확보 · 설립 사전 검토"
-            items={['수요물량 확보에 집중', '출자구조 · 정관 · 자본금 산정 등 사전 검토 병행']}
-          />
-          <Phase
-            q="27년 1분기"
-            t="설비 설치 · 법인 설립 등기"
-            items={['태양광 발전설비 설치', '출자자 협약 체결', '법인 설립 등기 완료']}
+            t="태양광 발전 물량 확보 · SPC 설립 사전 검토"
+            items={['구축 참여기관 외에도 PMO 기관을 중심으로 전 참여기관이 수용가 모집에 집중']}
           />
           <Phase
             final
-            q="27년 2분기"
-            t="허가 신청 · 전력거래 개시 준비"
-            items={['발전사업허가 신청', '구축 설비 이관', '전력거래 개시 준비']}
+            q="27년"
+            t="SPC 설립 · SPC 중심 전력거래 개시"
+            items={[
+              '태양광 발전시설 구축 완료 (성과 목표 달성)',
+              '태양광 발전사업 SPC 설립',
+              '구축설비 이관 및 전력거래 개시 준비',
+            ]}
           />
         </div>
       </div>
       <div>
         <div className="block-label">
-          <b>사업 영향</b>
+          <b>추진 단계 (결론)</b>
         </div>
-        <div className="fxrow3">
-          <div className="fx-row">
-            <span className="material-symbols-outlined">check_circle</span>
-            <span>확보 물량은 컨소시엄 참여기업이 <b>즉시 설치 착수</b> — 설치 일정 영향 없음</span>
+        <div className="concl">
+          <div className="concl-row">
+            <span className="concl-no">1</span>
+            <span>
+              SPC 설립 · 안정적 운영의 <b>핵심 선행조건</b>으로 태양광 수요 발굴 및 발전물량 확보 집중 추진
+            </span>
           </div>
-          <div className="fx-row">
-            <span className="material-symbols-outlined">check_circle</span>
-            <span>설립 전 구축 설비는 설립 후 <b>SPC로 이관</b> 방식으로 처리</span>
+          <div className="concl-row">
+            <span className="concl-no">2</span>
+            <span>
+              확보된 발전물량으로 발생하는 <b>안정적 수익 창출 기반</b>의 SPC 설립 및 발전사업 운영체계 구축
+            </span>
           </div>
-          <div className="fx-row">
-            <span className="material-symbols-outlined">check_circle</span>
-            <span>물량 확보 후 설립 — <b>재무 건전성 · 실 물량 기준 출자구조</b>로 안정성 제고</span>
+          <div className="concl-row">
+            <span className="concl-no">3</span>
+            <span>
+              태양광 발전 설비 이관 및 <b>SPC 중심 운영체계 전환</b> 추진
+            </span>
           </div>
         </div>
+        <p className="srcline" style={{ marginTop: '.6vw' }}>
+          ※ SPC 설립 관련 참여기관 간 협의 내용은 회의록 · 협약서 등으로 체계적으로 관리하고, 지분구조 · 출자방식 · 정관
+          등 주요사항을 문서화하여 발전설비 구축 이후 SPC 운영 과정에서 발생할 수 있는 이슈를 최소화
+        </p>
       </div>
     </ContentSlide>,
 
@@ -608,16 +636,16 @@ const SLIDES: ReactNode[] = [
       key="p4"
       no="04"
       sec="수요모집 정상화 계획"
-      title={<>우선 타겟 <span className="hl">50개사</span> 집중 — 2.1MW 달성 계획</>}
+      title={<>그렇다면 — 태양광 수요는 <span className="hl">어떻게 모집할 것인가</span></>}
       lede={
         <>
-          타겟 선별 · 유관기관 공동 대응 · PMO 관리 체계로 <b>3차년도 목표 2.1MW</b>를 달성하겠습니다.
+          산단 내 우선 접촉과 인근 산단 연계, 주 단위 관리 체계로 <b>3차년도 성과 달성에 집중</b>합니다.
         </>
       }
       fill
     >
       <div className="norm">
-        {/* 좌 — 정상화 계획 3행 (번호 · 아이콘 · 우측 핵심 스탯) */}
+        {/* 좌 — 정상화 계획 4행 */}
         <div className="plan">
           <div className="plan-row">
             <span className="plan-no">01</span>
@@ -625,170 +653,74 @@ const SLIDES: ReactNode[] = [
               <span className="material-symbols-outlined">ads_click</span>
             </span>
             <div className="plan-t">
-              <b>타겟 집중</b>
-              <small>울산미포산단 입주기업 중 지붕면적 · 계약전력 기준으로 우선 타겟을 선별해 집중 공략</small>
-            </div>
-            <div className="plan-meta">
-              <b>50개사</b>
-              <small>우선 타겟</small>
+              <b>산단 내 우선 접촉</b>
+              <small>울산 미포국가산단 소재 기업을 우선 접촉하여 수용가 확보</small>
             </div>
           </div>
           <div className="plan-row">
             <span className="plan-no">02</span>
             <span className="plan-ic">
-              <span className="material-symbols-outlined">handshake</span>
+              <span className="material-symbols-outlined">travel_explore</span>
             </span>
             <div className="plan-t">
-              <b>공동 대응</b>
-              <small>산업단지공단 울산지역본부 · 울산광역시 협력 — 입주기업 합동 사업설명회, 공단 명의 안내 공문 발송</small>
-            </div>
-            <div className="plan-meta">
-              <b>합동 설명회</b>
-              <small>공단 명의 공문</small>
+              <b>인근 산단 연계 검토</b>
+              <small>산단 내부 수용가만으로 목표 달성이 어려울 가능성에 대비 — 필요 시 인근 산단과 연계한 수용가 확보 방안 검토</small>
             </div>
           </div>
           <div className="plan-row">
             <span className="plan-no">03</span>
             <span className="plan-ic">
+              <span className="material-symbols-outlined">handshake</span>
+            </span>
+            <div className="plan-t">
+              <b>공동 대응</b>
+              <small>산업단지공단 울산지역본부 · 울산광역시 협력 — 입주기업 대상 합동 사업설명회 개최</small>
+            </div>
+          </div>
+          <div className="plan-row">
+            <span className="plan-no">04</span>
+            <span className="plan-ic">
               <span className="material-symbols-outlined">fact_check</span>
             </span>
             <div className="plan-t">
-              <b>
-                관리 체계 — 주간 운영 루프
-                <span className="tag blue live">
-                  <i />기 운영 중
-                </span>
-              </b>
+              <b>관리 체계 — 주 단위 점검</b>
               <div className="wflow">
                 <span className="wchip">
-                  <b>실적 취합</b>
-                  <small>컨소시엄 참여사</small>
+                  <b>영업 실적 취합</b>
+                  <small>태양광 수용가 영업</small>
                 </span>
                 <span className="material-symbols-outlined">arrow_forward</span>
                 <span className="wchip">
                   <b>주 단위 점검</b>
-                  <small>PMO 주관</small>
-                </span>
-                <span className="material-symbols-outlined">arrow_forward</span>
-                <span className="wchip">
-                  <b>주간보고</b>
-                  <small>울산지역본부</small>
+                  <small>접촉 업체 수 · 상담 결과 · 전환 가능 물량 정량 파악</small>
                 </span>
                 <span className="material-symbols-outlined">arrow_forward</span>
                 <span className="wchip acc">
-                  <b>점검 결과 반영</b>
-                  <small>타겟 · 대응 보완</small>
+                  <b>결과 반영 — 적극 영업</b>
+                  <small>신규 수용가 물색 · PMO · 참여기관 협업</small>
                 </span>
               </div>
             </div>
           </div>
         </div>
-        {/* 우 — 딥네이비 KPI 카드 (목표 규모 + 마일스톤) */}
+        {/* 우 — 딥네이비 KPI 카드 (잔여 물량 + 마일스톤) */}
         <div className="mcard">
-          <span className="mcard-eyebrow">3rd-Year Target</span>
+          <span className="mcard-eyebrow">Remaining Target</span>
           <div className="mcard-n">
-            2.1<small>MW</small>
+            2.67<small>MW</small>
           </div>
-          <p className="mcard-l">3차년도 전력거래 목표 — 기존 연간 목표의 2.3배 물량</p>
-          <div className="mcard-cmp">
-            <div className="mcard-cmp-row">
-              <i style={{ width: '36%' }} />
-              <span>기존 연간 목표 0.9MW</span>
-            </div>
-            <div className="mcard-cmp-row big">
-              <i style={{ width: '84%' }} />
-              <span>2.1MW</span>
-            </div>
-          </div>
+          <p className="mcard-l">3차년도에 확보할 잔여 전력거래 물량 — 전체 목표 3.0MW 중 구축 0.33MW</p>
           <div className="mcard-hr" />
           <div className="mstep">
-            <b>26년 하반기 — 계약 집중</b>
-            <small>우선 타겟 50개사 · 유관기관 합동 수요모집</small>
+            <b>26년 하반기 — 수용가 확보 및 구축</b>
+            <small>산단 내 우선 접촉 · 인근 산단 연계 · 유관기관 합동 수요모집</small>
           </div>
           <span className="mstep-arr material-symbols-outlined">arrow_downward</span>
           <div className="mstep acc">
-            <b>27년 상반기 — 설치 완료</b>
-            <small>확보 물량 즉시 설치 착수 — 목표 2.1MW 달성</small>
+            <b>3차년도 성과 목표 달성</b>
+            <small>PMO · 태양광 구축 참여기관 협업 — 성과 달성에 집중</small>
           </div>
         </div>
-      </div>
-    </ContentSlide>,
-
-    /* ── 5page : 요약 및 요청사항 ── */
-    <ContentSlide
-      key="p5"
-      no="05"
-      sec="요약 및 요청사항"
-      title={<>핵심 목표 변경 없는 시기 조정 — <span className="hl">사업 안정성 제고</span></>}
-      lede={
-        <>
-          SPC 설립 시기를 <b>4차년도(2027년 상반기)로 조정</b>하는 건으로, 목표 · 총사업비 · 사업기간 등 협약상 핵심
-          목표의 변경은 없습니다.
-        </>
-      }
-      fill
-    >
-      <div className="sum3">
-        <div className="sum">
-          <div className="sum-h">
-            <span className="no">01</span>변경 내용
-          </div>
-          <div className="sum-shift">
-            <span className="sum-chip">3차년도 (2026)</span>
-            <span className="material-symbols-outlined">east</span>
-            <span className="sum-chip acc">4차년도 (2027년 상반기)</span>
-          </div>
-          <div className="sli">
-            <span className="material-symbols-outlined">verified</span>
-            <span>
-              <b>협약 핵심 목표 변경 없음</b> — 설치 목표량 · 총사업비 · 사업기간
-            </span>
-          </div>
-        </div>
-        <div className="sum">
-          <div className="sum-h">
-            <span className="no">02</span>판단
-          </div>
-          <div className="sli bad">
-            <span className="material-symbols-outlined">remove_circle_outline</span>
-            <span>
-              미확보 상태의 조기 설립 — 매출 기반 없는 <b>고정비 지출</b>, 국비 집행 효율 저해
-            </span>
-          </div>
-          <div className="sli">
-            <span className="material-symbols-outlined">check_circle</span>
-            <span>
-              물량 확보 후 설립 — <b>재무 건전성</b> · 실 물량 기준 <b>출자구조 확정</b>으로 안정성 제고
-            </span>
-          </div>
-        </div>
-        <div className="sum">
-          <div className="sum-h">
-            <span className="no">03</span>3차년도 계획
-          </div>
-          <div className="sli">
-            <span className="material-symbols-outlined">ads_click</span>
-            <span>
-              우선 타겟 <b>50개사</b> 집중 공략 · 유관기관 합동 수요모집
-            </span>
-          </div>
-          <div className="sli">
-            <span className="material-symbols-outlined">flag</span>
-            <span>
-              목표 <b>2.1MW</b> — 26년 하반기 계약, 27년 상반기 설치 완료
-            </span>
-          </div>
-        </div>
-      </div>
-      <div className="ans">
-        <span className="material-symbols-outlined">edit_document</span>
-        <span className="ans-t">
-          변경 사업계획서에 <b>4차년도 SPC 설립계획(안)과 지분계획 등 세부내용</b>을 반영하겠습니다
-        </span>
-        <span className="ans-fn">
-          <span className="ans-pill">설립계획(안)</span>
-          <span className="ans-pill">지분계획</span>
-        </span>
       </div>
     </ContentSlide>,
 
