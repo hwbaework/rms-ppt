@@ -218,6 +218,8 @@ const CSS = `
 .wchip.acc{background:var(--tint);border-color:var(--tint-line)}
 .wchip.acc b{color:#1d4ed8}
 .wflow>.material-symbols-outlined{font-size:.92vw;color:#c3ccda;flex-shrink:0}
+/* 루프 종착 강조 — 3차년도 성과 달성 집중 */
+.wgoal{background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:#fff;border-radius:999px;padding:.36vw .95vw;font-size:.76vw;font-weight:800;white-space:nowrap;box-shadow:0 4px 12px rgba(29,78,216,.3);align-self:center}
 /* 우측 — 딥네이비 KPI 카드 (표지 톤과 이어지는 고급 카드) */
 .mcard{position:relative;overflow:hidden;border-radius:18px;background:radial-gradient(120% 140% at 82% -20%,#1d3f7d 0%,#102a58 55%,#0a1732 100%);padding:1.7vw 1.6vw;display:flex;flex-direction:column;justify-content:center;gap:.85vw;box-shadow:0 16px 40px rgba(8,17,32,.3)}
 .mcard:before{content:"";position:absolute;width:15vw;height:15vw;border-radius:50%;right:-5vw;top:-6vw;background:radial-gradient(circle at 35% 32%,rgba(255,255,255,.13),transparent 62%)}
@@ -692,13 +694,15 @@ const SLIDES: ReactNode[] = [
                 <span className="material-symbols-outlined">arrow_forward</span>
                 <span className="wchip">
                   <b>주 단위 점검</b>
-                  <small>접촉 업체 수 · 상담 결과 · 전환 가능 물량 정량 파악</small>
+                  <small>기존 영업활동 범위 · 접촉 업체 수 · 상담 결과 · 전환 가능 물량 정량 파악</small>
                 </span>
                 <span className="material-symbols-outlined">arrow_forward</span>
                 <span className="wchip acc">
-                  <b>결과 반영 — 적극 영업</b>
-                  <small>신규 수용가 물색 · PMO · 참여기관 협업</small>
+                  <b>결과 반영 — 신규 수용가 물색 · 적극 영업</b>
+                  <small>PMO 기관 · 태양광 구축 참여기관 협업 추진</small>
                 </span>
+                <span className="material-symbols-outlined">arrow_forward</span>
+                <span className="wgoal">3차년도 성과 달성에 집중!</span>
               </div>
             </div>
           </div>
