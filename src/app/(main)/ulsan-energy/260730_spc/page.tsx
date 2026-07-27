@@ -357,7 +357,11 @@ const SLIDES: ReactNode[] = [
     /* ── 표지 ── */
     <div className="dark-stage" key="cover">
       <p className="cover-eyebrow">Ulsan-Mipo Energy Independence</p>
-      <h1 className="cover-title">3차년도 사업 변경 신청<br />사전 보고 <span style={{ fontWeight: 300, opacity: 0.85 }}>(태양광 SPC 설립)</span></h1>
+      <h1 className="cover-title">
+        3차년도 사업 변경 신청 사전 보고
+        <br />
+        <span style={{ fontSize: '2.3vw', fontWeight: 300, opacity: 0.85 }}>(태양광 SPC 설립)</span>
+      </h1>
       <p className="cover-sub">
         울산미포 에너지자급자족 인프라 구축 및 운영사업<br />
         태양광 SPC 설립 시기 — 3차년도(2026)에서 4차년도(2027년 상반기)로 조정
@@ -377,8 +381,7 @@ const SLIDES: ReactNode[] = [
       title={<>SPC 설립 시기 — <span className="hl">3차년도에서 4차년도 상반기로</span> 조정</>}
       lede={
         <>
-          통합에너지플랫폼 구축 및 사업관리를 담당하는 <b>RMS</b>입니다. 전력거래용 태양광 발전사업 수행을 위한{' '}
-          <b>SPC 설립 시기 변경 신청 건</b>을 보고드립니다.
+          태양광 SPC 설립 시기를 <b>3차년도(2026년)에서 4차년도(2027년 상반기)로 조정</b>하고자 합니다.
         </>
       }
       fill
@@ -406,7 +409,6 @@ const SLIDES: ReactNode[] = [
         </div>
         <div className="shift-mid">
           <span className="material-symbols-outlined">east</span>
-          <b>변경 신청</b>
         </div>
         <div className="shift-card now">
           <span className="shift-tag">변경 후</span>
