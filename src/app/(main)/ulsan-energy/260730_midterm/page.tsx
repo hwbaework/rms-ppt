@@ -128,8 +128,8 @@ const CSS = `
 .g-mark{position:absolute;top:-.55vw;transform:translateX(-50%);z-index:4;background:#ef4444;color:#fff;font-size:.58vw;font-weight:800;border-radius:999px;padding:.08vw .5vw;border:1.5px solid #fff;box-shadow:0 2px 8px rgba(239,68,68,.45);white-space:nowrap}
 .g-mark:after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:.22vw solid transparent;border-top-color:#ef4444}
 .g-dots{position:absolute;top:50%;border-top:2px dotted #b6c2d6;z-index:1}
-/* 계약 체결 — 회색 아닌 컬러 칩 (원본은 본 막대와 같은 톤) */
-.g-cross{position:absolute;top:4%;bottom:4%;border-radius:6px;background:linear-gradient(90deg,#1d4ed8,#3b82f6);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.66vw;font-weight:800;z-index:2;box-shadow:0 2px 8px rgba(29,78,216,.3)}
+/* 계약 체결 — 중요도 낮음: 티 안 나는 옅은 톤 (구축 막대가 주인공) */
+.g-cross{position:absolute;top:4%;bottom:4%;border-radius:6px;background:#e7eef9;color:#64748b;display:flex;align-items:center;justify-content:center;font-size:.66vw;font-weight:700;z-index:2}
 .g-now{position:absolute;top:-.35vw;bottom:-.1vw;width:0;border-left:2px dashed #f59e0b;z-index:3;left:63.5%}
 .g-now:after{content:"현재";position:absolute;bottom:-1.3vw;left:50%;transform:translateX(-50%);background:#f59e0b;color:#fff;font-size:.62vw;font-weight:800;border-radius:999px;padding:.08vw .55vw;white-space:nowrap}
 .g-legend{display:flex;gap:1vw;justify-content:flex-end;margin-top:.9vw}
@@ -180,7 +180,11 @@ const CSS = `
 .kg-bar.wip{background:repeating-linear-gradient(-45deg,#cfdff9 0 .5vw,#e9f1fd .5vw 1vw);background-size:1.42vw 100%;animation:crawl 1.1s linear infinite}
 @keyframes crawl{to{background-position:1.42vw 0}}
 .kg-note{color:var(--muted);font-size:.66vw;line-height:1.5}
-.srcline{color:var(--muted);font-size:.7vw;line-height:1.6}
+/* 상태 칩 — 달성(파랑 채움) / 추진 중(틴트) — 좌측 경과 행과 톤 통일 */
+.kg-chip{align-self:flex-start;border-radius:999px;padding:.12vw .6vw;font-size:.62vw;font-weight:800;margin-top:.08vw;white-space:nowrap}
+.kg-chip.done{background:var(--accent);color:#fff}
+.kg-chip.ing{background:var(--tint);border:1px solid var(--tint-line);color:#1d4ed8}
+.kg.dim .kg-head b{color:var(--muted)}
 
 /* ── 3차년도 성과지표 표 (1) · 5) · 10) 만) ── */
 .tblwrap{flex:1;min-height:0;border:1px solid var(--hair);border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 6px 20px rgba(11,21,38,.04)}
@@ -381,16 +385,19 @@ function Gauge({
   s,
   pct,
   val,
-  note,
+  chip,
+  chipKind,
   wip,
 }: {
   b: string
   s: string
   pct?: number
   val?: string
-  note?: string
-  /** 유찰 등 — 수치 주장 없이 '재추진 준비 중' 스트라이프 */
-  wip?: string
+  /** 상태 칩 — 달성(done, 파랑 채움) / 추진 중(ing, 틴트) */
+  chip?: string
+  chipKind?: 'done' | 'ing'
+  /** 유찰 등 — 수치 주장 없이 스트라이프 */
+  wip?: boolean
 }) {
   const full = pct === 100
   return (
@@ -400,34 +407,46 @@ function Gauge({
           {b}
           <small>{s}</small>
         </b>
-        {wip ? <span className="kg-val" style={{ color: 'var(--muted)' }}>{wip}</span> : <span className={`kg-val${full ? ' full' : ''}`}>{val}</span>}
+        {val && <span className={`kg-val${full ? ' full' : ''}`}>{val}</span>}
       </div>
       <div className={`kg-bar${wip ? ' wip' : ''}`}>
         {!wip && <span className={`kg-fill${full ? ' full' : ''}`} style={{ width: `${pct}%` }} />}
       </div>
-      {note && <div className="kg-note">{note}</div>}
+      {chip && <span className={`kg-chip ${chipKind ?? 'ing'}`}>{chip}</span>}
     </div>
   )
 }
 
-/* ── 3차년도 추진현황 — 좌 카드 5개가 우측 순환 사진과 동기 하이라이트 (demo-v2 방식) ── */
-// files: 항목당 여러 장 가능 — 전부 순환하고, 보이는 사진의 카드가 하이라이트된다
-const SHOW_ITEMS = [
+/* ── 3차년도 추진현황 — 좌 카드 5개, 우측 사진은 클릭으로 전환 (demo-v2 레이아웃) ── */
+// files: 항목당 여러 장 가능 — 카드 클릭 시 해당 항목, 사진/도트 클릭 시 다음 장
+const SHOW_ITEMS: {
+  ic: string
+  t: string
+  s: ReactNode
+  files: string[]
+  suggest: string
+}[] = [
   {
     ic: 'bolt',
     t: '연료전지 발전',
-    s: 'RPS형 1호 상업운전 개시(’26.04) · REC 발급 — CHPS형 3호 8월 시운전, 12월 상업운전 예정',
-    tag: '상업운전 · 건설 중',
-    tone: 'blue' as const,
+    s: (
+      <>
+        RPS형(울산하이드로젠파워 1호) <b>19.8MW 상업운전</b>
+        <br />
+        CHPS형(울산하이드로젠파워 3호) <b>19.8MW 건설 중</b>
+      </>
+    ),
     files: ['fuelcell.png'],
     suggest: '연료전지동 전경 · 설비 사진',
   },
   {
     ic: 'solar_power',
     t: '태양광 발전',
-    s: '0.91MW 구축 완료 · 운영 — 잔여 2.99MW 확보 위한 신규 수요기업 발굴 · 사업성 검토',
-    tag: '수용가 발굴 중',
-    tone: 'blue' as const,
+    s: (
+      <>
+        자가소비형 이월 <b>0.32MW</b> · 전력거래형 <b>2.67MW</b>(이월 0.57 포함) — 신규 수요기업 발굴로 구축 추진
+      </>
+    ),
     files: ['solar-01.png', 'solar-02.png'],
     suggest: '수용가 지붕 태양광 설치 현장',
   },
@@ -435,8 +454,6 @@ const SHOW_ITEMS = [
     ic: 'device_thermostat',
     t: 'ORC 발전',
     s: '모듈 운송 · 토목 · 철골 · Dry Cooler 설치 완료, 배관 자재 입고 중 — 1MW 상업운전 후 1.8MW 구축',
-    tag: '구축 중',
-    tone: 'blue' as const,
     files: ['orc-01.png', 'orc-02.jpg'],
     suggest: 'ORC 발전시설 공사 현장',
   },
@@ -444,8 +461,6 @@ const SHOW_ITEMS = [
     ic: 'monitoring',
     t: '통합에너지관리 시스템',
     s: '페르소나별 화면 기획 · 구성 — RE100 이행관리 · ESG 성과관리 등 주요 기능 기획 및 개발',
-    tag: '개발 추진 중',
-    tone: 'blue' as const,
     files: ['platform-01.png', 'platform-02.png'],
     suggest: 'ESG 에너지 플랫폼 화면 캡처',
   },
@@ -453,8 +468,6 @@ const SHOW_ITEMS = [
     ic: 'ev_station',
     t: 'V2G · ESS 분산에너지 실증',
     s: '장비심의 완료(’26.07) · 조달공고 — 10~11월 V2G 6기 · ESS 설치, 12월 실증운영 개시',
-    tag: '발주 추진',
-    tone: 'amber' as const,
     files: ['v2g.png'],
     suggest: '통합안전관리센터 설치 예정지',
   },
@@ -468,10 +481,7 @@ const FRAMES = SHOW_ITEMS.flatMap((it, item) =>
 function Showcase() {
   const [i, setI] = useState(0)
   const [failed, setFailed] = useState<Record<number, boolean>>({})
-  useEffect(() => {
-    const t = setInterval(() => setI((v) => (v + 1) % FRAMES.length), 4000)
-    return () => clearInterval(t)
-  }, [])
+  // 자동 순환 없음 — 카드 클릭 시 해당 항목, 사진/도트 클릭 시 다음 장
   // 하이드레이션 전 404는 img onError를 놓치므로 클라이언트 프리로드로 확인 (demo-v2 방식)
   useEffect(() => {
     FRAMES.forEach((fr, idx) => {
@@ -485,7 +495,12 @@ function Showcase() {
     <div className="feat">
       <div className="lk-cards">
         {SHOW_ITEMS.map((it, idx) => (
-          <div className={`lk-card${idx === FRAMES[i].item ? ' on' : ''}`} key={it.t}>
+          <div
+            className={`lk-card${idx === FRAMES[i].item ? ' on' : ''}`}
+            key={it.t}
+            onClick={() => setI(FRAMES.findIndex((fr) => fr.item === idx))}
+            style={{ cursor: 'pointer' }}
+          >
             <span className="lk-ic">
               <span className="material-symbols-outlined">{it.ic}</span>
             </span>
@@ -493,14 +508,10 @@ function Showcase() {
               <b>{it.t}</b>
               <small>{it.s}</small>
             </span>
-            <span className={`tag ${it.tone} live`}>
-              <i />
-              {it.tag}
-            </span>
           </div>
         ))}
       </div>
-      <div className="shot">
+      <div className="shot" onClick={() => setI((v) => (v + 1) % FRAMES.length)} style={{ cursor: 'pointer' }}>
         {FRAMES.map((fr, idx) =>
           failed[idx] ? (
             <div key={fr.file} className={`shot-ph${idx === i ? ' on' : ''}`}>
@@ -520,11 +531,18 @@ function Showcase() {
         )}
         <div className="shot-cap">
           <b>{cur.t}</b>
-          <small>{cur.tag}</small>
         </div>
         <div className="shot-dots">
           {FRAMES.map((_, idx) => (
-            <i key={idx} className={idx === i ? 'on' : ''} />
+            <i
+              key={idx}
+              className={idx === i ? 'on' : ''}
+              onClick={(e) => {
+                e.stopPropagation()
+                setI(idx)
+              }}
+              style={{ cursor: 'pointer' }}
+            />
           ))}
         </div>
       </div>
@@ -663,7 +681,7 @@ const SLIDES: ReactNode[] = [
             b="태양광 발전"
             s="자가소비형 · 전력거래형"
             segs={[
-              { l: 14, w: 21.5, t: '대상지 선정 & 설계', tone: 'plan' },
+              { l: 0, w: 35.5, t: '대상지 선정 & 설계', tone: 'plan' },
               { l: 35.5, w: 7.2, t: '구축(1차)', tone: 'build' },
               { l: 47.5, w: 19.1, t: '구축(2차모집대상)', tone: 'build' },
               { l: 66.6, w: 33.4, t: '운영', tone: 'run' },
@@ -678,7 +696,7 @@ const SLIDES: ReactNode[] = [
           <GanttItem
             b="ESG 에너지 플랫폼"
             segs={[
-              { l: 14, w: 19.1, t: '분석 & 설계', tone: 'plan' },
+              { l: 0, w: 33.1, t: '분석 & 설계', tone: 'plan' },
               { l: 33.1, w: 23.9, t: '구축(개발)', tone: 'build' },
               { l: 57, w: 43, t: '운영 및 고도화', tone: 'run' },
             ]}
@@ -692,7 +710,7 @@ const SLIDES: ReactNode[] = [
             b="ORC 발전"
             s="연료전지 발전배열 활용"
             segs={[
-              { l: 14, w: 28.7, t: '제조사 선정 & 발주 및 제작', tone: 'plan' },
+              { l: 0, w: 42.7, t: '제조사 선정 & 발주 및 제작', tone: 'plan' },
               { l: 42.7, w: 23.9, t: '구축 및 시운전', tone: 'build' },
               { l: 66.6, w: 33.4, t: '상업운전', tone: 'run' },
             ]}
@@ -702,7 +720,7 @@ const SLIDES: ReactNode[] = [
             b="양방향 EV충전"
             s="V2G · ESS"
             segs={[
-              { l: 14, w: 9.6, t: '분석 & 검토', tone: 'plan' },
+              { l: 0, w: 23.6, t: '분석 & 검토', tone: 'plan' },
               { l: 23.6, w: 9.5, t: '설계', tone: 'plan' },
               { l: 33.1, w: 35.9, t: '구축', tone: 'build' },
               { l: 69, w: 31, t: '운영', tone: 'run' },
@@ -710,20 +728,6 @@ const SLIDES: ReactNode[] = [
             ]}
           />
         </div>
-      </div>
-      <div className="g-legend">
-        <span>
-          <i className="plan" />
-          분석 · 설계 · 계약
-        </span>
-        <span>
-          <i className="build" />
-          구축 · 시운전
-        </span>
-        <span>
-          <i className="run" />
-          운영 · 상업운전
-        </span>
       </div>
     </div>
   </ContentSlide>,
@@ -799,21 +803,51 @@ const SLIDES: ReactNode[] = [
             <b>CHPS</b> — 19.8MW 착공
           </div>
         </div>
-        <ExpRow
-          cat="신재생에너지 인프라"
-          name="태양광 발전"
-          sub="에스에너지"
-          steps={[
-            { m: '’25.06', t: '5개 업체 계약 완료' },
-            { m: '’25.10', t: '현장검토 · 설계 완료 (총 0.91MW)' },
-            { m: '’25.11', t: '착공 — 연내 구축 완료' },
-          ]}
-          note={
-            <>
-              <b>0.91MW</b> 구축 — 자가소비 5개 · 자가소비+PPA형 1개 업체
-            </>
-          }
-        />
+        {/* 태양광 — 우측 지표(자가소비/전력거래)와 좌우 범위가 맞도록 유형 분리 */}
+        <div className="exp-r" style={{ flex: 1.55 }}>
+          <div className="exp-name">
+            <span className="exp-cat">신재생에너지 인프라</span>
+            <b>태양광 발전</b>
+            <small>에스에너지</small>
+          </div>
+          <div className="ms-subwrap">
+            <div className="ms-sub">
+              <span className="ms-type">자가소비</span>
+              <div className="ms">
+                <div className="ms-i">
+                  <b>’25.06</b>
+                  <span>5개 업체 계약 완료</span>
+                </div>
+                <div className="ms-i">
+                  <b>’25.10</b>
+                  <span>현장검토 · 설계 완료</span>
+                </div>
+                <div className="ms-i">
+                  <b>’25.11</b>
+                  <span>착공 — 연내 구축</span>
+                </div>
+              </div>
+            </div>
+            <div className="ms-sub">
+              <span className="ms-type">전력거래</span>
+              <div className="ms">
+                <div className="ms-i">
+                  <b>’25.06</b>
+                  <span>자가소비+PPA형 1개 업체 계약</span>
+                </div>
+                <div className="ms-i">
+                  <b>’25.11</b>
+                  <span>착공 — 연내 구축</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="exp-note">
+            <b>자가소비</b> — 0.58MW 구축
+            <br />
+            <b>전력거래</b> — 0.33MW 구축
+          </div>
+        </div>
         <ExpRow
           cat="통합 에너지관리 시스템"
           name="ESG 에너지 플랫폼"
@@ -868,34 +902,46 @@ const SLIDES: ReactNode[] = [
         />
       </div>
 
-      {/* 우 1/3 — 원본 8p 성과지표 달성률 */}
+      {/* 우 1/3 — 원본 8p 성과지표 달성률 (좌측 행 순서와 동일하게 정렬) */}
       <div className="kpanel">
         <div className="block-label">
           <b>성과지표 검토 (2차년도)</b>
         </div>
-        <Gauge b="연료전지발전" s="롯데SK에너루트" pct={100} val="19.8 / 19.8 MW · 100%" />
+        <Gauge b="연료전지발전" s="롯데SK에너루트" pct={100} val="19.8 / 19.8 MW" chip="달성 100%" chipKind="done" />
         <Gauge
           b="태양광 · 자가소비형"
           s="에스에너지"
           pct={64}
-          val="0.58 / 0.9 MW · 64%"
-          note="목표 이월 — 수용가 발굴 추진"
+          val="0.58 / 0.9 MW"
+          chip="이월 목표 0.32MW 추진 중"
+          chipKind="ing"
         />
         <Gauge
           b="태양광 · 전력거래형"
           s="에스에너지"
           pct={37}
-          val="0.33 / 0.9 MW · 37%"
-          note="목표 이월 — 수용가 발굴 추진"
+          val="0.33 / 0.9 MW"
+          chip="이월 목표 0.57MW 추진 중"
+          chipKind="ing"
         />
-        <Gauge b="ESG 에너지 플랫폼 구축률" s="알엠에쓰플렛폼" pct={100} val="35 / 35% · 100%" />
+        <Gauge b="ESG 에너지 플랫폼 구축률" s="알엠에쓰플렛폼" pct={100} val="35 / 35%" chip="달성 100%" chipKind="done" />
+        <div className="kg dim">
+          <div className="kg-head">
+            <b>
+              연료전지 발전배열 (ORC)
+              <small>울산미포ORC발전</small>
+            </b>
+            <span className="kg-val" style={{ color: 'var(--muted)' }}>–</span>
+          </div>
+          <div className="kg-note">2차년도 목표 없음 — 3차년도 1.8MW 구축 목표</div>
+        </div>
         <Gauge
           b="양방향 EV 충전기"
           s="울산테크노파크"
-          wip="’26년 재추진"
-          note="유찰에 따른 목표 이월(4대) — 재추진 준비 중"
+          wip
+          chip="이월 목표 4대 — ’26년 재추진 중"
+          chipKind="ing"
         />
-        <p className="srcline">실적 ’25.12 기준 · 이월 지표는 3차년도 목표와 연계 달성</p>
       </div>
     </div>
   </ContentSlide>,
@@ -939,7 +985,7 @@ const SLIDES: ReactNode[] = [
             <th className="c">단위</th>
             <th className="c">이월 목표</th>
             <th className="c">3차년도 목표</th>
-            <th>비고 (성과 범위)</th>
+            <th>비고</th>
           </tr>
         </thead>
         <tbody>
@@ -1030,7 +1076,7 @@ const SLIDES: ReactNode[] = [
     sec="3차년도 추진현황"
     title={
       <>
-        3차년도 추진현황 — 5개 인프라 <span className="hl">구축 · 운영 진행 중</span>
+        3차년도 추진현황 — 인프라 <span className="hl">구축 · 운영 진행 중</span>
       </>
     }
     lede={

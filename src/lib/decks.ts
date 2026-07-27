@@ -19,7 +19,7 @@ export const decks: DeckMeta[] = [
     date: '2026-07-30',
     title: '3차년도 중간점검 보고',
     href: '/ulsan-energy/260730_midterm',
-    description: '추진일정 · 2차년도 성과와 지표 · 3차년도 지표 · 5개 인프라 추진현황(사진)',
+    description: '추진일정 · 2차년도 성과와 지표 · 3차년도 지표 · 인프라 추진현황(사진)',
     tags: ['중간점검', '성과지표', '인프라'],
   },
   {
