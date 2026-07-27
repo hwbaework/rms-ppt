@@ -115,9 +115,10 @@ const CSS = `
 .g-flex1{flex:1;min-width:0}
 .g-stack{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;gap:.26vw}
 /* 트랙 배경 없음 — 원본처럼 흰 바탕 위 컬러 막대만. 연차 경계는 g-vline(세로 헤어라인) */
-.g-track{position:relative;height:1.58vw}
+/* 세로 여백이 남으므로 막대를 굵게 — 가독성 */
+.g-track{position:relative;height:2.05vw}
 .g-vline{position:absolute;top:-.3vw;bottom:0;width:0;border-left:1px solid var(--hair);z-index:0}
-.g-seg{position:absolute;top:0;bottom:0;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.63vw;font-weight:700;white-space:nowrap;overflow:hidden;padding:0 .35vw;letter-spacing:-.01em}
+.g-seg{position:absolute;top:0;bottom:0;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.7vw;font-weight:700;white-space:nowrap;overflow:hidden;padding:0 .35vw;letter-spacing:-.01em}
 .g-seg.plan{background:#dbe7f8;color:#2c4f96}
 .g-seg.build{background:linear-gradient(90deg,#1d4ed8,#3b82f6);color:#fff}
 .g-seg.run{background:#0f2a5f;color:#cfe0fb}
@@ -129,7 +130,7 @@ const CSS = `
 .g-mark:after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:.22vw solid transparent;border-top-color:#ef4444}
 .g-dots{position:absolute;top:50%;border-top:2px dotted #b6c2d6;z-index:1}
 /* 계약 체결 — 중요도 낮음: 티 안 나는 옅은 톤 (구축 막대가 주인공) */
-.g-cross{position:absolute;top:4%;bottom:4%;border-radius:6px;background:#e7eef9;color:#64748b;display:flex;align-items:center;justify-content:center;font-size:.66vw;font-weight:700;z-index:2}
+.g-cross{position:absolute;top:4%;bottom:4%;border-radius:6px;background:#e7eef9;color:#64748b;display:flex;align-items:center;justify-content:center;font-size:.7vw;font-weight:700;z-index:2}
 .g-now{position:absolute;top:-.35vw;bottom:-.1vw;width:0;border-left:2px dashed #f59e0b;z-index:3;left:63.5%}
 .g-now:after{content:"현재";position:absolute;bottom:-1.3vw;left:50%;transform:translateX(-50%);background:#f59e0b;color:#fff;font-size:.62vw;font-weight:800;border-radius:999px;padding:.08vw .55vw;white-space:nowrap}
 .g-legend{display:flex;gap:1vw;justify-content:flex-end;margin-top:.9vw}
@@ -166,7 +167,8 @@ const CSS = `
 
 /* 우측 — 성과지표 게이지 패널: 행 높이 비율을 좌측(.exp-r)과 동일하게 맞춰 가로줄 정렬 */
 .kpanel{border:1px solid var(--hair);border-radius:14px;background:#f7f9fc;padding:.2vw 1.15vw .4vw;display:flex;flex-direction:column}
-.kpanel .block-label{margin-bottom:0;padding:.5vw 0 .35vw}
+/* 패널 헤더 — 좌측 표 헤더 행(.exp-r.hd)과 같은 규격(같은 높이)으로 가로줄 일치 */
+.kp-hd{padding:.5vw 0 .3vw;font-size:.64vw;color:var(--muted);font-weight:800;letter-spacing:.1em}
 .krow{display:flex;flex-direction:column;justify-content:center;gap:.55vw;border-top:1px solid var(--hair);min-height:0;padding:.35vw 0;flex:1}
 .kg{display:flex;flex-direction:column;gap:.3vw}
 .kg-head{display:flex;justify-content:space-between;align-items:baseline;gap:.6vw}
@@ -179,6 +181,8 @@ const CSS = `
 .kg-fill{position:absolute;top:0;bottom:0;left:0;border-radius:6px;background:linear-gradient(90deg,#1d4ed8,#3b82f6)}
 .kg-fill.full{background:linear-gradient(90deg,#1d4ed8,#3b82f6)}
 .kg-bar.wip{background:repeating-linear-gradient(-45deg,#cfdff9 0 .5vw,#e9f1fd .5vw 1vw);background-size:1.42vw 100%;animation:crawl 1.1s linear infinite}
+/* 미달(이월 추진 중) 잔여분 — 아래 EV 행과 같은 스트라이프로 칠한다 */
+.kg-rest{position:absolute;top:0;bottom:0;right:0;background:repeating-linear-gradient(-45deg,#cfdff9 0 .5vw,#e9f1fd .5vw 1vw);background-size:1.42vw 100%;animation:crawl 1.1s linear infinite}
 @keyframes crawl{to{background-position:1.42vw 0}}
 .kg-note{color:var(--muted);font-size:.66vw;line-height:1.5}
 /* 상태 칩 — 달성(파랑 채움) / 추진 중(틴트) — 좌측 경과 행과 톤 통일 */
@@ -393,6 +397,7 @@ function Gauge({
   chip,
   chipKind,
   wip,
+  restWip,
 }: {
   b: string
   s: string
@@ -403,6 +408,8 @@ function Gauge({
   chipKind?: 'done' | 'ing'
   /** 유찰 등 — 수치 주장 없이 스트라이프 */
   wip?: boolean
+  /** 미달 잔여분을 추진 중 스트라이프로 칠한다 (이월 목표) */
+  restWip?: boolean
 }) {
   const full = pct === 100
   return (
@@ -415,6 +422,7 @@ function Gauge({
         {val && <span className={`kg-val${full ? ' full' : ''}`}>{val}</span>}
       </div>
       <div className={`kg-bar${wip ? ' wip' : ''}`}>
+        {!wip && restWip && <span className="kg-rest" style={{ left: `${pct}%` }} />}
         {!wip && <span className={`kg-fill${full ? ' full' : ''}`} style={{ width: `${pct}%` }} />}
       </div>
       {chip && <span className={`kg-chip ${chipKind ?? 'ing'}`}>{chip}</span>}
@@ -688,8 +696,8 @@ const SLIDES: ReactNode[] = [
             segs={[
               { l: 0, w: 35.5, t: '대상지 선정 & 설계', tone: 'plan' },
               { l: 35.5, w: 7.2, t: '구축(1차)', tone: 'build' },
-              { l: 47.5, w: 19.1, t: '구축(2차모집대상)', tone: 'build' },
-              { l: 66.6, w: 33.4, t: '운영', tone: 'run' },
+              { l: 42.7, w: 57.3, t: '운영', tone: 'run' },
+              { l: 47.5, w: 19.1, t: '구축(2차모집대상)', tone: 'float' },
               { l: 74, w: 16, t: '구축(3차모집대상)', tone: 'float' },
             ]}
           />
@@ -702,8 +710,8 @@ const SLIDES: ReactNode[] = [
             b="ESG 에너지 플랫폼"
             segs={[
               { l: 0, w: 33.1, t: '분석 & 설계', tone: 'plan' },
-              { l: 33.1, w: 23.9, t: '구축(개발)', tone: 'build' },
-              { l: 57, w: 43, t: '운영 및 고도화', tone: 'run' },
+              { l: 33.1, w: 38.2, t: '구축(개발)', tone: 'build' },
+              { l: 71.3, w: 28.7, t: '운영 및 고도화', tone: 'run' },
             ]}
           />
         </div>
@@ -727,9 +735,9 @@ const SLIDES: ReactNode[] = [
             segs={[
               { l: 0, w: 23.6, t: '분석 & 검토', tone: 'plan' },
               { l: 23.6, w: 9.5, t: '설계', tone: 'plan' },
-              { l: 33.1, w: 35.9, t: '구축', tone: 'build' },
-              { l: 69, w: 31, t: '운영', tone: 'run' },
-              { l: 73, w: 13, t: '구축(증설)', tone: 'float' },
+              { l: 33.1, w: 14.4, t: '구축', tone: 'build' },
+              { l: 47.5, w: 52.5, t: '운영', tone: 'run' },
+              { l: 62, w: 15, t: '구축(증설)', tone: 'float' },
             ]}
           />
         </div>
@@ -809,7 +817,7 @@ const SLIDES: ReactNode[] = [
           </div>
         </div>
         {/* 태양광 — 우측 지표(자가소비/전력거래)와 좌우 범위가 맞도록 유형 분리 */}
-        <div className="exp-r" style={{ flex: 1.55 }}>
+        <div className="exp-r" style={{ flex: 1.85 }}>
           <div className="exp-name">
             <span className="exp-cat">신재생에너지 인프라</span>
             <b>태양광 발전</b>
@@ -874,6 +882,7 @@ const SLIDES: ReactNode[] = [
           }
         />
         <ExpRow
+          grow={0.85}
           cat="탄소저감 지원"
           name="ORC 발전시설"
           sub="울산미포ORC발전"
@@ -890,6 +899,7 @@ const SLIDES: ReactNode[] = [
           }
         />
         <ExpRow
+          grow={0.85}
           cat="탄소저감 지원"
           name="양방향 EV충전"
           sub="울산테크노파크"
@@ -909,18 +919,17 @@ const SLIDES: ReactNode[] = [
 
       {/* 우 1/3 — 원본 8p 성과지표 달성률: 행 높이 비율을 좌측과 동일하게(가로줄 정렬) */}
       <div className="kpanel">
-        <div className="block-label">
-          <b>성과지표 검토 (2차년도)</b>
-        </div>
+        <div className="kp-hd">성과지표 검토 (2차년도)</div>
         <div className="krow" style={{ flex: 1.55 }}>
           <Gauge b="연료전지발전" s="롯데SK에너루트" pct={100} val="19.8 / 19.8 MW" chip="달성 100%" chipKind="done" />
         </div>
-        <div className="krow" style={{ flex: 1.55 }}>
+        <div className="krow" style={{ flex: 1.85 }}>
           <Gauge
             b="태양광 · 자가소비형"
             s="에스에너지"
             pct={64}
             val="0.58 / 0.9 MW"
+            restWip
             chip="이월 목표 0.32MW 추진 중"
             chipKind="ing"
           />
@@ -929,6 +938,7 @@ const SLIDES: ReactNode[] = [
             s="에스에너지"
             pct={37}
             val="0.33 / 0.9 MW"
+            restWip
             chip="이월 목표 0.57MW 추진 중"
             chipKind="ing"
           />
@@ -936,7 +946,7 @@ const SLIDES: ReactNode[] = [
         <div className="krow" style={{ flex: 1.45 }}>
           <Gauge b="ESG 에너지 플랫폼 구축률" s="알엠에쓰플렛폼" pct={100} val="35 / 35%" chip="달성 100%" chipKind="done" />
         </div>
-        <div className="krow">
+        <div className="krow" style={{ flex: 0.85 }}>
           <div className="kg dim">
             <div className="kg-head">
               <b>
@@ -948,7 +958,7 @@ const SLIDES: ReactNode[] = [
             <div className="kg-note">2차년도 목표 없음 — 3차년도 1.8MW 구축 목표</div>
           </div>
         </div>
-        <div className="krow">
+        <div className="krow" style={{ flex: 0.85 }}>
           <Gauge
             b="양방향 EV 충전기"
             s="울산테크노파크"
