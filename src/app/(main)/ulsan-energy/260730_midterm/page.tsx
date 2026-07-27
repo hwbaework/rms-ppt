@@ -103,7 +103,8 @@ const CSS = `
 /* ── 간트 — 좌측 라벨 + 등분 연차 축(1~4차년도 각 25%) — 원본 4p 구조 ── */
 .gantt{flex:1;min-height:0;display:flex;flex-direction:column;gap:.4vw}
 .g-bodywrap{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-between;gap:.45vw}
-.g-curband{position:absolute;top:-.3vw;bottom:-.3vw;left:calc(11.1vw + (100% - 11.1vw)*.5);width:calc((100% - 11.1vw)*.25);background:rgba(37,99,235,.05);border-radius:10px;pointer-events:none}
+/* 연차 경계·현재선·밴드는 위 로드맵 카드 경계에서 수직으로 내린 위치(콘텐츠 폭 기준 %) */
+.g-curband{position:absolute;top:-.3vw;bottom:-.3vw;left:50%;width:25%;background:rgba(37,99,235,.05);border-radius:10px;pointer-events:none}
 .g-grp-t{display:flex;align-items:center;gap:.7vw;margin-bottom:.15vw;position:relative}
 .g-grp-t b{color:#1d4ed8;font-size:.74vw;font-weight:800;white-space:nowrap;background:var(--tint);border:1px solid var(--tint-line);border-radius:999px;padding:.08vw .7vw}
 .g-grp-t:after{content:"";flex:1;height:1px;background:var(--hair)}
@@ -129,7 +130,7 @@ const CSS = `
 .g-dots{position:absolute;top:50%;border-top:2px dotted #b6c2d6;z-index:1}
 /* 계약 체결 — 회색 아닌 컬러 칩 (원본은 본 막대와 같은 톤) */
 .g-cross{position:absolute;top:4%;bottom:4%;border-radius:6px;background:linear-gradient(90deg,#1d4ed8,#3b82f6);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.66vw;font-weight:800;z-index:2;box-shadow:0 2px 8px rgba(29,78,216,.3)}
-.g-now{position:absolute;top:-.35vw;bottom:-.1vw;width:0;border-left:2px dashed #f59e0b;z-index:3;left:calc(11.1vw + (100% - 11.1vw)*.635)}
+.g-now{position:absolute;top:-.35vw;bottom:-.1vw;width:0;border-left:2px dashed #f59e0b;z-index:3;left:63.5%}
 .g-now:after{content:"현재";position:absolute;bottom:-1.3vw;left:50%;transform:translateX(-50%);background:#f59e0b;color:#fff;font-size:.62vw;font-weight:800;border-radius:999px;padding:.08vw .55vw;white-space:nowrap}
 .g-legend{display:flex;gap:1vw;justify-content:flex-end;margin-top:.9vw}
 .g-legend span{display:inline-flex;align-items:center;gap:.4vw;color:var(--muted);font-size:.68vw;font-weight:600}
@@ -622,9 +623,9 @@ const SLIDES: ReactNode[] = [
     <div className="gantt">
       <div className="g-bodywrap">
         <span className="g-curband" />
-        <span className="g-vline" style={{ left: 'calc(11.1vw + (100% - 11.1vw)*.25)' }} />
-        <span className="g-vline" style={{ left: 'calc(11.1vw + (100% - 11.1vw)*.5)' }} />
-        <span className="g-vline" style={{ left: 'calc(11.1vw + (100% - 11.1vw)*.75)' }} />
+        <span className="g-vline" style={{ left: '25%' }} />
+        <span className="g-vline" style={{ left: '50%' }} />
+        <span className="g-vline" style={{ left: '75%' }} />
         <span className="g-now" />
         <div>
           <div className="g-grp-t">
@@ -637,40 +638,37 @@ const SLIDES: ReactNode[] = [
               <small>울산하이드로젠파워 1호 · 3호</small>
             </div>
             <div className="g-stack">
-              <span className="g-dots" style={{ left: '0%', width: '4%' }} />
-              <span className="g-cross" style={{ left: '5%', width: '15%' }}>
+              {/* 계약 체결 — 시작점은 다른 행과 동일(0), 1차년도 경계선(트랙 14%)에서 끝 */}
+              <span className="g-cross" style={{ left: '0%', width: '14%' }}>
                 계약 체결
               </span>
               <Track
                 segs={[
-                  { l: 25, w: 4.2, t: 'RPS', tone: 'type' },
-                  { l: 29.4, w: 27.9, t: '설치 및 시운전', tone: 'build' },
-                  { l: 57.3, w: 42.7, t: '상업운전', tone: 'run' },
+                  { l: 14.5, w: 4, t: 'RPS', tone: 'type' },
+                  { l: 18.7, w: 32.4, t: '설치 및 시운전', tone: 'build' },
+                  { l: 51.1, w: 48.9, t: '상업운전', tone: 'run' },
                 ]}
-                marks={[57.3]}
               />
               <Track
                 segs={[
-                  { l: 37, w: 4.5, t: 'CHPS', tone: 'type' },
-                  { l: 41.7, w: 31.3, t: '설치 및 시운전', tone: 'build' },
-                  { l: 73, w: 27, t: '상업운전', tone: 'run' },
+                  { l: 14.5, w: 4.5, t: 'CHPS', tone: 'type' },
+                  { l: 19.2, w: 49.8, t: '설치 및 시운전', tone: 'build' },
+                  { l: 69, w: 31, t: '상업운전', tone: 'run' },
                 ]}
-                marks={[73]}
               />
             </div>
           </div>
-          {/* 태양광 — 운영 막대 배경 + 구축(3차모집대상) 겹침 (원본 방식) */}
+          {/* 태양광 — 첫 막대는 시작점(0)부터 · 운영 배경 + 구축(3차모집대상) 겹침 */}
           <GanttItem
             b="태양광 발전"
             s="자가소비형 · 전력거래형"
             segs={[
-              { l: 25, w: 18.8, t: '대상지 선정 & 설계', tone: 'plan' },
-              { l: 43.8, w: 6.2, t: '구축(1차)', tone: 'build' },
-              { l: 54.2, w: 16.6, t: '구축(2차모집대상)', tone: 'build' },
-              { l: 70.8, w: 29.2, t: '운영', tone: 'run' },
-              { l: 77, w: 15, t: '구축(3차모집대상)', tone: 'float' },
+              { l: 14, w: 21.5, t: '대상지 선정 & 설계', tone: 'plan' },
+              { l: 35.5, w: 7.2, t: '구축(1차)', tone: 'build' },
+              { l: 47.5, w: 19.1, t: '구축(2차모집대상)', tone: 'build' },
+              { l: 66.6, w: 33.4, t: '운영', tone: 'run' },
+              { l: 74, w: 16, t: '구축(3차모집대상)', tone: 'float' },
             ]}
-            marks={[50]}
           />
         </div>
         <div>
@@ -680,11 +678,10 @@ const SLIDES: ReactNode[] = [
           <GanttItem
             b="ESG 에너지 플랫폼"
             segs={[
-              { l: 25, w: 16.7, t: '분석 & 설계', tone: 'plan' },
-              { l: 41.7, w: 20.8, t: '구축(개발)', tone: 'build' },
-              { l: 62.5, w: 37.5, t: '운영 및 고도화', tone: 'run' },
+              { l: 14, w: 19.1, t: '분석 & 설계', tone: 'plan' },
+              { l: 33.1, w: 23.9, t: '구축(개발)', tone: 'build' },
+              { l: 57, w: 43, t: '운영 및 고도화', tone: 'run' },
             ]}
-            marks={[62.5]}
           />
         </div>
         <div>
@@ -695,24 +692,22 @@ const SLIDES: ReactNode[] = [
             b="ORC 발전"
             s="연료전지 발전배열 활용"
             segs={[
-              { l: 25, w: 25, t: '제조사 선정 & 발주 및 제작', tone: 'plan' },
-              { l: 50, w: 20.8, t: '구축 및 시운전', tone: 'build' },
-              { l: 70.8, w: 29.2, t: '상업운전', tone: 'run' },
+              { l: 14, w: 28.7, t: '제조사 선정 & 발주 및 제작', tone: 'plan' },
+              { l: 42.7, w: 23.9, t: '구축 및 시운전', tone: 'build' },
+              { l: 66.6, w: 33.4, t: '상업운전', tone: 'run' },
             ]}
-            marks={[70.8]}
           />
-          {/* 양방향 EV충전 — 운영 배경 + 구축(증설) 겹침 (원본 방식) */}
+          {/* 양방향 EV충전 — 첫 막대는 시작점(0)부터 · 운영 배경 + 구축(증설) 겹침 */}
           <GanttItem
             b="양방향 EV충전"
             s="V2G · ESS"
             segs={[
-              { l: 25, w: 8.3, t: '분석 & 검토', tone: 'plan' },
-              { l: 33.3, w: 8.4, t: '설계', tone: 'plan' },
-              { l: 41.7, w: 31.2, t: '구축', tone: 'build' },
-              { l: 72.9, w: 27.1, t: '운영', tone: 'run' },
-              { l: 76, w: 13, t: '구축(증설)', tone: 'float' },
+              { l: 14, w: 9.6, t: '분석 & 검토', tone: 'plan' },
+              { l: 23.6, w: 9.5, t: '설계', tone: 'plan' },
+              { l: 33.1, w: 35.9, t: '구축', tone: 'build' },
+              { l: 69, w: 31, t: '운영', tone: 'run' },
+              { l: 73, w: 13, t: '구축(증설)', tone: 'float' },
             ]}
-            marks={[72.9]}
           />
         </div>
       </div>
@@ -728,10 +723,6 @@ const SLIDES: ReactNode[] = [
         <span>
           <i className="run" />
           운영 · 상업운전
-        </span>
-        <span>
-          <i className="mark" />
-          구축 완료 시점
         </span>
       </div>
     </div>
