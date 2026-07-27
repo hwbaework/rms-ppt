@@ -404,7 +404,7 @@ const SLIDES: ReactNode[] = [
           </div>
           <div className="shift-li">
             <span className="material-symbols-outlined">warning</span>
-            <span>본 사업 리스크</span>
+            <span>수요모집 자체에 차질</span>
           </div>
         </div>
         <div className="shift-mid">
@@ -468,7 +468,7 @@ const SLIDES: ReactNode[] = [
       key="p2"
       no="02"
       sec="변경 신청 사유"
-      title={<>물량 없는 조기 설립 — <span className="hl">비용과 리스크만 발생</span></>}
+      title={<>물량 없는 조기 설립 — <span className="hl">비용 부담과 수요모집 차질</span></>}
       lede={
         <>
           변경 신청 사유는 세 가지입니다. SPC의 핵심 기능(발전사업허가 · 계통연계 · 지분 확정)은 모두{' '}
@@ -510,9 +510,9 @@ const SLIDES: ReactNode[] = [
             <span className="material-symbols-outlined">warning</span>
           </span>
           <div className="q-text">
-            본 사업 <span className="hl">리스크</span>
+            수요모집 자체에 <span className="hl">차질</span>
             <span className="q-cap">
-              3차년도 설립 강행 시 역량이 분산되어 태양광 수요모집 자체에 차질 — 본 사업의 안정성 저하로 이어질 우려
+              3차년도 설립 강행 시 역량이 분산 — 본 사업의 안정성 저하로 이어질 우려
             </span>
           </div>
         </div>
@@ -526,7 +526,6 @@ const SLIDES: ReactNode[] = [
           <div className="cum">
             <div className="cum-head">
               <b>전력거래용 태양광 (SPC 관리 대상)</b>
-              <small>전체 목표 3.0MW = 2차년도 0.9 + 3차년도 2.1</small>
             </div>
             <div className="cum-bar">
               <div className="cum-done" style={{ width: '11%' }} />
@@ -544,7 +543,6 @@ const SLIDES: ReactNode[] = [
           <div className="cum">
             <div className="cum-head">
               <b>자가소비형 태양광 (참고)</b>
-              <small>전체 목표 0.9MW</small>
             </div>
             <div className="cum-bar">
               <div className="cum-done" style={{ width: '64.4%' }} />
