@@ -130,9 +130,9 @@ const CSS = `
 .keep-items{display:flex;gap:.55vw;flex-wrap:wrap;margin-left:auto}
 .keep-items span{background:var(--tint);border:1px solid var(--tint-line);color:#1d4ed8;font-size:.8vw;font-weight:700;border-radius:999px;padding:.26vw .95vw}
 
-/* ── 사유 3단 (고스트 숫자 + 헤어라인) ── */
-.qrow{display:grid;grid-template-columns:repeat(3,1fr);align-content:center}
-.qcol{position:relative;padding:1.6vw 1.8vw 1.4vw;display:flex;flex-direction:column;gap:.8vw;justify-content:flex-start}
+/* ── 사유 3단 (고스트 숫자 + 헤어라인) — 컬럼이 본문 높이를 채우고 내용은 세로 중앙 ── */
+.qrow{display:grid;grid-template-columns:repeat(3,1fr);flex:1;min-height:0}
+.qcol{position:relative;padding:1.6vw 1.8vw 1.4vw;display:flex;flex-direction:column;gap:.9vw;justify-content:center}
 .qcol+.qcol{border-left:1px solid var(--hair)}
 .q-ghost{position:absolute;top:0;right:1.2vw;font-size:5.2vw;font-weight:900;line-height:1;letter-spacing:-.04em;user-select:none;background:linear-gradient(180deg,#b9cff0 0%,#e2ecfb 85%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .q-chip{width:2.6vw;height:2.6vw;border-radius:50%;background:var(--tint);color:var(--accent);display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
@@ -158,27 +158,27 @@ const CSS = `
 .mrow-v .miss{color:#dc2626;font-weight:800}
 .srcline{color:var(--muted);font-size:.74vw;line-height:1.6;margin-top:.6vw}
 
-/* ── 영향 카드 2단 ── */
-.imp{display:grid;grid-template-columns:1fr 1fr;gap:1.1vw}
-.imp-card{background:#fff;border:1px solid var(--hair);border-radius:14px;padding:1vw 1.2vw;display:flex;flex-direction:column;gap:.6vw}
+/* ── 영향 카드 2단 — 카드가 남는 높이를 채우고 내용은 세로 중앙 ── */
+.imp{display:grid;grid-template-columns:1fr 1fr;gap:1.1vw;flex:1;min-height:0;align-items:stretch}
+.imp-card{background:#fff;border:1px solid var(--hair);border-radius:14px;padding:1.2vw 1.4vw;display:flex;flex-direction:column;gap:.8vw;justify-content:center}
 .imp-h{display:flex;align-items:center;gap:.55vw;font-size:.98vw;font-weight:800;color:var(--ink)}
 .imp-h .material-symbols-outlined{font-size:1.15vw;color:var(--accent)}
 .imp-h .tag{margin-left:auto}
 .fx{display:flex;flex-direction:column;gap:.45vw}
-.fx-row{display:flex;align-items:flex-start;gap:.6vw;background:#fff;border:1px solid var(--hair);border-radius:10px;padding:.5vw .9vw}
+.fx-row{display:flex;align-items:flex-start;gap:.6vw;background:var(--chip);border:1px solid var(--hair);border-radius:10px;padding:.65vw .95vw}
 .fx-row .material-symbols-outlined{font-size:1.05vw;color:#10b981;flex-shrink:0;margin-top:.1vw}
 .fx-row span:last-child{font-size:.87vw;color:var(--ink);font-weight:600;line-height:1.55;word-break:keep-all}
 
-/* ── 정상화 계획 타일 ── */
-.press{display:grid;grid-template-columns:repeat(3,1fr);gap:.9vw}
-.press-card{background:#fff;border:1px solid var(--hair);border-radius:14px;padding:1.1vw 1vw;display:flex;flex-direction:column}
-.press-ic{width:2.6vw;height:2.6vw;border-radius:50%;margin-bottom:.55vw;display:flex;align-items:center;justify-content:center;background:var(--tint);color:var(--accent)}
+/* ── 정상화 계획 타일 — 타일이 남는 높이를 채우고 내용은 세로 중앙 ── */
+.press{display:grid;grid-template-columns:repeat(3,1fr);gap:.9vw;flex:1;min-height:0;align-items:stretch}
+.press-card{background:#fff;border:1px solid var(--hair);border-radius:14px;padding:1.3vw 1.2vw;display:flex;flex-direction:column;justify-content:center}
+.press-ic{width:2.6vw;height:2.6vw;border-radius:50%;margin-bottom:.6vw;display:flex;align-items:center;justify-content:center;background:var(--tint);color:var(--accent)}
 .press-ic .material-symbols-outlined{font-size:1.35vw}
 .press-k{color:var(--ink);font-size:1.05vw;font-weight:800;letter-spacing:-.01em}
-.press-feats{list-style:none;margin:.55vw 0 0;padding:0;display:flex;flex-direction:column;gap:.5vw}
-.press-feats li{position:relative;padding-left:.85vw;color:var(--body);font-size:.83vw;line-height:1.6;word-break:keep-all}
+.press-feats{list-style:none;margin:.65vw 0 0;padding:0;display:flex;flex-direction:column;gap:.6vw}
+.press-feats li{position:relative;padding-left:.85vw;color:var(--body);font-size:.85vw;line-height:1.65;word-break:keep-all}
 .press-feats li:before{content:"";position:absolute;left:0;top:.55vw;width:.32vw;height:.32vw;border-radius:50%;background:var(--accent)}
-.press-st{margin-top:auto;padding-top:.7vw;display:flex}
+.press-st{padding-top:.8vw;display:flex}
 
 /* ── KPI 스탯 (하이라인 사이 큰 숫자) + 마일스톤 ── */
 .mile{display:grid;grid-template-columns:15vw 1fr;gap:2.4vw;align-items:center}
@@ -188,9 +188,9 @@ const CSS = `
 .kpi-l{color:var(--ink);font-size:.92vw;font-weight:700}
 .kpi-s{color:var(--muted);font-size:.78vw;line-height:1.6}
 
-/* ── 요약 대비 패널 (조기 설립 vs 물량 확보 후 설립) ── */
-.vs{display:grid;grid-template-columns:1fr 1.12fr;gap:1vw;align-items:stretch}
-.vs-panel{border:2px dashed #cbd5e1;border-radius:14px;background:#f8fafc;padding:1vw 1.2vw;display:flex;flex-direction:column;gap:.7vw;justify-content:center}
+/* ── 요약 대비 패널 (조기 설립 vs 물량 확보 후 설립) — 본문 높이를 채운다 ── */
+.vs{display:grid;grid-template-columns:1fr 1.12fr;gap:1vw;flex:1;min-height:0;align-items:stretch}
+.vs-panel{border:2px dashed #cbd5e1;border-radius:14px;background:#f8fafc;padding:1.2vw 1.5vw;display:flex;flex-direction:column;gap:.9vw;justify-content:center}
 .vs-panel.ours{border:1px solid #b9d2f8;background:linear-gradient(180deg,#ffffff 0%,#f7faff 100%);box-shadow:0 6px 24px rgba(37,99,235,.09)}
 .vs-h{display:flex;align-items:center;gap:.5vw;font-size:.98vw;font-weight:800;color:#64748b;justify-content:center}
 .vs-h .material-symbols-outlined{font-size:1.1vw}
