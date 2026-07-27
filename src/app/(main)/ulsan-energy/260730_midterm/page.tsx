@@ -145,22 +145,22 @@ const CSS = `
 .perf{display:grid;grid-template-columns:2fr 1fr;gap:1.1vw;flex:1;min-height:0;align-items:stretch}
 .exp{border:1px solid var(--hair);border-radius:14px;background:#fff;padding:.2vw 1.2vw .4vw;display:flex;flex-direction:column;min-width:0;box-shadow:0 6px 20px rgba(11,21,38,.04)}
 /* 구분 열 너비는 추진일정 간트의 라벨 열(10.5vw)과 동일 — 페이지 간 통일 */
-.exp-r{display:grid;grid-template-columns:10.5vw 1fr 10.6vw;gap:1.1vw;align-items:center;padding:.5vw 0;border-top:1px solid var(--hair);flex:1;min-height:0}
+.exp-r{display:grid;grid-template-columns:10.5vw 1fr 9.4vw;gap:1vw;align-items:center;padding:.42vw 0;border-top:1px solid var(--hair);flex:1;min-height:0;overflow:hidden}
 .exp-r.hd{border-top:none;flex:0 0 auto;padding:.5vw 0 .3vw}
 .exp-r.hd span{font-size:.64vw;color:var(--muted);font-weight:800;letter-spacing:.1em}
 .exp-cat{display:block;font-size:.58vw;color:var(--accent);font-weight:800;letter-spacing:.05em;margin-bottom:.14vw}
 .exp-name b{display:block;font-size:.84vw;color:var(--ink);font-weight:800;line-height:1.3;letter-spacing:-.01em}
 .exp-name small{display:block;font-size:.64vw;color:var(--muted);font-weight:600;margin-top:.1vw}
-.ms{display:flex;flex-wrap:wrap;gap:.45vw 1.2vw;min-width:0;align-content:center}
+.ms{display:flex;flex-wrap:wrap;gap:.3vw 1vw;min-width:0;align-content:center}
 .ms-i{min-width:0}
-.ms-i b{display:block;font-size:.6vw;color:var(--accent);font-weight:800;letter-spacing:.02em}
-.ms-i span{display:block;font-size:.71vw;color:var(--body);font-weight:600;line-height:1.4;margin-top:.08vw;word-break:keep-all}
+.ms-i b{display:block;font-size:.58vw;color:var(--accent);font-weight:800;letter-spacing:.02em}
+.ms-i span{display:block;font-size:.69vw;color:var(--body);font-weight:600;line-height:1.35;margin-top:.06vw;word-break:keep-all}
 .ms-i.warn b{color:var(--muted)}
 .ms-i.warn span{color:var(--body)}
 /* 연료전지 행 내부의 RPS/CHPS 유형 칩 — 간트의 type 칩과 같은 톤 */
 .ms-type{flex-shrink:0;background:#1e40af;color:#fff;border-radius:6px;padding:.16vw .5vw;font-size:.6vw;font-weight:800;letter-spacing:.02em;white-space:nowrap}
 .ms-sub{display:flex;align-items:center;gap:.7vw;min-width:0}
-.ms-subwrap{display:flex;flex-direction:column;gap:.55vw;min-width:0}
+.ms-subwrap{display:flex;flex-direction:column;gap:.42vw;min-width:0}
 .exp-note{border-left:1px solid var(--hair);padding-left:1vw;font-size:.7vw;color:var(--body);line-height:1.6;word-break:keep-all;align-self:center}
 .exp-note b{color:var(--ink);font-weight:700}
 .exp-note .tag{margin-top:.3vw}
@@ -169,8 +169,8 @@ const CSS = `
 .kpanel{border:1px solid var(--hair);border-radius:14px;background:#f7f9fc;padding:.2vw 1.15vw .4vw;display:flex;flex-direction:column}
 /* 패널 헤더 — 좌측 표 헤더 행(.exp-r.hd)과 같은 규격(같은 높이)으로 가로줄 일치 */
 .kp-hd{padding:.5vw 0 .3vw;font-size:.64vw;color:var(--muted);font-weight:800;letter-spacing:.1em}
-.krow{display:flex;flex-direction:column;justify-content:center;gap:.55vw;border-top:1px solid var(--hair);min-height:0;padding:.35vw 0;flex:1}
-.kg{display:flex;flex-direction:column;gap:.3vw}
+.krow{display:flex;flex-direction:column;justify-content:center;gap:.4vw;border-top:1px solid var(--hair);min-height:0;padding:.3vw 0;flex:1;overflow:hidden}
+.kg{display:flex;flex-direction:column;gap:.24vw}
 .kg-head{display:flex;justify-content:space-between;align-items:baseline;gap:.6vw}
 .kg-head b{color:var(--ink);font-size:.8vw;font-weight:700}
 .kg-head b small{color:var(--muted);font-weight:600;font-size:.66vw;margin-left:.35vw}
@@ -772,7 +772,7 @@ const SLIDES: ReactNode[] = [
           <span style={{ paddingLeft: '1vw' }}>비고</span>
         </div>
         {/* 연료전지 — 구분은 하나, 행 안에서 RPS/CHPS로 분리 (전체 구분은 5개) */}
-        <div className="exp-r" style={{ flex: 1.45 }}>
+        <div className="exp-r" style={{ flex: 1.35 }}>
           <div className="exp-name">
             <span className="exp-cat">신재생에너지 인프라</span>
             <b>연료전지 발전</b>
@@ -905,7 +905,7 @@ const SLIDES: ReactNode[] = [
           }
         />
         <ExpRow
-          grow={0.75}
+          grow={0.85}
           cat="탄소저감 지원"
           name="양방향 EV충전"
           sub="울산테크노파크"
@@ -925,7 +925,7 @@ const SLIDES: ReactNode[] = [
       {/* 우 1/3 — 원본 8p 성과지표 달성률: 행 높이 비율을 좌측과 동일하게(가로줄 정렬) */}
       <div className="kpanel">
         <div className="kp-hd">성과지표 검토 (2차년도)</div>
-        <div className="krow" style={{ flex: 1.45 }}>
+        <div className="krow" style={{ flex: 1.35 }}>
           <Gauge b="연료전지발전" s="롯데SK에너루트" pct={100} val="19.8 / 19.8 MW" chip="달성 100%" chipKind="done" />
         </div>
         <div className="krow" style={{ flex: 1.75 }}>
@@ -963,7 +963,7 @@ const SLIDES: ReactNode[] = [
             <div className="kg-note">2차년도 목표 없음 — 3차년도 1.8MW 구축 목표</div>
           </div>
         </div>
-        <div className="krow" style={{ flex: 0.75 }}>
+        <div className="krow" style={{ flex: 0.85 }}>
           <Gauge
             b="양방향 EV 충전기"
             s="울산테크노파크"

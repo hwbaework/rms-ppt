@@ -1,6 +1,9 @@
 // ── 발표 목록 (홈 화면용 메타데이터) ──
 // 실제 내용은 각 발표 폴더의 page.tsx 에 있다(폴더=URL). 여기엔 "목록에 뭘 보여줄지"만 둔다.
-// 새 발표 = 폴더(page.tsx) 만들고 + 여기 한 줄 추가(최신을 위로).
+// 새 발표 = 폴더(page.tsx) 만들고 + 여기 한 줄 추가(최신을 위로)
+//          + 폴더에 layout.tsx 3줄(deckMetadata) 추가 → 카톡 등 링크 미리보기에 덱 제목·설명 노출.
+
+import type { Metadata } from 'next'
 
 export type DeckMeta = {
   region: string // 지역·사업 (그룹 머리말)
@@ -103,6 +106,26 @@ export const decks: DeckMeta[] = [
     tags: ['Demo', 'Guide'],
   },
 ]
+
+/** 덱 폴더의 layout.tsx 에서 사용 — 등록된 제목·설명을 <title>·Open Graph(카톡 미리보기)로 노출.
+ *  주의: openGraph 는 루트 layout 값과 얕게 병합되어 통째로 대체되므로 이미지까지 다시 지정한다. */
+export function deckMetadata(href: string): Metadata {
+  const d = decks.find((x) => x.href === href)
+  if (!d) return {}
+  const description = d.description ?? 'RMS PLATFORM 발표자료'
+  return {
+    title: d.title,
+    description,
+    openGraph: {
+      title: d.title,
+      description,
+      siteName: 'RMS',
+      locale: 'ko_KR',
+      type: 'website',
+      images: [{ url: '/images/og-image.png', width: 1728, height: 910 }],
+    },
+  }
+}
 
 export type RegionGroup = { region: string; decks: DeckMeta[] }
 
