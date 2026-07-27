@@ -78,18 +78,20 @@ const CSS = `
 .area{flex:1;display:flex;flex-direction:column;gap:1.1vw}
 .area.fill{justify-content:space-between;gap:1.1vw}
 
-/* ── 스텝 플로우 (점 + 라인) ── */
-.flow{display:flex}
-.step{flex:1;padding-right:1.2vw;position:relative}
-.step-line{display:flex;align-items:center;gap:.55vw;margin-bottom:.55vw}
-.step-dot{width:.52vw;height:.52vw;border-radius:50%;border:2px solid var(--accent);background:var(--paper);flex-shrink:0}
-.step.final .step-dot{background:var(--accent)}
-.step-no{color:var(--accent);font-size:.74vw;font-weight:800;letter-spacing:.1em}
-.step-line:after{content:"";flex:1;height:1px;background:var(--hair)}
-.step:last-child .step-line:after{display:none}
-.step-name{color:var(--ink);font-size:1.08vw;font-weight:700;line-height:1.4;margin-bottom:.28vw}
-.step.final .step-name{color:var(--accent)}
-.step-sub{color:var(--muted);font-size:.85vw;line-height:1.68}
+/* ── 분기 단계 카드 3장 (일정 슬라이드) — 화살표로 이어지는 시기별 카드 ── */
+.grow{flex:1;min-height:0;display:flex;flex-direction:column}
+.ph3{display:flex;gap:.8vw;flex:1;min-height:0;align-items:stretch}
+.ph{flex:1;border:1px solid var(--hair);border-radius:14px;background:#fff;padding:1.1vw 1.2vw;display:flex;flex-direction:column;gap:.7vw;justify-content:center}
+.ph.final{border:1.5px solid #93c5fd;background:linear-gradient(180deg,#ffffff,#f7faff);box-shadow:0 8px 24px rgba(37,99,235,.12)}
+.ph-q{display:inline-flex;align-self:flex-start;background:var(--tint);border:1px solid var(--tint-line);color:#1d4ed8;border-radius:999px;padding:.2vw .9vw;font-size:.78vw;font-weight:800;white-space:nowrap}
+.ph.final .ph-q{background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:#fff;border-color:transparent;box-shadow:0 5px 14px rgba(29,78,216,.3)}
+.ph-t{color:var(--ink);font-size:1.02vw;font-weight:800;letter-spacing:-.01em;line-height:1.35}
+.ph-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.5vw}
+.ph-list li{position:relative;padding-left:.85vw;color:var(--body);font-size:.85vw;line-height:1.6;word-break:keep-all}
+.ph-list li:before{content:"";position:absolute;left:0;top:.55vw;width:.32vw;height:.32vw;border-radius:50%;background:var(--accent)}
+.ph3-arr{align-self:center;color:#c3ccda;font-size:1.35vw;flex-shrink:0}
+/* 사업 영향 — 체크 행 3개 가로 스트립 */
+.fxrow3{display:grid;grid-template-columns:repeat(3,1fr);gap:.9vw}
 
 /* ── 블록 라벨 ── */
 .block-label{display:flex;align-items:center;gap:.9vw;margin-bottom:.55vw}
@@ -152,49 +154,54 @@ const CSS = `
 /* ── 실적 게이지 패널 (목표 대비 실적 — 막대 하나에 통합) ── */
 .panel{background:#f7f9fc;border:1px solid var(--hair);border-radius:14px;padding:1vw 1.3vw .9vw}
 .panel .block-label{margin-bottom:.8vw}
-.mrows{display:flex;flex-direction:column;gap:.85vw}
-.mrow{display:grid;grid-template-columns:12.5vw 1fr 14.5vw;gap:1.1vw;align-items:center}
-.mrow-l b{display:block;color:var(--ink);font-size:.88vw;font-weight:700}
-.mrow-l small{display:block;color:var(--muted);font-size:.72vw;margin-top:.08vw}
-/* 트랙 길이 = 목표 물량(MW) 동일 축 — 3차년도 2.1MW가 기존 0.9MW보다 큰 물량임이 보인다 */
-.mtrack-wrap{display:flex;align-items:center;gap:.6vw;min-width:0}
-.mtrack{position:relative;height:1.15vw;border-radius:999px;background:#e9edf5;overflow:hidden;flex-shrink:0}
-.mfill{position:absolute;top:0;bottom:0;left:0;border-radius:999px;background:linear-gradient(90deg,#93c5fd,#60a5fa)}
-.mfill.acc{background:linear-gradient(90deg,#1d4ed8,#3b82f6)}
-/* 준비 중 — 진행률 주장 없이 "작업 중" 상태를 움직이는 스트라이프로 */
-.mfill.prep{width:100%;background:repeating-linear-gradient(-45deg,#bfd7f8 0 .5vw,#e6effc .5vw 1vw);background-size:1.42vw 100%;animation:crawl 1.1s linear infinite}
+/* ── 누적 목표 바 — 전체 목표 하나의 막대: 구축 완료 + 준비 중(잔여) ── */
+.cum{display:flex;flex-direction:column;gap:.35vw}
+.cum-head{display:flex;justify-content:space-between;align-items:baseline;gap:1vw}
+.cum-head b{color:var(--ink);font-size:.9vw;font-weight:800}
+.cum-head small{color:var(--muted);font-size:.74vw}
+.cum-bar{position:relative;display:flex;height:1.6vw;border-radius:9px;overflow:hidden;background:#e9edf5}
+.cum-done{background:linear-gradient(90deg,#1d4ed8,#3b82f6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.72vw;font-weight:800;white-space:nowrap;flex-shrink:0}
+/* 준비 중(잔여) — 진행률 주장 없이 움직이는 스트라이프 */
+.cum-prep{flex:1;background:repeating-linear-gradient(-45deg,#cfdff9 0 .5vw,#e9f1fd .5vw 1vw);background-size:1.42vw 100%;animation:crawl 1.1s linear infinite;display:flex;align-items:center;justify-content:center;color:#2c4f96;font-size:.74vw;font-weight:700;white-space:nowrap}
 @keyframes crawl{to{background-position:1.42vw 0}}
-.mgoal{color:var(--muted);font-size:.72vw;font-weight:600;white-space:nowrap}
-.mrow-v{text-align:right;font-size:.84vw;color:var(--body);font-variant-numeric:tabular-nums}
-.mrow-v b{color:var(--ink);font-weight:800}
-.mrow-v .pct{color:var(--accent);font-weight:800}
-.mrow-v .prep-t{color:var(--accent);font-weight:800}
+/* 연차 목표 경계선(2차 0.9 | 3차 +2.1) */
+.cum-sep{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed rgba(255,255,255,.75);z-index:1}
+.cum-cap{position:relative;height:1.15vw}
+.cum-mark{position:absolute;transform:translateX(-50%);color:var(--muted);font-size:.72vw;font-weight:700;white-space:nowrap}
+.cum-mark:before{content:"▲";display:block;text-align:center;font-size:.5vw;line-height:1;color:#b6c2d6}
+.cum-mark.acc{color:var(--accent)}
+.cum-mark.acc:before{color:var(--accent)}
+.cum-mark.end{transform:none;right:0}
+.cum-mark.end:before{text-align:right}
 .srcline{color:var(--muted);font-size:.74vw;line-height:1.6;margin-top:.6vw}
 
-/* ── 영향 카드 2단 — 카드가 남는 높이를 채우고 내용은 세로 중앙 ── */
-.imp{display:grid;grid-template-columns:1fr 1fr;gap:1.1vw;flex:1;min-height:0;align-items:stretch}
-.imp-card{background:#fff;border:1px solid var(--hair);border-radius:14px;padding:1.2vw 1.4vw;display:flex;flex-direction:column;gap:.8vw;justify-content:center}
-.imp-h{display:flex;align-items:center;gap:.55vw;font-size:.98vw;font-weight:800;color:var(--ink)}
-.imp-h .material-symbols-outlined{font-size:1.15vw;color:var(--accent)}
-.imp-h .tag{margin-left:auto}
-.fx{display:flex;flex-direction:column;gap:.45vw}
+/* ── 체크 행 ── */
 .fx-row{display:flex;align-items:flex-start;gap:.6vw;background:var(--chip);border:1px solid var(--hair);border-radius:10px;padding:.65vw .95vw}
 .fx-row .material-symbols-outlined{font-size:1.05vw;color:#10b981;flex-shrink:0;margin-top:.1vw}
 .fx-row span:last-child{font-size:.87vw;color:var(--ink);font-weight:600;line-height:1.55;word-break:keep-all}
 
-/* ── 정상화 계획 타일 — 타일이 남는 높이를 채우고 내용은 세로 중앙 ── */
-.press{display:grid;grid-template-columns:repeat(3,1fr);gap:.9vw;flex:1;min-height:0;align-items:stretch}
-.press-card{background:#fff;border:1px solid var(--hair);border-radius:14px;padding:1.3vw 1.2vw;display:flex;flex-direction:column;justify-content:center}
-.press-ic{width:2.6vw;height:2.6vw;border-radius:50%;margin-bottom:.6vw;display:flex;align-items:center;justify-content:center;background:var(--tint);color:var(--accent)}
-.press-ic .material-symbols-outlined{font-size:1.35vw}
-.press-k{color:var(--ink);font-size:1.05vw;font-weight:800;letter-spacing:-.01em}
-.press-feats{list-style:none;margin:.65vw 0 0;padding:0;display:flex;flex-direction:column;gap:.6vw}
-.press-feats li{position:relative;padding-left:.85vw;color:var(--body);font-size:.85vw;line-height:1.65;word-break:keep-all}
-.press-feats li:before{content:"";position:absolute;left:0;top:.55vw;width:.32vw;height:.32vw;border-radius:50%;background:var(--accent)}
-.press-st{padding-top:.8vw;display:flex}
+/* ── 정상화 계획 — 좌 계획 레인 3행 / 우 KPI·마일스톤 ── */
+.norm{display:grid;grid-template-columns:1.25fr .75fr;gap:1.2vw;flex:1;min-height:0;align-items:stretch}
+.plan{background:#fff;border:1px solid var(--hair);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.plan-row{flex:1;display:flex;align-items:center;gap:1vw;padding:.9vw 1.3vw;border-bottom:1px solid var(--hair)}
+.plan-row:last-child{border-bottom:none}
+.plan-ic{width:2.7vw;height:2.7vw;border-radius:50%;background:var(--tint);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.plan-ic .material-symbols-outlined{font-size:1.35vw}
+.plan-t{flex:1;min-width:0}
+.plan-t b{display:block;color:var(--ink);font-size:.98vw;font-weight:800}
+.plan-t small{display:block;color:var(--muted);font-size:.8vw;line-height:1.6;margin-top:.15vw;word-break:keep-all}
+.plan-row .tag{flex-shrink:0}
+/* 우측 마일스톤 — 세로 스텝 칩 */
+.mcol{display:flex;flex-direction:column;justify-content:center;gap:.9vw}
+.vstep{display:flex;flex-direction:column;gap:.4vw}
+.vstep-arr{align-self:center;color:#c3ccda;font-size:1.1vw}
+.vchip{background:var(--chip);border:1px solid transparent;border-radius:10px;padding:.6vw 1.05vw}
+.vchip b{display:block;color:var(--ink);font-size:.9vw;font-weight:700}
+.vchip small{display:block;color:var(--muted);font-size:.74vw;margin-top:.08vw}
+.vchip.acc{background:var(--tint);border-color:var(--tint-line)}
+.vchip.acc b{color:#1d4ed8}
 
-/* ── KPI 스탯 (하이라인 사이 큰 숫자) + 마일스톤 ── */
-.mile{display:grid;grid-template-columns:15vw 1fr;gap:2.4vw;align-items:center}
+/* ── KPI 스탯 (하이라인 사이 큰 숫자) ── */
 .kpi{display:flex;flex-direction:column;justify-content:center;gap:.3vw;border-top:2px solid var(--ink);border-bottom:1px solid var(--hair);padding:1vw .2vw}
 .kpi-n{font-size:3vw;font-weight:900;color:var(--accent);letter-spacing:-.03em;line-height:1.05}
 .kpi-n small{font-size:1.2vw;font-weight:800;margin-left:.15vw}
@@ -208,17 +215,19 @@ const CSS = `
 .kpi-cmp-row span{color:var(--muted);font-size:.7vw;font-weight:600;white-space:nowrap}
 .kpi-cmp-row.big span{color:var(--accent);font-weight:800}
 
-/* ── 요약 대비 패널 (조기 설립 vs 물량 확보 후 설립) — 본문 높이를 채운다 ── */
-.vs{display:grid;grid-template-columns:1fr 1.12fr;gap:1vw;flex:1;min-height:0;align-items:stretch}
-.vs-panel{border:2px dashed #cbd5e1;border-radius:14px;background:#f8fafc;padding:1.2vw 1.5vw;display:flex;flex-direction:column;gap:.9vw;justify-content:center}
-.vs-panel.ours{border:1px solid #b9d2f8;background:linear-gradient(180deg,#ffffff 0%,#f7faff 100%);box-shadow:0 6px 24px rgba(37,99,235,.09)}
-.vs-h{display:flex;align-items:center;gap:.5vw;font-size:.98vw;font-weight:800;color:#64748b;justify-content:center}
-.vs-h .material-symbols-outlined{font-size:1.1vw}
-.vs-panel.ours .vs-h{color:var(--accent)}
-.vs-li{display:flex;align-items:flex-start;gap:.55vw;color:var(--body);font-size:.85vw;line-height:1.6;word-break:keep-all}
-.vs-li .material-symbols-outlined{font-size:1vw;flex-shrink:0;margin-top:.12vw;color:#94a3b8}
-.vs-panel.ours .vs-li .material-symbols-outlined{color:#10b981}
-.vs-li b{color:var(--ink)}
+/* ── 요약 3단 카드 (변경 내용 · 판단 · 3차년도 계획) ── */
+.sum3{display:grid;grid-template-columns:repeat(3,1fr);gap:1vw;flex:1;min-height:0;align-items:stretch}
+.sum{border:1px solid var(--hair);border-radius:14px;background:#fff;padding:1.1vw 1.2vw;display:flex;flex-direction:column;gap:.7vw;justify-content:center}
+.sum-h{display:flex;align-items:center;gap:.55vw;font-size:.95vw;font-weight:800;color:var(--ink)}
+.sum-h .no{color:var(--accent);font-size:.8vw;font-weight:800;letter-spacing:.1em}
+.sum-shift{display:flex;align-items:center;gap:.45vw;flex-wrap:wrap}
+.sum-chip{background:#eef1f7;color:#64748b;border-radius:8px;padding:.4vw .8vw;font-size:.83vw;font-weight:700;white-space:nowrap}
+.sum-chip.acc{background:var(--tint);border:1px solid var(--tint-line);color:#1d4ed8}
+.sum-shift .material-symbols-outlined{color:var(--accent);font-size:1vw}
+.sli{display:flex;align-items:flex-start;gap:.55vw;color:var(--body);font-size:.85vw;line-height:1.6;word-break:keep-all}
+.sli .material-symbols-outlined{font-size:1vw;flex-shrink:0;margin-top:.12vw;color:#10b981}
+.sli.bad .material-symbols-outlined{color:#94a3b8}
+.sli b{color:var(--ink)}
 
 /* ── 마침 요청 바 ── */
 .ans{background:linear-gradient(90deg,#0f2a5f,#1d4ed8 55%,#2563eb);border-radius:14px;padding:1vw 1.6vw;display:flex;align-items:center;gap:1.1vw;color:#fff;box-shadow:0 10px 28px rgba(30,64,175,.25)}
@@ -314,58 +323,17 @@ function ContentSlide({
   )
 }
 
-function Flow({ steps }: { steps: { no: string; name: string; sub: string; final?: boolean }[] }) {
+// 분기 단계 카드 (일정 슬라이드)
+function Phase({ q, t, items, final }: { q: string; t: string; items: string[]; final?: boolean }) {
   return (
-    <div className="flow">
-      {steps.map((s) => (
-        <div key={s.no + s.name} className={`step${s.final ? ' final' : ''}`}>
-          <div className="step-line">
-            <span className="step-dot" />
-            <span className="step-no">{s.no}</span>
-          </div>
-          <div className="step-name">{s.name}</div>
-          <div className="step-sub">{s.sub}</div>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-// 목표 대비 실적 게이지 행 — 트랙 길이 = 목표 물량(MW, 동일 축), 채움 = 실적(달성률)
-// goal: 목표 MW · maxGoal: 축 최대값(가장 큰 목표) → 목표가 클수록 트랙이 길어진다
-function MRow({
-  l,
-  s,
-  goal,
-  maxGoal,
-  pct,
-  v,
-  acc,
-  prep,
-}: {
-  l: string
-  s: string
-  goal: number
-  maxGoal: number
-  pct: number
-  v: ReactNode
-  acc?: boolean
-  /** 준비 중 — 진행률 대신 움직이는 스트라이프 */
-  prep?: boolean
-}) {
-  return (
-    <div className="mrow">
-      <div className="mrow-l">
-        <b>{l}</b>
-        <small>{s}</small>
-      </div>
-      <div className="mtrack-wrap">
-        <div className="mtrack" style={{ width: `${(goal / maxGoal) * 100 * 0.82}%` }}>
-          {prep ? <div className="mfill prep" /> : pct > 0 && <div className={`mfill${acc ? ' acc' : ''}`} style={{ width: `${pct}%` }} />}
-        </div>
-        <span className="mgoal">목표 {goal}MW</span>
-      </div>
-      <div className="mrow-v">{v}</div>
+    <div className={`ph${final ? ' final' : ''}`}>
+      <span className="ph-q">{q}</span>
+      <div className="ph-t">{t}</div>
+      <ul className="ph-list">
+        {items.map((it) => (
+          <li key={it}>{it}</li>
+        ))}
+      </ul>
     </div>
   )
 }
@@ -553,14 +521,41 @@ function makeSlides(goTo: (i: number) => void): ReactNode[] {
       </div>
       <div className="panel">
         <div className="block-label">
-          <b>태양광 구축 목표 대비 실적</b>
+          <b>태양광 구축 실적 — 전체 목표 중 얼마나 했나</b>
         </div>
-        <div className="mrows">
-          <MRow l="2차년도 · 자가소비" s="2025년" goal={0.9} maxGoal={2.1} pct={64.4} v={<><b>0.58</b> / 0.9MW · <span className="pct">64.4%</span> <small>(이월 0.32MW)</small></>} />
-          <MRow l="2차년도 · 전력거래" s="2025년" goal={0.9} maxGoal={2.1} pct={36.7} acc v={<><b>0.33</b> / 0.9MW · <span className="pct">36.7%</span> <small>(이월 0.57MW)</small></>} />
-          <MRow l="3차년도 · 전력거래" s="2026년 — 기존 연간 목표의 2.3배" goal={2.1} maxGoal={2.1} pct={0} prep v={<span className="prep-t">신규 계약 준비 중</span>} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1vw' }}>
+          {/* 전력거래용 — SPC 관리 대상: 누적 목표 3.0MW 중 0.33MW 구축, 잔여는 준비 중 */}
+          <div className="cum">
+            <div className="cum-head">
+              <b>전력거래용 태양광 (SPC 관리 대상)</b>
+              <small>누적 목표 3.0MW = 2차년도 0.9 + 3차년도 2.1 (기존 연간 목표의 2.3배)</small>
+            </div>
+            <div className="cum-bar">
+              <div className="cum-done" style={{ width: '11%' }} />
+              <div className="cum-prep">잔여 2.67MW 준비 중 — 26년 하반기 계약 · 27년 상반기 설치</div>
+              <span className="cum-sep" style={{ left: '30%' }} />
+            </div>
+            <div className="cum-cap">
+              <span className="cum-mark acc" style={{ left: '11%' }}>구축 0.33MW</span>
+              <span className="cum-mark" style={{ left: '30%' }}>2차년도 목표 0.9MW</span>
+              <span className="cum-mark end">누적 목표 3.0MW</span>
+            </div>
+          </div>
+          {/* 자가소비형 — 참고 (같은 MW 축: 전체 폭의 30% = 0.9MW) */}
+          <div className="cum">
+            <div className="cum-head">
+              <b>자가소비형 태양광 (참고)</b>
+              <small>목표 0.9MW</small>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '.8vw' }}>
+              <div className="cum-bar" style={{ width: '30%' }}>
+                <div className="cum-done" style={{ width: '64.4%' }}>0.58MW</div>
+              </div>
+              <span className="srcline" style={{ marginTop: 0 }}>0.58 / 0.9MW 구축 · 64.4% (이월 0.32MW)</span>
+            </div>
+          </div>
         </div>
-        <p className="srcline">막대 길이 = 목표 물량(MW) 동일 축 · 출처: SPC 4차년도 변경 사유 보고서 — 태양광 수요발굴 추진 현황</p>
+        <p className="srcline">막대 길이 = 물량(MW) 동일 축 · 출처: SPC 4차년도 변경 사유 보고서 — 태양광 수요발굴 추진 현황</p>
       </div>
     </ContentSlide>,
 
@@ -578,60 +573,47 @@ function makeSlides(goTo: (i: number) => void): ReactNode[] {
       }
       fill
     >
-      <div>
+      <div className="grow">
         <div className="block-label">
           <b>SPC 설립 추진 일정 (변경 후)</b>
         </div>
-        <Flow
-          steps={[
-            {
-              no: '26년 3~4분기',
-              name: '수요물량 확보 집중 · 설립 사전 검토',
-              sub: '출자구조 · 정관 · 자본금 산정 등 병행 검토',
-            },
-            {
-              no: '27년 1분기',
-              name: '발전설비 설치 · 법인 설립 등기',
-              sub: '태양광 발전설비 설치, 출자자 협약 체결, 법인 설립 등기 완료',
-            },
-            {
-              no: '27년 2분기',
-              name: '발전사업허가 · 전력거래 개시 준비',
-              sub: '발전사업허가 신청, 구축 설비 이관, 전력거래 개시 준비',
-              final: true,
-            },
-          ]}
-        />
-      </div>
-      <div className="imp">
-        <div className="imp-card">
-          <div className="imp-h">
-            <span className="material-symbols-outlined">event_available</span>설치 일정 — 영향 없음
-          </div>
-          <div className="fx">
-            <div className="fx-row">
-              <span className="material-symbols-outlined">check_circle</span>
-              <span>3차년도 중 확보 물량은 컨소시엄 참여기업이 즉시 설치 착수</span>
-            </div>
-            <div className="fx-row">
-              <span className="material-symbols-outlined">check_circle</span>
-              <span>설립 전 구축 설비는 설립 후 SPC로 이관하는 방식으로 처리</span>
-            </div>
-          </div>
+        <div className="ph3">
+          <Phase
+            q="26년 3~4분기"
+            t="수요물량 확보 · 설립 사전 검토"
+            items={['수요물량 확보에 집중', '출자구조 · 정관 · 자본금 산정 등 사전 검토 병행']}
+          />
+          <span className="ph3-arr material-symbols-outlined">arrow_forward</span>
+          <Phase
+            q="27년 1분기"
+            t="설비 설치 · 법인 설립 등기"
+            items={['태양광 발전설비 설치', '출자자 협약 체결', '법인 설립 등기 완료']}
+          />
+          <span className="ph3-arr material-symbols-outlined">arrow_forward</span>
+          <Phase
+            final
+            q="27년 2분기"
+            t="허가 신청 · 전력거래 개시 준비"
+            items={['발전사업허가 신청', '구축 설비 이관', '전력거래 개시 준비']}
+          />
         </div>
-        <div className="imp-card">
-          <div className="imp-h">
-            <span className="material-symbols-outlined">trending_up</span>사업 안정성 — 오히려 제고
+      </div>
+      <div>
+        <div className="block-label">
+          <b>사업 영향</b>
+        </div>
+        <div className="fxrow3">
+          <div className="fx-row">
+            <span className="material-symbols-outlined">check_circle</span>
+            <span>확보 물량은 컨소시엄 참여기업이 <b>즉시 설치 착수</b> — 설치 일정 영향 없음</span>
           </div>
-          <div className="fx">
-            <div className="fx-row">
-              <span className="material-symbols-outlined">check_circle</span>
-              <span>물량 확보 후 설립 — SPC의 재무 건전성 확보</span>
-            </div>
-            <div className="fx-row">
-              <span className="material-symbols-outlined">check_circle</span>
-              <span>출자구조를 실제 물량 기준으로 확정 가능</span>
-            </div>
+          <div className="fx-row">
+            <span className="material-symbols-outlined">check_circle</span>
+            <span>설립 전 구축 설비는 설립 후 <b>SPC로 이관</b> 방식으로 처리</span>
+          </div>
+          <div className="fx-row">
+            <span className="material-symbols-outlined">check_circle</span>
+            <span>물량 확보 후 설립 — <b>재무 건전성 · 실 물량 기준 출자구조</b>로 안정성 제고</span>
           </div>
         </div>
       </div>
@@ -650,49 +632,42 @@ function makeSlides(goTo: (i: number) => void): ReactNode[] {
       }
       fill
     >
-      <div className="press">
-        <div className="press-card">
-          <span className="press-ic">
-            <span className="material-symbols-outlined">ads_click</span>
-          </span>
-          <div className="press-k">타겟 집중</div>
-          <ul className="press-feats">
-            <li>울산미포산단 입주기업 중 지붕면적 · 계약전력 기준 선별</li>
-            <li>우선 타겟 50개사 집중 공략</li>
-          </ul>
-        </div>
-        <div className="press-card">
-          <span className="press-ic">
-            <span className="material-symbols-outlined">handshake</span>
-          </span>
-          <div className="press-k">공동 대응</div>
-          <ul className="press-feats">
-            <li>산업단지공단 울산지역본부 · 울산광역시 협력</li>
-            <li>입주기업 합동 사업설명회 개최</li>
-            <li>공단 명의 안내 공문 발송</li>
-          </ul>
-        </div>
-        <div className="press-card">
-          <span className="press-ic">
-            <span className="material-symbols-outlined">fact_check</span>
-          </span>
-          <div className="press-k">관리 체계</div>
-          <ul className="press-feats">
-            <li>PMO 주관 주 단위 수요발굴 실적 점검</li>
-            <li>울산지역본부 주간보고 체계</li>
-          </ul>
-          <div className="press-st">
+      <div className="norm">
+        {/* 좌 — 정상화 계획 3행 */}
+        <div className="plan">
+          <div className="plan-row">
+            <span className="plan-ic">
+              <span className="material-symbols-outlined">ads_click</span>
+            </span>
+            <div className="plan-t">
+              <b>타겟 집중</b>
+              <small>울산미포산단 입주기업 중 지붕면적 · 계약전력 기준으로 우선 타겟 50개사 선별 — 집중 공략</small>
+            </div>
+          </div>
+          <div className="plan-row">
+            <span className="plan-ic">
+              <span className="material-symbols-outlined">handshake</span>
+            </span>
+            <div className="plan-t">
+              <b>공동 대응</b>
+              <small>산업단지공단 울산지역본부 · 울산광역시 협력 — 입주기업 합동 사업설명회 개최, 공단 명의 안내 공문 발송</small>
+            </div>
+          </div>
+          <div className="plan-row">
+            <span className="plan-ic">
+              <span className="material-symbols-outlined">fact_check</span>
+            </span>
+            <div className="plan-t">
+              <b>관리 체계</b>
+              <small>PMO 주관 주 단위 수요발굴 실적 점검 · 울산지역본부 주간보고 체계</small>
+            </div>
             <span className="tag blue live">
               <i />기 운영 중
             </span>
           </div>
         </div>
-      </div>
-      <div className="panel">
-        <div className="block-label">
-          <b>마일스톤</b>
-        </div>
-        <div className="mile">
+        {/* 우 — 목표 규모 KPI + 마일스톤 */}
+        <div className="mcol">
           <div className="kpi">
             <div className="kpi-n">
               2.1<small>MW</small>
@@ -710,12 +685,17 @@ function makeSlides(goTo: (i: number) => void): ReactNode[] {
             </div>
             <div className="kpi-s">기존 연간 목표의 2.3배 물량 — 집중 대응으로 달성</div>
           </div>
-          <Flow
-            steps={[
-              { no: '26년 하반기', name: '계약 집중', sub: '우선 타겟 50개사 · 유관기관 합동 수요모집' },
-              { no: '27년 상반기', name: '설치 완료', sub: '확보 물량 즉시 설치 착수 — 목표 2.1MW 달성', final: true },
-            ]}
-          />
+          <div className="vstep">
+            <div className="vchip">
+              <b>26년 하반기 — 계약 집중</b>
+              <small>우선 타겟 50개사 · 유관기관 합동 수요모집</small>
+            </div>
+            <span className="vstep-arr material-symbols-outlined">arrow_downward</span>
+            <div className="vchip acc">
+              <b>27년 상반기 — 설치 완료</b>
+              <small>확보 물량 즉시 설치 착수 — 목표 2.1MW 달성</small>
+            </div>
+          </div>
         </div>
       </div>
     </ContentSlide>,
@@ -734,36 +714,54 @@ function makeSlides(goTo: (i: number) => void): ReactNode[] {
       }
       fill
     >
-      <div className="vs">
-        <div className="vs-panel">
-          <div className="vs-h">
-            <span className="material-symbols-outlined">money_off</span>미확보 상태의 조기 설립
+      <div className="sum3">
+        <div className="sum">
+          <div className="sum-h">
+            <span className="no">01</span>변경 내용
           </div>
-          <div className="vs-li">
-            <span className="material-symbols-outlined">remove_circle_outline</span>
+          <div className="sum-shift">
+            <span className="sum-chip">3차년도 (2026)</span>
+            <span className="material-symbols-outlined">east</span>
+            <span className="sum-chip acc">4차년도 (2027년 상반기)</span>
+          </div>
+          <div className="sli">
+            <span className="material-symbols-outlined">verified</span>
             <span>
-              매출 기반 없는 <b>고정비 지출</b> — 국비 집행의 효율성 저해
+              <b>협약 핵심 목표 변경 없음</b> — 설치 목표량 · 총사업비 · 사업기간
             </span>
-          </div>
-          <div className="vs-li">
-            <span className="material-symbols-outlined">remove_circle_outline</span>
-            <span>역량 분산으로 수요모집 차질 우려</span>
           </div>
         </div>
-        <div className="vs-panel ours">
-          <div className="vs-h">
-            <span className="material-symbols-outlined">task_alt</span>물량 확보 후 설립
+        <div className="sum">
+          <div className="sum-h">
+            <span className="no">02</span>판단
           </div>
-          <div className="vs-li">
-            <span className="material-symbols-outlined">check_circle</span>
+          <div className="sli bad">
+            <span className="material-symbols-outlined">remove_circle_outline</span>
             <span>
-              SPC <b>재무 건전성</b> 확보 · 실 물량 기준 <b>출자구조 확정</b>
+              미확보 상태의 조기 설립 — 매출 기반 없는 <b>고정비 지출</b>, 국비 집행 효율 저해
             </span>
           </div>
-          <div className="vs-li">
+          <div className="sli">
             <span className="material-symbols-outlined">check_circle</span>
             <span>
-              3차년도는 수요모집에 집중 — 2.1MW <b>26년 하반기 계약 · 27년 상반기 설치 완료</b>
+              물량 확보 후 설립 — <b>재무 건전성</b> · 실 물량 기준 <b>출자구조 확정</b>으로 안정성 제고
+            </span>
+          </div>
+        </div>
+        <div className="sum">
+          <div className="sum-h">
+            <span className="no">03</span>3차년도 계획
+          </div>
+          <div className="sli">
+            <span className="material-symbols-outlined">ads_click</span>
+            <span>
+              우선 타겟 <b>50개사</b> 집중 공략 · 유관기관 합동 수요모집
+            </span>
+          </div>
+          <div className="sli">
+            <span className="material-symbols-outlined">flag</span>
+            <span>
+              목표 <b>2.1MW</b> — 26년 하반기 계약, 27년 상반기 설치 완료
             </span>
           </div>
         </div>
