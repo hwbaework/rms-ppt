@@ -160,6 +160,8 @@ const CSS = `
 @keyframes crawl{to{background-position:1.42vw 0}}
 /* 이월분 — 구축과 준비 사이의 중간 톤 세그먼트 */
 .cum-mid{background:linear-gradient(90deg,#7ea8ec,#9fc0f3);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.72vw;font-weight:700;white-space:nowrap;flex-shrink:0}
+/* 4차년도분 — 아직 준비 단계 이전의 옅은 구간 */
+.cum-later{background:#eef1f7;color:#8a94a6;display:flex;align-items:center;justify-content:center;font-size:.72vw;font-weight:700;white-space:nowrap}
 /* 연차 목표 경계선(2차 0.9 | 3차 +2.1) */
 .cum-sep{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed rgba(255,255,255,.75);z-index:1}
 .cum-cap{position:relative;height:1.15vw}
@@ -530,15 +532,18 @@ const SLIDES: ReactNode[] = [
               <b>전력거래용 태양광 (SPC 관리 대상)</b>
             </div>
             <div className="cum-bar">
-              <div className="cum-done" style={{ width: '11%' }} />
-              <div className="cum-mid" style={{ width: '19%' }}>이월분 0.57MW</div>
-              <div className="cum-prep">준비 중 — 26년 하반기 수용가 확보 및 구축</div>
-              <span className="cum-sep" style={{ left: '30%' }} />
+              <div className="cum-done" style={{ width: '7.9%' }} />
+              <div className="cum-mid" style={{ width: '13.5%' }}>이월분 0.57MW</div>
+              <div className="cum-prep" style={{ flex: 'none', width: '50%' }}>3차년도 2.1MW 준비 중 — 26년 하반기 수용가 확보 및 구축</div>
+              <div className="cum-later" style={{ flex: 1 }}>4차년도 1.2MW</div>
+              <span className="cum-sep" style={{ left: '21.4%' }} />
+              <span className="cum-sep" style={{ left: '71.4%' }} />
             </div>
             <div className="cum-cap">
-              <span className="cum-mark acc" style={{ left: '11%' }}>구축 0.33MW · 11%</span>
-              <span className="cum-mark" style={{ left: '30%' }}>2차년도 목표 0.9MW</span>
-              <span className="cum-mark end">전체 목표 3.0MW</span>
+              <span className="cum-mark acc" style={{ left: '7.9%' }}>구축 0.33MW</span>
+              <span className="cum-mark" style={{ left: '21.4%' }}>2차년도 목표 0.9MW</span>
+              <span className="cum-mark" style={{ left: '71.4%' }}>3차년도 누계 3.0MW</span>
+              <span className="cum-mark end">전체 목표 4.2MW</span>
             </div>
           </div>
           {/* 자가소비형 — 참고: 전체 목표 0.9MW 기준 */}
@@ -711,7 +716,7 @@ const SLIDES: ReactNode[] = [
           <div className="mcard-n">
             2.67<small>MW</small>
           </div>
-          <p className="mcard-l">3차년도에 확보할 잔여 전력거래 물량 — 전체 목표 3.0MW 중 구축 0.33MW</p>
+          <p className="mcard-l">3차년도에 확보할 잔여 전력거래 물량 — 3차년도 누계 목표 3.0MW 중 구축 0.33MW</p>
           <div className="mcard-hr" />
           <div className="mstep">
             <b>26년 하반기 — 수용가 확보 및 구축</b>
