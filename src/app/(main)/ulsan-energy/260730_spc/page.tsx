@@ -207,7 +207,7 @@ const CSS = `
 .plan-t b{display:block;color:var(--ink);font-size:1vw;font-weight:800;letter-spacing:-.01em}
 .plan-t small{display:block;color:var(--muted);font-size:.8vw;line-height:1.6;margin-top:.18vw;word-break:keep-all}
 .plan-meta{flex-shrink:0;text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:.2vw}
-.plan-meta b{color:var(--accent);font-size:1.25vw;font-weight:900;letter-spacing:-.02em;line-height:1.1}
+.plan-meta b{color:var(--accent);font-size:1.25vw;font-weight:900;letter-spacing:-.02em;line-height:1.35;word-break:keep-all;max-width:14vw}
 .plan-meta small{color:var(--muted);font-size:.7vw;font-weight:600}
 /* 관리 체계 — 주간 운영 루프: 받아서(취합) → 하고(점검·보고) → 될거다(보완 반영) */
 .plan-t .tag{margin-left:.5vw;vertical-align:middle}
@@ -661,8 +661,7 @@ const SLIDES: ReactNode[] = [
               </small>
             </div>
             <div className="plan-meta">
-              <b>우선 접촉</b>
-              <small>울산 미포국가산단 소재 기업</small>
+              <b>울산 미포국가산단 소재의 기업 우선 접촉</b>
             </div>
           </div>
           <div className="plan-row">
@@ -676,7 +675,6 @@ const SLIDES: ReactNode[] = [
             </div>
             <div className="plan-meta">
               <b>합동 설명회</b>
-              <small>유관기관 협력</small>
             </div>
           </div>
           <div className="plan-row">
