@@ -548,7 +548,7 @@ const SLIDES: ReactNode[] = [
             </div>
             <div className="cum-bar">
               <div className="cum-done" style={{ width: '64.4%' }} />
-              <div className="cum-prep">잔여 0.32MW — 26년 하반기 확보 · 구축</div>
+              <div className="cum-mid" style={{ flex: 1 }}>이월분 0.32MW — 26년 하반기 확보 · 구축</div>
             </div>
             <div className="cum-cap">
               <span className="cum-mark acc" style={{ left: '64.4%' }}>구축 0.58MW · 64.4%</span>
