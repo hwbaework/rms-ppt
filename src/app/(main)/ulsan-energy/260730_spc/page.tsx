@@ -76,7 +76,7 @@ const CSS = `
 .lede{color:var(--body);font-size:1vw;line-height:1.75;margin-bottom:1vw}
 .lede b{color:var(--ink);font-weight:700}
 .area{flex:1;display:flex;flex-direction:column;gap:1.1vw}
-.area.fill{justify-content:space-between;gap:0}
+.area.fill{justify-content:space-between;gap:1.1vw}
 
 /* ── 스텝 플로우 (점 + 라인) ── */
 .flow{display:flex}
@@ -117,6 +117,11 @@ const CSS = `
 .shift-yr small{display:block;font-size:1vw;font-weight:700;letter-spacing:0;margin-top:.25vw;color:var(--muted)}
 .shift-card.now .shift-yr small{color:var(--ink)}
 .shift-d{color:var(--muted);font-size:.84vw;line-height:1.6}
+.shift-hr{width:62%;height:1px;background:var(--hair);margin:.55vw 0}
+.shift-card.was .shift-hr{background:#dde3ec}
+.shift-li{display:flex;align-items:center;gap:.5vw;color:var(--body);font-size:.85vw;font-weight:600;line-height:1.5;word-break:keep-all}
+.shift-li .material-symbols-outlined{font-size:1.02vw;color:#94a3b8;flex-shrink:0}
+.shift-card.now .shift-li .material-symbols-outlined{color:var(--accent)}
 .shift-mid{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35vw;color:var(--accent)}
 .shift-mid .material-symbols-outlined{font-size:2.1vw;animation:nudge 1.8s ease-in-out infinite}
 @keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(.4vw)}}
@@ -126,8 +131,11 @@ const CSS = `
 .keep{background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:.95vw 1.4vw;display:flex;align-items:center;gap:1vw}
 .keep-ic{width:2.4vw;height:2.4vw;border-radius:50%;background:#e7f6ee;color:#0f9d58;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .keep-ic .material-symbols-outlined{font-size:1.25vw}
-.keep b{color:var(--ink);font-size:.95vw;font-weight:800;white-space:nowrap}
-.keep-items{display:flex;gap:.55vw;flex-wrap:wrap;margin-left:auto}
+.keep>b{color:var(--ink);font-size:.95vw;font-weight:800;white-space:nowrap}
+.keep p{color:var(--body);font-size:.88vw;line-height:1.65;word-break:keep-all}
+.keep p b{color:var(--ink);font-weight:700}
+.keep-ic.blue{background:var(--tint);color:var(--accent)}
+.keep-items{display:flex;gap:.55vw;flex-wrap:wrap;margin-left:auto;flex-shrink:0}
 .keep-items span{background:var(--tint);border:1px solid var(--tint-line);color:#1d4ed8;font-size:.8vw;font-weight:700;border-radius:999px;padding:.26vw .95vw}
 
 /* ── 사유 3단 (고스트 숫자 + 헤어라인) — 컬럼이 본문 높이를 채우고 내용은 세로 중앙 ── */
@@ -144,18 +152,23 @@ const CSS = `
 /* ── 실적 게이지 패널 (목표 대비 실적 — 막대 하나에 통합) ── */
 .panel{background:#f7f9fc;border:1px solid var(--hair);border-radius:14px;padding:1vw 1.3vw .9vw}
 .panel .block-label{margin-bottom:.8vw}
-.mrows{display:flex;flex-direction:column;gap:.7vw}
-.mrow{display:grid;grid-template-columns:11.5vw 1fr 13.5vw;gap:1.1vw;align-items:center}
+.mrows{display:flex;flex-direction:column;gap:.85vw}
+.mrow{display:grid;grid-template-columns:12.5vw 1fr 14.5vw;gap:1.1vw;align-items:center}
 .mrow-l b{display:block;color:var(--ink);font-size:.88vw;font-weight:700}
 .mrow-l small{display:block;color:var(--muted);font-size:.72vw;margin-top:.08vw}
-.mtrack{position:relative;height:1vw;border-radius:999px;background:#e9edf5;overflow:hidden}
-.mtrack.none{background:transparent;border:1.5px dashed #d4dae6}
+/* 트랙 길이 = 목표 물량(MW) 동일 축 — 3차년도 2.1MW가 기존 0.9MW보다 큰 물량임이 보인다 */
+.mtrack-wrap{display:flex;align-items:center;gap:.6vw;min-width:0}
+.mtrack{position:relative;height:1.15vw;border-radius:999px;background:#e9edf5;overflow:hidden;flex-shrink:0}
 .mfill{position:absolute;top:0;bottom:0;left:0;border-radius:999px;background:linear-gradient(90deg,#93c5fd,#60a5fa)}
 .mfill.acc{background:linear-gradient(90deg,#1d4ed8,#3b82f6)}
+/* 준비 중 — 진행률 주장 없이 "작업 중" 상태를 움직이는 스트라이프로 */
+.mfill.prep{width:100%;background:repeating-linear-gradient(-45deg,#bfd7f8 0 .5vw,#e6effc .5vw 1vw);background-size:1.42vw 100%;animation:crawl 1.1s linear infinite}
+@keyframes crawl{to{background-position:1.42vw 0}}
+.mgoal{color:var(--muted);font-size:.72vw;font-weight:600;white-space:nowrap}
 .mrow-v{text-align:right;font-size:.84vw;color:var(--body);font-variant-numeric:tabular-nums}
 .mrow-v b{color:var(--ink);font-weight:800}
 .mrow-v .pct{color:var(--accent);font-weight:800}
-.mrow-v .miss{color:#dc2626;font-weight:800}
+.mrow-v .prep-t{color:var(--accent);font-weight:800}
 .srcline{color:var(--muted);font-size:.74vw;line-height:1.6;margin-top:.6vw}
 
 /* ── 영향 카드 2단 — 카드가 남는 높이를 채우고 내용은 세로 중앙 ── */
@@ -187,6 +200,13 @@ const CSS = `
 .kpi-n small{font-size:1.2vw;font-weight:800;margin-left:.15vw}
 .kpi-l{color:var(--ink);font-size:.92vw;font-weight:700}
 .kpi-s{color:var(--muted);font-size:.78vw;line-height:1.6}
+/* 목표 규모 비교 미니 바 — 2.1MW가 기존 연간 목표(0.9MW)보다 큰 물량임을 한눈에 */
+.kpi-cmp{display:flex;flex-direction:column;gap:.4vw;margin-top:.45vw}
+.kpi-cmp-row{display:flex;align-items:center;gap:.5vw}
+.kpi-cmp-row i{height:.55vw;border-radius:999px;background:#c9d8f0;display:block;flex-shrink:0}
+.kpi-cmp-row.big i{background:linear-gradient(90deg,#1d4ed8,#3b82f6)}
+.kpi-cmp-row span{color:var(--muted);font-size:.7vw;font-weight:600;white-space:nowrap}
+.kpi-cmp-row.big span{color:var(--accent);font-weight:800}
 
 /* ── 요약 대비 패널 (조기 설립 vs 물량 확보 후 설립) — 본문 높이를 채운다 ── */
 .vs{display:grid;grid-template-columns:1fr 1.12fr;gap:1vw;flex:1;min-height:0;align-items:stretch}
@@ -311,21 +331,27 @@ function Flow({ steps }: { steps: { no: string; name: string; sub: string; final
   )
 }
 
-// 목표 대비 실적 게이지 행 — 트랙 전체 = 목표, 채움 = 실적(달성률)
+// 목표 대비 실적 게이지 행 — 트랙 길이 = 목표 물량(MW, 동일 축), 채움 = 실적(달성률)
+// goal: 목표 MW · maxGoal: 축 최대값(가장 큰 목표) → 목표가 클수록 트랙이 길어진다
 function MRow({
   l,
   s,
+  goal,
+  maxGoal,
   pct,
   v,
   acc,
-  none,
+  prep,
 }: {
   l: string
   s: string
+  goal: number
+  maxGoal: number
   pct: number
   v: ReactNode
   acc?: boolean
-  none?: boolean
+  /** 준비 중 — 진행률 대신 움직이는 스트라이프 */
+  prep?: boolean
 }) {
   return (
     <div className="mrow">
@@ -333,8 +359,11 @@ function MRow({
         <b>{l}</b>
         <small>{s}</small>
       </div>
-      <div className={`mtrack${none ? ' none' : ''}`}>
-        {pct > 0 && <div className={`mfill${acc ? ' acc' : ''}`} style={{ width: `${pct}%` }} />}
+      <div className="mtrack-wrap">
+        <div className="mtrack" style={{ width: `${(goal / maxGoal) * 100 * 0.82}%` }}>
+          {prep ? <div className="mfill prep" /> : pct > 0 && <div className={`mfill${acc ? ' acc' : ''}`} style={{ width: `${pct}%` }} />}
+        </div>
+        <span className="mgoal">목표 {goal}MW</span>
       </div>
       <div className="mrow-v">{v}</div>
     </div>
@@ -414,6 +443,15 @@ function makeSlides(goTo: (i: number) => void): ReactNode[] {
             3차년도<small>2026년</small>
           </div>
           <p className="shift-d">협약상 당초 SPC 설립 예정 시기</p>
+          <div className="shift-hr" />
+          <div className="shift-li">
+            <span className="material-symbols-outlined">hourglass_top</span>
+            <span>3차년도 신규 계약 물량 준비 중 (미확정)</span>
+          </div>
+          <div className="shift-li">
+            <span className="material-symbols-outlined">payments</span>
+            <span>지금 설립 시 매출 기반 없이 고정비만 발생</span>
+          </div>
         </div>
         <div className="shift-mid">
           <span className="material-symbols-outlined">east</span>
@@ -424,8 +462,27 @@ function makeSlides(goTo: (i: number) => void): ReactNode[] {
           <div className="shift-yr">
             4차년도<small>2027년 상반기</small>
           </div>
-          <p className="shift-d">수요물량 확보 후 설립 — 재무 건전성 확보</p>
+          <p className="shift-d">수요물량 확보 후 설립</p>
+          <div className="shift-hr" />
+          <div className="shift-li">
+            <span className="material-symbols-outlined">account_balance</span>
+            <span>SPC 재무 건전성 확보</span>
+          </div>
+          <div className="shift-li">
+            <span className="material-symbols-outlined">pie_chart</span>
+            <span>출자구조를 실제 물량 기준으로 확정</span>
+          </div>
         </div>
+      </div>
+      <div className="keep">
+        <span className="keep-ic blue">
+          <span className="material-symbols-outlined">apartment</span>
+        </span>
+        <b>SPC의 역할</b>
+        <p>
+          전력거래용 태양광 발전설비의 <b>소유 · 운영</b>과 <b>전력 판매 수익 관리</b>를 담당하는 발전사업 법인 —
+          설립의 실익은 관리 대상 발전물량이 확보된 이후에 발생
+        </p>
       </div>
       <div className="keep">
         <span className="keep-ic">
@@ -463,8 +520,8 @@ function makeSlides(goTo: (i: number) => void): ReactNode[] {
           <div className="q-text">
             수요물량 <span className="hl">미확보</span>
             <span className="q-cap">
-              전력거래용 태양광은 2차년도까지 0.33MW 구축에 그쳤고, 3차년도 목표 2.1MW의 신규 계약 물량 미확보 — 현재
-              컨소시엄 전원이 수요모집에 집중
+              전력거래용 태양광은 2차년도까지 0.33MW 구축. 3차년도 목표는 기존 연간 목표보다 큰 2.1MW로, 신규 계약을{' '}
+              준비 중 — 현재 컨소시엄 전원이 수요모집에 집중
             </span>
           </div>
         </div>
@@ -499,11 +556,11 @@ function makeSlides(goTo: (i: number) => void): ReactNode[] {
           <b>태양광 구축 목표 대비 실적</b>
         </div>
         <div className="mrows">
-          <MRow l="2차년도 · 자가소비" s="2025년" pct={64.4} v={<><b>0.58</b> / 0.9MW · <span className="pct">64.4%</span> <small>(이월 0.32MW)</small></>} />
-          <MRow l="2차년도 · 전력거래" s="2025년" pct={36.7} acc v={<><b>0.33</b> / 0.9MW · <span className="pct">36.7%</span> <small>(이월 0.57MW)</small></>} />
-          <MRow l="3차년도 · 전력거래" s="2026년 · 목표 2.1MW" pct={0} none v={<span className="miss">신규 계약 미확보 · 0%</span>} />
+          <MRow l="2차년도 · 자가소비" s="2025년" goal={0.9} maxGoal={2.1} pct={64.4} v={<><b>0.58</b> / 0.9MW · <span className="pct">64.4%</span> <small>(이월 0.32MW)</small></>} />
+          <MRow l="2차년도 · 전력거래" s="2025년" goal={0.9} maxGoal={2.1} pct={36.7} acc v={<><b>0.33</b> / 0.9MW · <span className="pct">36.7%</span> <small>(이월 0.57MW)</small></>} />
+          <MRow l="3차년도 · 전력거래" s="2026년 — 기존 연간 목표의 2.3배" goal={2.1} maxGoal={2.1} pct={0} prep v={<span className="prep-t">신규 계약 준비 중</span>} />
         </div>
-        <p className="srcline">출처: SPC 4차년도 변경 사유 보고서 — 태양광 수요발굴 추진 현황</p>
+        <p className="srcline">막대 길이 = 목표 물량(MW) 동일 축 · 출처: SPC 4차년도 변경 사유 보고서 — 태양광 수요발굴 추진 현황</p>
       </div>
     </ContentSlide>,
 
@@ -641,7 +698,17 @@ function makeSlides(goTo: (i: number) => void): ReactNode[] {
               2.1<small>MW</small>
             </div>
             <div className="kpi-l">3차년도 전력거래 목표</div>
-            <div className="kpi-s">계약 → 설치 완료로 달성</div>
+            <div className="kpi-cmp">
+              <div className="kpi-cmp-row">
+                <i style={{ width: '39%' }} />
+                <span>기존 연간 목표 0.9MW</span>
+              </div>
+              <div className="kpi-cmp-row big">
+                <i style={{ width: '91%' }} />
+                <span>2.1MW</span>
+              </div>
+            </div>
+            <div className="kpi-s">기존 연간 목표의 2.3배 물량 — 집중 대응으로 달성</div>
           </div>
           <Flow
             steps={[
