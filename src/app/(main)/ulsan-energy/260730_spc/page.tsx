@@ -655,22 +655,15 @@ const SLIDES: ReactNode[] = [
               <span className="material-symbols-outlined">ads_click</span>
             </span>
             <div className="plan-t">
-              <b>산단 내 우선 접촉</b>
-              <small>울산 미포국가산단 소재 기업을 우선 접촉하여 수용가 확보</small>
+              <b>타겟 집중</b>
+              <small>
+                울산 미포국가산단 소재 기업을 우선 접촉하여 수용가 확보 — 내부 수용가만으로 목표 달성이 어려울
+                가능성에 대비, 필요 시 인근 산단 연계 확보 방안 검토
+              </small>
             </div>
           </div>
           <div className="plan-row">
             <span className="plan-no">02</span>
-            <span className="plan-ic">
-              <span className="material-symbols-outlined">travel_explore</span>
-            </span>
-            <div className="plan-t">
-              <b>인근 산단 연계 검토</b>
-              <small>산단 내부 수용가만으로 목표 달성이 어려울 가능성에 대비 — 필요 시 인근 산단과 연계한 수용가 확보 방안 검토</small>
-            </div>
-          </div>
-          <div className="plan-row">
-            <span className="plan-no">03</span>
             <span className="plan-ic">
               <span className="material-symbols-outlined">handshake</span>
             </span>
@@ -680,7 +673,7 @@ const SLIDES: ReactNode[] = [
             </div>
           </div>
           <div className="plan-row">
-            <span className="plan-no">04</span>
+            <span className="plan-no">03</span>
             <span className="plan-ic">
               <span className="material-symbols-outlined">fact_check</span>
             </span>
