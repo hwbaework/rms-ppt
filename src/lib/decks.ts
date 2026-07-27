@@ -17,6 +17,14 @@ export const decks: DeckMeta[] = [
   {
     region: '울산 에너지자급자족',
     date: '2026-07-30',
+    title: '3차년도 중간점검 보고',
+    href: '/ulsan-energy/260730_midterm',
+    description: '추진일정 · 2차년도 성과와 지표 · 3차년도 지표 · 5개 인프라 추진현황(사진)',
+    tags: ['중간점검', '성과지표', '인프라'],
+  },
+  {
+    region: '울산 에너지자급자족',
+    date: '2026-07-30',
     title: 'SPC 설립 시기 변경 보고',
     href: '/ulsan-energy/260730_spc',
     description: '전력거래용 태양광 SPC 설립 3차→4차년도 조정 — 사유 · 일정 · 수요모집 정상화',
