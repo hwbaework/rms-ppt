@@ -164,9 +164,10 @@ const CSS = `
 .exp-note b{color:var(--ink);font-weight:700}
 .exp-note .tag{margin-top:.3vw}
 
-/* 우측 — 성과지표 게이지 패널 */
-.kpanel{border:1px solid var(--hair);border-radius:14px;background:#f7f9fc;padding:1vw 1.15vw;display:flex;flex-direction:column;justify-content:space-between;gap:.65vw}
-.kpanel .block-label{margin-bottom:0}
+/* 우측 — 성과지표 게이지 패널: 행 높이 비율을 좌측(.exp-r)과 동일하게 맞춰 가로줄 정렬 */
+.kpanel{border:1px solid var(--hair);border-radius:14px;background:#f7f9fc;padding:.2vw 1.15vw .4vw;display:flex;flex-direction:column}
+.kpanel .block-label{margin-bottom:0;padding:.5vw 0 .35vw}
+.krow{display:flex;flex-direction:column;justify-content:center;gap:.55vw;border-top:1px solid var(--hair);min-height:0;padding:.35vw 0;flex:1}
 .kg{display:flex;flex-direction:column;gap:.3vw}
 .kg-head{display:flex;justify-content:space-between;align-items:baseline;gap:.6vw}
 .kg-head b{color:var(--ink);font-size:.8vw;font-weight:700}
@@ -212,8 +213,9 @@ const CSS = `
 .lk-ic{width:2.4vw;height:2.4vw;border-radius:50%;background:var(--tint);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .lk-ic .material-symbols-outlined{font-size:1.2vw}
 .lk-t{flex:1;min-width:0}
-.lk-t b{display:block;font-size:.9vw;color:var(--ink);font-weight:800;letter-spacing:-.01em}
+.lk-t>b{display:block;font-size:.9vw;color:var(--ink);font-weight:800;letter-spacing:-.01em}
 .lk-t small{display:block;font-size:.72vw;color:var(--body);margin-top:.14vw;line-height:1.5;word-break:keep-all}
+.lk-t small b{display:inline;font-size:inherit;color:var(--ink);font-weight:700;letter-spacing:0}
 .lk-card .tag{flex-shrink:0}
 /* 우측 — 사진 크로스페이드 (dots 포함) */
 .shot{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--hair);background:#0a1220;box-shadow:0 10px 28px rgba(11,21,38,.12);min-height:0}
@@ -352,15 +354,18 @@ function ExpRow({
   sub,
   steps,
   note,
+  grow,
 }: {
   cat: string
   name: string
   sub?: string
   steps: { m: string; t: string; warn?: boolean }[]
   note: ReactNode
+  /** 행 높이 비율 — 우측 지표 패널(.krow)과 짝을 맞춘다 */
+  grow?: number
 }) {
   return (
-    <div className="exp-r">
+    <div className="exp-r" style={grow ? { flex: grow } : undefined}>
       <div className="exp-name">
         <span className="exp-cat">{cat}</span>
         <b>{name}</b>
@@ -849,6 +854,7 @@ const SLIDES: ReactNode[] = [
           </div>
         </div>
         <ExpRow
+          grow={1.45}
           cat="통합 에너지관리 시스템"
           name="ESG 에너지 플랫폼"
           sub="알엠에쓰플렛폼"
@@ -859,8 +865,7 @@ const SLIDES: ReactNode[] = [
             { m: '’25.08', t: '개발환경 설정 · 인터페이스 정의' },
             { m: '’25.09', t: '화면 디자인 · 퍼블리싱' },
             { m: '’25.10~11', t: '플랫폼 개발 구축' },
-            { m: '’25.11', t: '테스트 시나리오 작성 · 수행' },
-            { m: '’25.11', t: '상황실 구축 완료' },
+            { m: '’25.11', t: '테스트 · 상황실 구축 완료' },
           ]}
           note={
             <>
@@ -902,46 +907,56 @@ const SLIDES: ReactNode[] = [
         />
       </div>
 
-      {/* 우 1/3 — 원본 8p 성과지표 달성률 (좌측 행 순서와 동일하게 정렬) */}
+      {/* 우 1/3 — 원본 8p 성과지표 달성률: 행 높이 비율을 좌측과 동일하게(가로줄 정렬) */}
       <div className="kpanel">
         <div className="block-label">
           <b>성과지표 검토 (2차년도)</b>
         </div>
-        <Gauge b="연료전지발전" s="롯데SK에너루트" pct={100} val="19.8 / 19.8 MW" chip="달성 100%" chipKind="done" />
-        <Gauge
-          b="태양광 · 자가소비형"
-          s="에스에너지"
-          pct={64}
-          val="0.58 / 0.9 MW"
-          chip="이월 목표 0.32MW 추진 중"
-          chipKind="ing"
-        />
-        <Gauge
-          b="태양광 · 전력거래형"
-          s="에스에너지"
-          pct={37}
-          val="0.33 / 0.9 MW"
-          chip="이월 목표 0.57MW 추진 중"
-          chipKind="ing"
-        />
-        <Gauge b="ESG 에너지 플랫폼 구축률" s="알엠에쓰플렛폼" pct={100} val="35 / 35%" chip="달성 100%" chipKind="done" />
-        <div className="kg dim">
-          <div className="kg-head">
-            <b>
-              연료전지 발전배열 (ORC)
-              <small>울산미포ORC발전</small>
-            </b>
-            <span className="kg-val" style={{ color: 'var(--muted)' }}>–</span>
-          </div>
-          <div className="kg-note">2차년도 목표 없음 — 3차년도 1.8MW 구축 목표</div>
+        <div className="krow" style={{ flex: 1.55 }}>
+          <Gauge b="연료전지발전" s="롯데SK에너루트" pct={100} val="19.8 / 19.8 MW" chip="달성 100%" chipKind="done" />
         </div>
-        <Gauge
-          b="양방향 EV 충전기"
-          s="울산테크노파크"
-          wip
-          chip="이월 목표 4대 — ’26년 재추진 중"
-          chipKind="ing"
-        />
+        <div className="krow" style={{ flex: 1.55 }}>
+          <Gauge
+            b="태양광 · 자가소비형"
+            s="에스에너지"
+            pct={64}
+            val="0.58 / 0.9 MW"
+            chip="이월 목표 0.32MW 추진 중"
+            chipKind="ing"
+          />
+          <Gauge
+            b="태양광 · 전력거래형"
+            s="에스에너지"
+            pct={37}
+            val="0.33 / 0.9 MW"
+            chip="이월 목표 0.57MW 추진 중"
+            chipKind="ing"
+          />
+        </div>
+        <div className="krow" style={{ flex: 1.45 }}>
+          <Gauge b="ESG 에너지 플랫폼 구축률" s="알엠에쓰플렛폼" pct={100} val="35 / 35%" chip="달성 100%" chipKind="done" />
+        </div>
+        <div className="krow">
+          <div className="kg dim">
+            <div className="kg-head">
+              <b>
+                연료전지 발전배열 (ORC)
+                <small>울산미포ORC발전</small>
+              </b>
+              <span className="kg-val" style={{ color: 'var(--muted)' }}>–</span>
+            </div>
+            <div className="kg-note">2차년도 목표 없음 — 3차년도 1.8MW 구축 목표</div>
+          </div>
+        </div>
+        <div className="krow">
+          <Gauge
+            b="양방향 EV 충전기"
+            s="울산테크노파크"
+            wip
+            chip="이월 목표 4대 — ’26년 재추진 중"
+            chipKind="ing"
+          />
+        </div>
       </div>
     </div>
   </ContentSlide>,
