@@ -503,11 +503,11 @@ const SLIDES: ReactNode[] = [
           <b>태양광 구축 실적 — 전체 목표 중 얼마나 했나</b>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1vw' }}>
-          {/* 전력거래용 — SPC 관리 대상: 누적 목표 3.0MW 중 0.33MW 구축, 잔여는 준비 중 */}
+          {/* 전력거래용 — SPC 관리 대상: 전체 목표 3.0MW 기준, 0.33MW 구축 · 잔여 준비 중 */}
           <div className="cum">
             <div className="cum-head">
               <b>전력거래용 태양광 (SPC 관리 대상)</b>
-              <small>누적 목표 3.0MW = 2차년도 0.9 + 3차년도 2.1 (기존 연간 목표의 2.3배)</small>
+              <small>전체 목표 3.0MW = 2차년도 0.9 + 3차년도 2.1 (기존 연간 목표의 2.3배)</small>
             </div>
             <div className="cum-bar">
               <div className="cum-done" style={{ width: '11%' }} />
@@ -515,27 +515,27 @@ const SLIDES: ReactNode[] = [
               <span className="cum-sep" style={{ left: '30%' }} />
             </div>
             <div className="cum-cap">
-              <span className="cum-mark acc" style={{ left: '11%' }}>구축 0.33MW</span>
+              <span className="cum-mark acc" style={{ left: '11%' }}>구축 0.33MW · 11%</span>
               <span className="cum-mark" style={{ left: '30%' }}>2차년도 목표 0.9MW</span>
-              <span className="cum-mark end">누적 목표 3.0MW</span>
+              <span className="cum-mark end">전체 목표 3.0MW</span>
             </div>
           </div>
-          {/* 자가소비형 — 참고. 같은 MW 축(전체 폭 = 3.0MW)이라 막대 길이 30% = 0.9MW */}
+          {/* 자가소비형 — 참고: 전체 목표 0.9MW 기준 */}
           <div className="cum">
             <div className="cum-head">
               <b>자가소비형 태양광 (참고)</b>
-              <small>목표 0.9MW · 이월 0.32MW</small>
+              <small>전체 목표 0.9MW · 이월 0.32MW</small>
             </div>
-            <div className="cum-bar" style={{ width: '30%' }}>
+            <div className="cum-bar">
               <div className="cum-done" style={{ width: '64.4%' }} />
             </div>
             <div className="cum-cap">
-              <span className="cum-mark acc" style={{ left: '19.3%' }}>구축 0.58MW · 64.4%</span>
-              <span className="cum-mark" style={{ left: '30%' }}>목표 0.9MW</span>
+              <span className="cum-mark acc" style={{ left: '64.4%' }}>구축 0.58MW · 64.4%</span>
+              <span className="cum-mark end">전체 목표 0.9MW</span>
             </div>
           </div>
         </div>
-        <p className="srcline">막대 길이 = 물량(MW) 동일 축 · 출처: SPC 4차년도 변경 사유 보고서 — 태양광 수요발굴 추진 현황</p>
+        <p className="srcline">각 막대 = 해당 유형의 전체 목표(100%) 기준 · 출처: SPC 4차년도 변경 사유 보고서 — 태양광 수요발굴 추진 현황</p>
       </div>
     </ContentSlide>,
 
