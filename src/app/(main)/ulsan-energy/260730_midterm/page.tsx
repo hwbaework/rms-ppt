@@ -480,7 +480,7 @@ const SHOW_ITEMS: {
   {
     ic: 'ev_station',
     t: 'V2G · ESS 분산에너지 실증',
-    s: '장비심의 완료(’26.07) · 조달공고 — 10~11월 V2G 6기 · ESS 설치, 12월 실증운영 개시',
+    s: '장비심의 완료(26.07) · 조달공고 — 10~11월 V2G 6기 · ESS 설치, 12월 실증운영 개시',
     files: ['v2g.png'],
     suggest: '통합안전관리센터 설치 예정지',
   },
@@ -577,7 +577,7 @@ const SLIDES: ReactNode[] = [
     <p className="cover-sub">
       울산미포국가산단 <b>에너지 자급자족 인프라 구축 및 운영사업</b>
       <br />
-      ’26년 6월 말 기준 사업추진 실적 · 성과지표 목표달성 방안
+      26년 6월 말 기준 사업추진 실적 · 성과지표 목표달성 방안
     </p>
     <div className="cover-meta">
       <img src="/images/rmsplatform-logo-white.png" alt="RMS PLATFORM" />
@@ -783,15 +783,15 @@ const SLIDES: ReactNode[] = [
               <span className="ms-type">RPS</span>
               <div className="ms">
                 <div className="ms-i">
-                  <b>’25.10</b>
+                  <b>25.10</b>
                   <span>연료전지동 설치 · 입고 완료</span>
                 </div>
                 <div className="ms-i">
-                  <b>’25.10</b>
+                  <b>25.10</b>
                   <span>시운전 시작</span>
                 </div>
                 <div className="ms-i">
-                  <b>’25.11</b>
+                  <b>25.11</b>
                   <span>송전선로 공사 완료</span>
                 </div>
               </div>
@@ -800,11 +800,11 @@ const SLIDES: ReactNode[] = [
               <span className="ms-type">CHPS</span>
               <div className="ms">
                 <div className="ms-i">
-                  <b>’25.09</b>
+                  <b>25.09</b>
                   <span>기초 토목공사 진행</span>
                 </div>
                 <div className="ms-i">
-                  <b>’25.11</b>
+                  <b>25.11</b>
                   <span>연료전지동 구축 공사 진행</span>
                 </div>
               </div>
@@ -828,15 +828,15 @@ const SLIDES: ReactNode[] = [
               <span className="ms-type">자가소비</span>
               <div className="ms">
                 <div className="ms-i">
-                  <b>’25.06</b>
+                  <b>25.06</b>
                   <span>5개 업체 계약 완료</span>
                 </div>
                 <div className="ms-i">
-                  <b>’25.10</b>
+                  <b>25.10</b>
                   <span>현장검토 · 설계 완료</span>
                 </div>
                 <div className="ms-i">
-                  <b>’25.11</b>
+                  <b>25.11</b>
                   <span>착공 — 연내 구축</span>
                 </div>
               </div>
@@ -845,11 +845,11 @@ const SLIDES: ReactNode[] = [
               <span className="ms-type">전력거래</span>
               <div className="ms">
                 <div className="ms-i">
-                  <b>’25.06</b>
+                  <b>25.06</b>
                   <span>자가소비+PPA형 1개 업체 계약</span>
                 </div>
                 <div className="ms-i">
-                  <b>’25.11</b>
+                  <b>25.11</b>
                   <span>착공 — 연내 구축</span>
                 </div>
               </div>
@@ -867,17 +867,19 @@ const SLIDES: ReactNode[] = [
           name="ESG 에너지 플랫폼"
           sub="알엠에쓰플렛폼"
           steps={[
-            { m: '’25.04~06', t: '정보구조도 · 메뉴구조도 설계' },
-            { m: '’25.05~07', t: '디자인 시안 · 시각 가이드라인' },
-            { m: '’25.06~08', t: '세부 프로세스(통합관제 · 컨설팅) 설계' },
-            { m: '’25.08', t: '개발환경 설정 · 인터페이스 정의' },
-            { m: '’25.09', t: '화면 디자인 · 퍼블리싱' },
-            { m: '’25.10~11', t: '플랫폼 개발 구축' },
-            { m: '’25.11', t: '테스트 · 상황실 구축 완료' },
+            { m: '25.04~06', t: '정보구조도 · 메뉴구조도 설계' },
+            { m: '25.05~07', t: '디자인 시안 · 시각 가이드라인' },
+            { m: '25.06~08', t: '세부 프로세스(통합관제 · 컨설팅) 설계' },
+            { m: '25.08', t: '개발환경 설정 · 인터페이스 정의' },
+            { m: '25.09', t: '화면 디자인 · 퍼블리싱' },
+            { m: '25.10~11', t: '플랫폼 개발 구축' },
+            { m: '25.11', t: '테스트 · 상황실 구축 완료' },
           ]}
           note={
             <>
-              모듈별 개발 방식 적용 — <b>일부 모듈 선개발</b> 진행
+              모듈별 개발 방식 적용
+              <br />
+              <b>일부 모듈 선개발</b> 진행
             </>
           }
         />
@@ -887,14 +889,14 @@ const SLIDES: ReactNode[] = [
           name="ORC 발전시설"
           sub="울산미포ORC발전"
           steps={[
-            { m: '’25.01~12', t: '기본 · 상세설계' },
-            { m: '’25.01~', t: '모듈 · Dry cooler 등 주요 설비 제작' },
-            { m: '’25.11', t: '모듈 FAT' },
-            { m: '’25.03~12', t: '수요기업 발굴 · 계약 진행' },
+            { m: '25.01~12', t: '기본 · 상세설계' },
+            { m: '25.01~', t: '모듈 · Dry cooler 등 주요 설비 제작' },
+            { m: '25.11', t: '모듈 FAT' },
+            { m: '25.03~12', t: '수요기업 발굴 · 계약 진행' },
           ]}
           note={
             <>
-              특수목적법인 설립 및 수행기관 참여(’25.02~04)
+              특수목적법인 설립 및 수행기관 참여(25.02~04)
             </>
           }
         />
@@ -904,14 +906,14 @@ const SLIDES: ReactNode[] = [
           name="양방향 EV충전"
           sub="울산테크노파크"
           steps={[
-            { m: '’25.06', t: '기본 · 실시설계' },
-            { m: '’25.09', t: '장비심의 · 실시설계 준공 및 보완' },
-            { m: '’25.12', t: 'PCS 구매 · 납품 완료' },
-            { m: '유찰', t: '’26년 재추진 준비', warn: true },
+            { m: '25.06', t: '기본 · 실시설계' },
+            { m: '25.09', t: '장비심의 · 실시설계 준공 및 보완' },
+            { m: '25.12', t: 'PCS 구매 · 납품 완료' },
+            { m: '유찰', t: '26년 재추진 준비', warn: true },
           ]}
           note={
             <>
-              V2G 충전기 · ESS <b>유찰에 따른 재추진(’26년)</b> 예정
+              V2G 충전기 · ESS <b>유찰에 따른 재추진(26년)</b> 예정
             </>
           }
         />
@@ -963,7 +965,7 @@ const SLIDES: ReactNode[] = [
             b="양방향 EV 충전기"
             s="울산테크노파크"
             wip
-            chip="이월 목표 4대 — ’26년 재추진 중"
+            chip="이월 목표 4대 — 26년 재추진 중"
             chipKind="ing"
           />
         </div>
