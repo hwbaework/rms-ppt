@@ -208,6 +208,9 @@ const CSS = `
 .tbl td.num.carry{color:var(--ink);font-weight:700;font-size:.88vw}
 .tbl td.dim{color:#b6c2d6;text-align:center}
 .tbl td.scope{color:var(--muted);font-size:.76vw}
+/* 집행 실적(1+2차년도 합) · 집행 목표(총 합계) — 원 단위 우측 정렬 */
+.tbl td.won{text-align:right;font-variant-numeric:tabular-nums;font-size:.74vw;color:var(--ink);font-weight:700;white-space:nowrap}
+.tbl td.won.total{color:var(--body);font-weight:600}
 
 /* ── 3차년도 추진현황 — 좌 카드 5 + 우 순환 사진 (demo-v2와 동일 1:1) ── */
 .feat{display:grid;grid-template-columns:1fr 1fr;gap:1.1vw;flex:1;min-height:0;align-items:stretch}
@@ -998,14 +1001,16 @@ const SLIDES: ReactNode[] = [
       {/* 지표는 병합 셀로 묶는다 — 태양광은 구분 하나 + 자가/전력거래 유형 분리 (3p와 동일 원칙) */}
       <table className="tbl">
         <colgroup>
-          <col style={{ width: '17%' }} />
-          <col style={{ width: '13%' }} />
+          <col style={{ width: '14%' }} />
           <col style={{ width: '11%' }} />
+          <col style={{ width: '8%' }} />
+          <col style={{ width: '10.5%' }} />
+          <col style={{ width: '5%' }} />
+          <col style={{ width: '7%' }} />
+          <col style={{ width: '8.5%' }} />
+          <col style={{ width: '11.5%' }} />
+          <col style={{ width: '11.5%' }} />
           <col style={{ width: '13%' }} />
-          <col style={{ width: '6%' }} />
-          <col style={{ width: '9%' }} />
-          <col style={{ width: '11%' }} />
-          <col style={{ width: '20%' }} />
         </colgroup>
         <thead>
           <tr>
@@ -1015,12 +1020,14 @@ const SLIDES: ReactNode[] = [
             <th className="c">단위</th>
             <th className="c">이월 목표</th>
             <th className="c">3차년도 목표</th>
+            <th className="c">집행 실적 (원)</th>
+            <th className="c">집행 목표 (원)</th>
             <th>비고</th>
           </tr>
         </thead>
         <tbody>
           <tr className="grp">
-            <td colSpan={8}>신재생에너지 인프라 조성</td>
+            <td colSpan={10}>신재생에너지 인프라 조성</td>
           </tr>
           <tr>
             <td className="ind" rowSpan={3}>
@@ -1033,6 +1040,8 @@ const SLIDES: ReactNode[] = [
             <td className="c">MW</td>
             <td className="dim">–</td>
             <td className="num goal">19.8</td>
+            <td className="won">15,189,750,000</td>
+            <td className="won total">15,238,350,000</td>
             <td className="scope">발전시설의 설치 여부</td>
           </tr>
           <tr>
@@ -1044,6 +1053,8 @@ const SLIDES: ReactNode[] = [
             <td className="c">MW</td>
             <td className="num carry">0.32</td>
             <td className="dim">–</td>
+            <td className="won">1,249,956,470</td>
+            <td className="won total">2,534,662,350</td>
             <td className="scope">발전시설의 설치 여부</td>
           </tr>
           <tr>
@@ -1052,10 +1063,12 @@ const SLIDES: ReactNode[] = [
             <td className="c">MW</td>
             <td className="num carry">0.57</td>
             <td className="num goal">2.1</td>
+            <td className="won">1,674,223,530</td>
+            <td className="won total">5,164,517,650</td>
             <td className="scope">발전시설의 설치 여부</td>
           </tr>
           <tr className="grp">
-            <td colSpan={8}>통합 에너지관리 시스템 구축</td>
+            <td colSpan={10}>통합 에너지관리 시스템 구축</td>
           </tr>
           <tr>
             <td className="ind">통합 에너지관리시스템 구축</td>
@@ -1066,10 +1079,12 @@ const SLIDES: ReactNode[] = [
             <td className="c">%</td>
             <td className="dim">–</td>
             <td className="num goal">30</td>
+            <td className="won">3,038,990,000</td>
+            <td className="won total">4,382,990,000</td>
             <td className="scope">WBS 계획 대비 공정률</td>
           </tr>
           <tr className="grp">
-            <td colSpan={8}>탄소저감 지원</td>
+            <td colSpan={10}>탄소저감 지원</td>
           </tr>
           <tr>
             <td className="ind" rowSpan={2}>
@@ -1082,6 +1097,8 @@ const SLIDES: ReactNode[] = [
             <td className="c">MW</td>
             <td className="dim">–</td>
             <td className="num goal">1.8</td>
+            <td className="won">8,086,860,000</td>
+            <td className="won total">11,366,559,000</td>
             <td className="scope">발전시설의 설치 여부</td>
           </tr>
           <tr>
@@ -1092,6 +1109,8 @@ const SLIDES: ReactNode[] = [
             <td className="c">대</td>
             <td className="num carry">4</td>
             <td className="num goal">2</td>
+            <td className="won">299,530,164</td>
+            <td className="won total">1,000,000,000</td>
             <td className="scope">충전기 설치 여부</td>
           </tr>
         </tbody>
