@@ -1117,6 +1117,9 @@ const SLIDES: ReactNode[] = [
         </tbody>
       </table>
     </div>
+    <p className="srcline">
+      ※ 집행실적은 1, 2차년도 사업비 기 집행 내역, 집행 목표는 1~4차년도 총 사업비 금액 기준으로 작성
+    </p>
   </ContentSlide>,
 
   /* ── 04 3차년도 추진현황 — 좌 카드 5 + 우 순환 사진 (원본 11~15p) ── */
