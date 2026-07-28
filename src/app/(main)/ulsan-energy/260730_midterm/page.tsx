@@ -958,7 +958,7 @@ const SLIDES: ReactNode[] = [
           <div className="kg dim">
             <div className="kg-head">
               <b>
-                연료전지 발전배열 (ORC)
+                연료전지 발전배열 활용 (ORC)
                 <small>울산미포ORC발전</small>
               </b>
               <span className="kg-val" style={{ color: 'var(--muted)' }}>–</span>
@@ -1079,8 +1079,9 @@ const SLIDES: ReactNode[] = [
             <td className="c">%</td>
             <td className="dim">–</td>
             <td className="num goal">30</td>
-            <td className="won">3,038,990,000</td>
-            <td className="won total">4,382,990,000</td>
+            {/* 통합 EMS 4,382,990,000 + 데이터 수집 인프라 1,598,730,000 합산 (사용자 지시) */}
+            <td className="won">3,973,720,000</td>
+            <td className="won total">5,981,720,000</td>
             <td className="scope">WBS 계획 대비 공정률</td>
           </tr>
           <tr className="grp">
@@ -1091,7 +1092,7 @@ const SLIDES: ReactNode[] = [
               신재생에너지 인프라 연계
             </td>
             <td colSpan={2}>
-              <b>연료전지 발전배열 활용</b>
+              <b>연료전지 발전배열 활용 (ORC)</b>
             </td>
             <td>울산미포ORC발전</td>
             <td className="c">MW</td>
