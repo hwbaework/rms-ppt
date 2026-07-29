@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import PptExportButton from '@/components/PptExport'
 import type { ReactNode } from 'react'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
@@ -53,6 +54,7 @@ const CSS = `
 .cover-step-arr{color:rgba(127,168,232,.5);font-size:.9vw}
 .cover-meta{display:flex;align-items:center;gap:1vw;color:rgba(148,168,200,.85);font-size:.9vw;position:relative;z-index:1}
 .cover-meta img{height:1.5vw;opacity:1}
+.cover-consortium{color:#dde6f3;font-size:.95vw;font-weight:700;letter-spacing:.05em}
 .cover-meta i{width:3px;height:3px;border-radius:50%;background:rgba(148,168,200,.5)}
 
 /* ── 목차 (좌 네이비 패널 + 우 에디토리얼 리스트) ── */
@@ -580,6 +582,7 @@ const CSS = `
 /* ── 감사합니다 (마지막 다크) ── */
 .thanks-inner{text-align:center;position:relative;z-index:1;align-self:center}
 .thanks-inner img{height:2.4vw;margin-bottom:2.6vw;opacity:.95}
+.thanks-consortium{color:#dde6f3;font-size:1.3vw;font-weight:700;letter-spacing:.28em;padding-left:.28em;margin-bottom:2.6vw;opacity:.95}
 .thanks-title{color:#fff;font-size:3.1vw;font-weight:800;letter-spacing:-.01em;margin-bottom:1.3vw}
 .thanks-tagline{color:var(--accent-soft);font-size:1.05vw;font-weight:300;line-height:1.8}
 .thanks-contact{color:rgba(148,168,200,.6);font-size:.9vw;margin-top:2.8vw;letter-spacing:.08em}
@@ -772,6 +775,7 @@ function AutoShots({
   side,
   extra,
   map,
+  pos,
 }: {
   srcs: string[]
   steps?: { b: string; s: string }[]
@@ -781,6 +785,8 @@ function AutoShots({
   extra?: ReactNode
   /** 캡처 i가 보일 때 하이라이트할 단계 인덱스들 (생략 시 1:1) */
   map?: number[][]
+  /** 캡처별 크롭 기준(object-position) — 넓은 화면에서 어느 쪽을 보여줄지 (예: 'top right') */
+  pos?: (string | undefined)[]
 }) {
   const [i, setI] = useState(0)
   const [failed, setFailed] = useState<Record<number, boolean>>({})
@@ -832,6 +838,7 @@ function AutoShots({
             src={s}
             alt="플랫폼 화면 캡처"
             className={idx === i ? 'on' : ''}
+            style={pos?.[idx] ? { objectPosition: pos[idx] } : undefined}
             onError={() => setFailed((f) => ({ ...f, [idx]: true }))}
           />
         )
@@ -1025,6 +1032,8 @@ function FinaleExpand() {
           attributionControl: false,
           fadeDuration: 0,
           maxTileCacheSize: 512,
+          // 캔버스 버퍼 유지 — PPT 내보내기(화면 캡처) 때 지도가 검게 나오지 않도록
+          canvasContextAttributes: { preserveDrawingBuffer: true },
         })
         map.on('error', (e) => console.error('[MAPLIBRE]', (e as { error?: Error })?.error?.message || e))
         map.on('load', () => {
@@ -1103,7 +1112,7 @@ const SLIDES: ReactNode[] = [
       통합에너지플랫폼 구축 현황과 방향성
     </p>
     <div className="cover-meta">
-      <img src="/images/rmsplatform-logo-white.png" alt="RMS PLATFORM" />
+      <span className="cover-consortium">울산 미포 컨소시엄</span>
       <i />
       <span>2026. 07. 30</span>
     </div>
@@ -1247,7 +1256,7 @@ const SLIDES: ReactNode[] = [
         <Tile ic="support_agent" k="컨설팅" feats={['무료 진단 (A~F 등급)', '컨설턴트 매칭', '톡 상담 · 자료 요청', 'RE100 이행 7단계']} bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
         <Tile ic="monitoring" k="모니터링" feats={['통합관제 대시보드', '발전량 실시간 감시', '이상 감지 · 알림', 'A/S · O&M 접수']} bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
         <Tile ic="swap_horiz" k="전력거래" feats={['재생에너지 전력 조회', '거래 등록 · 체결', 'Lease · On/Off-site', '전력 확보']} bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
-        <Tile ic="view_in_ar" k="DT" feats={['설치 전 3D 시뮬레이션', '예상 발전량 · 효과 확인']} bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
+        <Tile ic="view_in_ar" k="DT" feats={['실제 설비 3D 트윈', '발전량 · 수익 시뮬레이션']} bar="done" st={<span className="tag blue live"><i />QA · 안정화</span>} />
       </div>
       <div className="press p3">
         <Tile soon ic="co2" k="탄소배출관리" planning="탄소 배출 현황 파악 · 감축 관리 영역" bar="early" st={<span className="tag gray"><i />일부 구성 · 하반기 확대</span>} />
@@ -1527,42 +1536,42 @@ const SLIDES: ReactNode[] = [
     />
   </ContentSlide>,
 
-  /* ── 11page : 핵심 기능 ⑤ DT(디지털 트윈) ── */
+  /* ── 11page : 핵심 기능 ⑤ DT(디지털 트윈) — 실제 설치된 설비의 3D 트윈 + 시뮬레이션 ── */
   <ContentSlide
     key="p11"
     no="03"
     sec="핵심 기능 ④ DT (디지털 트윈)"
-    title={<>설치 전에 눈으로 확인하는 <span className="hl">예상 효과</span></>}
-    lede={<>신규 가입 기업에 가장 효과적인 것 — 태양광 설치 효과를 <b>직접 눈으로 확인</b>하는 것입니다.</>}
+    title={<>실제 사업장을 그대로 옮긴 <span className="hl">3D 디지털 트윈</span></>}
+    lede={<>설치된 설비를 3D 트윈으로 재현해 — <b>가동 현황과 발전 효과를 한 화면에서</b> 확인합니다.</>}
   >
-    <div className="feat">
-      <div className="fcol">
-        <div className="proc">
-          <div className="block-label"><b>절차</b></div>
-          <StepCol
-            steps={[
-              { b: '설치 전', s: '우리 사업장' },
-              { b: 'DT 시뮬레이션', tone: 'acc' },
-              { b: '예상 효과 확인', s: '시각적으로' },
+    <AutoShots
+      side
+      steps={[
+        { b: '3D 트윈 · 가동 현황', s: '설비 선택 → 계약전력 · 수요 · 공급 · RE 달성률' },
+        { b: '발전 시뮬레이션', s: '태양 궤적 반영 — 20년 발전량 · 수익 계산' },
+        { b: '스카웃', s: '인근 지붕 후보 랭킹 · 설치용량 산출' },
+      ]}
+      srcs={[
+        '/images/260730_demo/dt-01.png',
+        '/images/260730_demo/dt-02.png',
+        '/images/260730_demo/dt-03.png',
+      ]}
+      pos={['top right', 'top left', undefined]}
+      extra={
+        <>
+          <Effects
+            items={[
+              '설비를 고르면 가동 값이 바로 — 수요 · 공급(kWh) · RE 달성률',
+              '태양 궤적 · 기상 반영 20년 발전량 · 수익 시뮬레이션',
+              '인근 지붕 후보 랭킹(용량 · 점수) — 신규 영업 지원',
             ]}
           />
-        </div>
-        <Effects
-          items={[
-            '설치 전 도입 의사결정 지원',
-            '신규 가입 기업에 가장 효과적인 소구점',
-          ]}
-        />
-        <div className="mflow">
-          <span className="tag blue"><i />발표 후 실제 플랫폼 접속 — 직접 시연</span>
-        </div>
-      </div>
-      <ImgSlot
-        tall
-        t="제안: DT 화면 캡처"
-        d="태양광 설치 전 예상 효과를 3D로 보여주는 디지털 트윈 화면 — 캡처를 넣으면 자동 순환 뷰어로 교체"
-      />
-    </div>
+          <div className="mflow">
+            <span className="tag blue"><i />발표 후 실제 플랫폼 접속 — 직접 시연</span>
+          </div>
+        </>
+      }
+    />
   </ContentSlide>,
 
   /* ── 12page : 하반기 개발 로드맵 ── */
@@ -1593,7 +1602,7 @@ const SLIDES: ReactNode[] = [
   /* ── 감사합니다 ── */
   <div className="dark-stage" key="thanks">
     <div className="thanks-inner">
-      <img src="/images/rmsplatform-logo-white.png" alt="RMS PLATFORM" />
+      <div className="thanks-consortium">울산 미포 컨소시엄</div>
       <div className="thanks-title">감사합니다</div>
       <div className="thanks-tagline">
         Improving the quality of life and<br />creating a sustainable &amp; resilient society
@@ -1660,6 +1669,7 @@ export default function Page() {
       >
         ⛶
       </button>
+      <PptExportButton total={total} current={idx} goTo={setIdx} fileName="20260730_ULS_통합에너지플랫폼_구축현황_v1.pptx" />
 
       {slides.map((s, i) => (
         <div key={i} className={`slide${i === idx ? ' active' : i < idx ? ' prev' : ''}`}>

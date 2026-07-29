@@ -28,14 +28,16 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        {/* Pretendard */}
+        {/* Pretendard — crossOrigin: PPT 내보내기(화면 캡처)가 폰트를 읽어 심을 수 있게 */}
         <link
           rel="stylesheet"
+          crossOrigin="anonymous"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
         />
         {/* Google Material Symbols (Outlined) */}
         <link
           rel="stylesheet"
+          crossOrigin="anonymous"
           href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
         />
       </head>

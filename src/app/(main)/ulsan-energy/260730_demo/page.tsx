@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import PptExportButton from '@/components/PptExport'
 import type { ReactNode } from 'react'
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -51,6 +52,7 @@ const CSS = `
 .cover-step-arr{color:rgba(127,168,232,.5);font-size:.9vw}
 .cover-meta{display:flex;align-items:center;gap:1vw;color:rgba(148,168,200,.85);font-size:.9vw;position:relative;z-index:1}
 .cover-meta img{height:1.35vw;filter:brightness(0) invert(1);opacity:.9}
+.cover-consortium{color:#dde6f3;font-size:.95vw;font-weight:700;letter-spacing:.05em}
 .cover-meta i{width:3px;height:3px;border-radius:50%;background:rgba(148,168,200,.5)}
 
 /* ── 목차 (좌 네이비 패널 + 우 에디토리얼 리스트) ── */
@@ -425,6 +427,7 @@ const CSS = `
 /* ── 감사합니다 (마지막 다크) ── */
 .thanks-inner{text-align:center;position:relative;z-index:1;align-self:center}
 .thanks-inner img{height:2.4vw;filter:brightness(0) invert(1);margin-bottom:2.6vw;opacity:.92}
+.thanks-consortium{color:#dde6f3;font-size:1.3vw;font-weight:700;letter-spacing:.28em;padding-left:.28em;margin-bottom:2.6vw;opacity:.95}
 .thanks-title{color:#fff;font-size:3.1vw;font-weight:800;letter-spacing:-.01em;margin-bottom:1.3vw}
 .thanks-tagline{color:var(--accent-soft);font-size:1.05vw;font-weight:300;line-height:1.8}
 .thanks-contact{color:rgba(148,168,200,.6);font-size:.9vw;margin-top:2.8vw;letter-spacing:.08em}
@@ -770,9 +773,7 @@ const SLIDES: ReactNode[] = [
       통합에너지플랫폼 구축 현황과 방향성
     </p>
     <div className="cover-meta">
-      <img src="/images/logo.png" alt="RMS GROUP" />
-      <i />
-      <span>RMS</span>
+      <span className="cover-consortium">울산 미포 컨소시엄</span>
       <i />
       <span>2026. 07. 30</span>
     </div>
@@ -1251,7 +1252,7 @@ const SLIDES: ReactNode[] = [
   /* ── 감사합니다 ── */
   <div className="dark-stage" key="thanks">
     <div className="thanks-inner">
-      <img src="/images/logo.png" alt="RMS GROUP" />
+      <div className="thanks-consortium">울산 미포 컨소시엄</div>
       <div className="thanks-title">감사합니다</div>
       <div className="thanks-tagline">
         Improving the quality of life and<br />creating a sustainable &amp; resilient society
@@ -1319,6 +1320,7 @@ export default function Page() {
       >
         ⛶
       </button>
+      <PptExportButton total={total} current={idx} goTo={setIdx} fileName="20260730_ULS_플랫폼구축현황_고정본_v1.pptx" />
 
       {slides.map((s, i) => (
         <div key={i} className={`slide${i === idx ? ' active' : i < idx ? ' prev' : ''}`}>

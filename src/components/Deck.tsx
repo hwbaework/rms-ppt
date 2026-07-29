@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
+import PptExportButton from '@/components/PptExport'
 
 function DeckPlayer({
   slides,
@@ -112,10 +113,14 @@ function DeckPlayer({
       ref={containerRef}
       className="fixed inset-0 z-50 bg-white text-gray-900 overflow-hidden flex flex-col"
     >
+      {/* PPT 내보내기 — 전 덱 공통 */}
+      <PptExportButton total={total} current={idx} goTo={goTo} />
+
       {/* 풀스크린 버튼 — 우상단 고정 */}
       <button
         onClick={toggleFullscreen}
         aria-label="풀스크린"
+        data-noexport
         className="absolute top-4 right-4 z-20 size-9 rounded-lg bg-white/80 backdrop-blur border border-gray-200 hover:bg-white hover:border-gray-300 flex items-center justify-center transition shadow-sm"
       >
         <span className="material-symbols-outlined text-base">
@@ -152,7 +157,7 @@ function DeckPlayer({
       )}
 
       {/* Bottom controls */}
-      <footer className="border-t border-gray-100 px-6 md:px-10 py-4 flex items-center justify-between gap-4">
+      <footer data-noexport className="border-t border-gray-100 px-6 md:px-10 py-4 flex items-center justify-between gap-4">
         <button
           onClick={prev}
           disabled={idx === 0}

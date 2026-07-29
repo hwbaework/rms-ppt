@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import PptExportButton from '@/components/PptExport'
 import type { ReactNode } from 'react'
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -54,6 +55,7 @@ const CSS = `
 .cover-sub b{color:#fff;font-weight:600}
 .cover-meta{display:flex;align-items:center;gap:1vw;color:rgba(148,168,200,.85);font-size:.9vw;position:relative;z-index:1}
 .cover-meta img{height:1.5vw;opacity:1}
+.cover-consortium{color:#dde6f3;font-size:.95vw;font-weight:700;letter-spacing:.05em}
 .cover-meta i{width:3px;height:3px;border-radius:50%;background:rgba(148,168,200,.5)}
 
 /* ── 본문 공통 ── */
@@ -243,6 +245,7 @@ const CSS = `
 /* ── 감사합니다 ── */
 .thanks-inner{text-align:center;position:relative;z-index:1;align-self:center}
 .thanks-inner img{height:2.4vw;margin-bottom:2.6vw;opacity:.95}
+.thanks-consortium{color:#dde6f3;font-size:1.3vw;font-weight:700;letter-spacing:.28em;padding-left:.28em;margin-bottom:2.6vw;opacity:.95}
 .thanks-title{color:#fff;font-size:3.1vw;font-weight:800;letter-spacing:-.01em;margin-bottom:1.3vw}
 .thanks-tagline{color:var(--accent-soft);font-size:1.05vw;font-weight:300;line-height:1.8}
 
@@ -583,7 +586,7 @@ const SLIDES: ReactNode[] = [
       26년 6월 말 기준 사업추진 실적 · 성과지표 목표달성 방안
     </p>
     <div className="cover-meta">
-      <img src="/images/rmsplatform-logo-white.png" alt="RMS PLATFORM" />
+      <span className="cover-consortium">울산 미포 컨소시엄</span>
       <i />
       <span>2026. 07. 30</span>
     </div>
@@ -1146,7 +1149,7 @@ const SLIDES: ReactNode[] = [
   /* ── 감사합니다 ── */
   <div className="dark-stage" key="thanks">
     <div className="thanks-inner">
-      <img src="/images/rmsplatform-logo-white.png" alt="RMS PLATFORM" />
+      <div className="thanks-consortium">울산 미포 컨소시엄</div>
       <div className="thanks-title">감사합니다</div>
       <div className="thanks-tagline">
         Improving the quality of life and
@@ -1215,6 +1218,7 @@ export default function Page() {
       >
         ⛶
       </button>
+      <PptExportButton total={total} current={idx} goTo={setIdx} fileName="20260730_ULS_3차년도_중간점검_v1.pptx" />
 
       {slides.map((s, i) => (
         <div key={i} className={`slide${i === idx ? ' active' : i < idx ? ' prev' : ''}`}>

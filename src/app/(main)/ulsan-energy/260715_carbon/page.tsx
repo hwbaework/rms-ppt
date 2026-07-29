@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import PptExportButton from '@/components/PptExport'
 import type { ReactNode } from 'react'
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1564,6 +1565,7 @@ export default function Page() {
       >
         ⛶
       </button>
+      <PptExportButton total={total} current={idx} goTo={setIdx} fileName="20260715_ULS_탄소거래개념_v1.pptx" />
 
       {slides.map((s, i) => (
         <div key={i} className={`slide${i === idx ? ' active' : i < idx ? ' prev' : ''}`}>
