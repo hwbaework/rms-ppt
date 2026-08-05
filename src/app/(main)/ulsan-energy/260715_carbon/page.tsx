@@ -739,7 +739,7 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
           </div>
         </div>
         <div className="formula">
-          <span className="f-pill"><span className="material-symbols-outlined">cloud</span>배출량 tCO₂</span>
+          <span className="f-pill"><span className="material-symbols-outlined">cloud</span>배출량 tCO₂e</span>
           ×
           <span className="f-pill">정해진 세율</span>
           =
@@ -773,7 +773,7 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     }
   >
     <div>
-      <div className="block-label"><b>배출권 거래제 메커니즘 — 1장 = 1 tCO₂</b></div>
+      <div className="block-label"><b>배출권 거래제 메커니즘 — 1장 = 1 tCO₂e</b></div>
       <div className="dia">
         {/* 곡선 화살표 — 위: 배출권 판매(좌→우), 아래: 거래 대금(우→좌) */}
         <svg className="dia-arrows" viewBox="0 0 1160 200" preserveAspectRatio="none" fill="none" aria-hidden>
