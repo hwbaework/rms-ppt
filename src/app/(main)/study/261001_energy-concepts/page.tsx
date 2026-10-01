@@ -456,16 +456,13 @@ const CSS = `
 .src.more{background:transparent;border:1.5px dashed #c7d2e3}
 .src.more .material-symbols-outlined{color:#94a3b8}
 
-/* ── 세로 채움 규칙 — 장마다 블록이 영역을 채우도록 (박스가 커져서 채운다) ── */
-.area>.duo,.area>.split2,.area>.pcs,.area>.hoses,.area>.hub,.area>.routes,.area>.seasons,.area>.models,.area>.cards-3,.area>.five,.area>.scen,.area>.grid-3,.area>.grid-2,.area>.co2,.area>.cards-2{flex:1}
-.area>.blk{flex:1;display:flex;flex-direction:column}
-.blk>.grid-2,.blk>.grid-3{flex:1}
-.item,.sc,.fcard,.use,.tcard,.model,.duo-col,.hose,.route,.season{display:flex;flex-direction:column;justify-content:center}
-.route-line{align-items:center}
-.split2{align-items:stretch}
-.split2 .stack{justify-content:center}
-.split2 .stack>.fcard{flex:1}
-.tree{justify-content:center}
+/* ── DC/AC 파형 그래프 ── */
+.wave{background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:.9vw 1.3vw .7vw}
+.wave svg{width:100%;height:auto;display:block}
+.wave-lg{display:flex;gap:2vw;margin-top:.5vw;font-size:.76vw;color:var(--body);flex-wrap:wrap}
+.wave-lg span{display:inline-flex;align-items:center;gap:.45vw}
+.wave-lg i{width:1.1vw;height:.35vw;border-radius:2px;display:inline-block;flex-shrink:0}
+.wave-lg b{color:var(--ink);margin-right:.2vw}
 
 /* ── 모션 (전부 CSS — 부유하는 블롭 + 콘텐츠 스태거 등장) ── */
 @keyframes drift-a{0%{transform:translate(0,0) scale(1);opacity:.8}50%{opacity:1}100%{transform:translate(7vw,4.5vw) scale(1.25);opacity:.85}}
@@ -840,20 +837,17 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
         </div>
       </div>
       <div className="co2-col yes">
-        <div className="co2-h"><i /><b>배출 있음</b><small>무언가를 태워 에너지를 얻는 방식</small></div>
+        <div className="co2-h"><i /><b>배출 있음</b><small>연료(가스)에서 출발하는 에너지</small></div>
         <div className="co2-chips">
-          <div className="src more"><span className="material-symbols-outlined">local_fire_department</span><div><b>연료를 태우는 발전 등</b><small>이 자료에서는 다루지 않음</small></div></div>
+          <Src icon="propane_tank" name="연료전지" sub="수소 100%로 전기를 만든다 — 그 수소(가스)를 어디서 얻느냐가 관건" />
+          <div className="src more"><span className="material-symbols-outlined">more_horiz</span><div><b>그 외 다수</b><small>이 자료에서는 다루지 않음</small></div></div>
         </div>
       </div>
     </div>
 
-    <div className="five">
-      <div className="sc charge"><div className="sc-t">만든다</div><div className="sc-k">태양광</div><div className="sc-d">빛으로 <b>전기</b>를 만든다 — 설비 흐름·사업모델·단위를 이어서 본다.</div></div>
-      <div className="sc charge"><div className="sc-t">만든다</div><div className="sc-k">태양열</div><div className="sc-d">햇빛으로 <b>온수</b>를 만든다 — 공공시설·요양원·어린이집.</div></div>
-      <div className="sc charge"><div className="sc-t">얻는다</div><div className="sc-k">지열</div><div className="sc-d">땅속 13℃를 열원으로 <b>냉난방</b>한다 — 에어컨 원리.</div></div>
-      <div className="sc mix"><div className="sc-t">만든다</div><div className="sc-k">연료전지</div><div className="sc-d"><b>수소 100%</b>로 전기를 만든다. 더 중요한 건 그 수소(가스)를 <b>어디서 어떻게 얻느냐</b>다.</div></div>
-      <div className="sc"><div className="sc-t">담는다</div><div className="sc-k">ESS</div><div className="sc-d">만들지 않고 <b>저장</b>한다. 무엇으로 채우느냐에 따라 탄소의 답이 달라진다.</div></div>
-    </div>
+    <p className="coda">
+      <b>ESS</b>는 에너지를 만드는 게 아니라 <b>담아 두는</b> 설비다 — 무엇으로 채우느냐에 따라 탄소의 답이 정해진다.
+    </p>
   </ContentSlide>,
 
   /* 5. [전사] DC와 AC */
@@ -864,24 +858,21 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     title="전기의 기본 — 태양광은 직류(DC)로 받아 교류(AC)로 보낸다"
     lede={<>태양광 모듈이 만드는 전기는 <b>직류(DC)</b>, 공장과 건물이 실제로 쓰는 전기는 <b>교류(AC)</b>다. 그 사이를 바꿔 주는 장치가 <span className="hl">인버터</span>다.</>}
   >
-    <div className="duo">
-      <div className="duo-col dc">
-        <div className="duo-h"><b>DC · 직류</b><span className="tag amber"><i />설비 그림의 주황색 구간</span></div>
-        <div className="duo-wave"><svg viewBox="0 0 300 40" preserveAspectRatio="none" aria-hidden><line x1="0" y1="20" x2="300" y2="20" stroke="#f59e0b" strokeWidth="3" /></svg></div>
-        <div className="duo-list">
-          <div className="duo-li"><i /><span><b>한 방향으로 일정하게</b> 흐르는 전기</span></div>
-          <div className="duo-li"><i /><span><b>태양광 모듈</b>이 만드는 전기 · <b>배터리(ESS)</b>에 담기는 전기</span></div>
-          <div className="duo-li"><i /><span>그대로는 <b>공장·건물에서 쓸 수 없다</b></span></div>
-        </div>
-      </div>
-      <div className="duo-col ac">
-        <div className="duo-h"><b>AC · 교류</b><span className="tag blue"><i />설비 그림의 파란색 구간 — 인버터부터</span></div>
-        <div className="duo-wave"><svg viewBox="0 0 300 40" preserveAspectRatio="none" aria-hidden><path d="M0 20 C 12 0, 25 0, 37 20 S 62 40, 75 20 S 100 0, 112 20 S 137 40, 150 20 S 175 0, 187 20 S 212 40, 225 20 S 250 0, 262 20 S 287 40, 300 20" fill="none" stroke="#3b82f6" strokeWidth="3" /></svg></div>
-        <div className="duo-list">
-          <div className="duo-li"><i /><span>방향이 <b>주기적으로 바뀌는</b> 전기(국내 60Hz)</span></div>
-          <div className="duo-li"><i /><span>콘센트 · 공장 부하 · 한전 계통 — <b>실제로 쓰는 전기는 전부 AC</b></span></div>
-          <div className="duo-li"><i /><span>인버터가 <b>DC와 AC의 분기점</b></span></div>
-        </div>
+    <div className="wave">
+      <svg viewBox="0 0 900 230" aria-hidden>
+        <line x1="60" y1="20" x2="60" y2="210" stroke="#c3ccda" strokeWidth="1.5" />
+        <line x1="60" y1="115" x2="880" y2="115" stroke="#c3ccda" strokeWidth="1.5" />
+        <text x="18" y="24" fontSize="12" fontWeight="700" fill="#8a94a6">전압</text>
+        <text x="48" y="119" fontSize="11" fill="#8a94a6" textAnchor="end">0</text>
+        <text x="880" y="134" fontSize="12" fontWeight="700" fill="#8a94a6" textAnchor="end">시간 →</text>
+        <line x1="60" y1="55" x2="880" y2="55" stroke="#f59e0b" strokeWidth="4" strokeLinecap="round" />
+        <text x="880" y="46" fontSize="14" fontWeight="800" fill="#b45309" textAnchor="end">DC · 직류 — 한 방향으로 일정하게</text>
+        <path d="M60 115 C 112 20, 164 20, 216 115 S 320 210, 372 115 S 476 20, 528 115 S 632 210, 684 115 S 788 20, 840 115" fill="none" stroke="#2563eb" strokeWidth="4" strokeLinecap="round" />
+        <text x="880" y="200" fontSize="14" fontWeight="800" fill="#1d4ed8" textAnchor="end">AC · 교류 — 방향이 주기적으로 바뀜 (국내 60Hz)</text>
+      </svg>
+      <div className="wave-lg">
+        <span><i style={{ background: '#f59e0b' }} /><b>DC</b> 태양광 모듈이 만드는 전기 · 배터리(ESS)에 담기는 전기 · 그대로는 공장에서 못 쓴다</span>
+        <span><i style={{ background: '#2563eb' }} /><b>AC</b> 콘센트 · 공장 부하 · 한전 계통 — 실제로 쓰는 전기는 전부 AC</span>
       </div>
     </div>
 
