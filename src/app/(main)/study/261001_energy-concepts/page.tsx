@@ -444,7 +444,7 @@ const CSS = `
 .analogy-row.big img{height:3.4vw}
 
 /* ── 탄소 배출 두 갈래 ── */
-.co2{display:grid;grid-template-columns:1.6fr 1fr;gap:1vw}
+.co2{display:grid;grid-template-columns:2.2fr 1fr;gap:1vw}
 .co2-col{background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:1vw 1.25vw;display:flex;flex-direction:column}
 .co2-h{display:flex;align-items:center;gap:.5vw;margin-bottom:.7vw;flex-wrap:wrap}
 .co2-h i{width:.5vw;height:.5vw;border-radius:50%}
@@ -828,19 +828,19 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
 
     <div className="co2">
       <div className="co2-col no">
-        <div className="co2-h"><i /><b>배출 없음</b><small>햇빛·땅의 온도처럼 태우지 않고 쓰는 에너지</small></div>
+        <div className="co2-h"><i /><b>배출 없음 — 재생에너지</b><small>이 자료가 다루는 네 가지는 모두 여기</small></div>
         <div className="co2-chips">
           <Src icon="solar_power" name="태양광" sub="전기를 만든다" />
           <Src icon="water_heater" name="태양열" sub="온수를 만든다" />
           <Src icon="device_thermostat" name="지열" sub="냉난방 열을 얻는다" />
-          <div className="src more"><span className="material-symbols-outlined">more_horiz</span><div><b>그 외 다수</b><small>이 자료에서는 다루지 않음</small></div></div>
+          <Src icon="propane_tank" name="연료전지" sub="수소 100%로 전기를 만든다 — 수소를 어디서 얻느냐가 관건" />
+          <div className="src more"><span className="material-symbols-outlined">more_horiz</span><div><b>그 외 다수</b><small>여러 재생에너지 중 이 자료에서는 다루지 않음</small></div></div>
         </div>
       </div>
       <div className="co2-col yes">
-        <div className="co2-h"><i /><b>배출 있음</b><small>연료(가스)에서 출발하는 에너지</small></div>
+        <div className="co2-h"><i /><b>배출 있음</b></div>
         <div className="co2-chips">
-          <Src icon="propane_tank" name="연료전지" sub="수소 100%로 전기를 만든다 — 그 수소(가스)를 어디서 얻느냐가 관건" />
-          <div className="src more"><span className="material-symbols-outlined">more_horiz</span><div><b>그 외 다수</b><small>이 자료에서는 다루지 않음</small></div></div>
+          <div className="src more"><span className="material-symbols-outlined">more_horiz</span><div><b>이 자료에서는 다루지 않음</b><small>탄소가 나오는 에너지는 범위 밖</small></div></div>
         </div>
       </div>
     </div>
