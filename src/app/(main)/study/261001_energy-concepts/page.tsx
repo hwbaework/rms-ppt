@@ -105,9 +105,6 @@ const CSS = `
 /* ── 탄소 축 (첫 질문) — 질문 노드 + 세 갈래 ── */
 .axis{display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:1vw}
 .axis-col{background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:1.1vw 1.25vw;display:flex;flex-direction:column}
-.axis-col.yes{border-top:3px solid #10b981}
-.axis-col.dep{border-top:3px solid #f59e0b}
-.axis-col.cond{border-top:3px solid #94a3b8}
 .axis-h{display:flex;align-items:center;gap:.5vw;margin-bottom:.3vw}
 .axis-h b{color:var(--ink);font-size:.95vw;font-weight:800}
 .axis-h i{width:.5vw;height:.5vw;border-radius:50%}
@@ -339,7 +336,6 @@ const CSS = `
 /* ── 비교 2단 (DC vs AC · kW vs kWh) ── */
 .duo{display:grid;grid-template-columns:1fr 1fr;gap:1vw}
 .duo-col{background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:1vw 1.2vw}
-.duo-col.dc{border-top:3px solid #f59e0b}.duo-col.ac{border-top:3px solid #3b82f6}
 .duo-h{display:flex;align-items:center;gap:.6vw;margin-bottom:.5vw}
 .duo-h b{color:var(--ink);font-size:1vw;font-weight:800}
 .duo-h .tag{margin-left:auto}
@@ -369,9 +365,10 @@ const CSS = `
 /* ── 5열 그리드 · 시나리오 카드 ── */
 .five{display:grid;grid-template-columns:repeat(5,1fr);gap:.8vw}
 .scen{display:grid;grid-template-columns:repeat(4,1fr);gap:.8vw}
-.sc{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:.8vw 1vw;border-top:3px solid #c3ccda}
-.sc.charge{border-top-color:#14b8a6}.sc.disch{border-top-color:#ef4444}.sc.mix{border-top-color:#f59e0b}
-.sc-t{color:var(--muted);font-size:.66vw;font-weight:700;letter-spacing:.06em;margin-bottom:.25vw}
+.sc{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:.8vw 1vw}
+.sc-t{color:var(--muted);font-size:.66vw;font-weight:700;letter-spacing:.06em;margin-bottom:.25vw;display:flex;align-items:center;gap:.4vw}
+.sc-t:before{content:"";width:.4vw;height:.4vw;border-radius:50%;background:#c3ccda;flex-shrink:0}
+.sc.charge .sc-t:before{background:#14b8a6}.sc.disch .sc-t:before{background:#ef4444}.sc.mix .sc-t:before{background:#f59e0b}
 .sc-k{color:var(--ink);font-size:.86vw;font-weight:800;margin-bottom:.3vw}
 .sc-d{color:var(--body);font-size:.74vw;line-height:1.6}
 .sc-d b{color:var(--ink)}
