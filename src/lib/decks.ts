@@ -95,10 +95,10 @@ export const decks: DeckMeta[] = [
     tags: ['PPA', 'Platform'],
   },
   {
-    region: '공통',
+    region: '개인 학습 · 개념 정리',
     date: '2026-10-01',
     title: '에너지 개념 정리',
-    href: '/common/261001_energy-concepts',
+    href: '/study/261001_energy-concepts',
     description: '첫 질문은 탄소 배출 여부 — 태양광(설비 흐름 · DC/AC · 전기실·분기점 · 자가소비/리스/PPA · kW/kWh) · 태양열 · 지열 · 연료전지 · ESS(구성 · 충방전 곡선 · PCS/BMS/EMS · 전압×전류 · 부하 구간 · 데이터). 설계 가이드 PDF + 구두 설명 전사 기반',
     tags: ['Concept', 'Solar', 'ESS', 'Geothermal', 'FuelCell'],
   },

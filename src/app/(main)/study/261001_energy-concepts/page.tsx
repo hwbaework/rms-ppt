@@ -5,7 +5,7 @@ import PptExportButton from '@/components/PptExport'
 import type { ReactNode } from 'react'
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 에너지 개념 정리 (2026-10-01) — 공통 · 지역 무관 레퍼런스
+// 에너지 개념 정리 (2026-10-01) — 개인 학습 · 개념 정리 (지역 무관, 공부용)
 //
 //   원천 ① 사용자 설명(2026-10-01) ② '태양광·ESS 통합 설계 가이드.pdf'(2p) — PDF 두 장은 구성·문구를 그대로 옮김
 //        ③ '전건호와 함께한 에너지 개념정리'(2026-10-01 구두 설명 전사, 24분) — 비유·설명을 그대로 옮김
@@ -1350,7 +1350,7 @@ export default function Page() {
       >
         ⛶
       </button>
-      <PptExportButton total={total} current={idx} goTo={setIdx} fileName="20261001_COM_공통_개념_에너지개념정리_v1.pptx" />
+      <PptExportButton total={total} current={idx} goTo={setIdx} fileName="20261001_COM_학습_개념_에너지개념정리_v1.pptx" />
 
       {slides.map((s, i) => (
         <div key={i} className={`slide${i === idx ? ' active' : i < idx ? ' prev' : ''}`}>
