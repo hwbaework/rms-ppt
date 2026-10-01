@@ -373,6 +373,100 @@ const CSS = `
 .sc-d{color:var(--body);font-size:.74vw;line-height:1.6}
 .sc-d b{color:var(--ink)}
 
+/* ── 트리(분기점) · 2단 ── */
+.split2{display:grid;grid-template-columns:1.35fr 1fr;gap:1.2vw;align-items:start}
+.tree{display:flex;flex-direction:column;align-items:center}
+.tnode{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:.7vw 1.3vw;text-align:center;display:flex;flex-direction:column;align-items:center;gap:.12vw;min-width:13vw}
+.tnode .material-symbols-outlined{font-size:1.5vw;color:var(--accent);margin-bottom:.15vw}
+.tnode b{color:var(--ink);font-size:.92vw;font-weight:800}
+.tnode small{color:var(--muted);font-size:.7vw;line-height:1.5}
+.tnode.root{background:var(--navy1);border-color:var(--navy1);min-width:24vw}
+.tnode.root .material-symbols-outlined{color:#7fa8e8}.tnode.root b{color:#fff}.tnode.root small{color:rgba(191,209,238,.8)}
+.tnode.green{background:#ecfdf5;border-color:#a7f3d0}.tnode.green .material-symbols-outlined{color:#047857}
+.tnode.blue{background:var(--tint);border-color:var(--tint-line)}
+.tlink{width:26vw;height:2.6vw;display:block}
+.trow2{display:flex;gap:1.6vw}
+.trow3{display:flex;gap:.8vw}
+.tchip{background:var(--chip);border:1px solid var(--hair);border-radius:999px;padding:.3vw 1vw;color:var(--body);font-size:.76vw;font-weight:700}
+.tcap{color:var(--muted);font-size:.72vw;margin-top:.7vw;text-align:center;line-height:1.6}
+.tcap b{color:var(--ink)}
+.node.dc{background:#fff7ed;border:1px solid #fed7aa}.node.dc .material-symbols-outlined{color:#b45309}
+.arr.dc{color:#f59e0b}
+
+/* ── PCS 양방향 그림 ── */
+.pcs{display:grid;grid-template-columns:1fr 1.2fr .9fr 1.2fr 1fr;align-items:center;gap:.4vw;background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:1vw 1.4vw}
+.pnode{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.15vw;border-radius:12px;padding:.9vw .6vw}
+.pnode .material-symbols-outlined{font-size:2.2vw}
+.pnode b{color:var(--ink);font-size:.95vw;font-weight:800}
+.pnode small{color:var(--muted);font-size:.7vw}
+.pnode.dc{background:#fff7ed}.pnode.dc .material-symbols-outlined{color:#b45309}
+.pnode.ac{background:var(--tint)}.pnode.ac .material-symbols-outlined{color:#1d4ed8}
+.pnode.hub{background:var(--navy1)}.pnode.hub .material-symbols-outlined{color:#7fa8e8}.pnode.hub b{color:#fff}.pnode.hub small{color:rgba(191,209,238,.8)}
+.parr{width:100%;height:auto;display:block}
+.cmp{display:grid;grid-template-columns:14vw 1fr;gap:1vw;align-items:center;background:var(--chip);border-radius:12px;padding:.6vw 1vw}
+.cmp-l b{display:block;color:var(--ink);font-size:.86vw;font-weight:800}
+.cmp-l small{display:block;color:var(--muted);font-size:.7vw;margin-top:.1vw}
+.cmp-r .node{padding:.45vw .4vw}
+
+/* ── 호스·펌프 비유 ── */
+.hoses{display:grid;grid-template-columns:1fr 1fr;gap:1vw}
+.hose{background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:.9vw 1.2vw;display:flex;flex-direction:column;gap:.5vw}
+.hose svg{width:100%;height:auto;display:block}
+.hose p{color:var(--body);font-size:.78vw;line-height:1.65}
+.hose p b{color:var(--ink)}
+.tag.red{color:#b91c1c}.tag.red i{background:#ef4444}
+
+/* ── 부하 구간 띠 ── */
+.band svg{width:100%;height:auto;display:block}
+
+/* ── 데이터 → EMS → 판단 허브 ── */
+.hub{display:grid;grid-template-columns:1.3fr 3vw auto 3vw 1fr;align-items:center;gap:.3vw}
+.hub-in{display:flex;flex-direction:column;gap:.45vw}
+.hchip{display:flex;align-items:center;gap:.6vw;background:var(--card);border:1px solid var(--hair);border-radius:10px;padding:.45vw .8vw}
+.hchip .material-symbols-outlined{font-size:1.15vw;color:#14b8a6;flex-shrink:0}
+.hchip.warn .material-symbols-outlined{color:#f59e0b}
+.hchip b{display:block;color:var(--ink);font-size:.8vw;font-weight:800}
+.hchip small{display:block;color:var(--muted);font-size:.66vw;line-height:1.45}
+.hub-arr{width:100%;height:100%;display:block}
+.hub-core{display:flex;flex-direction:column;align-items:center;gap:.25vw;text-align:center;padding:0 .6vw}
+.q-ic.big{width:4.4vw;height:4.4vw}.q-ic.big .material-symbols-outlined{font-size:2.3vw}
+.hub-core b{color:var(--ink);font-size:1.05vw;font-weight:800}
+.hub-core small{color:var(--muted);font-size:.7vw;line-height:1.45;max-width:9vw}
+.hub-out{display:flex;flex-direction:column;gap:.8vw}
+.hout{display:flex;align-items:center;gap:.6vw;border-radius:12px;padding:.7vw 1vw}
+.hout .material-symbols-outlined{font-size:1.5vw}
+.hout b{display:block;font-size:.95vw;font-weight:800;color:var(--ink)}
+.hout small{display:block;color:var(--muted);font-size:.68vw}
+.hout.charge{background:#ecfdf5}.hout.charge .material-symbols-outlined{color:#047857}
+.hout.disch{background:#fef2f2}.hout.disch .material-symbols-outlined{color:#b91c1c}
+.hout.stop{background:#f1f5f9}.hout.stop .material-symbols-outlined{color:#475569}
+.analogy-row.big{padding:1.1vw 2vw;gap:4vw}
+.analogy-row.big img{height:3.4vw}
+
+/* ── 탄소 배출 두 갈래 ── */
+.co2{display:grid;grid-template-columns:1.6fr 1fr;gap:1vw}
+.co2-col{background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:1vw 1.25vw;display:flex;flex-direction:column}
+.co2-h{display:flex;align-items:center;gap:.5vw;margin-bottom:.7vw;flex-wrap:wrap}
+.co2-h i{width:.5vw;height:.5vw;border-radius:50%}
+.co2-col.no .co2-h i{background:#10b981}.co2-col.yes .co2-h i{background:#ef4444}
+.co2-h b{color:var(--ink);font-size:.98vw;font-weight:800}
+.co2-h small{color:var(--muted);font-size:.72vw;margin-left:.3vw}
+.co2-chips{display:grid;grid-template-columns:1fr 1fr;gap:.5vw;flex:1;align-content:center}
+.co2-col.yes .co2-chips{grid-template-columns:1fr}
+.src.more{background:transparent;border:1.5px dashed #c7d2e3}
+.src.more .material-symbols-outlined{color:#94a3b8}
+
+/* ── 세로 채움 규칙 — 장마다 블록이 영역을 채우도록 (박스가 커져서 채운다) ── */
+.area>.duo,.area>.split2,.area>.pcs,.area>.hoses,.area>.hub,.area>.routes,.area>.seasons,.area>.models,.area>.cards-3,.area>.five,.area>.scen,.area>.grid-3,.area>.grid-2,.area>.co2,.area>.cards-2{flex:1}
+.area>.blk{flex:1;display:flex;flex-direction:column}
+.blk>.grid-2,.blk>.grid-3{flex:1}
+.item,.sc,.fcard,.use,.tcard,.model,.duo-col,.hose,.route,.season{display:flex;flex-direction:column;justify-content:center}
+.route-line{align-items:center}
+.split2{align-items:stretch}
+.split2 .stack{justify-content:center}
+.split2 .stack>.fcard{flex:1}
+.tree{justify-content:center}
+
 /* ── 모션 (전부 CSS — 부유하는 블롭 + 콘텐츠 스태거 등장) ── */
 @keyframes drift-a{0%{transform:translate(0,0) scale(1);opacity:.8}50%{opacity:1}100%{transform:translate(7vw,4.5vw) scale(1.25);opacity:.85}}
 @keyframes drift-b{0%{transform:translate(0,0) scale(1);opacity:.85}50%{opacity:1}100%{transform:translate(-5.5vw,-4vw) scale(1.22);opacity:.8}}
@@ -484,7 +578,7 @@ function Flow({ steps }: { steps: { no: string; name: string; sub: string; final
 
 function Block({ label, cols, children }: { label: string; cols: 2 | 3; children: ReactNode }) {
   return (
-    <div>
+    <div className="blk">
       <div className="block-label"><b>{label}</b></div>
       <div className={`grid-${cols}`}>{children}</div>
     </div>
@@ -541,7 +635,7 @@ function Model({ icon, name, rows }: { icon: string; name: string; rows: { k: st
   )
 }
 
-function Node({ icon, name, sub, kind }: { icon: string; name: string; sub?: string; kind?: 'grid' | 'off' }) {
+function Node({ icon, name, sub, kind }: { icon: string; name: string; sub?: string; kind?: 'grid' | 'off' | 'dc' }) {
   return (
     <div className={`node${kind ? ` ${kind}` : ''}`}>
       <span className="material-symbols-outlined">{icon}</span>
@@ -725,7 +819,7 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     no="00"
     sec="기본 원칙"
     title="모든 에너지 판단의 첫 질문 — 탄소가 배출되는가"
-    lede={<>에너지원을 볼 때 가장 먼저 확인할 것은 <span className="hl">탄소 배출 여부</span>다. 이 축에 따라 사업의 의미와 계약 구조가 갈린다.</>}
+    lede={<>에너지원을 볼 때 가장 먼저 확인할 것은 <span className="hl">탄소 배출 여부</span>다. 에너지원은 훨씬 많지만, 이 자료는 그중 다섯 가지만 다룬다.</>}
   >
     <div className="q">
       <span className="q-ic"><span className="material-symbols-outlined">co2</span></span>
@@ -735,32 +829,83 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
       </div>
     </div>
 
-    <div className="axis">
-      <div className="axis-col yes">
-        <div className="axis-h"><i /><b>운영 중 배출 없음</b></div>
-        <div className="axis-d">햇빛·땅의 온도를 그대로 쓰는 설비</div>
-        <div className="axis-list">
-          <Src icon="solar_power" name="태양광" sub="전기 — 자가소비 · 리스 · PPA" />
-          <Src icon="water_heater" name="태양열" sub="온수 — 집열판 + 축열탱크" />
-          <Src icon="device_thermostat" name="지열" sub="냉난방 — 땅속 13℃ 열원" />
+    <div className="co2">
+      <div className="co2-col no">
+        <div className="co2-h"><i /><b>배출 없음</b><small>햇빛·땅의 온도처럼 태우지 않고 쓰는 에너지</small></div>
+        <div className="co2-chips">
+          <Src icon="solar_power" name="태양광" sub="전기를 만든다" />
+          <Src icon="water_heater" name="태양열" sub="온수를 만든다" />
+          <Src icon="device_thermostat" name="지열" sub="냉난방 열을 얻는다" />
+          <div className="src more"><span className="material-symbols-outlined">more_horiz</span><div><b>그 외 다수</b><small>이 자료에서는 다루지 않음</small></div></div>
         </div>
       </div>
-      <div className="axis-col dep">
-        <div className="axis-h"><i /><b>연료에 따라 갈림</b></div>
-        <div className="axis-d">무엇을 태워 수소를 얻는지가 먼저</div>
-        <div className="axis-list">
-          <Src icon="propane_tank" name="연료전지" sub="가스(LNG·바이오) → 수소 100% 구동" />
-          <Src icon="help" name="수소 조달" sub="수소를 어디서 어떻게 사오는가가 쟁점" />
-        </div>
-      </div>
-      <div className="axis-col cond">
-        <div className="axis-h"><i /><b>저장 — 충전 전원이 결정</b></div>
-        <div className="axis-d">스스로 만들지 않고 담아두는 설비</div>
-        <div className="axis-list">
-          <Src icon="battery_charging_full" name="ESS" sub="태양광으로 채우면 비배출, 계통으로 채우면 계통 따라" />
+      <div className="co2-col yes">
+        <div className="co2-h"><i /><b>배출 있음</b><small>무언가를 태워 에너지를 얻는 방식</small></div>
+        <div className="co2-chips">
+          <div className="src more"><span className="material-symbols-outlined">local_fire_department</span><div><b>연료를 태우는 발전 등</b><small>이 자료에서는 다루지 않음</small></div></div>
         </div>
       </div>
     </div>
+
+    <div className="five">
+      <div className="sc charge"><div className="sc-t">만든다</div><div className="sc-k">태양광</div><div className="sc-d">빛으로 <b>전기</b>를 만든다 — 설비 흐름·사업모델·단위를 이어서 본다.</div></div>
+      <div className="sc charge"><div className="sc-t">만든다</div><div className="sc-k">태양열</div><div className="sc-d">햇빛으로 <b>온수</b>를 만든다 — 공공시설·요양원·어린이집.</div></div>
+      <div className="sc charge"><div className="sc-t">얻는다</div><div className="sc-k">지열</div><div className="sc-d">땅속 13℃를 열원으로 <b>냉난방</b>한다 — 에어컨 원리.</div></div>
+      <div className="sc mix"><div className="sc-t">만든다</div><div className="sc-k">연료전지</div><div className="sc-d"><b>수소 100%</b>로 전기를 만든다. 더 중요한 건 그 수소(가스)를 <b>어디서 어떻게 얻느냐</b>다.</div></div>
+      <div className="sc"><div className="sc-t">담는다</div><div className="sc-k">ESS</div><div className="sc-d">만들지 않고 <b>저장</b>한다. 무엇으로 채우느냐에 따라 탄소의 답이 달라진다.</div></div>
+    </div>
+  </ContentSlide>,
+
+  /* 5. [전사] DC와 AC */
+  <ContentSlide
+    key="s1b"
+    no="01"
+    sec="태양광 · 전기의 기본"
+    title="전기의 기본 — 태양광은 직류(DC)로 받아 교류(AC)로 보낸다"
+    lede={<>태양광 모듈이 만드는 전기는 <b>직류(DC)</b>, 공장과 건물이 실제로 쓰는 전기는 <b>교류(AC)</b>다. 그 사이를 바꿔 주는 장치가 <span className="hl">인버터</span>다.</>}
+  >
+    <div className="duo">
+      <div className="duo-col dc">
+        <div className="duo-h"><b>DC · 직류</b><span className="tag amber"><i />설비 그림의 주황색 구간</span></div>
+        <div className="duo-wave"><svg viewBox="0 0 300 40" preserveAspectRatio="none" aria-hidden><line x1="0" y1="20" x2="300" y2="20" stroke="#f59e0b" strokeWidth="3" /></svg></div>
+        <div className="duo-list">
+          <div className="duo-li"><i /><span><b>한 방향으로 일정하게</b> 흐르는 전기</span></div>
+          <div className="duo-li"><i /><span><b>태양광 모듈</b>이 만드는 전기 · <b>배터리(ESS)</b>에 담기는 전기</span></div>
+          <div className="duo-li"><i /><span>그대로는 <b>공장·건물에서 쓸 수 없다</b></span></div>
+        </div>
+      </div>
+      <div className="duo-col ac">
+        <div className="duo-h"><b>AC · 교류</b><span className="tag blue"><i />설비 그림의 파란색 구간 — 인버터부터</span></div>
+        <div className="duo-wave"><svg viewBox="0 0 300 40" preserveAspectRatio="none" aria-hidden><path d="M0 20 C 12 0, 25 0, 37 20 S 62 40, 75 20 S 100 0, 112 20 S 137 40, 150 20 S 175 0, 187 20 S 212 40, 225 20 S 250 0, 262 20 S 287 40, 300 20" fill="none" stroke="#3b82f6" strokeWidth="3" /></svg></div>
+        <div className="duo-list">
+          <div className="duo-li"><i /><span>방향이 <b>주기적으로 바뀌는</b> 전기(국내 60Hz)</span></div>
+          <div className="duo-li"><i /><span>콘센트 · 공장 부하 · 한전 계통 — <b>실제로 쓰는 전기는 전부 AC</b></span></div>
+          <div className="duo-li"><i /><span>인버터가 <b>DC와 AC의 분기점</b></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div className="route" style={{ padding: '1vw 1.4vw' }}>
+      <div className="route-line">
+        <Node icon="solar_power" name="태양광 모듈" sub="빛 → 직류(DC)" kind="dc" />
+        <span className="arr dc">⟶</span>
+        <Node icon="input" name="접속반 → 인버터 입력" sub="몰라도 된다 — 입력으로만" kind="dc" />
+        <span className="arr dc">⟶</span>
+        <Node icon="swap_horiz" name="인버터" sub="DC → AC 변환 · 모니터링 설치 지점" kind="grid" />
+        <div className="branch" style={{ marginTop: 0 }}>
+          <span className="branch-fork" />
+          <div className="branch-out">
+            <div className="bout"><span className="material-symbols-outlined">factory</span><div><b>자가소비</b><small>공장 부하에 직접 공급 (AC)</small></div></div>
+            <div className="bout"><span className="material-symbols-outlined">cell_tower</span><div><b>한전 계통 연계</b><small>잉여 전력 송전 (AC)</small></div></div>
+          </div>
+        </div>
+      </div>
+      <p className="route-note"><b style={{ color: '#b45309' }}>주황 = DC</b> 구간 · <b>파랑 = AC</b> 구간 — 인버터를 기준으로 색이 바뀐다.</p>
+    </div>
+
+    <p className="coda">
+      모니터링(RTU)이 인버터에 붙기 때문에 플랫폼에 들어오는 데이터에는 <b>DC 값과 AC 값이 함께</b> 있다 — 인버터 앞은 DC, 뒤는 AC. 울산 데이터의 DC·AC 구분이 여기서 나온다.
+    </p>
   </ContentSlide>,
 
   /* 4. [PDF p1] 태양광 발전설비 — 햇빛에서 전력 사용까지 */
@@ -824,84 +969,59 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     />
   </ContentSlide>,
 
-  /* 5. [전사] DC와 AC */
-  <ContentSlide
-    key="s1b"
-    no="01"
-    sec="태양광 · 전기의 기본"
-    title="DC와 AC — 태양광은 DC를 만들고, 우리는 AC를 쓴다"
-    lede={<>태양광 모듈에서는 자연스럽게 <b>직류(DC)</b>가 나온다. 하지만 공장이든 집이든 콘센트로 쓰는 전기는 전부 <span className="hl">교류(AC)</span> — 그 사이를 바꿔 주는 것이 인버터다.</>}
-  >
-    <div className="duo">
-      <div className="duo-col dc">
-        <div className="duo-h"><b>DC · 직류</b><span className="tag amber"><i />설비 그림의 주황색 구간</span></div>
-        <div className="duo-wave"><svg viewBox="0 0 300 40" preserveAspectRatio="none" aria-hidden><line x1="0" y1="20" x2="300" y2="20" stroke="#f59e0b" strokeWidth="3" /></svg></div>
-        <div className="duo-list">
-          <div className="duo-li"><i /><span>일직선 한 방향으로 흐르고 <b>꺼지지 않는다</b></span></div>
-          <div className="duo-li"><i /><span><b>태양광 모듈</b>이 빛을 받아 만드는 전기 · <b>배터리(ESS)</b>에 담기는 전기</span></div>
-          <div className="duo-li"><i /><span>핸드폰·컴퓨터 파워는 DC로 동작 — 충전기(어댑터)가 콘센트의 AC를 DC로 바꿔 준다</span></div>
-          <div className="duo-li"><i /><span>그 자체로는 <b>공장에서 쓸 수 있는 전기가 아니다</b></span></div>
-        </div>
-      </div>
-      <div className="duo-col ac">
-        <div className="duo-h"><b>AC · 교류</b><span className="tag blue"><i />설비 그림의 파란색 구간 — 인버터부터</span></div>
-        <div className="duo-wave"><svg viewBox="0 0 300 40" preserveAspectRatio="none" aria-hidden><path d="M0 20 C 12 0, 25 0, 37 20 S 62 40, 75 20 S 100 0, 112 20 S 137 40, 150 20 S 175 0, 187 20 S 212 40, 225 20 S 250 0, 262 20 S 287 40, 300 20" fill="none" stroke="#3b82f6" strokeWidth="3" /></svg></div>
-        <div className="duo-list">
-          <div className="duo-li"><i /><span><b>1초에 60번</b> 방향이 바뀐다(60Hz) — TV·모니터가 1초에 60번 깜빡이는 이유, 눈에는 안 보인다</span></div>
-          <div className="duo-li"><i /><span>콘센트(돼지코)로 쓰는 <b>실생활 전기는 전부 AC</b> — 공장 부하도, 한전 계통도</span></div>
-          <div className="duo-li"><i /><span>태양광 DC를 AC로 바꾸는 장치가 <b>인버터</b> — 인버터가 DC와 AC의 분기점</span></div>
-          <div className="duo-li"><i /><span>접속반은 몰라도 된다 — 그냥 <b>인버터 입력</b>으로 생각하면 된다</span></div>
-        </div>
-      </div>
-    </div>
-
-    <Flow
-      steps={[
-        { no: 'DC', name: '태양광 모듈', sub: '빛 → 직류 발전. 공장 지붕 등에 설치' },
-        { no: 'DC', name: '접속반 → 인버터 입력', sub: '여러 모듈 선로를 모아 인버터로' },
-        { no: 'DC → AC', name: '인버터', sub: '직류를 교류로. 모니터링 장치를 여기에 설치' },
-        { no: 'AC', name: '공장 부하 · 한전 계통', sub: '쓰거나(자가소비) 보낸다(계통 송전)', final: true },
-      ]}
-    />
-
-    <p className="coda">
-      모니터링(RTU)이 인버터에 붙기 때문에 플랫폼에 들어오는 데이터에는 <b>DC 값과 AC 값이 함께</b> 있다 — 인버터 앞은 DC, 뒤는 AC. 울산 데이터의 DC·AC 구분이 여기서 나온다.
-    </p>
-  </ContentSlide>,
-
-  /* 6. [전사] 전기실(수배전반·계량기)과 분기점 */
+  /* 6. [전사] 전기실(수배전반·계량기)과 분기점 — 트리 */
   <ContentSlide
     key="s1c"
     no="01"
     sec="태양광 · 전기실과 분기점"
     title="전기실(수배전반·계량기)과 분기점 — 저장이 아니라 흐름의 시작점"
-    lede={<>태양광이 만든 전기는 결국 건물의 <b>전기실</b>로 들어가야 공장이 쓸 수 있다. 전기실은 전기를 담는 곳이 아니라 <span className="hl">모든 전기 경로의 시작점</span>이고, 그 뒤에서 자가소비와 계통 송전으로 갈린다.</>}
+    lede={<>태양광이 만든 전기는 건물의 <b>전기실</b>로 들어가야 공장이 쓸 수 있다. 전기실은 전기를 담는 곳이 아니라 <span className="hl">모든 전기 경로의 시작점</span>이고, 그 뒤에서 자가소비와 계통 송전으로 갈린다.</>}
   >
-    <div className="cards-3">
-      <Fcard icon="electrical_services" title="정식 명칭과 흔한 말">
-        정확한 명칭은 <b>수배전반 · 계량기</b>. 일반적으로는 건물의 <b>'전기실'</b>이라고 부른다. 공장이 실제로 쓰는 전기를 컨트롤하는 곳.
-      </Fcard>
-      <Fcard icon="moving" title="저장이 아니라 흐름">
-        ESS가 아닌 이상 전기는 <b>한 방향으로 흐르고 멈출 수 없다</b>. 전기실은 전기를 담는 곳이 아니라 들어온 전기를 실시간으로 바로 쓰게 보내는 곳.
-      </Fcard>
-      <Fcard icon="power_off" title="정전이 나면">
-        집의 두꺼비집처럼, 공장은 <b>전기실의 차단기가 떨어진다</b>. 공장에서 쓰는 모든 전기의 경로와 시작점이 여기이기 때문.
-      </Fcard>
+    <div className="split2">
+      <div className="tree">
+        <div className="tnode root">
+          <span className="material-symbols-outlined">electrical_services</span>
+          <b>전기실 — 수배전반 · 계량기</b>
+          <small>태양광 전기가 들어오는 곳 · 공장 모든 전기 경로의 시작점</small>
+        </div>
+        <svg className="tlink" viewBox="0 0 400 60" preserveAspectRatio="none" aria-hidden>
+          <path d="M200 0 V22 M200 22 H100 V60 M200 22 H300 V60" fill="none" stroke="#c3ccda" strokeWidth="2" />
+        </svg>
+        <div className="trow2">
+          <div className="tnode green">
+            <span className="material-symbols-outlined">home</span>
+            <b>자가소비</b>
+            <small>내가 쓴다 — 계통으로 보내지 않고 끝</small>
+          </div>
+          <div className="tnode blue">
+            <span className="material-symbols-outlined">cell_tower</span>
+            <b>계통 송전</b>
+            <small>내가 쓰지 않는 전기는 전부 한전 계통으로</small>
+          </div>
+        </div>
+        <svg className="tlink" viewBox="0 0 400 44" preserveAspectRatio="none" aria-hidden>
+          <path d="M100 0 V16 M300 0 V16 M60 16 H340 M80 16 V44 M200 16 V44 M320 16 V44" fill="none" stroke="#c3ccda" strokeWidth="2" strokeDasharray="4 4" />
+        </svg>
+        <div className="trow3">
+          <div className="tchip">리스</div>
+          <div className="tchip">PPA</div>
+          <div className="tchip">RPS (한전 판매)</div>
+        </div>
+        <p className="tcap">리스·PPA·RPS는 <b>그 아래 단계의 사업 방식</b> — 어느 쪽으로 흐르느냐(자가소비 / 계통 송전)가 먼저다.</p>
+      </div>
+
+      <div className="stack">
+        <Fcard icon="moving" title="저장이 아니라 흐름">
+          ESS가 아닌 이상 전기는 <b>한 방향으로 흐르고 멈출 수 없다</b>. 들어온 전기를 그 순간 바로 쓰게 보내는 곳 — 흔히 <b>'전기실'</b>이라 부른다.
+        </Fcard>
+        <Fcard icon="power_off" title="정전이 나면">
+          집의 두꺼비집처럼 공장은 <b>전기실의 차단기가 떨어진다</b>. 모든 전기의 경로와 시작점이 여기이기 때문.
+        </Fcard>
+        <Fcard icon="sync_alt" title="발전 · 사용 · 수전은 동시에">
+          발전이 사용량에 못 미치면 부족분은 <b>그 순간 한전에서 받아</b> 쓰고, 남으면 계통으로 보낸다. 자가소비든 송전이든 공장은 늘 한전에서 전기를 받고 있다.
+        </Fcard>
+      </div>
     </div>
-
-    <Block label="분기점 — 최상위 두 갈래 (리스·PPA·RPS는 그 아래 단계)" cols={2}>
-      <Item k="자가소비" d="말 그대로 내가 쓴다. 계통으로 보내지 않고 내가 쓰고 끝." tone="green" />
-      <Item k="계통 송전" d="PPA든 한전에 파는 RPS든 '내가 쓰지 않는 전기'는 전부 한전 계통으로 보낸다(송전)." />
-    </Block>
-
-    <Stats
-      items={[
-        { num: '100', label: '태양광이 발전한 양 (예)' },
-        { num: '120', label: '공장이 쓰고 있는 양 (예)', acc: true },
-        { num: '20', label: '한전에서 동시에 받는 양 — 송전과 수전은 동시에 일어난다' },
-      ]}
-    />
-    <p className="srcline">단순화 예시 — 대화 중 든 숫자. 자가소비든 계통 송전이든 공장은 한전에서 전기를 받고 있고, 발전·사용·수전은 동시에 일어난다.</p>
   </ContentSlide>,
 
   /* 7. 태양광 — 3모델 + 온/오프사이트 */
@@ -982,25 +1102,25 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     <div className="duo">
       <div className="duo-col dc">
         <div className="duo-h"><b>kW · 설비용량</b><span className="tag amber"><i />순간 출력의 크기</span></div>
-        <div className="duo-big">100 kW<small>= 설치한 용량</small></div>
+        <div className="duo-big">kW<small>설치한 설비의 크기</small></div>
         <div className="duo-list">
-          <div className="duo-li"><i /><span>말 그대로 <b>설치한 용량</b>. 원래 명칭대로면 '시간당 얼마'지만 그렇게 생각하면 어렵다</span></div>
+          <div className="duo-li"><i /><span>말 그대로 <b>설치한 용량</b>이자 순간 출력의 크기</span></div>
           <div className="duo-li"><i /><span>그 자체로는 <b>큰 의미가 있는 지표는 아니다</b> — 얼마나 큰 설비인지를 말할 뿐</span></div>
         </div>
       </div>
       <div className="duo-col ac">
         <div className="duo-h"><b>kWh · 발전량</b><span className="tag blue"><i />시간 동안 생산한 에너지</span></div>
-        <div className="duo-big">100 kWh<small>= 1시간 동안 100kW만큼 만들어 냈다</small></div>
+        <div className="duo-big">kWh<small>시간 동안 만들어 낸 양</small></div>
         <div className="duo-list">
-          <div className="duo-li"><i /><span>오늘 1시간에 100kWh를 생산했다 = 그 1시간에 <b>100만큼의 kW를 만들어 냈다</b>는 뜻</span></div>
+          <div className="duo-li"><i /><span>어떤 시간 동안 <b>얼마만큼의 kW를 만들어 냈는가</b> — 그 합이 발전량</span></div>
           <div className="duo-li"><i /><span>발전량은 <b>시간으로밖에 표현이 안 되기</b> 때문에 kWh를 쓴다</span></div>
         </div>
       </div>
     </div>
 
-    <div className="analogy-row">
-      <div className="kw"><img src={`${G}/kw-pipe.png`} alt="" /><div><b>kW = 굵기</b><br /><small>파이프가 얼마나 굵은가</small></div></div>
-      <div className="kwh"><img src={`${G}/kwh-bucket.png`} alt="" /><div><b>kWh = 받은 물의 양</b><br /><small>시간 동안 통에 얼마나 담겼나</small></div></div>
+    <div className="analogy-row big">
+      <div className="kw"><img src={`${G}/kw-pipe.png`} alt="" /><div><b>kW = 굵기</b><br /><small>파이프가 얼마나 굵은가 — 순간에 흐를 수 있는 양</small></div></div>
+      <div className="kwh"><img src={`${G}/kwh-bucket.png`} alt="" /><div><b>kWh = 받은 물의 양</b><br /><small>시간 동안 통에 얼마나 담겼나 — 돈이 되는 쪽</small></div></div>
     </div>
 
     <Block label="왜 kWh를 보나 — 누가 무엇이 궁금한가" cols={2}>
@@ -1174,107 +1294,187 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     />
   </ContentSlide>,
 
-  /* 13. [전사] ESS 구성 심화 — 핸드폰 배터리 비유 */
+  /* 13. [전사] ESS 구성 심화 — PCS 양방향 그림 */
   <ContentSlide
     key="s5b"
     no="05"
     sec="ESS · 구성 요소"
-    title="ESS는 대용량 핸드폰 배터리 — 다른 점은 '늘 연결되어 있다'는 것"
-    lede={<>저장했다가 필요할 때 쓴다는 점은 핸드폰 배터리와 같다. 핸드폰은 떼어 쓰지만 ESS는 계통·부하와 <b>실시간으로 연결</b>되어 있어, 그 흐름을 <span className="hl">컨트롤하는 것</span>이 ESS의 가장 큰 포인트다.</>}
+    title="ESS는 대용량 배터리 — 다른 점은 늘 연결되어 있고, 한 곳에서 충전과 방전이 함께 일어난다는 것"
+    lede={<>저장했다가 필요할 때 쓴다는 점은 배터리와 같다. 하지만 ESS는 계통·부하와 <b>실시간으로 연결</b>되어 있어 그 흐름을 <span className="hl">컨트롤하는 것</span>이 핵심이고, 그 자리가 PCS다.</>}
   >
-    <div className="five">
-      <div className="sc"><div className="sc-t">1 · 저장</div><div className="sc-k">배터리 랙</div><div className="sc-d">컨테이너 박스 안에 들어간다. IT에서 <b>서버랙에 서버</b>를 넣듯, ESS는 <b>랙에 배터리</b>를 넣는다. 용량은 kWh.</div></div>
-      <div className="sc mix"><div className="sc-t">2 · 변환</div><div className="sc-k">PCS</div><div className="sc-d">충전(AC→DC)과 방전(DC→AC)이 <b>같은 포인트</b>에서 일어나는 양방향 변환. 태양광 인버터는 DC→AC 단방향·<b>낮에만</b>, PCS는 <b>24시간</b> 동작.</div></div>
-      <div className="sc charge"><div className="sc-t">3 · 보호</div><div className="sc-k">BMS</div><div className="sc-d">배터리는 <b>셀 수십·수백 개의 합</b>(태양광 모듈이 작은 셀을 모아 만든 것처럼). 셀의 전압·온도를 감시해 <b>터지지 않게</b> 보호.</div></div>
-      <div className="sc"><div className="sc-t">+ · 그림에 빠진 것</div><div className="sc-k">PMS</div><div className="sc-d"><b>PCS를 관리하는 시스템</b>(PCS Management System). 가이드 그림에는 빠져 있지만 따로 있다.</div></div>
-      <div className="sc disch"><div className="sc-t">4 · 두뇌</div><div className="sc-k">EMS</div><div className="sc-d"><b>BMS와 PMS를 함께 관리</b>하며 충·방전 시점을 결정하고 명령을 내린다. 언제 어느 방향으로 바꿀지 모르므로 <b>AI 기반</b>이어야 한다.</div></div>
+    <div className="pcs">
+      <div className="pnode dc">
+        <span className="material-symbols-outlined">battery_charging_full</span>
+        <b>배터리 랙</b>
+        <small>DC · 전기를 담는 곳</small>
+      </div>
+      <svg className="parr" viewBox="0 0 200 120" aria-hidden>
+        <defs>
+          <marker id="ah-l" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M10 0 L0 5 L10 10 z" fill="#14b8a6" /></marker>
+          <marker id="ah-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#ef4444" /></marker>
+        </defs>
+        <line x1="195" y1="38" x2="8" y2="38" stroke="#14b8a6" strokeWidth="4" markerEnd="url(#ah-l)" />
+        <text x="100" y="26" textAnchor="middle" fontSize="13" fontWeight="800" fill="#0f766e">충전 · AC → DC</text>
+        <line x1="5" y1="84" x2="192" y2="84" stroke="#ef4444" strokeWidth="4" markerEnd="url(#ah-r)" />
+        <text x="100" y="108" textAnchor="middle" fontSize="13" fontWeight="800" fill="#b91c1c">방전 · DC → AC</text>
+      </svg>
+      <div className="pnode hub">
+        <span className="material-symbols-outlined">swap_horiz</span>
+        <b>PCS</b>
+        <small>양방향 변환 · 24시간</small>
+      </div>
+      <svg className="parr" viewBox="0 0 200 120" aria-hidden>
+        <line x1="195" y1="38" x2="8" y2="38" stroke="#14b8a6" strokeWidth="4" markerEnd="url(#ah-l)" />
+        <line x1="5" y1="84" x2="192" y2="84" stroke="#ef4444" strokeWidth="4" markerEnd="url(#ah-r)" />
+      </svg>
+      <div className="pnode ac">
+        <span className="material-symbols-outlined">factory</span>
+        <b>공장 부하 · 한전 계통</b>
+        <small>AC · 실제로 쓰는 전기</small>
+      </div>
     </div>
 
-    <div className="formula">
-      <div className="formula-eq">방전 <span>DC→AC</span> · 충전 <span>AC→DC</span></div>
-      <div className="formula-d">
-        <b>핸드폰 비유</b> — 집에 전기가 없어 핸드폰 전기를 집에 쓰려면 DC를 AC로 바꿔야 한다(방전, 인버터와 같은 일). 반대로 핸드폰이 비어 충전하려면 집의 AC를 DC로 바꿔야 한다(충전).
-        이 두 가지가 <b>같은 선, 같은 포인트</b>에서 일어나기 때문에 인버터와 구분해 <b>PCS</b>라는 이름을 새로 붙였다.
+    <div className="cmp">
+      <div className="cmp-l"><b>비교 — 태양광 인버터</b><small>DC → AC 한 방향만 · 해가 떠 있는 낮에만 동작</small></div>
+      <div className="route-line cmp-r">
+        <Node icon="solar_power" name="태양광 모듈" sub="DC" kind="dc" />
+        <span className="arr">⟶</span>
+        <Node icon="swap_horiz" name="인버터" sub="DC → AC 단방향" kind="grid" />
+        <span className="arr">⟶</span>
+        <Node icon="factory" name="부하 · 계통" sub="AC" />
       </div>
+    </div>
+
+    <div className="five">
+      <div className="sc"><div className="sc-t">1 · 저장</div><div className="sc-k">배터리 랙</div><div className="sc-d">컨테이너 안에 <b>랙마다 배터리</b>를 꽂는다(서버랙에 서버를 넣듯). 용량은 kWh.</div></div>
+      <div className="sc mix"><div className="sc-t">2 · 변환</div><div className="sc-k">PCS</div><div className="sc-d">충전과 방전이 <b>같은 포인트</b>에서 일어나는 양방향 변환. 인버터와 구분해 이름을 따로 붙였다.</div></div>
+      <div className="sc charge"><div className="sc-t">3 · 보호</div><div className="sc-k">BMS</div><div className="sc-d">배터리는 <b>셀 수십·수백 개의 합</b>. 셀의 전압·온도를 감시해 터지지 않게 보호.</div></div>
+      <div className="sc"><div className="sc-t">+ · 그림에 빠진 것</div><div className="sc-k">PMS</div><div className="sc-d"><b>PCS를 관리</b>하는 시스템. 가이드 그림에는 없지만 따로 있다.</div></div>
+      <div className="sc disch"><div className="sc-t">4 · 두뇌</div><div className="sc-k">EMS</div><div className="sc-d"><b>BMS와 PMS를 함께 관리</b>하며 충·방전 시점을 결정하고 명령한다. AI 기반이어야 한다.</div></div>
     </div>
   </ContentSlide>,
 
-  /* 14. [전사] 왜 선 하나로 양방향인가 — 전압 × 전류 */
+  /* 14. [전사] 왜 선 하나로 양방향인가 — 전압 × 전류, 호스·펌프 그림 */
   <ContentSlide
     key="s5c"
     no="05"
     sec="ESS · 전기의 특성"
-    title="왜 선 하나로 양방향인가 — 전력은 전압 × 전류"
-    lede={<>선이 하나면 <b>전압(220V)은 고정</b>이고 전류만 바꾸면 된다. 급속 충전도 선을 늘리는 게 아니라 <span className="hl">전류를 늘리는 것</span> — 선을 둘로 하면 전기를 배로 쓰는 셈이 된다.</>}
+    title="왜 선 하나로 양방향인가 — 전력은 전압 × 전류, 선이 하나면 전류만 키우면 된다"
+    lede={<>선이 하나면 <b>전압은 고정</b>이고 전류만 바꾸면 된다. 급속 충전도 선을 늘리는 게 아니라 <span className="hl">전류를 늘리는 것</span> — 선을 둘로 하면 전기를 배로 쓰는 셈이 된다.</>}
   >
     <div className="formula">
-      <div className="formula-eq">전력(W) = 전압(V) <span>×</span> 전류(A)</div>
-      <div className="formula-d">
-        인버터에서 들어오는 값에도 <b>전압과 전류</b>가 있고, 그 곱이 전력(kW)이다. 선이 하나면 전압은 고정 — <b>흘려보내는 양(전류)만 늘리면</b> 더 많은 전력이 간다. 그게 급속 충전.
-      </div>
+      <div className="formula-eq">전력 = 전압 <span>×</span> 전류</div>
+      <div className="formula-d">인버터에서 들어오는 값에도 <b>전압과 전류</b>가 있고, 그 곱이 전력(kW)이다. 선이 하나면 전압은 정해져 있으니 <b>흘려보내는 양(전류)</b>만 늘리면 더 많은 전력이 간다.</div>
     </div>
 
-    <Stats
-      items={[
-        { num: '220V × 10A = 2,200W', label: '선 하나 — 전압 고정, 전류로 조절 (대화 중 예시)', acc: true },
-        { num: '× 2', label: '선을 둘로 꽂으면 전기 관점에서는 에너지를 배로 쓰는 것 — 여기도 120, 저기도 120' },
-        { num: '1방향', label: '그래서 전 세계적으로 한 방향이 효율적 — 전봇대(망)를 두 개 지을 수는 없다' },
-      ]}
-    />
-
-    <Block label="물과 펌프 비유 — 왜 호스를 하나 더 놓지 않나" cols={3}>
-      <Item k="호스 공사 vs 펌프" d="물탱크를 빨리 채우려고 호스를 2개 설치하면 파이프 관 공사를 새로 해야 한다. 그보다 펌프를 좋은 걸 써서 한쪽에서 보내는 양만 늘리는 게 효율적." tone="green" />
-      <Item k="비용과 리스크" d="망을 2개 설치해야 하고, 두 개를 옮겨야 하고, 선·망 설치 비용이 든다. 두 개가 충돌하지 않게 끊어 주는 컨트롤도 필요." tone="amber" />
-      <Item k="노후화" d="한 군데서만 물을 받아도 버티는 한계가 있는데, 두세 군데서 동시에 들어오면 설비가 오래 버티지 못한다 — 노후화가 빨라진다." />
-    </Block>
+    <div className="hoses">
+      <div className="hose ok">
+        <div className="hose-h"><span className="tag green"><i />한 방향 · 펌프를 키운다</span></div>
+        <svg viewBox="0 0 320 150" aria-hidden>
+          <rect x="200" y="40" width="100" height="90" rx="8" fill="#eff6ff" stroke="#bfdbfe" strokeWidth="2" />
+          <rect x="206" y="80" width="88" height="44" rx="4" fill="#93c5fd" opacity=".7" />
+          <text x="250" y="68" textAnchor="middle" fontSize="12" fontWeight="700" fill="#1d4ed8">물탱크</text>
+          <rect x="20" y="70" width="60" height="40" rx="8" fill="#0a162e" />
+          <text x="50" y="95" textAnchor="middle" fontSize="12" fontWeight="800" fill="#fff">펌프↑</text>
+          <path d="M80 90 H200" stroke="#14b8a6" strokeWidth="18" strokeLinecap="round" />
+          <path d="M100 90 H185" stroke="#fff" strokeWidth="3" strokeDasharray="10 8" />
+          <text x="140" y="60" textAnchor="middle" fontSize="12" fontWeight="800" fill="#0f766e">선 하나 · 전류만 ↑</text>
+        </svg>
+        <p>호스는 그대로 두고 <b>펌프를 좋은 걸 써서</b> 보내는 양만 늘린다. 공사도 없고, 집(설비)도 한 군데서만 받으니 오래 버틴다.</p>
+      </div>
+      <div className="hose bad">
+        <div className="hose-h"><span className="tag red"><i />두 방향 · 호스를 하나 더</span></div>
+        <svg viewBox="0 0 320 150" aria-hidden>
+          <rect x="200" y="40" width="100" height="90" rx="8" fill="#eff6ff" stroke="#bfdbfe" strokeWidth="2" />
+          <rect x="206" y="80" width="88" height="44" rx="4" fill="#93c5fd" opacity=".7" />
+          <text x="250" y="68" textAnchor="middle" fontSize="12" fontWeight="700" fill="#1d4ed8">물탱크</text>
+          <rect x="20" y="40" width="60" height="32" rx="8" fill="#0a162e" />
+          <rect x="20" y="100" width="60" height="32" rx="8" fill="#0a162e" />
+          <text x="50" y="61" textAnchor="middle" fontSize="11" fontWeight="800" fill="#fff">펌프</text>
+          <text x="50" y="121" textAnchor="middle" fontSize="11" fontWeight="800" fill="#fff">펌프</text>
+          <path d="M80 56 H200" stroke="#ef4444" strokeWidth="10" strokeLinecap="round" />
+          <path d="M80 116 H200" stroke="#ef4444" strokeWidth="10" strokeLinecap="round" strokeDasharray="6 6" />
+          <text x="140" y="90" textAnchor="middle" fontSize="12" fontWeight="800" fill="#b91c1c">선 둘 · 에너지 ×2</text>
+        </svg>
+        <p>호스(망)를 하나 더 놓으려면 <b>관 공사</b>를 새로 해야 하고, 두 줄이 충돌하지 않게 끊어 줘야 하며, 여러 군데서 동시에 들어오면 <b>설비가 빨리 늙는다</b>.</p>
+      </div>
+    </div>
   </ContentSlide>,
 
-  /* 15. [전사] 부하 구간과 EMS의 시나리오 판단 */
+  /* 15. [전사] 부하 구간 띠 + EMS 시나리오 */
   <ContentSlide
     key="s5d"
     no="05"
     sec="ESS · 부하 구간과 판단"
-    title="경부하·중간부하·최대부하 — 한전이 정한 구간과 EMS의 실시간 판단"
-    lede={<>전기를 많이 쓰는 시간엔 요금을 더 부과한다. 한 선을 여럿이 쓰는 계통이 불안해지고 설비가 빨리 늙기 때문이다. EMS는 이 구간과 태양광·부하·배터리 상태를 보고 <span className="hl">충·방전을 실시간으로 결정</span>한다.</>}
+    title="경부하·중간부하·최대부하 — 한전이 정한 요금 구간 위에서 EMS가 실시간으로 판단한다"
+    lede={<>전기를 많이 쓰는 시간엔 요금을 더 부과한다. 한 선을 여럿이 쓰는 계통이 불안해지고 설비가 빨리 늙기 때문이다. EMS는 이 구간과 태양광·부하·배터리 상태를 보고 <span className="hl">충·방전을 그때그때 결정</span>한다.</>}
   >
-    <Block label="부하 구간 — 한전이 지정한 요금 구간" cols={3}>
-      <Item k="경부하" d="전기를 안 쓸 때. 요금이 가장 낮다." tone="green" />
-      <Item k="중간부하" d="적절하게 전기를 쓰고 있을 때." tone="amber" />
-      <Item k="최대부하" d="가장 많이 쓰고 있을 때. 요금이 가장 높다 — 한 선에서 A공장이 많이 쓰면 전류를 더 보내야 하고 그만큼 선이 노후화되므로, 그 비용을 요금으로 부과한다." cite="'노후화 비용'을 받는 개념" />
-    </Block>
+    <div className="band">
+      <svg viewBox="0 0 960 86" preserveAspectRatio="none" aria-hidden>
+        <rect x="0" y="22" width="360" height="30" fill="#d1fae5" />
+        <rect x="360" y="22" width="120" height="30" fill="#fef3c7" />
+        <rect x="480" y="22" width="160" height="30" fill="#334155" />
+        <rect x="640" y="22" width="320" height="30" fill="#fef3c7" />
+        <text x="180" y="42" textAnchor="middle" fontSize="14" fontWeight="800" fill="#047857">경부하 — 전기를 안 쓸 때 · 요금 가장 낮음</text>
+        <text x="420" y="42" textAnchor="middle" fontSize="14" fontWeight="800" fill="#b45309">중간부하</text>
+        <text x="560" y="42" textAnchor="middle" fontSize="14" fontWeight="800" fill="#fff">최대부하 — 가장 높음</text>
+        <text x="800" y="42" textAnchor="middle" fontSize="14" fontWeight="800" fill="#b45309">중간부하 — 적절히 쓰는 때</text>
+        {[0, 3, 6, 9, 12, 15, 18, 21, 24].map((h) => (
+          <g key={h}>
+            <line x1={h * 40} y1="52" x2={h * 40} y2="60" stroke="#c3ccda" strokeWidth="1.5" />
+            <text x={h * 40} y="76" textAnchor="middle" fontSize="12" fill="#8a94a6">{h === 24 ? '24시' : h}</text>
+          </g>
+        ))}
+        <text x="0" y="14" fontSize="12" fontWeight="700" fill="#8a94a6">한전이 지정한 구간 — 많이 쓰면 선이 노후화되므로 그 비용을 요금으로</text>
+      </svg>
+    </div>
 
     <div className="scen">
       <div className="sc charge"><div className="sc-t">밤 · 경부하</div><div className="sc-k">충전</div><div className="sc-d">해가 없고 전기도 많이 안 쓴다. <b>방전할 필요가 전혀 없으니</b> 충전만.</div></div>
-      <div className="sc mix"><div className="sc-t">낮 · 발전 + 사용</div><div className="sc-k">방전, 또는 충전하며 방전</div><div className="sc-d">기본은 방전이지만 <b>배터리에 충전된 용량이 없으면</b> 충전하면서 방전해야 할 수도 — 배터리 상태에 따라 선택.</div></div>
-      <div className="sc charge"><div className="sc-t">최대부하 · 발전 많음</div><div className="sc-k">그림은 '충전' 선택</div><div className="sc-d">보통은 방전이 낫다. 그런데 그림이 충전을 택했다면 <b>왜인지 생각해 봐야 한다</b> — 배터리가 비어 있었을 것.</div></div>
-      <div className="sc disch"><div className="sc-t">날씨 변동</div><div className="sc-k">실시간 재판단</div><div className="sc-d">비·눈·구름이면 태양광 곡선이 <b>완만해진다</b>. 그때도 즉각 다시 판단해야 한다 — 하나의 시나리오로 끝나지 않는다.</div></div>
+      <div className="sc mix"><div className="sc-t">낮 · 발전 + 사용</div><div className="sc-k">방전, 또는 충전하며 방전</div><div className="sc-d">기본은 방전. <b>배터리에 남은 용량이 없으면</b> 충전하면서 방전해야 할 수도 — 배터리 상태에 따라.</div></div>
+      <div className="sc charge"><div className="sc-t">최대부하 · 발전 많음</div><div className="sc-k">그림은 '충전'을 택했다</div><div className="sc-d">보통은 방전이 낫다. 그런데 충전을 택했다면 <b>왜인지 생각해야 한다</b> — 배터리가 비어 있었을 것.</div></div>
+      <div className="sc disch"><div className="sc-t">날씨 변동</div><div className="sc-k">실시간 재판단</div><div className="sc-d">비·눈·구름이면 태양광 곡선이 <b>완만해진다</b>. 그때도 즉각 다시 판단 — 하나의 시나리오로 끝나지 않는다.</div></div>
     </div>
 
     <p className="coda">
-      "몇 시부터 몇 시까지 충전, 배터리 용량이 얼마일 때 충전" 같은 <b>코딩 규칙으로는 안 된다</b>. 예전엔 그렇게 했고, 그래서 화재가 났다. 지금·1시간 뒤·내일 중 언제 어느 방향으로 바꿀지 모르기 때문에 EMS는 <b>AI로 즉각 판단</b>해야 한다 — ESS가 어렵다고 하는 이유.
+      "몇 시부터 몇 시까지 충전, 용량이 얼마일 때 충전" 같은 <b>코딩 규칙으로는 안 된다</b>. 예전엔 그렇게 했고 화재가 났다. 언제 어느 방향으로 바꿀지 모르기 때문에 EMS는 <b>AI로 즉각 판단</b>해야 한다 — ESS가 어렵다고 하는 이유.
     </p>
   </ContentSlide>,
 
-  /* 16. [전사] 수집 데이터 6가지 — 각각 어떤 판단에 쓰이나 */
+  /* 16. [전사] 수집 데이터 → EMS → 판단 (허브 그림) */
   <ContentSlide
     key="s5e"
     no="05"
     sec="ESS · 수집 데이터"
-    title="수집 데이터 여섯 가지 — 각각 어떤 판단의 근거가 되나"
-    lede={<>데이터는 그 자체가 목적이 아니라 <b>충전할지, 방전할지, 멈출지</b>를 결정하는 근거다. 가이드 하단 스트립의 여섯 항목을 판단 기준으로 다시 읽는다.</>}
+    title="수집 데이터 여섯 가지 — 전부 EMS로 모여 충전·방전·차단을 결정하는 근거가 된다"
+    lede={<>데이터는 그 자체가 목적이 아니다. 여섯 가지를 <b>한 번에 보고</b> 충전할지, 방전할지, 멈출지를 <span className="hl">즉각 결정</span>하는 것이 EMS의 일이다.</>}
   >
-    <div className="grid-3">
-      <Item k="SOC · 충전 상태 %" d="지금 얼마나 차 있나. 이걸 알아야 충전할지 방전할지 결정할 수 있다 — 판단의 출발점." tone="green" cite="→ 충·방전 방향 결정" />
-      <Item k="SOH · 수명 상태 %" d="설치 후 배터리가 얼마나 버티고 효율이 어떤지를 계속 계산해 알려 준다. 핸드폰을 바꾸는 시점이 '배터리가 빨리 닳을 때'인 것처럼, 그게 SOH." tone="green" cite="→ 교체·효율 판단" />
-      <Item k="충 · 방전량" d="지금 충전은 얼마, 방전은 얼마나 되고 있나. 둘은 동시에 일어날 수 있다." cite="→ 현재 흐름 파악" />
-      <Item k="PCS 상태 · 알람" d="PCS가 정상 동작하는지 — 이것을 보는 체계가 PMS." cite="→ 변환 장치 이상 감지" />
-      <Item k="배터리 온도" d="과열되고 있는데 충전을 계속해도 되나? 안 된다. 방전도 막아야 할 수 있다 — 필요하면 차단해 화재를 막는다." tone="amber" cite="→ 차단 · 화재 예방" />
-      <Item k="공장 전력사용량" d="공장에 전기가 부족한지 알아야 방전을 결정할 수 있다. 핸드폰 전기를 집에 쓰려면 '집에 전기가 없다'는 전제가 먼저 있어야 하는 것과 같다." cite="→ 방전 필요 여부" />
+    <div className="hub">
+      <div className="hub-in">
+        <div className="hchip"><span className="material-symbols-outlined">battery_std</span><div><b>SOC · 충전 상태 %</b><small>지금 얼마나 차 있나 — 판단의 출발점</small></div></div>
+        <div className="hchip"><span className="material-symbols-outlined">monitor_heart</span><div><b>SOH · 수명 상태 %</b><small>설치 후 얼마나 버티고 효율이 어떤지</small></div></div>
+        <div className="hchip"><span className="material-symbols-outlined">swap_vert</span><div><b>충 · 방전량</b><small>지금 충전·방전이 각각 얼마나 — 동시에 일어난다</small></div></div>
+        <div className="hchip"><span className="material-symbols-outlined">notifications</span><div><b>PCS 상태 · 알람</b><small>PMS가 보는 값</small></div></div>
+        <div className="hchip warn"><span className="material-symbols-outlined">device_thermostat</span><div><b>배터리 온도</b><small>과열이면 충전을 계속할 수 없다</small></div></div>
+        <div className="hchip"><span className="material-symbols-outlined">factory</span><div><b>공장 전력사용량</b><small>전기가 부족한지 알아야 방전을 정한다</small></div></div>
+      </div>
+      <svg className="hub-arr" viewBox="0 0 120 400" preserveAspectRatio="none" aria-hidden>
+        {[33, 100, 167, 233, 300, 367].map((y) => <path key={y} d={`M0 ${y} C 60 ${y}, 60 200, 120 200`} fill="none" stroke="#c3ccda" strokeWidth="2" />)}
+      </svg>
+      <div className="hub-core">
+        <div className="q-ic big"><span className="material-symbols-outlined">psychology</span></div>
+        <b>EMS</b>
+        <small>BMS + PMS를 함께 보는 두뇌 · AI</small>
+      </div>
+      <svg className="hub-arr" viewBox="0 0 120 400" preserveAspectRatio="none" aria-hidden>
+        {[110, 200, 290].map((y) => <path key={y} d={`M0 200 C 60 200, 60 ${y}, 120 ${y}`} fill="none" stroke="#c3ccda" strokeWidth="2" />)}
+      </svg>
+      <div className="hub-out">
+        <div className="hout charge"><span className="material-symbols-outlined">battery_charging_full</span><b>충전</b><small>싸고 남을 때</small></div>
+        <div className="hout disch"><span className="material-symbols-outlined">bolt</span><b>방전</b><small>비싸고 부족할 때</small></div>
+        <div className="hout stop"><span className="material-symbols-outlined">block</span><b>차단</b><small>과열 · 이상 — 화재 예방</small></div>
+      </div>
     </div>
-
-    <p className="coda">
-      여섯 가지를 한 번에 보고 즉각 판단해야 하므로 ESS는 <b>보통 일이 아니다</b> — 그래서 EMS가 두뇌이고, AI가 필요하다.
-    </p>
   </ContentSlide>,
 
   /* 17. 마무리 */
