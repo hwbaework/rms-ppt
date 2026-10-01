@@ -2,7 +2,7 @@
 import type { ReactNode } from 'react'
 import { deckMetadata } from '@/lib/decks'
 
-export const metadata = deckMetadata('/ulsan-energy/260624_planning')
+export const metadata = deckMetadata('/common/261001_energy-concepts')
 
 export default function DeckLayout({ children }: { children: ReactNode }) {
   return children

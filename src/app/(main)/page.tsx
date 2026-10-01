@@ -4,7 +4,7 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
-import { decks, getDecksByRegion, type DeckMeta } from '@/lib/decks'
+import { decks, getDecksByRegion, type DeckMeta, type DeckCategory } from '@/lib/decks'
 import NewDeckModal from '@/components/NewDeckModal'
 
 // 지역별 액센트 색 (새 지역은 여기 추가, 없으면 violet 기본)
@@ -15,6 +15,34 @@ const REGION_ACCENT: Record<string, string> = {
   공통: 'bg-slate-400',
 }
 const accent = (region: string) => REGION_ACCENT[region] ?? 'bg-violet-500'
+
+// 용도(외부/내부/개인) — 지역 그룹 "안에서" 나누는 하위 구획. (전역 필터 아님)
+const CAT_ORDER: DeckCategory[] = ['외부', '내부', '개인']
+const CAT_ACCENT: Record<DeckCategory, string> = {
+  외부: 'bg-blue-500',
+  내부: 'bg-emerald-500',
+  개인: 'bg-violet-500',
+}
+const CAT_LABEL: Record<DeckCategory, string> = {
+  외부: '외부',
+  내부: '내부',
+  개인: '개인·레퍼런스',
+}
+
+// 한 지역의 덱을 용도별 하위 구획으로 나눈다. 미분류는 '기타'로 맨 뒤에.
+// 카테고리가 하나도 없는 지역(공통 등)은 subs 없이 rest 로만 평면 표시.
+type Sub = { cat: DeckCategory | '기타'; decks: DeckMeta[] }
+function subdivide(list: DeckMeta[]): { subs: Sub[]; hasCat: boolean } {
+  const subs: Sub[] = []
+  for (const cat of CAT_ORDER) {
+    const d = list.filter((x) => x.category === cat)
+    if (d.length) subs.push({ cat, decks: d })
+  }
+  const uncat = list.filter((x) => !x.category)
+  const hasCat = subs.length > 0
+  if (uncat.length) subs.push({ cat: '기타', decks: uncat })
+  return { subs, hasCat }
+}
 
 export default function Home() {
   const [active, setActive] = useState<string>('전체')
@@ -143,15 +171,51 @@ export default function Home() {
                       expand_more
                     </span>
                   </button>
-                  {!isCollapsed && (
-                    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {group.decks.map((meta) => (
-                        <li key={meta.href}>
-                          <DeckCard meta={meta} accentClass={accent(group.region)} />
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  {!isCollapsed &&
+                    (() => {
+                      const { subs, hasCat } = subdivide(group.decks)
+                      // 용도 분류가 없는 지역(공통 등)은 하위 구획 없이 평면 그리드
+                      if (!hasCat) {
+                        return (
+                          <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {group.decks.map((meta) => (
+                              <li key={meta.href}>
+                                <DeckCard meta={meta} accentClass={accent(group.region)} />
+                              </li>
+                            ))}
+                          </ul>
+                        )
+                      }
+                      // 용도(외부/내부/개인)별 하위 구획으로 나눠 표시
+                      return (
+                        <div className="space-y-7">
+                          {subs.map((sub) => (
+                            <div key={sub.cat}>
+                              <div className="flex items-center gap-2 mb-3 pl-0.5">
+                                <span
+                                  className={`size-1.5 rounded-full ${
+                                    sub.cat === '기타' ? 'bg-slate-300' : CAT_ACCENT[sub.cat]
+                                  }`}
+                                />
+                                <h3 className="text-sm font-bold text-slate-500 tracking-tight">
+                                  {sub.cat === '기타' ? '기타' : CAT_LABEL[sub.cat]}
+                                </h3>
+                                <span className="text-xs text-slate-400 font-mono">
+                                  {sub.decks.length}
+                                </span>
+                              </div>
+                              <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {sub.decks.map((meta) => (
+                                  <li key={meta.href}>
+                                    <DeckCard meta={meta} accentClass={accent(group.region)} />
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          ))}
+                        </div>
+                      )
+                    })()}
                 </div>
               )
             })}

@@ -402,9 +402,29 @@ const CSS = `
 .slide.active .area>:nth-child(1){animation-delay:.24s}
 .slide.active .area>:nth-child(2){animation-delay:.36s}
 .slide.active .area>:nth-child(3){animation-delay:.48s}
+.slide.active .area>:nth-child(4){animation-delay:.6s}
+.slide.active .area>:nth-child(5){animation-delay:.72s}
 .slide.active .thanks-inner{animation:rise .8s cubic-bezier(.2,.6,.2,1) both}
 /* ※ prefers-reduced-motion 스위치 제거 — OS에서 "애니메이션 효과"를 꺼둔 PC에서
    모든 모션이 죽는 원인이었음. 발표 덱은 모션이 디자인의 일부라 항상 재생. */
+
+/* ── 계보 다이어그램 (무엇이 무엇으로 바뀌나) ── */
+.gen{background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:.9vw 1.1vw}
+.gen svg{width:100%;height:auto;display:block}
+
+/* ── 파이프라인 스텝 카드 (서식·기간을 달고 있는 단계) ── */
+.pipe{display:grid;grid-template-columns:repeat(5,1fr);gap:.7vw}
+.pstep{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:.7vw .85vw;display:flex;flex-direction:column;gap:.3vw}
+.pstep.final{border-color:#bfdbfe;box-shadow:0 3px 14px rgba(37,99,235,.07)}
+.pstep-no{color:var(--accent);font-size:.62vw;font-weight:800;letter-spacing:.12em}
+.pstep-n{color:var(--ink);font-size:.88vw;font-weight:700;line-height:1.35}
+.pstep-who{color:var(--muted);font-size:.66vw;font-weight:600;display:flex;align-items:center;gap:.32vw}
+.pstep-who i{width:.32vw;height:.32vw;border-radius:50%;background:#94a3b8;flex-shrink:0}
+.pstep-d{color:var(--body);font-size:.72vw;line-height:1.62}
+.pstep-d b{color:var(--ink)}
+.pforms{display:flex;flex-wrap:wrap;gap:.22vw;margin-top:auto;padding-top:.35vw}
+.fchip{border:1px solid #dbe3f0;background:#f7f9fd;color:#1d4ed8;border-radius:5px;font-size:.6vw;font-weight:600;padding:.1vw .38vw;white-space:nowrap}
+.fchip.gray{border-color:var(--hair);background:var(--chip);color:var(--muted)}
 
 /* ── 플레이어 ── */
 .nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:1000;display:flex;align-items:center;gap:8px;background:rgba(10,18,32,.78);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:6px 12px}
@@ -525,10 +545,10 @@ function LaneRow({
 const TOC = [
   { no: '01', t: '탄소거래란 무엇인가', d: '탄소의 정체, 값을 매기는 두 방법, 그리고 거래가 일어나는 이유', target: 2 },
   { no: '02', t: '시장은 어떻게 나뉘는가', d: '규제·자발적 시장 — 배출권(KAU·KCU)과 감축실적(KOC·CER)', target: 5 },
-  { no: '03', t: '누가 움직이는가', d: '다섯 참여자가 만드는 하나의 사이클', target: 8 },
-  { no: '04', t: '한국은 어떻게 운영하는가', d: '무상으로 주는 몫, 경매로 파는 몫 — 그리고 거래 인프라', target: 9 },
-  { no: '05', t: '시장은 지금 어디에 있는가', d: '4차 계획기간 원년, 2026년의 숫자들', target: 13 },
-  { no: '06', t: '무엇부터 시작하는가', d: '측정과 MRV, 그리고 CBAM이라는 외부 압력', target: 14 },
+  { no: '03', t: '누가 움직이는가', d: '다섯 참여자가 만드는 하나의 사이클', target: 10 },
+  { no: '04', t: '한국은 어떻게 운영하는가', d: '무상으로 주는 몫, 경매로 파는 몫 — 그리고 거래 인프라', target: 11 },
+  { no: '05', t: '시장은 지금 어디에 있는가', d: '4차 계획기간 원년, 2026년의 숫자들', target: 15 },
+  { no: '06', t: '무엇부터 시작하는가', d: '측정과 MRV, 그리고 CBAM이라는 외부 압력', target: 16 },
 ]
 
 // goTo = 플레이어의 슬라이드 이동 함수 — 목차 행 클릭 시 해당 챕터로 점프
@@ -962,8 +982,8 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
         </div>
         <div className="spec">
           <div className="spec-row"><span className="spec-k">출처</span><span className="spec-v"><b>조직경계 밖</b> 감축사업 (법 제30조 인증) — 기준 대비 감축분을 실적으로 인정(Baseline-and-Credit)</span></div>
-          <div className="spec-row"><span className="spec-k">성격</span><span className="spec-v">Vintage 없는 &ldquo;실적&rdquo; — 흔히 배출권으로 오해</span></div>
-          <div className="spec-row"><span className="spec-k">쓰임</span><span className="spec-v">그대로 제출 불가 → <b>KCU 전환 필요</b></span></div>
+          <div className="spec-row"><span className="spec-k">구분</span><span className="spec-v"><b>KOC</b> = 국내 인증 실적 · <b>CER</b> = UN CDM 발행 실적 — 처분 증빙 갖춰 <b>1:1로 KOC 전환</b> 후에야 국내 효력</span></div>
+          <div className="spec-row"><span className="spec-k">쓰임</span><span className="spec-v">Vintage 없는 &ldquo;실적&rdquo; — 그대로 제출 불가 → <b>KCU 전환 필요</b></span></div>
         </div>
       </div>
     </div>
@@ -1041,6 +1061,180 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     </div>
   </ContentSlide>,
 
+  /* 02 — KOC 발급 파이프라인 + 상품 계보 */
+  <ContentSlide
+    key="s3koc"
+    no="02"
+    sec="시장은 어떻게 나뉘는가"
+    title="KOC는 이렇게 만들어진다 — 승인부터 발행까지 다섯 걸음"
+    lede={
+      <>사업 하나가 KOC가 되기까지 <b>승인 → 시행·모니터링 → 검증 → 인증</b>의 관문을 지난다.
+      모든 단계가 <span className="hl">서식과 기한</span>으로 정해져 있다 — 지침이 정한 그대로다.</>
+    }
+  >
+    <div className="pipe">
+      <div className="pstep">
+        <span className="pstep-no">STEP 1</span>
+        <div className="pstep-n">사업 승인 · 등록</div>
+        <div className="pstep-who"><i />외부사업자 → 관장기관</div>
+        <div className="pstep-d">타당성·추가성 평가 의견 <b>30일</b> · 수정보완 <b>3회</b> → 인증위 심의 → 승인서 발급·상쇄등록부 등록</div>
+        <div className="pforms"><span className="fchip">별지 5 승인신청서</span><span className="fchip">별지 1~4 사업계획서</span></div>
+      </div>
+      <div className="pstep">
+        <span className="pstep-no">STEP 2</span>
+        <div className="pstep-n">시행 · 모니터링</div>
+        <div className="pstep-who"><i />외부사업자</div>
+        <div className="pstep-d">승인일부터 <b>1년 내 착수</b> · 모니터링 기간 <b>최대 2년</b>(산림 5년) — 계획서의 모니터링 계획대로 측정</div>
+        <div className="pforms"><span className="fchip">별지 16 착수신고서</span><span className="fchip">별지 17 모니터링 보고서 · 작성지침 별표 7</span></div>
+      </div>
+      <div className="pstep">
+        <span className="pstep-no">STEP 3</span>
+        <div className="pstep-n">제3자 검증</div>
+        <div className="pstep-who"><i />지정 검증기관</div>
+        <div className="pstep-d">이행·산정·데이터 품질·<b>타 제도 중복 인증 여부</b>를 객관 평가 — 모니터링 종료 후 <b>12개월 내</b> 보고서 제출</div>
+        <div className="pforms"><span className="fchip">검증 보고서 (검증지침 별지 6)</span></div>
+      </div>
+      <div className="pstep">
+        <span className="pstep-no">STEP 4</span>
+        <div className="pstep-n">감축량 인증</div>
+        <div className="pstep-who"><i />관장기관 → 기후부 → 인증위</div>
+        <div className="pstep-d">검토서 <b>30일</b>(수정보완 3회) → 협의 <b>30일</b> → 심의 → 인증서 발급 — 1 tCO₂e 이상, 정수 단위만</div>
+        <div className="pforms"><span className="fchip">별지 18 인증신청서</span><span className="fchip gray">별지 19 검토서 · 별지 21 인증서</span></div>
+      </div>
+      <div className="pstep final">
+        <span className="pstep-no">STEP 5</span>
+        <div className="pstep-n">KOC 발행</div>
+        <div className="pstep-who"><i />상쇄등록부 (ORS)</div>
+        <div className="pstep-d">인증량을 발행계정에 발행 → 사업자 <b>보유계정으로 이전</b> — 인증일부터 <b>5년 내 KCU 전환</b> 조건</div>
+        <div className="pforms"><span className="fchip">고유번호 부여 · 이력관리</span></div>
+      </div>
+    </div>
+
+    <div>
+      <div className="block-label"><b>그래서 계보는 이렇다 — KCU는 KAU가 아니라 KOC에서 나온다 (CER은 KOC로 전환 후 합류)</b></div>
+      <div className="gen">
+        <svg viewBox="0 0 1160 232" fill="none" aria-hidden>
+          {/* 출처 노드 */}
+          <rect x="15" y="12" width="185" height="44" rx="10" fill="#f5f7fb" stroke="#e6eaf2" />
+          <text x="107" y="38" textAnchor="middle" fill="#3e4c5e" fontSize="15" fontWeight="600">정부 — 유·무상 할당</text>
+          <rect x="15" y="94" width="185" height="44" rx="10" fill="#f5f7fb" stroke="#e6eaf2" />
+          <text x="107" y="120" textAnchor="middle" fill="#3e4c5e" fontSize="15" fontWeight="600">국내 외부사업 감축</text>
+          <rect x="15" y="176" width="185" height="44" rx="10" fill="#f5f7fb" stroke="#e6eaf2" strokeDasharray="5 4" />
+          <text x="107" y="202" textAnchor="middle" fill="#3e4c5e" fontSize="15" fontWeight="600">UN CDM — 국외 감축</text>
+          {/* 출처 → 상품 화살표 */}
+          <path d="M 200 34 H 246" stroke="#94a3b8" strokeWidth="2" /><path d="M 244 28 L 256 34 L 244 40 Z" fill="#94a3b8" />
+          <path d="M 200 116 H 246" stroke="#94a3b8" strokeWidth="2" /><path d="M 244 110 L 256 116 L 244 122 Z" fill="#94a3b8" />
+          <path d="M 200 198 H 246" stroke="#94a3b8" strokeWidth="2" /><path d="M 244 192 L 256 198 L 244 204 Z" fill="#94a3b8" />
+          {/* 상품 노드 */}
+          <rect x="258" y="12" width="140" height="44" rx="10" fill="#eff6ff" stroke="#2563eb" strokeWidth="1.5" />
+          <text x="328" y="32" textAnchor="middle" fill="#1d4ed8" fontSize="17" fontWeight="800">KAU</text>
+          <text x="328" y="48" textAnchor="middle" fill="#1d4ed8" fontSize="11">할당배출권</text>
+          <rect x="258" y="94" width="140" height="44" rx="10" fill="#fffbeb" stroke="#f59e0b" strokeWidth="1.5" />
+          <text x="328" y="114" textAnchor="middle" fill="#b45309" fontSize="17" fontWeight="800">KOC</text>
+          <text x="328" y="130" textAnchor="middle" fill="#b45309" fontSize="11">외부사업 인증실적</text>
+          <rect x="258" y="176" width="140" height="44" rx="10" fill="#fffbeb" stroke="#f59e0b" strokeWidth="1.5" strokeDasharray="5 4" />
+          <text x="328" y="196" textAnchor="middle" fill="#b45309" fontSize="17" fontWeight="800">CER</text>
+          <text x="328" y="212" textAnchor="middle" fill="#b45309" fontSize="11">CDM 인증실적</text>
+          {/* CER → KOC (1:1 전환) */}
+          <path d="M 328 174 V 144" stroke="#f59e0b" strokeWidth="2" /><path d="M 322 146 L 328 134 L 334 146 Z" fill="#f59e0b" />
+          <text x="344" y="162" fill="#b45309" fontSize="12.5" fontWeight="600">1 CER = 1 KOC 전환 (처분 증빙 제출)</text>
+          {/* KOC → KCU */}
+          <path d="M 398 116 H 566" stroke="#64748b" strokeWidth="2" /><path d="M 564 110 L 576 116 L 564 122 Z" fill="#64748b" />
+          <text x="487" y="104" textAnchor="middle" fill="#8a94a6" fontSize="12.5" fontWeight="600">전환 신청 — 별지 23</text>
+          <text x="487" y="134" textAnchor="middle" fill="#8a94a6" fontSize="12.5">할당대상업체만 · 인증 후 5년 내</text>
+          {/* KCU 노드 */}
+          <rect x="578" y="94" width="140" height="44" rx="10" fill="#eff6ff" stroke="#2563eb" strokeWidth="1.5" />
+          <text x="648" y="114" textAnchor="middle" fill="#1d4ed8" fontSize="17" fontWeight="800">KCU</text>
+          <text x="648" y="130" textAnchor="middle" fill="#1d4ed8" fontSize="11">상쇄배출권 (1 KCU = 1 KAU)</text>
+          {/* KAU → 제출 / KCU → 제출 */}
+          <path d="M 398 34 Q 700 34 908 66" stroke="#64748b" strokeWidth="2" /><path d="M 904 58 L 918 68 L 902 71 Z" fill="#64748b" />
+          <path d="M 718 116 Q 830 116 908 92" stroke="#64748b" strokeWidth="2" /><path d="M 904 87 L 918 89 L 906 99 Z" fill="#64748b" />
+          <text x="812" y="140" textAnchor="middle" fill="#8a94a6" fontSize="12.5" fontWeight="600">갈음 제출 — 제출량의 5%까지 (3차 기준)</text>
+          {/* 제출 노드 */}
+          <rect x="920" y="44" width="225" height="64" rx="12" fill="#0a162e" />
+          <text x="1032" y="72" textAnchor="middle" fill="#ffffff" fontSize="15.5" fontWeight="700">정부 제출 — 의무 이행</text>
+          <text x="1032" y="92" textAnchor="middle" fill="#7fa8e8" fontSize="11.5">배출권거래법 제27 · 29조</text>
+          {/* 하단 캡션 */}
+          <text x="920" y="190" fill="#8a94a6" fontSize="12.5">시장에서 사고파는 종목 — <tspan fontWeight="700" fill="#3e4c5e">KAU · KCU · KOC</tspan> (KRX 상장)</text>
+          <text x="920" y="210" fill="#8a94a6" fontSize="12.5">CER은 KOC로 전환한 뒤에만 국내 효력</text>
+        </svg>
+      </div>
+    </div>
+
+    <p className="srcline">
+      근거 —{' '}
+      <a href="https://www.law.go.kr/LSW/admRulLsInfoP.do?chrClsCd=&admRulSeq=2100000231214" target="_blank" rel="noreferrer">
+        「외부사업 타당성 평가 및 감축량 인증에 관한 지침」
+      </a>
+      {' '}제12·13조(승인·평가) · 제26·28조(착수·모니터링) · 제30~34조(검증·인증) · 제36·38조(발행·KCU 전환) ·{' '}
+      <a href="https://offset.energy.or.kr/offsetsystem/promotionprocedure.do" target="_blank" rel="noreferrer">
+        한국에너지공단 상쇄제도 추진절차
+      </a>
+    </p>
+  </ContentSlide>,
+
+  /* 02 — KAU 한 페이지: 누가, 어떻게 거래하나 */
+  <ContentSlide
+    key="s3kau"
+    no="02"
+    sec="시장은 어떻게 나뉘는가"
+    title="KAU 거래 — 못 하는 게 아니라, 자격과 계정의 문제다"
+    lede={
+      <>&ldquo;KAU는 거래가 막혀 있다&rdquo;는 말은 <b>개인</b> 이야기다.
+      법이 정한 시장 참여자는 <span className="hl">배출권등록부(ETRS)에 거래계정을 등록</span>하면 장내에서 사고판다 —
+      그리고 KOC는 <b>외부사업자인 우리도</b> 장내에서 팔 수 있다.</>
+    }
+  >
+    <Block label="누가 살 수 있나 — 법 제19조①이 정한 시장 참여자 (2025.2 금융기관까지 확대)" cols={4}>
+      <Item k="① 할당대상업체" d="의무 이행의 당사자 — 거래계정은 기후부장관이 직권 등록 (영 제32조⑤)" />
+      <Item k="② 시장조성자" d="산업·기업·수출입은행 등 — 호가를 대며 유동성 공급 (법 제22조의2)" />
+      <Item k="③ 배출권거래중개회사" d="증권사 — 위탁거래 창구. 위탁계약서 제출로 계정 등록 갈음 (영 제32조①)" />
+      <Item k="④ 금융기관 등" d="투자매매업자 · 집합투자업자 · 신탁업자 · 은행 · 보험 · 기금관리주체 (영 제31조①)" />
+    </Block>
+
+    <div>
+      <div className="block-label"><b>거래를 시작하는 길 — ETRS 계정에서 KRX 호가까지</b></div>
+      <Flow
+        steps={[
+          { no: 'STEP 1', name: '참여 자격 확인', sub: '법 제19조① 목록 — 국내 개인은 목록에 없다' },
+          { no: 'STEP 2', name: 'ETRS 거래계정 등록', sub: '등록신청서 전자 제출 → 적절성 검토 후 계정 개설' },
+          { no: 'STEP 3', name: '증권사 위탁계좌', sub: '회원·중개회사 경유 — HTS로 호가 제출' },
+          { no: 'STEP 4', name: 'KRX 장내 매매', sub: '10~12시 — 시세 공개, 거래소가 청산·결제 보증' },
+          { no: 'STEP 5', name: '신고 · 등록부 등록', sub: '등록한 때 이전 효력 (법 제21조③)', final: true },
+        ]}
+      />
+    </div>
+
+    <Block label="선을 긋는 세 가지 — 어디까지 열려 있나" cols={3}>
+      <Item
+        tone="amber"
+        k="개인은 아직"
+        d="외국 법인·개인은 조약·국제협정으로 허용된 경우만(영 제32조⑥) — 국내 개인은 선물(2028)·ETF 이후 검토"
+      />
+      <Item
+        k="KOC는 사업자도 판다"
+        d="외부사업자가 보유계정의 KOC를 장내 매도 — 거래소 결제지시로 이전 처리(인증지침 제37조②)"
+      />
+      <Item
+        k="무한정은 아니다"
+        d="비할당 참여자엔 최대 보유한도 설정 가능(법 제20조②) · 자금세탁 의심 등엔 계정 등록 거절(법 제20조④, 2025.10 신설)"
+      />
+    </Block>
+
+    <p className="srcline">
+      근거 —{' '}
+      <a href="https://www.law.go.kr/법령/온실가스배출권의할당및거래에관한법률" target="_blank" rel="noreferrer">
+        배출권거래법 제19~21조 (시장 참여자 · 거래계정 · 거래 신고)
+      </a>
+      {' '}·{' '}
+      <a href="https://www.law.go.kr/법령/온실가스배출권의할당및거래에관한법률시행령" target="_blank" rel="noreferrer">
+        시행령 제31~33조
+      </a>
+      {' '}· 계정 등록:{' '}
+      <a href="https://etrs.gir.go.kr/etrs/" target="_blank" rel="noreferrer">ETRS 배출권등록부시스템</a>
+    </p>
+  </ContentSlide>,
+
   /* 02 — 사는 곳: 장내 vs 장외 */
   <ContentSlide
     key="s3b"
@@ -1049,7 +1243,8 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
     title="사는 곳도 둘 — 장내와 장외"
     lede={
       <>같은 배출권이라도 사는 길은 둘이다. 거래소를 거치면 <b>장내</b>,
-      당사자끼리 직접 계약하면 <b>장외</b>다.</>
+      당사자끼리 직접 계약하면 <b>장외</b>다 — 다만 <span className="hl">원칙은 장내</span>이고,
+      장외는 고시가 정하는 경우에만 열린다(영 제31조④, 2025.2 개정).</>
     }
   >
     <div className="cards-2">
@@ -1073,9 +1268,9 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
         </div>
         <div className="spec">
           <div className="spec-row"><span className="spec-k">방식</span><span className="spec-v">당사자 간 직접 계약 — 브로커 중개 포함</span></div>
-          <div className="spec-row"><span className="spec-k">가격</span><span className="spec-v"><b>당사자 협의</b>로 결정 — 공표되지 않는다</span></div>
-          <div className="spec-row"><span className="spec-k">비용</span><span className="spec-v">상대 탐색·협상, 중개 시 수수료</span></div>
-          <div className="spec-row"><span className="spec-k">결제</span><span className="spec-v">당사자 간 계약 조건에 따름</span></div>
+          <div className="spec-row"><span className="spec-k">가격</span><span className="spec-v"><b>당사자 협의</b>로 결정 — 공표되지 않으며, 실무에선 <b>장내 시세를 기준</b> 삼아 협상</span></div>
+          <div className="spec-row"><span className="spec-k">허용</span><span className="spec-v">장내가 원칙 — <b>고시로 정하는 경우에만</b> 장외 가능 (영 제31조④)</span></div>
+          <div className="spec-row"><span className="spec-k">결제</span><span className="spec-v">당사자 간 계약 조건 — 거래 후 <b>신고 의무</b> (아래)</span></div>
         </div>
       </div>
     </div>
@@ -1099,8 +1294,22 @@ const buildSlides = (goTo: (i: number) => void): ReactNode[] => [
       </p>
     </div>
 
+    <div>
+      <div className="block-label"><b>장외로 샀다면 — 신고해야 내 것이 된다 (법 제21조 · 영 제33조)</b></div>
+      <Flow
+        steps={[
+          { no: 'STEP 1', name: '계약 합의', sub: '종류 · 수량 · 가격 — 실무에선 장내 시세 참조' },
+          { no: 'STEP 2', name: '합의 공증', sub: '양도인·양수인 간 합의에 관한 공증 서류 (장외거래 한정)' },
+          { no: 'STEP 3', name: '거래신고서 제출', sub: 'ETRS 전자 방식 — 종류·수량·가격 + 공증 서류' },
+          { no: 'STEP 4', name: '주무관청 확인', sub: '계정 등록 여부 · 보유한도 · 제출 회피 여부 심사' },
+          { no: 'STEP 5', name: '등록부 등록 = 효력', sub: '양도인 → 양수인 계정 이전 — 등록한 때 효력 발생', final: true },
+        ]}
+      />
+    </div>
+
     <p className="coda" style={{ paddingTop: '.7vw' }}>
-      어느 길로 사든 <b>ETRS 등록을 마쳐야 효력</b> — 결국 모든 거래는 등록부로 모인다.
+      장내는 거래소가 신고를 갈음해 전송하고, 장외는 <b>직접 신고</b>해야 한다 —
+      어느 길이든 <b>등록부에 등록되어야 이전 효력</b>, 결국 모든 거래는 ETRS로 모인다.
     </p>
   </ContentSlide>,
 
